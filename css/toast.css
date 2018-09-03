@@ -73,6 +73,14 @@ body {
   display: inline-block;
 }
 
+.report-message-normal {
+  white-space: normal;
+}
+
+.report-message-pre {
+  white-space: pre;
+}
+
 .report-message .report-message-text-blink {
   display: none;
 }

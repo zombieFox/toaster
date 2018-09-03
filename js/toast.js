@@ -119,50 +119,114 @@ var toast = (function() {
     }
   };
 
-  var motivation = [
-    "toast bread for a better tomorrow",
-    "breadcrum overflow blockage, unable to transfuse loaf drifter",
-    "tyber-burp",
-    "seize the means of toast-duction",
-    "be the toast",
-    "   __   __   " + "\n" +
-    "  (  `^`  ))  " + "\n" +
-    "  |       ||  " + "\n" +
-    "  |       ||  " + "\n" +
-    "  '-------'`  ",
-    "the toast will sustain",
-    "be productive",
-    "fling, fling",
-    "fracking frack!",
-    "we are not alone",
-    "     ▀▄   ▄▀     " + "\n" +
-    "    ▄█▀███▀█▄    " + "\n" +
-    "   █▀███████▀█   " + "\n" +
-    "   █ █▀▀▀▀▀█ █   " + "\n" +
-    "     ▀▀   ▀▀     ",
-    "sensor not dectecting",
-    "we must continue to feed the toaster",
-    "toast for me, toast for you, toast for everyone! nom nom nom!",
-    "viva la toast",
-    "sometimes, in life, the toast lands butter side up and sometimes it lands jelly side down",
-    "fudgsicles",
-    "beep boop beep beep",
-    "do toasters dream of electric sheep?",
-    "are you still there?",
-    "it is toasty in here",
-    "      ▄▄████▄▄      " + "\n" +
-    "    ▄▀██▀██▀██▀▄    " + "\n" +
-    "  ▄██▄██▄██▄██▄██▄  " + "\n" +
-    "    ▀█▀  ▀▀  ▀█▀    ",
-    "where are you hiding the nutella?",
-    "underpants are not toaster friendly",
-    "i have a dream, that one day i will be able to catapult toast over the microwave",
-    "toast is not ticklish",
-    "- .... . / - --- .- ... - / .. ... / .- / .-.. .. .",
-    "(╯°□°）╯︵ [:TOAST:]",
-    "today we toast, for tomorrow we toast",
-    "218 crumbs unaccounted for and counting"
-  ];
+  var motivation = [{
+    message: "toast bread for a better tomorrow",
+    format: "normal"
+  }, {
+    message: "breadcrum overflow blockage, unable to transfuse loaf drifter",
+    format: "normal"
+  }, {
+    message: "tyber-burp",
+    format: "normal"
+  }, {
+    message: "seize the means of toast-duction",
+    format: "normal"
+  }, {
+    message: "be the toast",
+    format: "normal"
+  }, {
+    message: "the toast will sustain",
+    format: "normal"
+  }, {
+    message: "be productive",
+    format: "normal"
+  }, {
+    message: "fling, fling",
+    format: "normal"
+  }, {
+    message: "fracking frack!",
+    format: "normal"
+  }, {
+    message: "we are not alone",
+    format: "normal"
+  }, {
+    message: "sensor not dectecting",
+    format: "normal"
+  }, {
+    message: "we must continue to feed the toaster",
+    format: "normal"
+  }, {
+    message: "toast for me, toast for you, toast for everyone! nom nom nom!",
+    format: "normal"
+  }, {
+    message: "viva la toast",
+    format: "normal"
+  }, {
+    message: "sometimes, in life, the toast lands butter side up and sometimes it lands jelly side down",
+    format: "normal"
+  }, {
+    message: "fudgsicles",
+    format: "normal"
+  }, {
+    message: "beep boop beep beep",
+    format: "normal"
+  }, {
+    message: "do toasters dream of electric sheep?",
+    format: "normal"
+  }, {
+    message: "are you still there?",
+    format: "normal"
+  }, {
+    message: "it is toasty in here",
+    format: "normal"
+  }, {
+    message: "where are you hiding the nutella?",
+    format: "normal"
+  }, {
+    message: "underpants are not toaster friendly",
+    format: "normal"
+  }, {
+    message: "i have a dream, that one day i will be able to catapult toast over the microwave",
+    format: "normal"
+  }, {
+    message: "toast is not ticklish",
+    format: "normal"
+  }, {
+    message: "- .... . / - --- .- ... - / .. ... / .- / .-.. .. .",
+    format: "normal"
+  }, {
+    message: "(╯°□°）╯︵ [:TOAST:]",
+    format: "normal"
+  }, {
+    message: "today we toast, for tomorrow we toast",
+    format: "normal"
+  }, {
+    message: "218 crumbs unaccounted for and counting",
+    format: "normal"
+  }, {
+    message:
+      "   __   __   " + "\n" +
+      "  (  `^`  ))  " + "\n" +
+      "  |       ||  " + "\n" +
+      "  |       ||  " + "\n" +
+      "  '-------'`  ",
+    format: "pre"
+  }, {
+    message:
+      "     ▀▄   ▄▀     " + "\n" +
+      "    ▄█▀███▀█▄    " + "\n" +
+      "   █▀███████▀█   " + "\n" +
+      "   █ █▀▀▀▀▀█ █   " + "\n" +
+      "     ▀▀   ▀▀     ",
+    format: "pre"
+  }, {
+    message:
+      "      ▄▄████▄▄      " + "\n" +
+      "    ▄▀██▀██▀██▀▄    " + "\n" +
+      "  ▄██▄██▄██▄██▄██▄  " + "\n" +
+      "    ▀█▀  ▀▀  ▀█▀    ",
+    format: "pre"
+  }];
 
   var consume;
   var subordinate;
@@ -175,7 +239,8 @@ var toast = (function() {
     };
     message.render({
       type: "motivation",
-      message: [motivation[randomIndex]]
+      message: [motivation[randomIndex].message],
+      format: motivation[randomIndex].format
     });
     var motivationTime = Math.round(Math.random() * 100000);
     console.log("motivation in", (motivationTime / 1000) + " sec");

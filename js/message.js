@@ -88,15 +88,21 @@ var message = (function() {
   var render = function(override) {
     var options = {
       type: null,
-      message: null
+      message: null,
+      format: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
     var report = helper.e("#report");
     var reportArea = helper.e("#report-area");
-    var newMessage = document.createElement("pre");
+    var newMessage = document.createElement("div");
     newMessage.setAttribute("class", "mb-0 text-" + colour[options.type] + " report-message");
+    if (options.format == "normal") {
+      newMessage.classList.add("report-message-normal");
+    } else if (options.format == "pre") {
+      newMessage.classList.add("report-message-pre");
+    };
     var messageType = document.createElement("span");
     messageType.textContent = typePrefix(options.type);
     messageType.setAttribute("class", "report-message-type");

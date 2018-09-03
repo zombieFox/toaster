@@ -4,42 +4,49 @@ var boot = (function() {
     introMessage: {
       type: "system",
       message: ["TAI.dat loaded"],
+      format: "normal",
       delay: 0
     }
   }, {
     introMessage: {
       type: "normal",
       message: ["TAI stable"],
+      format: "normal",
       delay: 500
     }
   }, {
     introMessage: {
       type: "system",
       message: ["SensBlocker.dat loaded"],
+      format: "normal",
       delay: 500
     }
   }, {
     introMessage: {
       type: "normal",
       message: ["SensBlocker stable"],
+      format: "normal",
       delay: 500
     }
   }, {
     introMessage: {
       type: "system",
       message: ["directive.dat loaded"],
+      format: "normal",
       delay: 500
     }
   }, {
     introMessage: {
       type: "normal",
       message: ["directive 01 = toast bread", "directive 02 = be productive", "directive 03 = follow commands"],
+      format: "normal",
       delay: 500
     }
   }, {
     introMessage: {
       type: "system",
       message: ["motivation.dat loaded"],
+      format: "normal",
       delay: 500
     }
   }, {
@@ -58,7 +65,8 @@ var boot = (function() {
           var runBootMessage = function() {
             message.render({
               type: arrayItem[key].type,
-              message: arrayItem[key].message
+              message: arrayItem[key].message,
+              format: arrayItem[key].format,
             });
           };
           delay = delay + arrayItem[key].delay;
