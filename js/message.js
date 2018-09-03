@@ -1,10 +1,10 @@
 var message = (function() {
 
   var type = {
-    success: "!!! ",
-    normal: "::: ",
-    error: "ERR ",
-    system: "||| ",
+    success: "!!!",
+    normal: ":::",
+    error: "ERR",
+    system: "|||",
     motivation: "^_^"
   };
 
