@@ -1,11 +1,29 @@
 var message = (function() {
 
-  var type = {
-    success: "!!!",
-    normal: ":::",
-    error: "ERR",
-    system: "|||",
-    motivation: "^_^"
+  var typePrefix = function(type) {
+    var allFaces = [
+      "-_-",
+      "^_^",
+      "*_*",
+      "#_#",
+      "x x",
+      "o o",
+      "._.",
+      "[:]",
+      "!_!",
+      "+.+"
+    ];
+    var allTypes = {
+      success: "!!!",
+      normal: ":::",
+      error: "ERR",
+      system: "|||"
+    };
+    if (type == "motivation") {
+      return allFaces[Math.round(Math.random() * (allFaces.length - 1))]
+    } else {
+      return allTypes[type];
+    }
   };
 
   var colour = {
@@ -24,7 +42,7 @@ var message = (function() {
       callback: null
     };
     if (override) {
-     options = helper.applyOptions(options, override);
+      options = helper.applyOptions(options, override);
     }
     if (options.index < options.text.length) {
       options.target.innerHTML = options.text.substring(0, options.index + 1) + '<span class="report-message-text-blink">#</span>';
@@ -51,7 +69,7 @@ var message = (function() {
       callback: null
     };
     if (override) {
-     options = helper.applyOptions(options, override);
+      options = helper.applyOptions(options, override);
     }
     options.textArray.forEach(function(arrayItem, index) {
       var span = document.createElement("span");
@@ -73,14 +91,14 @@ var message = (function() {
       message: null
     };
     if (override) {
-     options = helper.applyOptions(options, override);
+      options = helper.applyOptions(options, override);
     }
     var report = helper.e("#report");
     var reportArea = helper.e("#report-area");
     var newMessage = document.createElement("pre");
     newMessage.setAttribute("class", "mb-0 text-" + colour[options.type] + " report-message");
     var messageType = document.createElement("span");
-    messageType.textContent = type[options.type];
+    messageType.textContent = typePrefix(options.type);
     messageType.setAttribute("class", "report-message-type");
     var messageText = document.createElement("span");
     messageText.setAttribute("class", "report-message-text");

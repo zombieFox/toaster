@@ -7,18 +7,24 @@ var toast = (function() {
     autoToasterEfficiency: 1,
     consumed: 0,
     consumeRate: 5000,
+    sensor: {
+      matterConversion: false
+    },
     flags: {
       toastedLifetime: {
         ms50: {
           count: 50,
           passed: false,
+          unlock: function() {
+            unlock_consumeToast();
+          },
           message: "milestone: 50 lifetime toast!"
         },
         ms100: {
           count: 100,
           passed: false,
           unlock: function() {
-            unlock_consumeToast();
+            unlock_sensors();
           },
           message: "milestone: 100 lifetime toast!"
         },
@@ -77,6 +83,38 @@ var toast = (function() {
           passed: false,
           message: "milestone: 5,000 consumed toast!"
         }
+      },
+      autoToaster: {
+        ms50: {
+          count: 50,
+          passed: false,
+          message: "milestone: 50 Subordinate Auto Toasters online!"
+        },
+        ms100: {
+          count: 100,
+          passed: false,
+          message: "milestone: 100 Subordinate Auto Toasters online!"
+        },
+        ms500: {
+          count: 200,
+          passed: false,
+          message: "milestone: 200 Subordinate Auto Toasters online!"
+        },
+        ms1000: {
+          count: 500,
+          passed: false,
+          message: "milestone: 500 Subordinate Auto Toasters online!"
+        },
+        ms5000: {
+          count: 1000,
+          passed: false,
+          message: "milestone: 1,000 Subordinate Auto Toasters online!"
+        },
+        ms10000: {
+          count: 5000,
+          passed: false,
+          message: "milestone: 5,000 Subordinate Auto Toasters online!"
+        }
       }
     }
   };
@@ -84,27 +122,23 @@ var toast = (function() {
   var motivation = [
     "breadcrum overflow blockage, unable to transfuse loaf drifter",
     "tyber-burp",
+    "seize the means of toast-duction",
     "be the toast",
-    "   _   __   " + "\n" +
-    "  ( `^` ))  " + "\n" +
-    "  |     ||  " + "\n" +
-    "  |     ||  " + "\n" +
-    "  '-----'`  ",
+    "   __   __   " + "\n" +
+    "  (  `^`  ))  " + "\n" +
+    "  |       ||  " + "\n" +
+    "  |       ||  " + "\n" +
+    "  '-------'`  ",
     "the toast will sustain",
     "be productive",
     "fling, fling",
+    "fracking frack!",
     "we are not alone",
     "     ▀▄   ▄▀     " + "\n" +
     "    ▄█▀███▀█▄    " + "\n" +
     "   █▀███████▀█   " + "\n" +
     "   █ █▀▀▀▀▀█ █   " + "\n" +
-    "      ▀▀ ▀▀      ",
-    "                    " + "\n" +
-    "      ▄▄████▄▄      " + "\n" +
-    "    ▄██████████▄    " + "\n" +
-    "  ▄██▄██▄██▄██▄██▄  " + "\n" +
-    "    ▀█▀  ▀▀  ▀█▀    " + "\n" +
-    "                    ",
+    "     ▀▀   ▀▀     ",
     "sensor not dectecting",
     "we must continue to feed the toaster",
     "toast for me, toast for you, toast for everyone! nom nom nom!",
@@ -115,11 +149,16 @@ var toast = (function() {
     "do toasters dream of electric sheep?",
     "are you still there?",
     "it is toasty in here",
+    "      ▄▄████▄▄      " + "\n" +
+    "    ▄▀██▀██▀██▀▄    " + "\n" +
+    "  ▄██▄██▄██▄██▄██▄  " + "\n" +
+    "    ▀█▀  ▀▀  ▀█▀    ",
     "where are you hiding the nutella?",
     "underpants are not toaster friendly",
     "i have a dream, that one day i will be able to catapult toast over the microwave",
     "toast is not ticklish",
-    "toast is not a means; it is an end",
+    "- .... . / - --- .- ... - / .. ... / .- / .-.. .. .",
+    "(╯°□°）╯︵ [:TOAST:]",
     "today we toast, for tomorrow we toast",
     "218 crumbs unaccounted for and counting"
   ];
@@ -129,12 +168,10 @@ var toast = (function() {
   var motivateTheToaster;
 
   var randomMotivation = function(index) {
-    var randomIndex;
-    if (index) {
+    var randomIndex = Math.round(Math.random() * (motivation.length - 1));
+    if (index && index <= (motivation.length - 1)) {
       randomIndex = index;
-    } else {
-      randomIndex = Math.round(Math.random() * (motivation.length - 1));
-    }
+    };
     message.render({
       type: "motivation",
       message: [motivation[randomIndex]]
@@ -162,7 +199,9 @@ var toast = (function() {
     }, false);
   };
 
-  var xxxx = function() {console.log("xxxx")};
+  var xxxx = function() {
+    console.log("xxxx")
+  };
 
   var unlockStage = function() {
     for (var key1 in state.flags) {
@@ -187,6 +226,20 @@ var toast = (function() {
     // console.log(state);
   };
 
+  var autoToast = function() {
+    makeToast((state.autoToaster * state.autoToasterEfficiency));
+    render();
+  };
+
+  var unlock_sensors = function() {
+    var stageSensors = helper.e("#stage-sensors");
+    stageSensors.classList.remove("d-none");
+    message.render({
+      type: "normal",
+      message: ["sensor subsystem discovered"]
+    });
+  };
+
   var unlock_subordinateToaster = function() {
     var stageSubordinateToaster = helper.e("#stage-subordinate-toaster");
     stageSubordinateToaster.classList.remove("d-none");
@@ -196,9 +249,13 @@ var toast = (function() {
     });
   };
 
-  var autoToast = function() {
-    makeToast((state.autoToaster * state.autoToasterEfficiency));
-    render();
+  var unlock_subordinateToaster = function() {
+    var stageSubordinateToaster = helper.e("#stage-subordinate-toaster");
+    stageSubordinateToaster.classList.remove("d-none");
+    message.render({
+      type: "normal",
+      message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"]
+    });
   };
 
   var makeSubordinateToaster = function() {
@@ -225,6 +282,10 @@ var toast = (function() {
       state.autoToasterEfficiency = increase(state.autoToasterEfficiency, 1);
       clearInterval(subordinate);
       subordinate = setInterval(autoToast, 1000);
+      message.render({
+        type: "system",
+        message: ["subordinate auto toaster efficiency increased, " + state.autoToasterEfficiency + " toast/1s"]
+      });
     } else {
       message.render({
         type: "error",
@@ -232,7 +293,7 @@ var toast = (function() {
       });
     }
   };
-  
+
   var unlock_consumeToast = function() {
     consume = setInterval(consumeToast, state.consumeRate);
     var stageConsume = helper.e("#stage-consumed");
@@ -266,28 +327,32 @@ var toast = (function() {
   };
 
   var render = function() {
-    helper.e("#toasted-lifetime").textContent = state.toastedLifetime.toLocaleString(2);
-    helper.e("#toasted-inventory").textContent = state.toastedInventory.toLocaleString(2);
-    helper.e("#consumed-count").textContent = state.consumed.toLocaleString(2);
-    helper.e("#subordinate-toaster-count").textContent = state.autoToaster.toLocaleString(2);
-    helper.e("#subordinate-toaster-efficiency").textContent = state.autoToasterEfficiency.toLocaleString(2);
-    helper.e("#subordinate-toaster-efficiency-display").textContent = state.autoToasterEfficiency.toLocaleString(2);
-    // helper.e("#toasted-lifetime").textContent = numberSuffix({
-    //   number: state.toastedLifetime,
-    //   decimals: 2
-    // });
-    // helper.e("#toasted-inventory").textContent = numberSuffix({
-    //   number: state.toastedInventory,
-    //   decimals: 2
-    // });
-    // helper.e("#consumed-count").textContent = numberSuffix({
-    //   number: state.consumed,
-    //   decimals: 2
-    // });
-    // helper.e("#subordinate-toaster-count").textContent = numberSuffix({
-    //   number: state.autoToaster,
-    //   decimals: 2
-    // });
+    var allReadOuts = [{
+      element: helper.e("#toasted-lifetime"),
+      value: state.toastedLifetime
+    }, {
+      element: helper.e("#toasted-inventory"),
+      value: state.toastedInventory
+    }, {
+      element: helper.e("#consumed-count"),
+      value: state.consumed
+    }, {
+      element: helper.e("#subordinate-toaster-count"),
+      value: state.autoToaster
+    }, {
+      element: helper.e("#subordinate-toaster-efficiency"),
+      value: state.autoToasterEfficiency
+    }, {
+      element: helper.e("#subordinate-toaster-efficiency-display"),
+      value: state.autoToasterEfficiency
+    }];
+    allReadOuts.forEach(function(arrayItem, index) {
+      // arrayItem.element.textContent = arrayItem.value.toLocaleString(2);
+      arrayItem.element.textContent = numberSuffix({
+        number: arrayItem.value,
+        decimals: 2
+      });
+    });
   };
 
   var numberSuffix = function(override) {
@@ -296,7 +361,7 @@ var toast = (function() {
       decimals: null
     };
     if (override) {
-     options = helper.applyOptions(options, override);
+      options = helper.applyOptions(options, override);
     }
     if (options.decimals === null) {
       options.decimals == 2;
@@ -304,58 +369,58 @@ var toast = (function() {
     var suffix = "";
     var precision = options.decimals;
     if (options.number > 999999999999999999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000000000000000000;
-        suffix = "sexdecillion";
+      options.number = options.number / 1000000000000000000000000000000000000000000000000000;
+      suffix = "sexdecillion";
     } else if (options.number > 999999999999999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000000000000000;
-        suffix = "quindecillion";
+      options.number = options.number / 1000000000000000000000000000000000000000000000000;
+      suffix = "quindecillion";
     } else if (options.number > 999999999999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000000000000;
-        suffix = "quattuordecillion";
+      options.number = options.number / 1000000000000000000000000000000000000000000000;
+      suffix = "quattuordecillion";
     } else if (options.number > 999999999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000000000;
-        suffix = "tredecillion";
+      options.number = options.number / 1000000000000000000000000000000000000000000;
+      suffix = "tredecillion";
     } else if (options.number > 999999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000000;
-        suffix = "duodecillion";
+      options.number = options.number / 1000000000000000000000000000000000000000;
+      suffix = "duodecillion";
     } else if (options.number > 999999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000000;
-        suffix = "undecillion";
+      options.number = options.number / 1000000000000000000000000000000000000;
+      suffix = "undecillion";
     } else if (options.number > 999999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000000;
-        suffix = "decillion";
+      options.number = options.number / 1000000000000000000000000000000000;
+      suffix = "decillion";
     } else if (options.number > 999999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000000;
-        suffix = "nonillion";
+      options.number = options.number / 1000000000000000000000000000000;
+      suffix = "nonillion";
     } else if (options.number > 999999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000000;
-        suffix = "octillion";
+      options.number = options.number / 1000000000000000000000000000;
+      suffix = "octillion";
     } else if (options.number > 999999999999999999999999) {
-        options.number = options.number / 1000000000000000000000000;
-        suffix = "septillion";
+      options.number = options.number / 1000000000000000000000000;
+      suffix = "septillion";
     } else if (options.number > 999999999999999999999) {
-        options.number = options.number / 1000000000000000000000;
-        suffix = "sextillion";
+      options.number = options.number / 1000000000000000000000;
+      suffix = "sextillion";
     } else if (options.number > 999999999999999999) {
-        options.number = options.number / 1000000000000000000;
-        suffix = "quintillion";
+      options.number = options.number / 1000000000000000000;
+      suffix = "quintillion";
     } else if (options.number > 999999999999999) {
-        options.number = options.number / 1000000000000000;
-        suffix = "quadrillion";
+      options.number = options.number / 1000000000000000;
+      suffix = "quadrillion";
     } else if (options.number > 999999999999) {
-        options.number = options.number / 1000000000000;
-        suffix = "trillion";
+      options.number = options.number / 1000000000000;
+      suffix = "trillion";
     } else if (options.number > 999999999) {
-        options.number = options.number / 1000000000;
-        suffix = "billion";
+      options.number = options.number / 1000000000;
+      suffix = "billion";
     } else if (options.number > 999999) {
-        options.number = options.number / 1000000;
-        suffix = "million";
+      options.number = options.number / 1000000;
+      suffix = "million";
     } else if (options.number > 999) {
-        options.number = options.number / 1000;
-        suffix = "thousand";
-    }  else if (options.number < 1000) {
-        precision = 0;
+      options.number = options.number / 1000;
+      suffix = "thousand";
+    } else if (options.number < 1000) {
+      precision = 0;
     }
     return options.number.toFixed(precision) + " " + suffix;
   };
