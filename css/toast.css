@@ -1,0 +1,102 @@
+:root {
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --black: #000000;
+}
+
+body {
+  background-color: var(--gray-900);
+}
+
+.toaster {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.controls, .report {
+  height: 50vh;
+  width: 100vw;
+  overflow-y: auto;
+  padding-bottom: 5em;
+}
+
+@media (min-width: 768px) {
+  .toaster {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .controls, .report {
+    height: 100vh;
+    width: 50vw;
+    overflow-y: auto;
+  }
+}
+
+.report {
+  background-color: var(--black);
+}
+
+.report-message {
+  display: flex;
+  flex-flow: nowrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.report-message-type {
+  margin-right: 1.5em;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.report-message-text {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-flow: nowrap;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.report-message-text-item {
+  display: inline-block;
+}
+
+.report-message .report-message-text-blink {
+  display: none;
+}
+
+/*.report-message:last-child .report-message-text .report-message-text-item:last-child .report-message-text-blink {*/
+
+.report-message:last-child .report-message-text:last-child .report-message-text-blink {
+  display: inline-block;
+  opacity: 1;
+  margin-left: 0.8em;
+  animation-duration: 1s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1);
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1
+  }
+}
