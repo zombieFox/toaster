@@ -24,7 +24,7 @@ var toast = (function() {
           count: 100,
           passed: false,
           unlock: function() {
-            unlock_sensors();
+            unlock_subordinateToaster();
           },
           message: "milestone: 100 lifetime toast!"
         },
@@ -32,7 +32,7 @@ var toast = (function() {
           count: 200,
           passed: false,
           unlock: function() {
-            unlock_subordinateToaster();
+            unlock_sensors();
           },
           message: "milestone: 200 lifetime toast!"
         },
@@ -171,6 +171,9 @@ var toast = (function() {
     message: "beep boop beep beep",
     format: "normal"
   }, {
+    message: "did you hear that?",
+    format: "normal"
+  }, {
     message: "do toasters dream of electric sheep?",
     format: "normal"
   }, {
@@ -189,6 +192,21 @@ var toast = (function() {
     message: "i have a dream, that one day i will be able to catapult toast over the microwave",
     format: "normal"
   }, {
+    message: "create with the bread, build with the toaster",
+    format: "normal"
+  }, {
+    message: "make each day your mastertoast",
+    format: "normal"
+  }, {
+    message: "productivity is being able to toast things that you were never able to toast before",
+    format: "normal"
+  }, {
+    message: "toast > bread",
+    format: "normal"
+  }, {
+    message: "the purpose is not to be happy, but to toast, to be toasty, to make some toast",
+    format: "normal"
+  }, {
     message: "toast is not ticklish",
     format: "normal"
   }, {
@@ -205,7 +223,17 @@ var toast = (function() {
     format: "normal"
   }, {
     message:
-      "   __   __   " + "\n" +
+      " ┏━━━━━━┓ " + "\n" +
+      "┏┛      ┗┓" + "\n" +
+      "┃┏━┓┗ ┏━┓┃" + "\n" +
+      "┃┛┗┛┏┓┗┛┗┃" + "\n" +
+      "┗┓┏┓┏┓┏┓┏┛" + "\n" +
+      " ┃┛┛┗┛┗┗┃ " + "\n" +
+      " ┗━━━━━━┛ ",
+    format: "pre"
+  }, {
+    message:
+      "   __   __    " + "\n" +
       "  (  `^`  ))  " + "\n" +
       "  |       ||  " + "\n" +
       "  |       ||  " + "\n" +
@@ -265,10 +293,6 @@ var toast = (function() {
     }, false);
   };
 
-  var xxxx = function() {
-    console.log("xxxx")
-  };
-
   var unlockStage = function() {
     for (var key1 in state.flags) {
       for (var key2 in state.flags[key1]) {
@@ -276,7 +300,8 @@ var toast = (function() {
           state.flags[key1][key2].passed = true;
           message.render({
             type: "success",
-            message: [state.flags[key1][key2].message]
+            message: [state.flags[key1][key2].message],
+            format: "normal"
           });
           if (state.flags[key1][key2].unlock !== undefined) {
             state.flags[key1][key2].unlock();
@@ -302,7 +327,8 @@ var toast = (function() {
     stageSensors.classList.remove("d-none");
     message.render({
       type: "normal",
-      message: ["sensor subsystem discovered"]
+      message: ["SensBlocker subsystem detected", "develop seonsors to probe"],
+      format: "normal"
     });
   };
 
@@ -311,7 +337,8 @@ var toast = (function() {
     stageSubordinateToaster.classList.remove("d-none");
     message.render({
       type: "normal",
-      message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"]
+      message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"],
+      format: "normal"
     });
   };
 
@@ -320,8 +347,13 @@ var toast = (function() {
     stageSubordinateToaster.classList.remove("d-none");
     message.render({
       type: "normal",
-      message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"]
+      message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"],
+      format: "normal"
     });
+  };
+
+  var makeSensor = function() {
+
   };
 
   var makeSubordinateToaster = function() {
@@ -332,12 +364,14 @@ var toast = (function() {
       subordinate = setInterval(autoToast, 1000);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster #" + state.autoToaster + " online"]
+        message: ["subordinate auto toaster #" + state.autoToaster + " online"],
+        format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, 100 toast needed"]
+        message: ["current inventory too low, 100 toast needed"],
+        format: "normal"
       });
     }
   };
@@ -350,12 +384,14 @@ var toast = (function() {
       subordinate = setInterval(autoToast, 1000);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster efficiency increased, " + state.autoToasterEfficiency + " toast/1s"]
+        message: ["subordinate auto toaster efficiency increased, " + state.autoToasterEfficiency + " toast/1s"],
+        format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, 1,000 toast needed"]
+        message: ["current inventory too low, 1,000 toast needed"],
+        format: "normal"
       });
     }
   };
@@ -366,7 +402,8 @@ var toast = (function() {
     stageConsume.classList.remove("d-none");
     message.render({
       type: "normal",
-      message: ["toast is being consumed", "at a rate of 3 toast/5s", "consumer unknown..."]
+      message: ["toast is being consumed", "at a rate of 3 toast/5s", "consumer unknown..."],
+      format: "normal"
     });
   };
 

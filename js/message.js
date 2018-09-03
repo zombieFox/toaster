@@ -1,18 +1,8 @@
 var message = (function() {
 
   var typePrefix = function(type) {
-    var allFaces = [
-      "-_-",
-      "^_^",
-      "*_*",
-      "#_#",
-      "x x",
-      "o o",
-      "._.",
-      "[:]",
-      "!_!",
-      "+.+"
-    ];
+    var allEyes = ["~", "-", "^", "*", "=", "x", "!", "|", "¬", "¯", "¶", "×", "÷", "•", "†", "—", "Y", "y", "P", "p", "Q", "q", "O", "o", "V", "v", "M", "m", "E", "e", "I", "i", "U", "u", "1", "6", "8", "0", "ö", "õ", "š", "ł", "ß", "æ", "ę", "ė", "ÿ", "û", "ū", "î", "ï", "į", "µ", "¢", "₹", "₪", "λ", "θ", "±", "Ξ", "+"];
+    var allMouth = ["_", ".", ","];
     var allTypes = {
       success: "!!!",
       normal: ":::",
@@ -20,7 +10,13 @@ var message = (function() {
       system: "|||"
     };
     if (type == "motivation") {
-      return allFaces[Math.round(Math.random() * (allFaces.length - 1))]
+      var makeFace = function() {
+        var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))]
+        var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))]
+        return randomEyes + randomMouth + randomEyes
+      };
+      // return allFaces[Math.round(Math.random() * (allFaces.length - 1))]
+      return makeFace();
     } else {
       return allTypes[type];
     }
@@ -95,9 +91,8 @@ var message = (function() {
       options = helper.applyOptions(options, override);
     }
     var report = helper.e("#report");
-    var reportArea = helper.e("#report-area");
-    var newMessage = document.createElement("div");
-    newMessage.setAttribute("class", "mb-0 text-" + colour[options.type] + " report-message");
+    var newMessage = document.createElement("pre");
+    newMessage.setAttribute("class", "mb-2 text-" + colour[options.type] + " report-message");
     if (options.format == "normal") {
       newMessage.classList.add("report-message-normal");
     } else if (options.format == "pre") {
@@ -108,12 +103,9 @@ var message = (function() {
     messageType.setAttribute("class", "report-message-type");
     var messageText = document.createElement("span");
     messageText.setAttribute("class", "report-message-text");
-    var hr = document.createElement("hr");
-    hr.setAttribute("class", "border-" + colour[options.type]);
     newMessage.appendChild(messageType);
     newMessage.appendChild(messageText);
-    // reportArea.appendChild(hr);
-    reportArea.appendChild(newMessage);
+    report.appendChild(newMessage);
     startTypeWriter({
       textArray: options.message,
       index: 0,

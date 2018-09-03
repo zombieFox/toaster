@@ -31,7 +31,7 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "system",
-      message: ["directive.dat loaded"],
+      message: ["Directive.dat loaded"],
       format: "normal",
       delay: 500
     }
@@ -45,7 +45,7 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "system",
-      message: ["motivation.dat loaded"],
+      message: ["Motivation.dat loaded"],
       format: "normal",
       delay: 500
     }
