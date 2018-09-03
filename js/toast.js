@@ -120,6 +120,7 @@ var toast = (function() {
   };
 
   var motivation = [
+    "toast bread for a better tomorrow",
     "breadcrum overflow blockage, unable to transfuse loaf drifter",
     "tyber-burp",
     "seize the means of toast-duction",
@@ -169,7 +170,7 @@ var toast = (function() {
 
   var randomMotivation = function(index) {
     var randomIndex = Math.round(Math.random() * (motivation.length - 1));
-    if (index && index <= (motivation.length - 1)) {
+    if (index && index <= (motivation.length - 1) || index == 0) {
       randomIndex = index;
     };
     message.render({
