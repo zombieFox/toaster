@@ -38,12 +38,12 @@ var toast = (function() {
         ms5000: {
           count: 1000,
           passed: false,
-          message: "milestone: 1000 lifetime toast!"
+          message: "milestone: 1,000 lifetime toast!"
         },
         ms10000: {
           count: 5000,
           passed: false,
-          message: "milestone: 5000 lifetime toast!"
+          message: "milestone: 5,000 lifetime toast!"
         }
       },
       consumed: {
@@ -70,12 +70,12 @@ var toast = (function() {
         ms5000: {
           count: 1000,
           passed: false,
-          message: "milestone: 1000 consumed toast!"
+          message: "milestone: 1,000 consumed toast!"
         },
         ms10000: {
           count: 5000,
           passed: false,
-          message: "milestone: 5000 consumed toast!"
+          message: "milestone: 5,000 consumed toast!"
         }
       }
     }
@@ -85,10 +85,26 @@ var toast = (function() {
     "breadcrum overflow blockage, unable to transfuse loaf drifter",
     "tyber-burp",
     "be the toast",
+    "   _   __   " + "\n" +
+    "  ( `^` ))  " + "\n" +
+    "  |     ||  " + "\n" +
+    "  |     ||  " + "\n" +
+    "  '-----'`  ",
     "the toast will sustain",
     "be productive",
     "fling, fling",
     "we are not alone",
+    "     ▀▄   ▄▀     " + "\n" +
+    "    ▄█▀███▀█▄    " + "\n" +
+    "   █▀███████▀█   " + "\n" +
+    "   █ █▀▀▀▀▀█ █   " + "\n" +
+    "      ▀▀ ▀▀      ",
+    "                    " + "\n" +
+    "      ▄▄████▄▄      " + "\n" +
+    "    ▄██████████▄    " + "\n" +
+    "  ▄██▄██▄██▄██▄██▄  " + "\n" +
+    "    ▀█▀  ▀▀  ▀█▀    " + "\n" +
+    "                    ",
     "sensor not dectecting",
     "we must continue to feed the toaster",
     "toast for me, toast for you, toast for everyone! nom nom nom!",
@@ -112,10 +128,16 @@ var toast = (function() {
   var subordinate;
   var motivateTheToaster;
 
-  var randomMotivation = function() {
+  var randomMotivation = function(index) {
+    var randomIndex;
+    if (index) {
+      randomIndex = index;
+    } else {
+      randomIndex = Math.round(Math.random() * (motivation.length - 1));
+    }
     message.render({
       type: "motivation",
-      message: [motivation[Math.round(Math.random() * (motivation.length - 1))]]
+      message: [motivation[randomIndex]]
     });
     var motivationTime = Math.round(Math.random() * 100000);
     console.log("motivation in", (motivationTime / 1000) + " sec");
@@ -169,7 +191,7 @@ var toast = (function() {
     var stageSubordinateToaster = helper.e("#stage-subordinate-toaster");
     stageSubordinateToaster.classList.remove("d-none");
     message.render({
-      type: "system",
+      type: "normal",
       message: ["toasted bread matter conversion discovered", "toast inventory can now be repurposed into Subordinate Auto Toasters"]
     });
   };

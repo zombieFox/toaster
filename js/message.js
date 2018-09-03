@@ -77,8 +77,8 @@ var message = (function() {
     }
     var report = helper.e("#report");
     var reportArea = helper.e("#report-area");
-    var newMessage = document.createElement("samp");
-    newMessage.setAttribute("class", "text-" + colour[options.type] + " report-message");
+    var newMessage = document.createElement("pre");
+    newMessage.setAttribute("class", "mb-0 text-" + colour[options.type] + " report-message");
     var messageType = document.createElement("span");
     messageType.textContent = type[options.type];
     messageType.setAttribute("class", "report-message-type");
