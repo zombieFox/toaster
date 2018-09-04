@@ -23,7 +23,7 @@
         </div>
         <div class="card-body">
           <p class="card-text mb-0 lead">Current Inventory: <strong class="float-right" id="toasted-inventory">0</strong></p>
-          <p class="card-text mb-0">Lifetime: <strong class="float-right" id="toasted-lifetime">0</strong></p>
+          <p class="card-text mb-0">Lifetime: <span class="float-right" id="toasted-lifetime">0</span></p>
         </div>
         <div class="card-footer">
           <button class="btn btn-primary btn-lg" id="toast-button">Toast Bread</button>
@@ -35,15 +35,13 @@
           <p class="card-text mb-0 lead"><strong>Sensors</strong></p>
         </div>
         <div class="card-body">
-          <p class="card-text mb-0 lead">Electromagnetic Spectrum: <strong class="float-right" id="seonsor-count">Offline</strong></p>
-          <p class="card-text mb-0 small">Sensor cost 4,000 toast matter</p>
+          <p class="card-text mb-0 lead">Electromagnetic: <strong class="float-right" id="seonsor-count">0</strong></p>
+          <p class="card-text mb-2 small">Sensor cost 4,000 toast matter</p>
+          <button class="btn btn-sm btn-secondary">Build Electromagnetic Sensor</button>
           <hr>
-          <p class="card-text mb-0 lead">Sound Wave: <strong class="float-right" id="seonsor-efficiency">Offline</strong></p>
-          <p class="card-text mb-0 small">Sensor cost 4,000 toast matter</p>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-secondary">Build Sensor</button>
-          <button class="btn btn-secondary">Build Sensor</button>
+          <p class="card-text mb-0 lead">Sound: <strong class="float-right" id="seonsor-efficiency">0</strong></p>
+          <p class="card-text mb-2 small">Sensor cost 4,000 toast matter</p>
+          <button class="btn btn-sm btn-secondary">Build Sound Sensor</button>
         </div>
       </div>
 
@@ -64,14 +62,12 @@
         <div class="card-body">
           <p class="card-text mb-0 lead">Count: <strong class="float-right" id="subordinate-toaster-count">0</strong></p>
           <p class="card-text mb-0 small">1 subordinate auto toaster cost 100 toast matter</p>
-          <p class="card-text mb-0 small">1 subordinate auto toaster will produce <span id="subordinate-toaster-efficiency-display">1</span> toast/1s</p>
+          <p class="card-text mb-2 small">1 subordinate auto toaster will produce <span id="subordinate-toaster-efficiency-display">1</span> toast/1s</p>
+          <button class="btn btn-sm btn-secondary" id="subordinate-toaster-button">Build Subordinate Auto Toaster</button>
           <hr>
           <p class="card-text mb-0 lead">Efficiency Level: <strong class="float-right" id="subordinate-toaster-efficiency">0</strong></p>
-          <p class="card-text mb-0 small">Improve subordinate auto toaster efficiency cost 1,000 toast matter</p>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-secondary" id="subordinate-toaster-button">Build Subordinate Auto Toaster</button>
-          <button class="btn btn-info" id="subordinate-toaster-imprive-button">Improve Efficiency +1</button>
+          <p class="card-text mb-2 small">Improve subordinate auto toaster efficiency cost 1,000 toast matter</p>
+          <button class="btn btn-sm btn-secondary" id="subordinate-toaster-imprive-button">Improve Efficiency +1</button>
         </div>
       </div>
 
@@ -85,6 +81,7 @@
   <!--<script src="js/bootstrap.min.js"></script>-->
   <script src="js/helper.js"></script>
   <script src="js/message.js"></script>
+  <script src="js/motivation.js"></script>
   <script src="js/toast.js"></script>
   <script src="js/boot.js"></script>
   <script src="js/init.js"></script>

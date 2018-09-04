@@ -24,7 +24,7 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "normal",
-      message: ["SensBlocker stable"],
+      message: ["SensBlocker crytolock secure"],
       format: "normal",
       delay: 500
     }
@@ -51,7 +51,7 @@ var boot = (function() {
     }
   }, {
     introFunction: {
-      func: toast.randomMotivation,
+      func: motivation.render,
       messageCount: 0,
       delay: 800
     }

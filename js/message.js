@@ -15,7 +15,6 @@ var message = (function() {
         var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))]
         return randomEyes + randomMouth + randomEyes
       };
-      // return allFaces[Math.round(Math.random() * (allFaces.length - 1))]
       return makeFace();
     } else {
       return allTypes[type];
@@ -42,6 +41,7 @@ var message = (function() {
     }
     if (options.index < options.text.length) {
       options.target.innerHTML = options.text.substring(0, options.index + 1) + '<span class="report-message-text-blink">#</span>';
+      scrollToBottom();
       setTimeout(function() {
         typeWriter({
           text: options.text,
@@ -71,12 +71,10 @@ var message = (function() {
       var span = document.createElement("span");
       span.setAttribute("class", "report-message-text-item");
       options.target.appendChild(span);
-      scrollToBottom();
       typeWriter({
         text: arrayItem,
         index: index,
-        target: span,
-        callback: options.callback
+        target: span
       });
     });
   };
