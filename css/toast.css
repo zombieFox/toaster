@@ -86,8 +86,6 @@ body {
   display: none;
 }
 
-/*.report-message:last-child .report-message-text .report-message-text-item:last-child .report-message-text-blink {*/
-
 .report-message:last-child .report-message-text:last-child .report-message-text-blink {
   display: inline-block;
   opacity: 1;

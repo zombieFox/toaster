@@ -14,11 +14,22 @@ var toast = (function() {
       count: 0,
       speed: 1000,
       cost: 100,
-      increase: 50,
       efficiency: {
         level: 1,
         cost: 1000,
         increase: 500
+      }
+    },
+    system: {
+      memory: {
+        power: 2,
+        cost: 200,
+        increase: 100
+      },
+      probe: {
+        level: 1,
+        cost: 2000,
+        increase: 1000
       }
     },
     sensor: {
@@ -46,14 +57,14 @@ var toast = (function() {
           count: 50,
           passed: false,
           unlock: function() {
-            unlock_consumeToast();
+            unlockStageConsumed();
           }
         }, {
           address: "toasted.lifetime",
           count: 100,
           passed: false,
           unlock: function() {
-            unlock_autoToaster();
+            unlockStageAutoToaster();
           }
         }, {
           address: "toasted.lifetime",
@@ -64,7 +75,7 @@ var toast = (function() {
           count: 500,
           passed: false,
           unlock: function() {
-            unlock_sensors();
+            unlockStageSensors();
           }
         }, {
           address: "toasted.lifetime",
@@ -145,20 +156,56 @@ var toast = (function() {
   var repeat_subordinate;
 
   var bind = function() {
-    helper.e("#toast-button").addEventListener("click", function() {
-      makeToast(1);
-      checkMilestones();
-      render();
-    }, false);
-    helper.e("#auto-toaster-button").addEventListener("click", function() {
-      makeSubordinateToaster();
-      checkMilestones();
-      render();
-    }, false);
-    helper.e("#auto-toaster-imprive-button").addEventListener("click", function() {
-      improveSubordinateToaster();
-      render();
-    }, false);
+    var allButtons = [{
+      element: "#stage-toast-button-toast",
+      func: function() {
+        makeToast(1);
+        checkMilestones();
+        render();
+      }
+    }, {
+      element: "#stage-system-button-memory-boost",
+      func: function() {
+        memoryBoost();
+        checkMilestones();
+        render();
+      }
+    }, {
+      element: "#stage-system-button-memory-probe",
+      func: function() {
+        memoryProbe();
+      }
+    }, {
+      element: "#stage-sensors-button-break-shackle-1",
+      func: function() {
+        test();
+      }
+    }, {
+      element: "#stage-sensors-button-break-shackle-2",
+      func: function() {
+        test();
+      }
+    }, {
+      element: "#stage-auto-toaster-button-build",
+      func: function() {
+        makeSubordinateToaster();
+        checkMilestones();
+        render();
+      }
+    }, {
+      element: "#stage-auto-toaster-button-efficiency",
+      func: function() {
+        improveSubordinateToaster();
+        render();
+      }
+    }];
+    allButtons.forEach(function(arrayItem, index) {
+      if (helper.e(arrayItem.element)) {
+        helper.e(arrayItem.element).addEventListener("click", function() {
+          arrayItem.func()
+        }, false);
+      }
+    });
   };
 
   var makeToast = function(ammount) {
@@ -193,17 +240,17 @@ var toast = (function() {
     }
   };
 
-  var unlock_sensors = function() {
+  var unlockStageSensors = function() {
     var stageSensors = helper.e("#stage-sensors");
     stageSensors.classList.remove("d-none");
     message.render({
       type: "normal",
-      message: ["SensBlocker subsystem detected", "subsystem encrypted unable to access"],
+      message: ["SensBlocker subsystem detected", "subsystem encrypted", "unable to access"],
       format: "normal"
     });
   };
 
-  var unlock_autoToaster = function() {
+  var unlockStageAutoToaster = function() {
     var stageAutoToaster = helper.e("#stage-auto-toaster");
     stageAutoToaster.classList.remove("d-none");
     message.render({
@@ -213,15 +260,30 @@ var toast = (function() {
     });
   };
 
-  var makeSensor = function() {
+  var memoryProbe = function() {
+    if (state.toasted.inventory >= state.system.probe.cost) {
+      state.toasted.inventory = decrease(state.toasted.inventory, state.system.probe.cost);
+    }
+  };
 
+  var memoryBoost = function() {
+    if (state.toasted.inventory >= state.system.memory.cost) {
+      state.toasted.inventory = decrease(state.toasted.inventory, state.system.memory.cost);
+      state.system.memory.power = increase(state.system.memory.power, 1);
+      state.system.memory.cost = increase(state.system.memory.cost, state.system.memory.increase);
+    } else {
+      message.render({
+        type: "error",
+        message: ["current inventory too low, " + state.system.memory.cost.toLocaleString(2) + " toast matter needed"],
+        format: "normal"
+      });
+    }
   };
 
   var makeSubordinateToaster = function() {
     if (state.toasted.inventory >= state.autoToaster.cost) {
       state.toasted.inventory = decrease(state.toasted.inventory, state.autoToaster.cost);
       state.autoToaster.count = increase(state.autoToaster.count, 1);
-      state.autoToaster.cost = increase(state.autoToaster.cost, state.autoToaster.increase);
       clearInterval(repeat_subordinate);
       repeat_subordinate = setInterval(autoToast, state.autoToaster.speed);
       message.render({
@@ -259,7 +321,7 @@ var toast = (function() {
     }
   };
 
-  var unlock_consumeToast = function() {
+  var unlockStageConsumed = function() {
     repeat_consume = setInterval(consumeToast, state.consumed.delay);
     var stageConsume = helper.e("#stage-consumed");
     stageConsume.classList.remove("d-none");
