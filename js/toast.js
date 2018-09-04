@@ -150,7 +150,7 @@ var toast = (function() {
       checkMilestones();
       render();
     }, false);
-    helper.e("#auto-toaster-button").addEventListener("click", function() {console.log(1);
+    helper.e("#auto-toaster-button").addEventListener("click", function() {
       makeSubordinateToaster();
       checkMilestones();
       render();
