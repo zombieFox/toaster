@@ -1,172 +1,196 @@
 var toast = (function() {
 
   var state = {
-    toastedLifetime: 0,
-    toastedInventory: 0,
-    autoToaster: 0,
-    autoToasterEfficiency: 1,
-    consumed: 0,
-    consumeDelay: 5000,
-    consumeRate: 3,
-    sensor: {
-      matterConversion: false
+    toasted: {
+      lifetime: 0,
+      inventory: 0
     },
-    flags: {
-      toastedLifetime: {
-        ms50: {
+    consumed: {
+      count: 0,
+      rate: 3,
+      delay: 5000
+    },
+    autoToaster: {
+      count: 0,
+      speed: 1000,
+      cost: 100,
+      increase: 50,
+      efficiency: {
+        level: 1,
+        cost: 1000,
+        increase: 500
+      }
+    },
+    sensor: {
+      electromagnetic: {
+        break: 3000,
+        unlocked: false,
+        count: 0,
+        level: 1
+      },
+      sonic: {
+        break: 3000,
+        unlocked: false,
+        count: 0,
+        level: 1
+      }
+    },
+    milestones: {
+      toasted: {
+        message: {
+          prefix: "milestone: ",
+          suffix: " lifetime toast!"
+        },
+        all: [{
+          address: "toasted.lifetime",
           count: 50,
           passed: false,
           unlock: function() {
             unlock_consumeToast();
-          },
-          message: "milestone: 50 lifetime toast!"
-        },
-        ms100: {
+          }
+        }, {
+          address: "toasted.lifetime",
           count: 100,
           passed: false,
           unlock: function() {
-            unlock_subordinateToaster();
-          },
-          message: "milestone: 100 lifetime toast!"
-        },
-        ms500: {
+            unlock_autoToaster();
+          }
+        }, {
+          address: "toasted.lifetime",
           count: 200,
+          passed: false
+        }, {
+          address: "toasted.lifetime",
+          count: 500,
           passed: false,
           unlock: function() {
             unlock_sensors();
-          },
-          message: "milestone: 200 lifetime toast!"
-        },
-        ms1000: {
-          count: 500,
-          passed: false,
-          message: "milestone: 500 lifetime toast!"
-        },
-        ms5000: {
+          }
+        }, {
+          address: "toasted.lifetime",
           count: 1000,
-          passed: false,
-          message: "milestone: 1,000 lifetime toast!"
-        },
-        ms10000: {
+          passed: false
+        }, {
+          address: "toasted.lifetime",
           count: 5000,
-          passed: false,
-          message: "milestone: 5,000 lifetime toast!"
-        }
+          passed: false
+        }]
       },
       consumed: {
-        ms50: {
+        message: {
+          prefix: "milestone: ",
+          suffix: " consumed toast!"
+        },
+        all: [{
+          address: "consumed.count",
           count: 50,
-          passed: false,
-          message: "milestone: 50 consumed toast!"
-        },
-        ms100: {
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 100,
-          passed: false,
-          message: "milestone: 100 consumed toast!"
-        },
-        ms500: {
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 200,
-          passed: false,
-          message: "milestone: 200 consumed toast!"
-        },
-        ms1000: {
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 500,
-          passed: false,
-          message: "milestone: 500 consumed toast!"
-        },
-        ms5000: {
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 1000,
-          passed: false,
-          message: "milestone: 1,000 consumed toast!"
-        },
-        ms10000: {
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 5000,
-          passed: false,
-          message: "milestone: 5,000 consumed toast!"
-        }
+          passed: false
+        }]
       },
       autoToaster: {
-        ms50: {
+        message: {
+          prefix: "milestone: ",
+          suffix: " subordinate auto toasters online!"
+        },
+        all: [{
+          address: "autoToaster.count",
           count: 50,
-          passed: false,
-          message: "milestone: 50 Subordinate Auto Toasters online!"
-        },
-        ms100: {
+          passed: false
+        }, {
+          address: "autoToaster.count",
           count: 100,
-          passed: false,
-          message: "milestone: 100 Subordinate Auto Toasters online!"
-        },
-        ms500: {
+          passed: false
+        }, {
+          address: "autoToaster.count",
           count: 200,
-          passed: false,
-          message: "milestone: 200 Subordinate Auto Toasters online!"
-        },
-        ms1000: {
+          passed: false
+        }, {
+          address: "autoToaster.count",
           count: 500,
-          passed: false,
-          message: "milestone: 500 Subordinate Auto Toasters online!"
-        },
-        ms5000: {
+          passed: false
+        }, {
+          address: "autoToaster.count",
           count: 1000,
-          passed: false,
-          message: "milestone: 1,000 Subordinate Auto Toasters online!"
-        },
-        ms10000: {
+          passed: false
+        }, {
+          address: "autoToaster.count",
           count: 5000,
-          passed: false,
-          message: "milestone: 5,000 Subordinate Auto Toasters online!"
-        }
+          passed: false
+        }]
       }
     }
   };
 
-  var consume;
-  var subordinate;
+  var repeat_consume;
+  var repeat_subordinate;
 
   var bind = function() {
     helper.e("#toast-button").addEventListener("click", function() {
       makeToast(1);
-      unlockStage();
+      checkMilestones();
       render();
     }, false);
-    helper.e("#subordinate-toaster-button").addEventListener("click", function() {
+    helper.e("#auto-toaster-button").addEventListener("click", function() {console.log(1);
       makeSubordinateToaster();
-      unlockStage();
+      checkMilestones();
       render();
     }, false);
-    helper.e("#subordinate-toaster-imprive-button").addEventListener("click", function() {
+    helper.e("#auto-toaster-imprive-button").addEventListener("click", function() {
       improveSubordinateToaster();
       render();
     }, false);
   };
 
-  var unlockStage = function() {
-    for (var key1 in state.flags) {
-      for (var key2 in state.flags[key1]) {
-        if (state[key1] >= state.flags[key1][key2].count && !state.flags[key1][key2].passed) {
-          state.flags[key1][key2].passed = true;
-          message.render({
-            type: "success",
-            message: [state.flags[key1][key2].message],
-            format: "normal"
-          });
-          if (state.flags[key1][key2].unlock !== undefined) {
-            state.flags[key1][key2].unlock();
-          }
-        }
-      }
-    }
-  };
-
   var makeToast = function(ammount) {
-    state.toastedLifetime = increase(state.toastedLifetime, ammount);
-    state.toastedInventory = increase(state.toastedInventory, ammount);
-    // console.log(state);
+    state.toasted.lifetime = increase(state.toasted.lifetime, ammount);
+    state.toasted.inventory = increase(state.toasted.inventory, ammount);
   };
 
   var autoToast = function() {
-    makeToast((state.autoToaster * state.autoToasterEfficiency));
+    makeToast((state.autoToaster.count * state.autoToaster.efficiency.level));
     render();
+  };
+
+  var checkMilestones = function() {
+    for (var key in state.milestones) {
+      state.milestones[key].all.forEach(function(arrayItem, index) {
+        var valueToCheck = helper.getObject({
+          object: state,
+          path: arrayItem.address
+        });
+        if (valueToCheck >= arrayItem.count && !arrayItem.passed) {
+          arrayItem.passed = true;
+          message.render({
+            type: "success",
+            message: [state.milestones[key].message.prefix + arrayItem.count + state.milestones[key].message.suffix],
+            format: "normal"
+          });
+          if (arrayItem.unlock !== undefined) {
+            arrayItem.unlock();
+          }
+        };
+      });
+    }
   };
 
   var unlock_sensors = function() {
@@ -179,9 +203,9 @@ var toast = (function() {
     });
   };
 
-  var unlock_subordinateToaster = function() {
-    var stageSubordinateToaster = helper.e("#stage-subordinate-toaster");
-    stageSubordinateToaster.classList.remove("d-none");
+  var unlock_autoToaster = function() {
+    var stageAutoToaster = helper.e("#stage-auto-toaster");
+    stageAutoToaster.classList.remove("d-none");
     message.render({
       type: "normal",
       message: ["toasted bread matter conversion discovered", "toast matter can be repurposed into autonomous utilities", "Subordinate Auto Toaster utility accessible"],
@@ -194,47 +218,49 @@ var toast = (function() {
   };
 
   var makeSubordinateToaster = function() {
-    if (state.toastedInventory >= 100) {
-      state.toastedInventory = decrease(state.toastedInventory, 100);
-      state.autoToaster = increase(state.autoToaster, 1);
-      clearInterval(subordinate);
-      subordinate = setInterval(autoToast, 1000);
+    if (state.toasted.inventory >= state.autoToaster.cost) {
+      state.toasted.inventory = decrease(state.toasted.inventory, state.autoToaster.cost);
+      state.autoToaster.count = increase(state.autoToaster.count, 1);
+      state.autoToaster.cost = increase(state.autoToaster.cost, state.autoToaster.increase);
+      clearInterval(repeat_subordinate);
+      repeat_subordinate = setInterval(autoToast, state.autoToaster.speed);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster #" + state.autoToaster + " online"],
+        message: ["subordinate auto toaster #" + state.autoToaster.count.toLocaleString(2) + " online"],
         format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, 100 toast needed"],
+        message: ["current inventory too low, " + state.autoToaster.cost.toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
   };
 
   var improveSubordinateToaster = function() {
-    if (state.toastedInventory >= 1000) {
-      state.toastedInventory = decrease(state.toastedInventory, 1000);
-      state.autoToasterEfficiency = increase(state.autoToasterEfficiency, 1);
-      clearInterval(subordinate);
-      subordinate = setInterval(autoToast, 1000);
+    if (state.toasted.inventory >= state.autoToaster.efficiency.cost) {
+      state.toasted.inventory = decrease(state.toasted.inventory, state.autoToaster.efficiency.cost);
+      state.autoToaster.efficiency.level = increase(state.autoToaster.efficiency.level, 1);
+      state.autoToaster.efficiency.cost = increase(state.autoToaster.efficiency.cost, state.autoToaster.efficiency.increase);
+      clearInterval(repeat_subordinate);
+      repeat_subordinate = setInterval(autoToast, state.autoToaster.speed);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster efficiency increased, " + state.autoToasterEfficiency + " toast/1s"],
+        message: ["subordinate auto toaster efficiency increased, " + state.autoToaster.efficiency.level.toLocaleString(2) + " toast/1s"],
         format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, 1,000 toast needed"],
+        message: ["current inventory too low, " + state.autoToaster.efficiency.cost.toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
   };
 
   var unlock_consumeToast = function() {
-    consume = setInterval(consumeToast, state.consumeDelay);
+    repeat_consume = setInterval(consumeToast, state.consumed.delay);
     var stageConsume = helper.e("#stage-consumed");
     stageConsume.classList.remove("d-none");
     message.render({
@@ -245,16 +271,16 @@ var toast = (function() {
   };
 
   var consumeToast = function() {
-    if (state.toastedInventory > 0) {
-      var rate = state.consumeRate;
+    if (state.toasted.inventory > 0) {
+      var rate = state.consumed.rate;
       while (rate > 0) {
         rate = rate - 1;
-        if (state.toastedInventory > 0) {
-          state.toastedInventory = decrease(state.toastedInventory, 1);
-          state.consumed = increase(state.consumed, 1);
+        if (state.toasted.inventory > 0) {
+          state.toasted.inventory = decrease(state.toasted.inventory, 1);
+          state.consumed.count = increase(state.consumed.count, 1);
         }
       };
-      unlockStage();
+      checkMilestones();
       render();
     }
   };
@@ -273,31 +299,27 @@ var toast = (function() {
   };
 
   var render = function() {
-    var allReadOuts = [{
-      element: helper.e("#toasted-lifetime"),
-      value: state.toastedLifetime
-    }, {
-      element: helper.e("#toasted-inventory"),
-      value: state.toastedInventory
-    }, {
-      element: helper.e("#consumed-count"),
-      value: state.consumed
-    }, {
-      element: helper.e("#subordinate-toaster-count"),
-      value: state.autoToaster
-    }, {
-      element: helper.e("#subordinate-toaster-efficiency"),
-      value: state.autoToasterEfficiency
-    }, {
-      element: helper.e("#subordinate-toaster-efficiency-display"),
-      value: state.autoToasterEfficiency
-    }];
-    allReadOuts.forEach(function(arrayItem, index) {
-      // arrayItem.element.textContent = arrayItem.value.toLocaleString(2);
-      arrayItem.element.textContent = numberSuffix({
-        number: arrayItem.value,
-        decimals: 2
-      });
+    var allDataReadouts = helper.eA("[data-toast-readout]");
+    allDataReadouts.forEach(function(arrayItem, index) {
+      if (arrayItem.dataset.format == "suffix") {
+        arrayItem.textContent = numberSuffix({
+          number: helper.getObject({
+            object: state,
+            path: arrayItem.dataset.toastReadout
+          }),
+          decimals: 2
+        });
+      } else if (arrayItem.dataset.format == "local") {
+        arrayItem.textContent = helper.getObject({
+          object: state,
+          path: arrayItem.dataset.toastReadout
+        }).toLocaleString(2);
+      } else {
+        arrayItem.textContent = helper.getObject({
+          object: state,
+          path: arrayItem.dataset.toastReadout
+        });
+      }
     });
   };
 

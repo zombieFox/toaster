@@ -11,9 +11,9 @@ var message = (function() {
     };
     if (type == "motivation") {
       var makeFace = function() {
-        var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))]
-        var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))]
-        return randomEyes + randomMouth + randomEyes
+        var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))];
+        var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))];
+        return randomEyes + randomMouth + randomEyes;
       };
       return makeFace();
     } else {
