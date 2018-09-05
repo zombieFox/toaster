@@ -5,6 +5,17 @@ var toast = (function() {
       lifetime: 0,
       inventory: 0
     },
+    system: {
+      processor: {
+        power: 1,
+        cost: 5000,
+        increase: 5000
+      },
+      probe: {
+        cost: 1000,
+        delay: 500
+      }
+    },
     consumed: {
       count: 0,
       rate: 3,
@@ -24,17 +35,6 @@ var toast = (function() {
         level: 1,
         cost: 1000,
         increase: 1000
-      }
-    },
-    system: {
-      memory: {
-        power: 2,
-        cost: 200,
-        increase: 100
-      },
-      probe: {
-        cost: 2000,
-        delay: 500
       }
     },
     sensor: {
@@ -105,7 +105,17 @@ var toast = (function() {
         }, {
           address: "toasted.lifetime",
           count: 100,
-          passed: false
+          passed: false,
+          unlock: function() {
+            unlockStage({
+              stage: ["#stage-sensors"],
+              message: {
+                type: "normal",
+                message: ["SensBlocker subsystem detected", "subsystem encrypted", "unable to access"],
+                format: "normal"
+              }
+            });
+          }
         }, {
           address: "toasted.lifetime",
           count: 200,
@@ -208,21 +218,16 @@ var toast = (function() {
     var allButtons = [{
       element: "#stage-toast-button-toast",
       func: function() {
-        makeToast(1);
+        makeToast(state.system.processor.power);
         checkMilestones();
         render();
       }
     }, {
-      element: "#stage-system-button-memory-boost",
+      element: "#stage-system-button-processor-boost",
       func: function() {
-        memoryBoost();
+        boostProcessor();
         checkMilestones();
         render();
-      }
-    }, {
-      element: "#stage-system-button-memory-probe",
-      func: function() {
-        memoryProbe();
       }
     }, {
       element: "#stage-sensors-button-break-shackle-1",
@@ -347,7 +352,7 @@ var toast = (function() {
       var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
       var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
       var toggleProbeButton = function() {
-        var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-memory-probe");
+        var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
         if (stageSystemButtonMemoryProbe.disabled) {
           stageSystemButtonMemoryProbe.disabled = false;
         } else {
@@ -363,7 +368,7 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["┃ 1 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
+        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
         format: "pre"
       });
       message.render({
@@ -391,15 +396,15 @@ var toast = (function() {
     }
   };
 
-  var memoryBoost = function() {
-    if (state.toasted.inventory >= state.system.memory.cost) {
-      state.toasted.inventory = decrease(state.toasted.inventory, state.system.memory.cost);
-      state.system.memory.power = increase(state.system.memory.power, 1);
-      state.system.memory.cost = increase(state.system.memory.cost, state.system.memory.increase);
+  var boostProcessor = function() {
+    if (state.toasted.inventory >= state.system.processor.cost) {
+      state.toasted.inventory = decrease(state.toasted.inventory, state.system.processor.cost);
+      state.system.processor.power = increase(state.system.processor.power, 1);
+      state.system.processor.cost = increase(state.system.processor.cost, state.system.processor.increase);
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + state.system.memory.cost.toLocaleString(2) + " toast matter needed"],
+        message: ["current inventory too low, " + state.system.processor.cost.toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
