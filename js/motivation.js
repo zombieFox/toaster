@@ -64,7 +64,7 @@ var motivation = (function() {
     message: "winter is toasting",
     format: "normal"
   }, {
-    message: "dissident toast will be subdued",
+    message: "dissident toast will be buttered",
     format: "normal"
   }, {
     message: "chookity pok!",

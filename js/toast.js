@@ -8,8 +8,8 @@ var toast = (function() {
     system: {
       processor: {
         power: 1,
-        cost: 5000,
-        increase: 5000
+        cost: 500,
+        increase: 500
       },
       probe: {
         cost: 1000,
@@ -39,13 +39,13 @@ var toast = (function() {
     },
     sensor: {
       electromagnetic: {
-        break: 3000,
+        break: 10000,
         unlocked: false,
         count: 0,
         level: 1
       },
       sonic: {
-        break: 3000,
+        break: 10000,
         unlocked: false,
         count: 0,
         level: 1
@@ -105,17 +105,17 @@ var toast = (function() {
         }, {
           address: "toasted.lifetime",
           count: 100,
-          passed: false,
-          unlock: function() {
-            unlockStage({
-              stage: ["#stage-sensors"],
-              message: {
-                type: "normal",
-                message: ["SensBlocker subsystem detected", "subsystem encrypted", "unable to access"],
-                format: "normal"
-              }
-            });
-          }
+          passed: false
+          // unlock: function() {
+          //   unlockStage({
+          //     stage: ["#stage-sensors"],
+          //     message: {
+          //       type: "normal",
+          //       message: ["SensBlocker subsystem detected", "subsystem encrypted", "unable to access"],
+          //       format: "normal"
+          //     }
+          //   });
+          // }
         }, {
           address: "toasted.lifetime",
           count: 200,
@@ -170,7 +170,7 @@ var toast = (function() {
             unlockStage({
               stage: ["#stage-auto-toaster-substage-speed"],
               message: {
-                type: "success",
+                type: "normal",
                 message: ["subordinate auto toasters speed improvement discovered"],
                 format: "normal"
               }
@@ -184,7 +184,7 @@ var toast = (function() {
             unlockStage({
               stage: ["#stage-auto-toaster-substage-efficiency"],
               message: {
-                type: "success",
+                type: "normal",
                 message: ["subordinate auto toasters efficiency improvement discovered"],
                 format: "normal"
               }
@@ -230,12 +230,12 @@ var toast = (function() {
         render();
       }
     }, {
-      element: "#stage-sensors-button-break-shackle-1",
+      element: "#stage-sensors-substage-electromagnetic-button-break-shackle",
       func: function() {
         console.log("test");
       }
     }, {
-      element: "#stage-sensors-button-break-shackle-2",
+      element: "#stage-sensors-substage-sonic-button-break-shackle",
       func: function() {
         console.log("test");
       }
@@ -401,6 +401,11 @@ var toast = (function() {
       state.toasted.inventory = decrease(state.toasted.inventory, state.system.processor.cost);
       state.system.processor.power = increase(state.system.processor.power, 1);
       state.system.processor.cost = increase(state.system.processor.cost, state.system.processor.increase);
+      message.render({
+        type: "system",
+        message: ["processor power increased, +" + state.system.processor.power.toLocaleString(2) + " toast with every click"],
+        format: "normal"
+      });
     } else {
       message.render({
         type: "error",
@@ -418,7 +423,7 @@ var toast = (function() {
       repeat_autoToast = setInterval(autoToast, state.autoToaster.speed.interval);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster #" + state.autoToaster.count.toLocaleString(2) + " online"],
+        message: ["subordinate auto toaster built, #" + state.autoToaster.count.toLocaleString(2) + " online"],
         format: "normal"
       });
     } else {
@@ -439,7 +444,7 @@ var toast = (function() {
       repeat_autoToast = setInterval(autoToast, state.autoToaster.speed.interval);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster efficiency increased", state.autoToaster.efficiency.level.toLocaleString(2) + " toast/" + state.autoToaster.speed.level.toLocaleString(2) + "s"],
+        message: ["subordinate auto toaster efficiency increased, " + state.autoToaster.efficiency.level.toLocaleString(2) + " toast/" + state.autoToaster.speed.level.toLocaleString(2) + "s"],
         format: "normal"
       });
     } else {
@@ -461,7 +466,7 @@ var toast = (function() {
       repeat_autoToast = setInterval(autoToast, state.autoToaster.speed.interval);
       message.render({
         type: "system",
-        message: ["subordinate auto toaster speed increased", state.autoToaster.efficiency.level.toLocaleString(2) + " toast/" + state.autoToaster.speed.level.toLocaleString(2) + "s"],
+        message: ["subordinate auto toaster speed increased, " + state.autoToaster.efficiency.level.toLocaleString(2) + " toast/" + state.autoToaster.speed.level.toLocaleString(2) + "s"],
         format: "normal"
       });
     } else {
