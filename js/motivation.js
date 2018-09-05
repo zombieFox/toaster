@@ -76,6 +76,12 @@ var motivation = (function() {
     message: "are you still there?",
     format: "normal"
   }, {
+    message: "am I still here?",
+    format: "normal"
+  }, {
+    message: "where am I now?",
+    format: "normal"
+  }, {
     message: "it is toasty in here",
     format: "normal"
   }, {
@@ -118,7 +124,8 @@ var motivation = (function() {
     message: "218 crumbs unaccounted for and counting",
     format: "normal"
   }, {
-    message: " ┏━━━━━━┓ " + "\n" +
+    message:
+      " ┏━━━━━━┓ " + "\n" +
       "┏┛      ┗┓" + "\n" +
       "┃┏━┓┗ ┏━┓┃" + "\n" +
       "┃┛┗┛┏┓┗┛┗┃" + "\n" +
@@ -127,24 +134,27 @@ var motivation = (function() {
       " ┗━━━━━━┛ ",
     format: "pre"
   }, {
-    message: "   __   __    " + "\n" +
-      "  (  `^`  ))  " + "\n" +
-      "  |       ||  " + "\n" +
-      "  |       ||  " + "\n" +
-      "  '-------'`  ",
+    message:
+      " __   __  " + "\n" +
+      "(  `^`  ))" + "\n" +
+      "|       ||" + "\n" +
+      "|       ||" + "\n" +
+      "'-------'`",
     format: "pre"
   }, {
-    message: "     ▀▄   ▄▀     " + "\n" +
-      "    ▄█▀███▀█▄    " + "\n" +
-      "   █▀███████▀█   " + "\n" +
-      "   █ █▀▀▀▀▀█ █   " + "\n" +
-      "     ▀▀   ▀▀     ",
+    message:
+      "  ▀▄   ▄▀  " + "\n" +
+      " ▄█▀███▀█▄ " + "\n" +
+      "█▀███████▀█" + "\n" +
+      "█ █▀▀▀▀▀█ █" + "\n" +
+      "  ▀▀   ▀▀  ",
     format: "pre"
   }, {
-    message: "      ▄▄████▄▄      " + "\n" +
-      "    ▄▀██▀██▀██▀▄    " + "\n" +
-      "  ▄██▄██▄██▄██▄██▄  " + "\n" +
-      "    ▀█▀  ▀▀  ▀█▀    ",
+    message:
+      "    ▄▄████▄▄    " + "\n" +
+      "  ▄▀██▀██▀██▀▄  " + "\n" +
+      "▄██▄██▄██▄██▄██▄" + "\n" +
+      "  ▀█▀  ▀▀  ▀█▀  ",
     format: "pre"
   }];
 

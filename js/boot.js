@@ -17,7 +17,7 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "system",
-      message: ["SensBlocker.dat loaded"],
+      message: ["Sens.dat loaded", "SensBlocker.dat loaded"],
       format: "normal",
       delay: 500
     }

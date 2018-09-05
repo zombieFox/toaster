@@ -34,6 +34,7 @@ var message = (function() {
       text: null,
       index: null,
       target: null,
+      delay: null,
       callback: null
     };
     if (override) {
@@ -42,14 +43,21 @@ var message = (function() {
     if (options.index < options.text.length) {
       options.target.innerHTML = options.text.substring(0, options.index + 1) + '<span class="report-message-text-blink">#</span>';
       scrollToBottom();
+      var delay;
+      if (options.delay !== null) {
+        delay = options.delay;
+      } else {
+        delay = 20;
+      }
       setTimeout(function() {
         typeWriter({
           text: options.text,
           index: options.index + 1,
           target: options.target,
+          delay: options.delay,
           callback: options.callback
         });
-      }, 20);
+      }, delay);
     } else {
       if (options.callback !== null) {
         options.callback();
@@ -62,6 +70,7 @@ var message = (function() {
       textArray: null,
       index: null,
       target: null,
+      delay: null,
       callback: null
     };
     if (override) {
@@ -74,7 +83,9 @@ var message = (function() {
       typeWriter({
         text: arrayItem,
         index: index,
-        target: span
+        target: span,
+        delay: options.delay,
+        callback: options.callback
       });
     });
   };
@@ -83,7 +94,9 @@ var message = (function() {
     var options = {
       type: null,
       message: null,
-      format: null
+      delay: null,
+      format: null,
+      callback: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -107,8 +120,17 @@ var message = (function() {
     startTypeWriter({
       textArray: options.message,
       index: 0,
-      target: messageText
+      delay: options.delay,
+      target: messageText,
+      callback: options.callback
     });
+  };
+
+  var clear = function() {
+    var report = helper.e("#report");
+    while (report.lastChild) {
+      report.removeChild(report.lastChild);
+    };
   };
 
   var scrollToBottom = function() {
@@ -117,7 +139,8 @@ var message = (function() {
   };
 
   return {
-    render: render
+    render: render,
+    clear: clear
   };
 
 })();
