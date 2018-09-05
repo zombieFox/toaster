@@ -22,21 +22,12 @@
           <p class="card-text mb-0"><strong>Toast</strong></p>
         </div>
         <div class="card-body">
-          <p class="card-text mb-0 lead">Current Inventory: <strong class="float-right" data-toast-readout="toasted.inventory" data-format="local"></strong></p>
-          <p class="card-text mb-0">Lifetime: <span class="float-right" data-toast-readout="toasted.lifetime" data-format="local"></span></p>
+          <p class="card-text mb-0 lead">Current Toast Inventory: <strong class="float-right" data-toast-readout="toasted.inventory" data-format="local"></strong></p>
+          <hr>
+          <p class="card-text mb-0">Lifetime Toast: <span class="float-right" data-toast-readout="toasted.lifetime" data-format="local"></span></p>
         </div>
         <div class="card-footer">
           <button class="btn btn-primary" id="stage-toast-button-toast">Toast Bread +1</button>
-        </div>
-      </div>
-
-      <div class="card mb-3 bg-danger text-white d-none" id="stage-consumed">
-        <div class="card-header">
-          <p class="card-text mb-0"><strong>Consumed Toast</strong></p>
-        </div>
-        <div class="card-body">
-          <p class="card-text mb-0 lead">Count: <strong class="float-right" data-toast-readout="consumed.count" data-format="local"></strong></p>
-          <p class="card-text mb-0 small">toast consumed at rate of 3 toast/5s</p>
         </div>
       </div>
 
@@ -45,11 +36,11 @@
           <p class="card-text mb-0"><strong>Subordinate Auto Toasters</strong></p>
         </div>
         <div class="card-body">
-          <p class="card-text mb-0 lead"><abbr title="Subordinate Auto Toasters">SATs:</abbr> <strong class="float-right" data-toast-readout="autoToaster.count" data-format="local"></strong></p>
-          <p class="card-text mb-2 small">1 subordinate auto toaster will produce <strong data-toast-readout="autoToaster.efficiency.level" data-format="local">1</strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
+          <p class="card-text mb-0 lead"><abbr title="Subordinate Auto Toasters">SATs</abbr> Count: <strong class="float-right" data-toast-readout="autoToaster.count" data-format="local"></strong></p>
+          <p class="card-text mb-2 small">1 subordinate auto toaster will produce <strong data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
           <p class="card-text mb-2 small">Cost <strong data-toast-readout="autoToaster.cost" data-format="local"></strong> toast matter</p>
           <button class="btn btn-sm btn-secondary" id="stage-auto-toaster-button-build">Build Subordinate Auto Toaster +1</button>
-          <div id="stage-auto-toaster-substage-speed">
+          <div class="d-none" id="stage-auto-toaster-substage-speed">
             <hr>
             <p class="card-text mb-0 lead">Speed: <span class="float-right"><strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s<span></p>
             <div id="stage-auto-toaster-substage-speed-controls">
@@ -58,11 +49,13 @@
               <button class="btn btn-sm btn-secondary" id="stage-auto-toaster-button-speed">Improve Speed -1</button>
             </div>
           </div>
-          <hr>
-          <p class="card-text mb-0 lead">Efficiency: <strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
-          <p class="card-text mb-2 small">Improve subordinate auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
-          <p class="card-text mb-2 small">Cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
-          <button class="btn btn-sm btn-secondary" id="stage-auto-toaster-button-efficiency">Improve Efficiency +1</button>
+          <div class="d-none" id="stage-auto-toaster-substage-efficiency">
+            <hr>
+            <p class="card-text mb-0 lead">Efficiency: <strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
+            <p class="card-text mb-2 small">Improve subordinate auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
+            <p class="card-text mb-2 small">Cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
+            <button class="btn btn-sm btn-secondary" id="stage-auto-toaster-button-efficiency">Improve Efficiency +1</button>
+          </div>
         </div>
       </div>
 
@@ -79,7 +72,7 @@
           <div id="stage-system-substage-probe">
             <p class="card-text mb-0">Unrecognised Memory Bank</p>
             <p class="card-text mb-2 small">Cost <strong data-toast-readout="system.probe.cost" data-format="local"></strong> toast matter</p>
-            <button class="btn btn-sm btn-dark mb-2" id="stage-system-button-memory-probe">Probe Memory</button>
+            <button class="btn btn-sm btn-dark mb-0" id="stage-system-button-memory-probe">Probe Memory</button>
           </div>
         </div>
       </div>
@@ -104,6 +97,16 @@
           </div>
           <div class="d-none-" id="-sensors-sonic">
           </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 bg-danger text-white d-none" id="stage-consumed">
+        <div class="card-header">
+          <p class="card-text mb-0"><strong>Consumed Toast</strong></p>
+        </div>
+        <div class="card-body">
+          <p class="card-text mb-0 lead">Count: <strong class="float-right" data-toast-readout="consumed.count" data-format="local"></strong></p>
+          <p class="card-text mb-0 small">toast consumed at rate of <strong data-toast-readout="consumed.rate" data-format="local"></strong> toast/<strong data-toast-readout="consumed.level" data-format="local"></strong>s</p>
         </div>
       </div>
 

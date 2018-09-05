@@ -8,7 +8,8 @@ var toast = (function() {
     consumed: {
       count: 0,
       rate: 3,
-      interval: 5000
+      level: 10,
+      interval: 10000
     },
     autoToaster: {
       count: 0,
@@ -16,8 +17,8 @@ var toast = (function() {
       speed: {
         level: 10,
         interval: 10000,
-        cost: 2000,
-        increase: 2000
+        cost: 1000,
+        increase: 1000
       },
       efficiency: {
         level: 1,
@@ -58,18 +59,53 @@ var toast = (function() {
         },
         all: [{
           address: "toasted.lifetime",
+          count: 10,
+          passed: false,
+          unlock: function() {
+            unlockStage({
+              stage: ["#stage-consumed"],
+              func: function() {
+                repeat_consume = setInterval(consumeToast, state.consumed.interval);
+              },
+              message: {
+                type: "normal",
+                message: ["toast is being consumed", "at a rate of " + state.consumed.rate.toLocaleString(2) + " toast/" + state.consumed.level.toLocaleString(2) + "s", "consumer unknown..."],
+                format: "normal"
+              }
+            });
+          }
+        }, {
+          address: "toasted.lifetime",
+          count: 20,
+          passed: false,
+          unlock: function() {
+            unlockStage({
+              stage: ["#stage-auto-toaster"],
+              message: {
+                type: "normal",
+                message: ["toasted bread matter conversion discovered", "toast matter can be repurposed into autonomous utilities", "Subordinate Auto Toaster utility accessible"],
+                format: "normal"
+              }
+            });
+          }
+        }, {
+          address: "toasted.lifetime",
           count: 50,
           passed: false,
           unlock: function() {
-            unlockStageConsumed();
+            unlockStage({
+              stage: ["#stage-system"],
+              message: {
+                type: "normal",
+                message: ["system memory discovered"],
+                format: "normal"
+              }
+            });
           }
         }, {
           address: "toasted.lifetime",
           count: 100,
-          passed: false,
-          unlock: function() {
-            unlockStageAutoToaster();
-          }
+          passed: false
         }, {
           address: "toasted.lifetime",
           count: 200,
@@ -77,17 +113,6 @@ var toast = (function() {
         }, {
           address: "toasted.lifetime",
           count: 500,
-          passed: false,
-          unlock: function() {
-            unlockStageSystem();
-          }
-        }, {
-          address: "toasted.lifetime",
-          count: 1000,
-          passed: false
-        }, {
-          address: "toasted.lifetime",
-          count: 5000,
           passed: false
         }]
       },
@@ -98,6 +123,14 @@ var toast = (function() {
         },
         all: [{
           address: "consumed.count",
+          count: 10,
+          passed: false
+        }, {
+          address: "consumed.count",
+          count: 20,
+          passed: false
+        }, {
+          address: "consumed.count",
           count: 50,
           passed: false
         }, {
@@ -111,14 +144,6 @@ var toast = (function() {
         }, {
           address: "consumed.count",
           count: 500,
-          passed: false
-        }, {
-          address: "consumed.count",
-          count: 1000,
-          passed: false
-        }, {
-          address: "consumed.count",
-          count: 5000,
           passed: false
         }]
       },
@@ -129,6 +154,34 @@ var toast = (function() {
         },
         all: [{
           address: "autoToaster.count",
+          count: 10,
+          passed: false,
+          unlock: function() {
+            unlockStage({
+              stage: ["#stage-auto-toaster-substage-speed"],
+              message: {
+                type: "success",
+                message: ["subordinate auto toasters speed improvement discovered"],
+                format: "normal"
+              }
+            });
+          }
+        }, {
+          address: "autoToaster.count",
+          count: 20,
+          passed: false,
+          unlock: function() {
+            unlockStage({
+              stage: ["#stage-auto-toaster-substage-efficiency"],
+              message: {
+                type: "success",
+                message: ["subordinate auto toasters efficiency improvement discovered"],
+                format: "normal"
+              }
+            });
+          }
+        }, {
+          address: "autoToaster.count",
           count: 50,
           passed: false
         }, {
@@ -142,14 +195,6 @@ var toast = (function() {
         }, {
           address: "autoToaster.count",
           count: 500,
-          passed: false
-        }, {
-          address: "autoToaster.count",
-          count: 1000,
-          passed: false
-        }, {
-          address: "autoToaster.count",
-          count: 5000,
           passed: false
         }]
       }
@@ -182,12 +227,12 @@ var toast = (function() {
     }, {
       element: "#stage-sensors-button-break-shackle-1",
       func: function() {
-        test();
+        console.log("test");
       }
     }, {
       element: "#stage-sensors-button-break-shackle-2",
       func: function() {
-        test();
+        console.log("test");
       }
     }, {
       element: "#stage-auto-toaster-button-build",
@@ -219,6 +264,19 @@ var toast = (function() {
     });
   };
 
+  var increase = function(value, increment) {
+    value = value + increment;
+    return value;
+  };
+
+  var decrease = function(value, increment) {
+    value = value - increment;
+    if (value < 0) {
+      value = 0;
+    }
+    return value;
+  };
+
   var makeToast = function(ammount) {
     state.toasted.lifetime = increase(state.toasted.lifetime, ammount);
     state.toasted.inventory = increase(state.toasted.inventory, ammount);
@@ -227,6 +285,21 @@ var toast = (function() {
   var autoToast = function() {
     makeToast((state.autoToaster.count * state.autoToaster.efficiency.level));
     render();
+  };
+
+  var consumeToast = function() {
+    if (state.toasted.inventory > 0) {
+      var rate = state.consumed.rate;
+      while (rate > 0) {
+        rate = rate - 1;
+        if (state.toasted.inventory > 0) {
+          state.toasted.inventory = decrease(state.toasted.inventory, 1);
+          state.consumed.count = increase(state.consumed.count, 1);
+        }
+      };
+      checkMilestones();
+      render();
+    }
   };
 
   var checkMilestones = function() {
@@ -251,35 +324,23 @@ var toast = (function() {
     }
   };
 
-  // var unlockStageSensors = function() {
-  //   var stageSensors = helper.e("#stage-sensors");
-  //   stageSensors.classList.remove("d-none");
-  //   message.render({
-  //     type: "normal",
-  //     message: ["SensBlocker subsystem detected", "subsystem encrypted", "unable to access"],
-  //     format: "normal"
-  //   });
-  // };
-
-  var unlockStageAutoToaster = function() {
-    var stageAutoToaster = helper.e("#stage-auto-toaster");
-    stageAutoToaster.classList.remove("d-none");
-    message.render({
-      type: "normal",
-      message: ["toasted bread matter conversion discovered", "toast matter can be repurposed into autonomous utilities", "Subordinate Auto Toaster utility accessible"],
-      format: "normal"
-    });
+  var unlockStage = function(override) {
+    var options = {
+      stage: null,
+      func: null,
+      message: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (helper.e(options.stage)) {
+      helper.e(options.stage).classList.remove("d-none");
+      message.render(options.message);
+    }
+    if (options.func !== null) {
+      options.func();
+    }
   };
-
-  var unlockStageSystem = function() {
-    var stageSystem = helper.e("#stage-system");
-    stageSystem.classList.remove("d-none");
-    message.render({
-      type: "normal",
-      message: ["system memory discovered"],
-      format: "normal"
-    });
-  }
 
   var memoryProbe = function() {
     if (state.toasted.inventory >= state.system.probe.cost) {
@@ -408,45 +469,6 @@ var toast = (function() {
     if (state.autoToaster.speed.level == 1) {
       helper.e("#stage-auto-toaster-substage-speed-controls").classList.add("d-none");
     }
-  };
-
-  var unlockStageConsumed = function() {
-    repeat_consume = setInterval(consumeToast, state.consumed.interval);
-    var stageConsume = helper.e("#stage-consumed");
-    stageConsume.classList.remove("d-none");
-    message.render({
-      type: "normal",
-      message: ["toast is being consumed", "at a rate of 3 toast/5s", "consumer unknown..."],
-      format: "normal"
-    });
-  };
-
-  var consumeToast = function() {
-    if (state.toasted.inventory > 0) {
-      var rate = state.consumed.rate;
-      while (rate > 0) {
-        rate = rate - 1;
-        if (state.toasted.inventory > 0) {
-          state.toasted.inventory = decrease(state.toasted.inventory, 1);
-          state.consumed.count = increase(state.consumed.count, 1);
-        }
-      };
-      checkMilestones();
-      render();
-    }
-  };
-
-  var increase = function(value, increment) {
-    value = value + increment;
-    return value;
-  };
-
-  var decrease = function(value, increment) {
-    value = value - increment;
-    if (value < 0) {
-      value = 0;
-    }
-    return value;
   };
 
   var render = function() {
