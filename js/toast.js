@@ -83,7 +83,7 @@ var toast = (function() {
               stage: ["#stage-auto-toaster"],
               message: {
                 type: "normal",
-                message: ["toasted bread matter conversion discovered", "toast matter can be repurposed into autonomous utilities", "Subordinate Auto Toaster utility accessible"],
+                message: ["toast matter conversion discovered", "toast matter can be repurposed into utilities and self improvement", "subordinate auto toasters discovered"],
                 format: "normal"
               }
             });
