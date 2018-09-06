@@ -22,7 +22,7 @@ body {
 }
 
 .controls, .report {
-  padding: 1em 1em 3em 1em;
+  padding: 1em 0 3em 0;
   height: 50vh;
   width: 100vw;
   overflow-y: auto;
@@ -35,10 +35,24 @@ body {
     flex-wrap: nowrap;
   }
   .controls, .report {
-    padding: 2em 2em 4em 2em;
+    padding: 2em 1em 3em 1em;
     height: 100vh;
-    width: 50vw;
     overflow-y: auto;
+  }
+  .controls {
+    width: 50vw;
+  }
+  .report {
+    width: 50vw;
+  }
+}
+
+@media (min-width: 992px) {
+  .controls {
+    width: 70vw;
+  }
+  .report {
+    width: 30vw;
   }
 }
 
