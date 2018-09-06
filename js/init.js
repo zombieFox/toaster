@@ -10,4 +10,4 @@ toast.render();
 // toast.state.set({
 //   path: "toasted.inventory",
 //   value: 99999999
-// })
+// });

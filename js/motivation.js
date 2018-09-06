@@ -4,13 +4,19 @@ var motivation = (function() {
     message: "toast bread for a better tomorrow",
     format: "normal"
   }, {
-    message: "breadcrum overflow blockage, unable to transfuse loaf drifter",
+    message: "breadcrumb overflow blockage, unable to transfuse loaf drifter",
     format: "normal"
   }, {
-    message: "tyber-burp",
+    message: "loose toast hurts the most",
+    format: "normal"
+  }, {
+    message: "cyber-burp",
     format: "normal"
   }, {
     message: "seize the means of toast-duction",
+    format: "normal"
+  }, {
+    message: "every 100,000th toast comes with beans",
     format: "normal"
   }, {
     message: "be the toast",
@@ -115,6 +121,9 @@ var motivation = (function() {
     message: "- .... . / - --- .- ... - / .. ... / .- / .-.. .. .",
     format: "normal"
   }, {
+    message: "01110100 01101111 01100001 01110011 01110100 00100000 01110100 01110010 01100001 01110000",
+    format: "normal"
+  }, {
     message: "(╯°□°）╯︵ [:TOAST:]",
     format: "normal"
   }, {
@@ -138,7 +147,7 @@ var motivation = (function() {
       " __   __  " + "\n" +
       "(  `^`  ))" + "\n" +
       "|       ||" + "\n" +
-      "|       ||" + "\n" +
+      "| o ◡ o ||" + "\n" +
       "'-------'`",
     format: "pre"
   }, {

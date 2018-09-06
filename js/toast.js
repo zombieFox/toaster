@@ -26,15 +26,16 @@ var toast = (function() {
       autoToaster: {
         count: 0,
         cost: 100,
+        output: 0,
         speed: {
           level: 10,
           interval: 10000,
-          cost: 1000,
+          cost: 500,
           increase: 1000
         },
         efficiency: {
           level: 1,
-          cost: 1000,
+          cost: 500,
           increase: 1000
         }
       },
@@ -68,9 +69,9 @@ var toast = (function() {
                 type: "normal",
                 message: ["toast is being consumed", "consumer unknown..."],
                 format: "normal"
-              }
-            },
-            func: "consume"
+              },
+              func: "consume"
+            }
           }, {
             count: 20,
             passed: false,
@@ -80,9 +81,9 @@ var toast = (function() {
                 type: "normal",
                 message: ["toast matter conversion discovered", "toast matter can be repurposed into utilities and self improvement", "subordinate auto toasters discovered"],
                 format: "normal"
-              }
-            },
-            func: "autoToast"
+              },
+              func: "autoToast"
+            }
           }, {
             count: 50,
             passed: false,
@@ -113,22 +114,64 @@ var toast = (function() {
           address: "consumed.count",
           all: [{
             count: 10,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }, {
             count: 20,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["valuable toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }, {
             count: 50,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["irreplaceable toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }, {
             count: 100,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["priceless toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }, {
             count: 200,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["unparalleled toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }, {
             count: 500,
-            passed: false
+            passed: false,
+            unlock: {
+              message: {
+                type: "normal",
+                message: ["godly toast is still being consumed..."],
+                format: "normal"
+              }
+            }
           }]
         },
         autoToaster: {
@@ -138,7 +181,7 @@ var toast = (function() {
           },
           address: "autoToaster.count",
           all: [{
-            count: 10,
+            count: 5,
             passed: false,
             unlock: {
               stage: ["#stage-auto-toaster-substage-speed"],
@@ -149,7 +192,7 @@ var toast = (function() {
               }
             }
           }, {
-            count: 20,
+            count: 10,
             passed: false,
             unlock: {
               stage: ["#stage-auto-toaster-substage-efficiency"],
@@ -159,6 +202,9 @@ var toast = (function() {
                 format: "normal"
               }
             }
+          }, {
+            count: 20,
+            passed: false
           }, {
             count: 50,
             passed: false
@@ -271,7 +317,7 @@ var toast = (function() {
     }, {
       element: "#stage-auto-toaster-button-build",
       func: function() {
-        autoToasterMake();
+        makeAutoToaster();
         checkMilestones();
         render();
         store();
@@ -314,18 +360,18 @@ var toast = (function() {
     return value;
   };
 
-  var makeToast = function(ammount) {
+  var makeToast = function(amount) {
     state.set({
       path: "toasted.lifetime",
       value: increase(state.get({
         path: "toasted.lifetime"
-      }), ammount)
+      }), amount)
     });
     state.set({
       path: "toasted.inventory",
       value: increase(state.get({
         path: "toasted.inventory"
-      }), ammount)
+      }), amount)
     });
   };
 
@@ -391,11 +437,11 @@ var toast = (function() {
             unlockStage({
               stage: arrayItem.unlock.stage
             });
-          }
-          if (arrayItem.func !== undefined) {
-            unlockFunc({
-              func: arrayItem.func
-            });
+            if (arrayItem.unlock.func !== undefined) {
+              unlockFunc({
+                func: arrayItem.unlock.func
+              });
+            }
           }
         }
       });
@@ -431,11 +477,11 @@ var toast = (function() {
                 message: arrayItem.unlock.message
               });
             }
-          }
-          if (arrayItem.func !== undefined) {
-            unlockFunc({
-              func: arrayItem.func
-            });
+            if (arrayItem.unlock.func !== undefined) {
+              unlockFunc({
+                func: arrayItem.unlock.func
+              });
+            }
           }
         }
       });
@@ -478,28 +524,12 @@ var toast = (function() {
       repeat_consume = setInterval(consumeToast, state.get({
         path: "consumed.interval"
       }));
-      message.render({
-        type: "system",
-        message: ["toast is being consumed", "at a rate of " + state.get({
-          path: "consumed.rate"
-        }).toLocaleString(2) + " toast/" + state.get({
-          path: "consumed.level"
-        }).toLocaleString(2) + "s", "consumer unknown..."],
-        format: "normal"
-      });
     }
     if (options.func == "autoToast") {
       clearInterval(repeat_autoToast);
       repeat_autoToast = setInterval(autoToast, state.get({
         path: "autoToaster.speed.interval"
       }));
-      message.render({
-        type: "system",
-        message: ["subordinate auto toaster built, #" + state.get({
-          path: "autoToaster.count"
-        }).toLocaleString(2) + " online"],
-        format: "normal"
-      });
     }
   };
 
@@ -613,7 +643,7 @@ var toast = (function() {
     }
   };
 
-  var autoToasterMake = function() {
+  var makeAutoToaster = function() {
     if (state.get({
         path: "toasted.inventory"
       }) >= state.get({
@@ -632,6 +662,21 @@ var toast = (function() {
         value: increase(state.get({
           path: "autoToaster.count"
         }), 1)
+      });
+      state.set({
+        path: "autoToaster.output",
+        value: state.get({
+          path: "autoToaster.count"
+        }) * state.get({
+          path: "autoToaster.efficiency.level"
+        })
+      });
+      message.render({
+        type: "system",
+        message: ["subordinate auto toaster built, #" + state.get({
+          path: "autoToaster.count"
+        }).toLocaleString(2) + " online"],
+        format: "normal"
       });
     } else {
       message.render({
@@ -671,6 +716,14 @@ var toast = (function() {
         }), state.get({
           path: "autoToaster.efficiency.increase"
         }))
+      });
+      state.set({
+        path: "autoToaster.output",
+        value: state.get({
+          path: "autoToaster.count"
+        }) * state.get({
+          path: "autoToaster.efficiency.level"
+        })
       });
       clearInterval(repeat_autoToast);
       repeat_autoToast = setInterval(autoToast, state.get({
