@@ -1,5 +1,13 @@
 boot.go();
+toast.restore();
 toast.bind();
 toast.render();
 
-// toast.state.toasted.inventory = 1000000; toast.state.toasted.lifetime = 1000000; toast.render();
+// toast.state.set({
+//   path: "toasted.lifetime",
+//   value: 99999999
+// });
+// toast.state.set({
+//   path: "toasted.inventory",
+//   value: 99999999
+// })

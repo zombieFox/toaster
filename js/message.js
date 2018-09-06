@@ -1,8 +1,27 @@
 var message = (function() {
 
   var typePrefix = function(type) {
-    var allEyes = ["~", "-", "^", "*", "=", "x", "!", "|", "¬", "¯", "¶", "×", "÷", "•", "†", "—", "Y", "y", "P", "p", "Q", "q", "O", "o", "V", "v", "M", "m", "E", "e", "I", "i", "U", "u", "1", "6", "8", "0", "ö", "õ", "š", "ł", "ß", "æ", "ę", "ė", "ÿ", "û", "ū", "î", "ï", "į", "µ", "¢", "₹", "₪", "λ", "θ", "±", "Ξ", "+", "■", "▀"];
-    var allMouth = ["_", ".", ",", "▁", "▂"];
+    var allEyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "λ", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
+    var allMouth = ["_", ".", ",", "▁", "±", "◡", "◠"];
+    var allBrackets = [{
+      left: "[",
+      right: "]"
+    }, {
+      left: "(",
+      right: ")"
+    }, {
+      left: "{",
+      right: "}"
+    }, {
+      left: "<",
+      right: ">"
+    }, {
+      left: "|",
+      right: "|"
+    }, {
+      left: "=",
+      right: "="
+    }];
     var allTypes = {
       success: "!!!",
       normal: ":::",
@@ -11,9 +30,11 @@ var message = (function() {
     };
     if (type == "motivation") {
       var makeFace = function() {
+        var randomBracket = allBrackets[Math.round(Math.random() * (allBrackets.length - 1))];
         var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))];
         var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))];
-        return randomEyes + randomMouth + randomEyes;
+        // return randomEyes + randomMouth + randomEyes;
+        return randomBracket.left + randomEyes + randomMouth + randomEyes + randomBracket.right;
       };
       return makeFace();
     } else {

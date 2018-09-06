@@ -55,7 +55,9 @@ body {
 }
 
 .report-message-type {
-  margin-right: 1.5em;
+  width: 4em;
+  text-align: center;
+  margin-right: 0.5em;
   flex-grow: 0;
   flex-shrink: 0;
 }
