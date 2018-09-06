@@ -21,6 +21,12 @@ var message = (function() {
     }, {
       left: "=",
       right: "="
+    }, {
+      left: ":",
+      right: ":"
+    }, {
+      left: "-",
+      right: "-"
     }];
     var allTypes = {
       success: "!!!",
