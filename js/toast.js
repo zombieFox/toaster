@@ -102,7 +102,28 @@ var toast = (function() {
             count: 200,
             passed: false
           }, {
+            count: 300,
+            passed: false
+          }, {
+            count: 400,
+            passed: false
+          }, {
             count: 500,
+            passed: false
+          }, {
+            count: 600,
+            passed: false
+          }, {
+            count: 700,
+            passed: false
+          }, {
+            count: 800,
+            passed: false
+          }, {
+            count: 900,
+            passed: false
+          }, {
+            count: 1000,
             passed: false
           }]
         },
@@ -163,7 +184,7 @@ var toast = (function() {
               }
             }
           }, {
-            count: 500,
+            count: 300,
             passed: false,
             unlock: {
               message: {
@@ -172,6 +193,27 @@ var toast = (function() {
                 format: "normal"
               }
             }
+          }, {
+            count: 400,
+            passed: false
+          }, {
+            count: 500,
+            passed: false
+          }, {
+            count: 600,
+            passed: false
+          }, {
+            count: 700,
+            passed: false
+          }, {
+            count: 800,
+            passed: false
+          }, {
+            count: 900,
+            passed: false
+          }, {
+            count: 1000,
+            passed: false
           }]
         },
         autoToaster: {
@@ -181,7 +223,7 @@ var toast = (function() {
           },
           address: "autoToaster.count",
           all: [{
-            count: 5,
+            count: 10,
             passed: false,
             unlock: {
               stage: ["#stage-auto-toaster-substage-speed"],
@@ -192,7 +234,7 @@ var toast = (function() {
               }
             }
           }, {
-            count: 10,
+            count: 20,
             passed: false,
             unlock: {
               stage: ["#stage-auto-toaster-substage-efficiency"],
@@ -203,9 +245,6 @@ var toast = (function() {
               }
             }
           }, {
-            count: 20,
-            passed: false
-          }, {
             count: 50,
             passed: false
           }, {
@@ -215,7 +254,28 @@ var toast = (function() {
             count: 200,
             passed: false
           }, {
+            count: 300,
+            passed: false
+          }, {
+            count: 400,
+            passed: false
+          }, {
             count: 500,
+            passed: false
+          }, {
+            count: 600,
+            passed: false
+          }, {
+            count: 700,
+            passed: false
+          }, {
+            count: 800,
+            passed: false
+          }, {
+            count: 900,
+            passed: false
+          }, {
+            count: 1000,
             passed: false
           }]
         }
