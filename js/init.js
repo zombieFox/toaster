@@ -11,3 +11,4 @@ toast.render();
 //   path: "toasted.inventory",
 //   value: 99999999
 // });
+// toast.render();
