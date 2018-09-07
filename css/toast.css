@@ -17,13 +17,21 @@ body {
 
 .toaster {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   flex-wrap: nowrap;
 }
 
-.controls, .report {
+.controls {
   padding: 1em 0 3em 0;
-  height: 50vh;
+  height: 70vh;
+}
+
+.report {
+  padding: 1em 2em 3em 0;
+  height: 30vh;
+}
+
+.controls, .report {
   width: 100vw;
   overflow-y: auto;
 }
@@ -34,24 +42,31 @@ body {
     flex-direction: row;
     flex-wrap: nowrap;
   }
+
   .controls, .report {
-    padding: 2em 1em 3em 1em;
     height: 100vh;
     overflow-y: auto;
   }
+
   .controls {
+    padding: 1em 0 3em 0;
     width: 50vw;
   }
+
   .report {
+    padding: 1em 2em 3em 0;
     width: 50vw;
   }
 }
 
 @media (min-width: 992px) {
   .controls {
+    padding: 2em 1em 4em 1em;
     width: 70vw;
   }
+
   .report {
+    padding: 2em 2em 4em 1em;
     width: 30vw;
   }
 }
@@ -116,9 +131,11 @@ body {
   0% {
     opacity: 1
   }
+
   50% {
     opacity: 0;
   }
+
   100% {
     opacity: 1
   }
