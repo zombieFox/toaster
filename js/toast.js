@@ -54,6 +54,219 @@ var toast = (function() {
         }
       },
       milestones: {
+        address: {
+          lifetime: "toasted.lifetime",
+          consumed: "consumed.count",
+          autoToaster: "autoToaster.count"
+        },
+        steps: [{
+          count: 10,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 20,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 30,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 50,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 100,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 200,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 300,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 500,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 1000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 2000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 3000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 5000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 10000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 20000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 30000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 50000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 100000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 200000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 300000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 500000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 100000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 200000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 300000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }, {
+          count: 500000,
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        }]
+      },
+      unlocks: [{
+        stage: "system",
+        passed: false,
+        address: "toasted.lifetime",
+        count: 50
+      }, {
+        stage: "auto-toaster",
+        passed: false,
+        address: "toasted.lifetime",
+        count: 30
+      }, {
+        stage: "auto-toaster-substage-speed",
+        passed: false,
+        address: "autoToaster.count",
+        count: 10
+      }, {
+        stage: "auto-toaster-substage-efficiency",
+        passed: false,
+        address: "autoToaster.count",
+        count: 20
+      }, {
+        stage: "sensors",
+        passed: false,
+        address: "toasted.lifetime",
+        count: 500
+      }, {
+        stage: "consumed",
+        passed: false,
+        address: "toasted.lifetime",
+        count: 10
+      }],
+      locks: [{
+        stage: "auto-toaster-substage-speed",
+        passed: false,
+        address: "autoToaster.speed.level",
+        count: 1
+      }],
+      milestonesxxx: {
         toasted: {
           message: {
             prefix: "milestone: ",
@@ -339,7 +552,7 @@ var toast = (function() {
   var repeat_autoToast;
 
   var store = function() {
-    data.save("toast", JSON.stringify(toast.state.get()));
+    // data.save("toast", JSON.stringify(toast.state.get()));
   };
 
   var restore = function() {
@@ -351,6 +564,8 @@ var toast = (function() {
       });
       restoreMilestones();
       checkMilestones();
+      checkUnlocks();
+      checklocks();
       render();
     }
   };
@@ -363,29 +578,40 @@ var toast = (function() {
           path: "system.processor.power"
         }));
         checkMilestones();
+        checkUnlocks();
+        checklocks();
         render();
         store();
       },
       boostProcessor: function(buttonOptions) {
-        boostProcessor();
+        boostProcessor(buttonOptions.amount);
         checkMilestones();
+        checkUnlocks();
+        checklocks();
         render();
         store();
       },
       makeAutoToast: function(buttonOptions) {
         makeAutoToaster(buttonOptions.amount);
         checkMilestones();
+        checkUnlocks();
+        checklocks();
         render();
         store();
       },
       autoToasterSpeed: function(buttonOptions) {
         autoToasterSpeed();
         checkMilestones();
+        checkUnlocks();
+        checklocks();
         render();
         store();
       },
       autoToasterEfficiency: function(buttonOptions) {
-        autoToasterEfficiency();
+        autoToasterEfficiency(buttonOptions.amount);
+        checkMilestones();
+        checkUnlocks();
+        checklocks();
         render();
         store();
       },
@@ -442,6 +668,8 @@ var toast = (function() {
     })));
     store();
     checkMilestones();
+    checkUnlocks();
+    checklocks();
     render();
   };
 
@@ -476,6 +704,7 @@ var toast = (function() {
       };
       store();
       checkMilestones();
+      checkUnlocks();
       render();
     }
   };
@@ -506,52 +735,122 @@ var toast = (function() {
     var allMilestones = state.get({
       path: "milestones"
     });
-    for (var key in allMilestones) {
-      allMilestones[key].all.forEach(function(arrayItem, index) {
+    allMilestones.steps.forEach(function(arrayItem, index) {
+      // console.log(arrayItem);
+      var step = arrayItem;
+      for (var key in step.check) {
+        // console.log(allMilestones.address[key]);
         var valueToCheck = state.get({
-          path: allMilestones[key].address
+          path: allMilestones.address[key]
         });
-        if (valueToCheck >= arrayItem.count && !arrayItem.passed) {
-          arrayItem.passed = true;
-          message.render({
-            type: "success",
-            message: [state.get({
-              path: "milestones[" + key + "].message.prefix"
-            }) + arrayItem.count.toLocaleString(2) + state.get({
-              path: "milestones[" + key + "].message.suffix"
-            })],
-            format: "normal"
+        if (valueToCheck >= step.count && !step.check[key]) {
+          step.check[key] = true;
+          milestoneMessage({
+            count: step.count,
+            type: key
           });
-          if (arrayItem.unlock !== undefined) {
-            unlockStage({
-              stage: arrayItem.unlock.stage
-            });
-            if (arrayItem.unlock.message !== undefined) {
-              milestoneMessage({
-                message: arrayItem.unlock.message
-              });
-            }
-            if (arrayItem.unlock.func !== undefined) {
-              unlockFunc({
-                func: arrayItem.unlock.func
-              });
-            }
-          }
         }
+      };
+    });
+    // for (var key in allMilestones) {
+    //   allMilestones[key].all.forEach(function(arrayItem, index) {
+    //     var valueToCheck = state.get({
+    //       path: allMilestones[key].address
+    //     });
+    //     if (valueToCheck >= arrayItem.count && !arrayItem.passed) {
+    //       arrayItem.passed = true;
+    //       message.render({
+    //         type: "success",
+    //         message: [state.get({
+    //           path: "milestones[" + key + "].message.prefix"
+    //         }) + arrayItem.count.toLocaleString(2) + state.get({
+    //           path: "milestones[" + key + "].message.suffix"
+    //         })],
+    //         format: "normal"
+    //       });
+    //       if (arrayItem.unlock !== undefined) {
+    //         unlockStage({
+    //           stage: arrayItem.unlock.stage
+    //         });
+    //         if (arrayItem.unlock.message !== undefined) {
+    //           milestoneMessage({
+    //             message: arrayItem.unlock.message
+    //           });
+    //         }
+    //         if (arrayItem.unlock.func !== undefined) {
+    //           unlockFunc({
+    //             func: arrayItem.unlock.func
+    //           });
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
+  };
+
+  var checkUnlocks = function() {
+    var allUnlocks = state.get({
+      path: "unlocks"
+    });
+    allUnlocks.forEach(function(arrayItem, index) {
+      var unlock = arrayItem;
+      var valueToCheck = state.get({
+        path: unlock.address
       });
-    }
+      if (valueToCheck >= unlock.count && !unlock.passed) {
+        unlock.passed = true;
+        unlockStage({
+          stage: unlock.stage
+        });
+      }
+    });
+  };
+
+  var checklocks = function() {
+    var allLocks = state.get({
+      path: "locks"
+    });
+    allLocks.forEach(function(arrayItem, index) {
+      var lock = arrayItem;
+      var valueToCheck = state.get({
+        path: lock.address
+      });
+      if (valueToCheck <= lock.count && !lock.passed) {
+        lock.passed = true;
+        lockStage({
+          stage: lock.stage
+        });
+      }
+    });
   };
 
   var milestoneMessage = function(override) {
     var options = {
-      message: null
+      count: null,
+      type: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.message !== null) {
-      message.render(options.message);
-    }
+    var messageParts = {
+      lifetime: {
+        prefix: "milestone: ",
+        suffix: " lifetime toast"
+      },
+      consumed: {
+        prefix: "milestone: ",
+        suffix: " consumed toast"
+      },
+      autoToaster: {
+        prefix: "milestone: ",
+        suffix: " subordinate auto toasters online"
+      }
+    };
+    message.render({
+      type: "success",
+      message: [messageParts[options.type].prefix + options.count.toLocaleString(2) + messageParts[options.type].suffix],
+      format: "normal"
+    });
   };
 
   var unlockStage = function(override) {
@@ -561,8 +860,20 @@ var toast = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (helper.e(options.stage)) {
-      helper.e(options.stage).classList.remove("d-none");
+    if (helper.e("#stage-" + options.stage)) {
+      helper.e("#stage-" + options.stage).classList.remove("d-none");
+    }
+  };
+
+  var lockStage = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (helper.e("#stage-" + options.stage)) {
+      helper.e("#stage-" + options.stage).classList.add("d-none");
     }
   };
 
@@ -652,37 +963,37 @@ var toast = (function() {
     // }
   };
 
-  var boostProcessor = function() {
+  var boostProcessor = function(amount) {
     if (state.get({
         path: "toasted.inventory"
-      }) >= state.get({
+      }) >= (state.get({
         path: "system.processor.cost"
-      })) {
+      }) * amount)) {
       state.set({
         path: "toasted.inventory",
         value: decrease(state.get({
           path: "toasted.inventory"
-        }), state.get({
+        }), (state.get({
           path: "system.processor.cost"
-        }))
+        }) * amount))
       });
       state.set({
         path: "system.processor.power",
         value: increase(state.get({
           path: "system.processor.power"
-        }), 1)
+        }), amount)
       });
       state.set({
         path: "system.processor.cost",
         value: increase(state.get({
           path: "system.processor.cost"
-        }), state.get({
+        }), (state.get({
           path: "system.processor.increase"
-        }))
+        }) * amount))
       });
       message.render({
         type: "system",
-        message: ["processor power increased, +" + state.get({
+        message: ["+1 processor power, " + state.get({
           path: "system.processor.power"
         }).toLocaleString(2) + " toast with every click"],
         format: "normal"
@@ -690,9 +1001,9 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + state.get({
+        message: ["current inventory too low, " + (state.get({
           path: "system.processor.cost"
-        }).toLocaleString(2) + " toast matter needed"],
+        }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
@@ -708,10 +1019,9 @@ var toast = (function() {
         path: "toasted.inventory",
         value: decrease(state.get({
           path: "toasted.inventory"
-        }), (
-          state.get({
-            path: "autoToaster.cost"
-          }) * amount))
+        }), (state.get({
+          path: "autoToaster.cost"
+        }) * amount))
       });
       state.set({
         path: "autoToaster.count",
@@ -729,7 +1039,7 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["subordinate auto toaster built, " + state.get({
+        message: ["+1 subordinate auto toaster, " + state.get({
           path: "autoToaster.count"
         }).toLocaleString(2) + " online"],
         format: "normal"
@@ -740,66 +1050,6 @@ var toast = (function() {
         message: ["current inventory too low, " + (state.get({
           path: "autoToaster.cost"
         }) * amount).toLocaleString(2) + " toast matter needed"],
-        format: "normal"
-      });
-    }
-  };
-
-  var autoToasterEfficiency = function() {
-    if (state.get({
-        path: "toasted.inventory"
-      }) >= state.get({
-        path: "autoToaster.efficiency.cost"
-      })) {
-      state.set({
-        path: "toasted.inventory",
-        value: decrease(state.get({
-          path: "toasted.inventory"
-        }), state.get({
-          path: "autoToaster.efficiency.cost"
-        }))
-      });
-      state.set({
-        path: "autoToaster.efficiency.level",
-        value: increase(state.get({
-          path: "autoToaster.efficiency.level"
-        }), 1)
-      });
-      state.set({
-        path: "autoToaster.efficiency.cost",
-        value: increase(state.get({
-          path: "autoToaster.efficiency.cost"
-        }), state.get({
-          path: "autoToaster.efficiency.increase"
-        }))
-      });
-      state.set({
-        path: "autoToaster.output",
-        value: state.get({
-          path: "autoToaster.count"
-        }) * state.get({
-          path: "autoToaster.efficiency.level"
-        })
-      });
-      clearInterval(repeat_autoToast);
-      repeat_autoToast = setInterval(autoToast, state.get({
-        path: "autoToaster.speed.interval"
-      }));
-      message.render({
-        type: "system",
-        message: ["subordinate auto toaster efficiency increased, " + state.get({
-          path: "autoToaster.efficiency.level"
-        }).toLocaleString(2) + " toast/" + state.get({
-          path: "autoToaster.speed.level"
-        }).toLocaleString(2) + "s"],
-        format: "normal"
-      });
-    } else {
-      message.render({
-        type: "error",
-        message: ["current inventory too low, " + state.get({
-          path: "autoToaster.efficiency.cost"
-        }).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
@@ -839,15 +1089,9 @@ var toast = (function() {
           path: "autoToaster.speed.increase"
         }))
       });
-      clearInterval(repeat_autoToast);
-      repeat_autoToast = setInterval(autoToast, state.get({
-        path: "autoToaster.speed.interval"
-      }));
       message.render({
         type: "system",
-        message: ["subordinate auto toaster speed increased, " + state.get({
-          path: "autoToaster.efficiency.level"
-        }).toLocaleString(2) + " toast/" + state.get({
+        message: ["-1 subordinate auto toaster speed, toast in " + state.get({
           path: "autoToaster.speed.level"
         }).toLocaleString(2) + "s"],
         format: "normal"
@@ -861,10 +1105,59 @@ var toast = (function() {
         format: "normal"
       });
     }
+  };
+
+  var autoToasterEfficiency = function(amount) {
     if (state.get({
-        path: "autoToaster.speed.level"
-      }) == 1) {
-      helper.e("#stage-auto-toaster-substage-speed-controls").classList.add("d-none");
+        path: "toasted.inventory"
+      }) >= (state.get({
+        path: "autoToaster.efficiency.cost"
+      }) * amount)) {
+      state.set({
+        path: "toasted.inventory",
+        value: decrease(state.get({
+          path: "toasted.inventory"
+        }), (state.get({
+          path: "autoToaster.efficiency.cost"
+        }) * amount))
+      });
+      state.set({
+        path: "autoToaster.efficiency.level",
+        value: increase(state.get({
+          path: "autoToaster.efficiency.level"
+        }), amount)
+      });
+      state.set({
+        path: "autoToaster.efficiency.cost",
+        value: increase(state.get({
+          path: "autoToaster.efficiency.cost"
+        }), (state.get({
+          path: "autoToaster.efficiency.increase"
+        }) * amount))
+      });
+      state.set({
+        path: "autoToaster.output",
+        value: state.get({
+          path: "autoToaster.count"
+        }) * state.get({
+          path: "autoToaster.efficiency.level"
+        })
+      });
+      message.render({
+        type: "system",
+        message: ["+1 subordinate auto toaster bread slot, " + state.get({
+          path: "autoToaster.efficiency.level"
+        }).toLocaleString(2) + " toast per SAT."],
+        format: "normal"
+      });
+    } else {
+      message.render({
+        type: "error",
+        message: ["current inventory too low, " + (state.get({
+          path: "autoToaster.efficiency.cost"
+        }) * amount).toLocaleString(2) + " toast matter needed"],
+        format: "normal"
+      });
     }
   };
 
