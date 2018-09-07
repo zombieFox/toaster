@@ -266,6 +266,20 @@ var toast = (function() {
         address: "autoToaster.speed.level",
         count: 1
       }],
+      triggers: [{
+        func: "consume",
+        address: "toasted.lifetime",
+        count: 10,
+        message: {
+          type: "normal",
+          message: ["toast is being consumed", "consumer unknown..."],
+          format: "normal"
+        }
+      }, {
+        func: "autoToast",
+        address: "autoToaster.count",
+        count: 1
+      }],
       milestonesxxx: {
         toasted: {
           message: {
@@ -565,7 +579,7 @@ var toast = (function() {
       restoreMilestones();
       checkMilestones();
       checkUnlocks();
-      checklocks();
+      checkLocks();
       render();
     }
   };
@@ -579,7 +593,8 @@ var toast = (function() {
         }));
         checkMilestones();
         checkUnlocks();
-        checklocks();
+        checkLocks();
+        triggerConsume();
         render();
         store();
       },
@@ -587,7 +602,8 @@ var toast = (function() {
         boostProcessor(buttonOptions.amount);
         checkMilestones();
         checkUnlocks();
-        checklocks();
+        checkLocks();
+        triggerAutotoast();
         render();
         store();
       },
@@ -595,7 +611,8 @@ var toast = (function() {
         makeAutoToaster(buttonOptions.amount);
         checkMilestones();
         checkUnlocks();
-        checklocks();
+        checkLocks();
+        triggerAutotoast();
         render();
         store();
       },
@@ -603,7 +620,8 @@ var toast = (function() {
         autoToasterSpeed();
         checkMilestones();
         checkUnlocks();
-        checklocks();
+        checkLocks();
+        triggerAutotoast();
         render();
         store();
       },
@@ -611,7 +629,8 @@ var toast = (function() {
         autoToasterEfficiency(buttonOptions.amount);
         checkMilestones();
         checkUnlocks();
-        checklocks();
+        checkLocks();
+        triggerAutotoast();
         render();
         store();
       },
@@ -669,7 +688,7 @@ var toast = (function() {
     store();
     checkMilestones();
     checkUnlocks();
-    checklocks();
+    checkLocks();
     render();
   };
 
@@ -705,30 +724,31 @@ var toast = (function() {
       store();
       checkMilestones();
       checkUnlocks();
+      checkLocks();
       render();
     }
   };
 
   var restoreMilestones = function() {
-    var allMilestones = state.get({
-      path: "milestones"
-    });
-    for (var key in allMilestones) {
-      allMilestones[key].all.forEach(function(arrayItem, index) {
-        if (arrayItem.passed) {
-          if (arrayItem.unlock !== undefined) {
-            unlockStage({
-              stage: arrayItem.unlock.stage
-            });
-            if (arrayItem.unlock.func !== undefined) {
-              unlockFunc({
-                func: arrayItem.unlock.func
-              });
-            }
-          }
-        }
-      });
-    }
+    // var allMilestones = state.get({
+    //   path: "milestones"
+    // });
+    // for (var key in allMilestones) {
+    //   allMilestones[key].all.forEach(function(arrayItem, index) {
+    //     if (arrayItem.passed) {
+    //       if (arrayItem.unlock !== undefined) {
+    //         unlockStage({
+    //           stage: arrayItem.unlock.stage
+    //         });
+    //         if (arrayItem.unlock.func !== undefined) {
+    //           checkTriggers({
+    //             func: arrayItem.unlock.func
+    //           });
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
   };
 
   var checkMilestones = function() {
@@ -752,40 +772,6 @@ var toast = (function() {
         }
       };
     });
-    // for (var key in allMilestones) {
-    //   allMilestones[key].all.forEach(function(arrayItem, index) {
-    //     var valueToCheck = state.get({
-    //       path: allMilestones[key].address
-    //     });
-    //     if (valueToCheck >= arrayItem.count && !arrayItem.passed) {
-    //       arrayItem.passed = true;
-    //       message.render({
-    //         type: "success",
-    //         message: [state.get({
-    //           path: "milestones[" + key + "].message.prefix"
-    //         }) + arrayItem.count.toLocaleString(2) + state.get({
-    //           path: "milestones[" + key + "].message.suffix"
-    //         })],
-    //         format: "normal"
-    //       });
-    //       if (arrayItem.unlock !== undefined) {
-    //         unlockStage({
-    //           stage: arrayItem.unlock.stage
-    //         });
-    //         if (arrayItem.unlock.message !== undefined) {
-    //           milestoneMessage({
-    //             message: arrayItem.unlock.message
-    //           });
-    //         }
-    //         if (arrayItem.unlock.func !== undefined) {
-    //           unlockFunc({
-    //             func: arrayItem.unlock.func
-    //           });
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
   };
 
   var checkUnlocks = function() {
@@ -806,7 +792,7 @@ var toast = (function() {
     });
   };
 
-  var checklocks = function() {
+  var checkLocks = function() {
     var allLocks = state.get({
       path: "locks"
     });
@@ -819,6 +805,24 @@ var toast = (function() {
         lock.passed = true;
         lockStage({
           stage: lock.stage
+        });
+      }
+    });
+  };
+
+  var checkTriggers = function(override) {
+    var allTriggers = state.get({
+      path: "triggers"
+    });
+    allTriggers.forEach(function(arrayItem, index) {
+      var trigger = arrayItem;
+      var valueToCheck = state.get({
+        path: trigger.address
+      });
+      console.log(trigger);
+      if (valueToCheck >= trigger.count) {
+        fireTrigger({
+          stage: trigger.func
         });
       }
     });
@@ -877,7 +881,7 @@ var toast = (function() {
     }
   };
 
-  var unlockFunc = function(override) {
+  var fireTrigger = function(override) {
     var options = {
       func: null
     };
@@ -885,82 +889,24 @@ var toast = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.func == "consume") {
-      clearInterval(repeat_consume);
-      repeat_consume = setInterval(consumeToast, state.get({
-        path: "consumed.interval"
-      }));
-    }
-    if (options.func == "autoToast") {
-      clearInterval(repeat_autoToast);
-      repeat_autoToast = setInterval(autoToast, state.get({
-        path: "autoToaster.speed.interval"
-      }));
+      triggerConsume();
+    } else if (options.func == "autoToast") {
+      triggerAutotoast();
     }
   };
 
-  var decrypt = function() {
-    console.log("hit");
-    // if (state.get({
-    //     path: "toasted.inventory"
-    //   }) >= state.get({
-    //     path: "system.probe.cost"
-    //   })) {
-    //   var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
-    //   var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
-    //   var toggleProbeButton = function() {
-    //     var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
-    //     if (stageSystemButtonMemoryProbe.disabled) {
-    //       stageSystemButtonMemoryProbe.disabled = false;
-    //     } else {
-    //       stageSystemButtonMemoryProbe.disabled = true;
-    //     }
-    //   };
-    //   state.set({
-    //     path: "toasted.inventory",
-    //     value: decrease(state.get({
-    //       path: "toasted.inventory"
-    //     }), state.get({
-    //       path: "system.probe.cost"
-    //     }))
-    //   });
-    //   toggleProbeButton();
-    //   message.render({
-    //     type: "system",
-    //     message: ["probing memory banks..."],
-    //     format: "normal"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
-    //     format: "pre"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["█████████████████████████████"],
-    //     format: "pre",
-    //     delay: state.get({
-    //       path: "system.probe.delay"
-    //     }),
-    //     callback: function() {
-    //       message.render({
-    //         type: "system",
-    //         message: ["=== probe report ===", "= Memory.dat discovered", " == memory power can be improved", "= Sens.dat discovered", "= SensBlocker.dat discovered", " == sensors subsystem restricted"],
-    //         format: "normal"
-    //       });
-    //       toggleProbeButton();
-    //       stageSystemSubstageMemory.classList.remove("d-none");
-    //       stageSystemSubstageProbe.classList.add("d-none");
-    //     }
-    //   });
-    // } else {
-    //   message.render({
-    //     type: "error",
-    //     message: ["current inventory too low, " + state.get({
-    //       path: "system.probe.cost"
-    //     }).toLocaleString(2) + " toast matter needed"],
-    //     format: "normal"
-    //   });
-    // }
+  var triggerConsume = function() {
+    clearInterval(repeat_consume);
+    repeat_consume = setInterval(consumeToast, state.get({
+      path: "consumed.interval"
+    }));
+  };
+
+  var triggerAutotoast = function() {
+    clearInterval(repeat_autoToast);
+    repeat_autoToast = setInterval(autoToast, state.get({
+      path: "autoToaster.speed.interval"
+    }));
   };
 
   var boostProcessor = function(amount) {
@@ -1039,7 +985,7 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["+1 subordinate auto toaster, " + state.get({
+        message: ["+" + amount.toLocaleString(2) + " subordinate auto toaster, " + state.get({
           path: "autoToaster.count"
         }).toLocaleString(2) + " online"],
         format: "normal"
@@ -1145,7 +1091,7 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["+1 subordinate auto toaster bread slot, " + state.get({
+        message: ["+" + amount.toLocaleString(2) + " subordinate auto toaster bread slot, " + state.get({
           path: "autoToaster.efficiency.level"
         }).toLocaleString(2) + " toast per SAT."],
         format: "normal"
@@ -1159,6 +1105,71 @@ var toast = (function() {
         format: "normal"
       });
     }
+  };
+
+  var decrypt = function() {
+    console.log("hit");
+    // if (state.get({
+    //     path: "toasted.inventory"
+    //   }) >= state.get({
+    //     path: "system.probe.cost"
+    //   })) {
+    //   var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
+    //   var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
+    //   var toggleProbeButton = function() {
+    //     var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
+    //     if (stageSystemButtonMemoryProbe.disabled) {
+    //       stageSystemButtonMemoryProbe.disabled = false;
+    //     } else {
+    //       stageSystemButtonMemoryProbe.disabled = true;
+    //     }
+    //   };
+    //   state.set({
+    //     path: "toasted.inventory",
+    //     value: decrease(state.get({
+    //       path: "toasted.inventory"
+    //     }), state.get({
+    //       path: "system.probe.cost"
+    //     }))
+    //   });
+    //   toggleProbeButton();
+    //   message.render({
+    //     type: "system",
+    //     message: ["probing memory banks..."],
+    //     format: "normal"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
+    //     format: "pre"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["█████████████████████████████"],
+    //     format: "pre",
+    //     delay: state.get({
+    //       path: "system.probe.delay"
+    //     }),
+    //     callback: function() {
+    //       message.render({
+    //         type: "system",
+    //         message: ["=== probe report ===", "= Memory.dat discovered", " == memory power can be improved", "= Sens.dat discovered", "= SensBlocker.dat discovered", " == sensors subsystem restricted"],
+    //         format: "normal"
+    //       });
+    //       toggleProbeButton();
+    //       stageSystemSubstageMemory.classList.remove("d-none");
+    //       stageSystemSubstageProbe.classList.add("d-none");
+    //     }
+    //   });
+    // } else {
+    //   message.render({
+    //     type: "error",
+    //     message: ["current inventory too low, " + state.get({
+    //       path: "system.probe.cost"
+    //     }).toLocaleString(2) + " toast matter needed"],
+    //     format: "normal"
+    //   });
+    // }
   };
 
   var render = function() {
