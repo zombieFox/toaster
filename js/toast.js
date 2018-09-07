@@ -722,12 +722,11 @@ var toast = (function() {
   };
 
   var makeAutoToaster = function(amount) {
-    console.log(amount);
     if (state.get({
         path: "toasted.inventory"
-      }) >= state.get({
+      }) >= (state.get({
         path: "autoToaster.cost"
-      })) {
+      }) * amount)) {
       state.set({
         path: "toasted.inventory",
         value: decrease(state.get({
