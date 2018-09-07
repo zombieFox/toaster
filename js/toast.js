@@ -9,8 +9,8 @@ var toast = (function() {
       system: {
         processor: {
           power: 1,
-          cost: 500,
-          increase: 500
+          cost: 200,
+          increase: 800
         },
         probe: {
           cost: 1000,
@@ -30,12 +30,12 @@ var toast = (function() {
         speed: {
           level: 10,
           interval: 10000,
-          cost: 800,
+          cost: 200,
           increase: 800
         },
         efficiency: {
           level: 1,
-          cost: 800,
+          cost: 200,
           increase: 800
         }
       },
@@ -239,18 +239,7 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "toasted.lifetime",
-        count: 30,
-        stage: "auto-toaster",
-        message: {
-          type: "normal",
-          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement", "subordinate auto toasters discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "toasted.lifetime",
-        count: 50,
+        count: 20,
         stage: "system",
         message: {
           type: "normal",
@@ -260,8 +249,19 @@ var toast = (function() {
       }, {
         passed: false,
         type: "unlock",
-        address: "toasted.lifetime",
-        count: 500,
+        address: "system.processor.power",
+        count: 2,
+        stage: "auto-toaster",
+        message: {
+          type: "normal",
+          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement", "subordinate auto toasters discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "system.processor.power",
+        count: 3,
         stage: "sensors",
         message: {
           type: "normal",
@@ -365,20 +365,17 @@ var toast = (function() {
   var repeat_autoToast;
 
   var store = function() {
-    // data.save("toast", JSON.stringify(toast.state.get()));
+    data.save("toast", JSON.stringify(toast.state.get()));
   };
 
   var restore = function() {
     if (data.load("toast")) {
-      // console.log("state restore");
-      // toast.state.set({
-      //   full: JSON.parse(data.load("toast"))
-      // });
-      // restoreMilestones();
-      milestones();
-      // checkUnlocks();
-      // checkLocks();
-      // render();
+      console.log("state restore");
+      toast.state.set({
+        full: JSON.parse(data.load("toast"))
+      });
+      restoreEvents();
+      render();
     }
   };
 
@@ -390,9 +387,6 @@ var toast = (function() {
           path: "system.processor.power"
         }));
         milestones();
-        // checkUnlocks();
-        // checkLocks();
-        // triggerConsume();
         events();
         render();
         store();
@@ -400,39 +394,30 @@ var toast = (function() {
       boostProcessor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
         milestones();
-        // checkUnlocks();
-        // checkLocks();
-        // triggerAutotoast();
         events();
         render();
         store();
       },
       makeAutoToast: function(buttonOptions) {
         makeAutoToaster(buttonOptions.amount);
+        triggerAutotoast();
         milestones();
-        // checkUnlocks();
-        // checkLocks();
-        // triggerAutotoast();
         events();
         render();
         store();
       },
       autoToasterSpeed: function(buttonOptions) {
         autoToasterSpeed();
+        triggerAutotoast();
         milestones();
-        // checkUnlocks();
-        // checkLocks();
-        // triggerAutotoast();
         events();
         render();
         store();
       },
       autoToasterEfficiency: function(buttonOptions) {
         autoToasterEfficiency(buttonOptions.amount);
+        triggerAutotoast();
         milestones();
-        // checkUnlocks();
-        // checkLocks();
-        // triggerAutotoast();
         events();
         render();
         store();
@@ -486,8 +471,7 @@ var toast = (function() {
     console.log(amount + " auto toast made");
     makeToast(amount);
     milestones();
-    // checkUnlocks();
-    // checkLocks();
+    events();
     render();
     store();
   };
@@ -523,33 +507,33 @@ var toast = (function() {
         }
       };
       milestones();
-      // checkUnlocks();
-      // checkLocks();
+      events();
       render();
       store();
     }
   };
 
-  var restoreMilestones = function() {
-    // var allMilestones = state.get({
-    //   path: "milestones"
-    // });
-    // for (var key in allMilestones) {
-    //   allMilestones[key].all.forEach(function(arrayItem, index) {
-    //     if (arrayItem.passed) {
-    //       if (arrayItem.unlock !== undefined) {
-    //         unlockStage({
-    //           stage: arrayItem.unlock.stage
-    //         });
-    //         if (arrayItem.unlock.func !== undefined) {
-    //           checkTriggers({
-    //             func: arrayItem.unlock.func
-    //           });
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
+  var restoreEvents = function() {
+    var allEvents = state.get({
+      path: "events"
+    });
+    allEvents.forEach(function(arrayItem, index) {
+      if (arrayItem.passed) {
+        if (arrayItem.type == "unlock") {
+          unlockStage({
+            stage: arrayItem.stage
+          });
+        } else if (arrayItem.type == "lock") {
+          lockStage({
+            stage: arrayItem.stage
+          });
+        } else if (arrayItem.type == "trigger") {
+          fireTrigger({
+            func: arrayItem.func
+          });
+        }
+      }
+    });
   };
 
   var events = function() {
@@ -646,9 +630,6 @@ var toast = (function() {
     }
   };
 
-
-
-
   var milestones = function() {
     var allMilestones = state.get({
       path: "milestones"
@@ -669,60 +650,6 @@ var toast = (function() {
           });
         }
       };
-    });
-  };
-
-  var checkUnlocks = function() {
-    var allUnlocks = state.get({
-      path: "unlocks"
-    });
-    allUnlocks.forEach(function(arrayItem, index) {
-      var unlock = arrayItem;
-      var valueToCheck = state.get({
-        path: unlock.address
-      });
-      if (valueToCheck >= unlock.count && !unlock.passed) {
-        unlock.passed = true;
-        unlockStage({
-          stage: unlock.stage
-        });
-      }
-    });
-  };
-
-  var checkLocks = function() {
-    var allLocks = state.get({
-      path: "locks"
-    });
-    allLocks.forEach(function(arrayItem, index) {
-      var lock = arrayItem;
-      var valueToCheck = state.get({
-        path: lock.address
-      });
-      if (valueToCheck <= lock.count && !lock.passed) {
-        lock.passed = true;
-        lockStage({
-          stage: lock.stage
-        });
-      }
-    });
-  };
-
-  var checkTriggers = function(override) {
-    var allTriggers = state.get({
-      path: "triggers"
-    });
-    allTriggers.forEach(function(arrayItem, index) {
-      var trigger = arrayItem;
-      var valueToCheck = state.get({
-        path: trigger.address
-      });
-      console.log(trigger);
-      if (valueToCheck >= trigger.count) {
-        fireTrigger({
-          stage: trigger.func
-        });
-      }
     });
   };
 
@@ -754,6 +681,8 @@ var toast = (function() {
       format: "normal"
     });
   };
+
+
 
   var triggerConsume = function() {
     clearInterval(repeat_consume);
@@ -1033,8 +962,6 @@ var toast = (function() {
   };
 
   var render = function() {
-    // console.log(toast.state.get().toasted.lifetime);
-    // console.log(state.get().toasted.lifetime);
     var allDataReadouts = helper.eA("[data-toast-readout]");
     allDataReadouts.forEach(function(arrayItem, index) {
       // console.log(arrayItem.dataset.toastReadout);
@@ -1125,6 +1052,7 @@ var toast = (function() {
 
   return {
     state: state,
+    store: store,
     restore: restore,
     render: render,
     bind: bind
