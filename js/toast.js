@@ -30,13 +30,13 @@ var toast = (function() {
         speed: {
           level: 10,
           interval: 10000,
-          cost: 500,
-          increase: 1000
+          cost: 800,
+          increase: 800
         },
         efficiency: {
           level: 1,
-          cost: 500,
-          increase: 1000
+          cost: 800,
+          increase: 800
         }
       },
       sensor: {
@@ -377,9 +377,25 @@ var toast = (function() {
         console.log("test");
       }
     }, {
-      element: "#stage-auto-toaster-button-build",
+      element: "#stage-auto-toaster-button-build-1",
       func: function() {
-        makeAutoToaster();
+        makeAutoToaster(1);
+        checkMilestones();
+        render();
+        store();
+      }
+    }, {
+      element: "#stage-auto-toaster-button-build-100",
+      func: function() {
+        makeAutoToaster(100);
+        checkMilestones();
+        render();
+        store();
+      }
+    }, {
+      element: "#stage-auto-toaster-button-build-100000",
+      func: function() {
+        makeAutoToaster(100000);
         checkMilestones();
         render();
         store();
@@ -705,7 +721,8 @@ var toast = (function() {
     }
   };
 
-  var makeAutoToaster = function() {
+  var makeAutoToaster = function(amount) {
+    console.log(amount);
     if (state.get({
         path: "toasted.inventory"
       }) >= state.get({
@@ -715,15 +732,16 @@ var toast = (function() {
         path: "toasted.inventory",
         value: decrease(state.get({
           path: "toasted.inventory"
-        }), state.get({
-          path: "autoToaster.cost"
-        }))
+        }), (
+          state.get({
+            path: "autoToaster.cost"
+          }) * amount))
       });
       state.set({
         path: "autoToaster.count",
         value: increase(state.get({
           path: "autoToaster.count"
-        }), 1)
+        }), amount)
       });
       state.set({
         path: "autoToaster.output",
@@ -735,7 +753,7 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["subordinate auto toaster built, #" + state.get({
+        message: ["subordinate auto toaster built, " + state.get({
           path: "autoToaster.count"
         }).toLocaleString(2) + " online"],
         format: "normal"
@@ -743,9 +761,9 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + state.get({
+        message: ["current inventory too low, " + (state.get({
           path: "autoToaster.cost"
-        }).toLocaleString(2) + " toast matter needed"],
+        }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
