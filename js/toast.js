@@ -103,7 +103,15 @@ var toast = (function() {
             passed: false
           }, {
             count: 300,
-            passed: false
+            passed: false,
+            unlock: {
+              stage: ["#stage-sensors"],
+              message: {
+                type: "normal",
+                message: ["system sensors discovered", "access restricted: SensBlocker.dat"],
+                format: "normal"
+              }
+            }
           }, {
             count: 400,
             passed: false
@@ -337,7 +345,7 @@ var toast = (function() {
   var restore = function() {
     if (data.load("toast")) {
       console.log("state restore");
-      console.log(JSON.parse(data.load("toast")));
+      // console.log(JSON.parse(data.load("toast")));
       toast.state.set({
         full: JSON.parse(data.load("toast"))
       });
@@ -348,80 +356,48 @@ var toast = (function() {
   };
 
   var bind = function() {
-    var allButtons = [{
-      element: "#stage-toast-button-toast",
-      func: function() {
+    var allButtons = helper.eA("[data-toast-button]");
+    var action = {
+      toast: function(buttonOptions) {
         makeToast(state.get({
           path: "system.processor.power"
         }));
         checkMilestones();
         render();
         store();
-      }
-    }, {
-      element: "#stage-system-button-processor-boost",
-      func: function() {
+      },
+      boostProcessor: function(buttonOptions) {
         boostProcessor();
         checkMilestones();
         render();
         store();
-      }
-    }, {
-      element: "#stage-sensors-substage-electromagnetic-button-break-shackle",
-      func: function() {
-        console.log("test");
-      }
-    }, {
-      element: "#stage-sensors-substage-sonic-button-break-shackle",
-      func: function() {
-        console.log("test");
-      }
-    }, {
-      element: "#stage-auto-toaster-button-build-1",
-      func: function() {
-        makeAutoToaster(1);
+      },
+      makeAutoToast: function(buttonOptions) {
+        makeAutoToaster(buttonOptions.amount);
         checkMilestones();
         render();
         store();
-      }
-    }, {
-      element: "#stage-auto-toaster-button-build-100",
-      func: function() {
-        makeAutoToaster(100);
-        checkMilestones();
-        render();
-        store();
-      }
-    }, {
-      element: "#stage-auto-toaster-button-build-100000",
-      func: function() {
-        makeAutoToaster(100000);
-        checkMilestones();
-        render();
-        store();
-      }
-    }, {
-      element: "#stage-auto-toaster-button-speed",
-      func: function() {
+      },
+      autoToasterSpeed: function(buttonOptions) {
         autoToasterSpeed();
         checkMilestones();
         render();
         store();
-      }
-    }, {
-      element: "#stage-auto-toaster-button-efficiency",
-      func: function() {
+      },
+      autoToasterEfficiency: function(buttonOptions) {
         autoToasterEfficiency();
         render();
         store();
+      },
+      decrypt: function(buttonOptions) {
+        console.log("decrypt");
       }
-    }];
+    };
     allButtons.forEach(function(arrayItem, index) {
-      if (helper.e(arrayItem.element)) {
-        helper.e(arrayItem.element).addEventListener("click", function() {
-          arrayItem.func()
-        }, false);
-      }
+      arrayItem.addEventListener("click", function() {
+        var buttonOptions = helper.makeObject(this.dataset.toastButton);
+        action[buttonOptions.action](buttonOptions);
+      }, false);
     });
   };
 
@@ -611,68 +587,69 @@ var toast = (function() {
     }
   };
 
-  var memoryProbe = function() {
-    if (state.get({
-        path: "toasted.inventory"
-      }) >= state.get({
-        path: "system.probe.cost"
-      })) {
-      var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
-      var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
-      var toggleProbeButton = function() {
-        var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
-        if (stageSystemButtonMemoryProbe.disabled) {
-          stageSystemButtonMemoryProbe.disabled = false;
-        } else {
-          stageSystemButtonMemoryProbe.disabled = true;
-        }
-      };
-      state.set({
-        path: "toasted.inventory",
-        value: decrease(state.get({
-          path: "toasted.inventory"
-        }), state.get({
-          path: "system.probe.cost"
-        }))
-      });
-      toggleProbeButton();
-      message.render({
-        type: "system",
-        message: ["probing memory banks..."],
-        format: "normal"
-      });
-      message.render({
-        type: "system",
-        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
-        format: "pre"
-      });
-      message.render({
-        type: "system",
-        message: ["█████████████████████████████"],
-        format: "pre",
-        delay: state.get({
-          path: "system.probe.delay"
-        }),
-        callback: function() {
-          message.render({
-            type: "system",
-            message: ["=== probe report ===", "= Memory.dat discovered", " == memory power can be improved", "= Sens.dat discovered", "= SensBlocker.dat discovered", " == sensors subsystem restricted"],
-            format: "normal"
-          });
-          toggleProbeButton();
-          stageSystemSubstageMemory.classList.remove("d-none");
-          stageSystemSubstageProbe.classList.add("d-none");
-        }
-      });
-    } else {
-      message.render({
-        type: "error",
-        message: ["current inventory too low, " + state.get({
-          path: "system.probe.cost"
-        }).toLocaleString(2) + " toast matter needed"],
-        format: "normal"
-      });
-    }
+  var decrypt = function() {
+    console.log("hit");
+    // if (state.get({
+    //     path: "toasted.inventory"
+    //   }) >= state.get({
+    //     path: "system.probe.cost"
+    //   })) {
+    //   var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
+    //   var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
+    //   var toggleProbeButton = function() {
+    //     var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
+    //     if (stageSystemButtonMemoryProbe.disabled) {
+    //       stageSystemButtonMemoryProbe.disabled = false;
+    //     } else {
+    //       stageSystemButtonMemoryProbe.disabled = true;
+    //     }
+    //   };
+    //   state.set({
+    //     path: "toasted.inventory",
+    //     value: decrease(state.get({
+    //       path: "toasted.inventory"
+    //     }), state.get({
+    //       path: "system.probe.cost"
+    //     }))
+    //   });
+    //   toggleProbeButton();
+    //   message.render({
+    //     type: "system",
+    //     message: ["probing memory banks..."],
+    //     format: "normal"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
+    //     format: "pre"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["█████████████████████████████"],
+    //     format: "pre",
+    //     delay: state.get({
+    //       path: "system.probe.delay"
+    //     }),
+    //     callback: function() {
+    //       message.render({
+    //         type: "system",
+    //         message: ["=== probe report ===", "= Memory.dat discovered", " == memory power can be improved", "= Sens.dat discovered", "= SensBlocker.dat discovered", " == sensors subsystem restricted"],
+    //         format: "normal"
+    //       });
+    //       toggleProbeButton();
+    //       stageSystemSubstageMemory.classList.remove("d-none");
+    //       stageSystemSubstageProbe.classList.add("d-none");
+    //     }
+    //   });
+    // } else {
+    //   message.render({
+    //     type: "error",
+    //     message: ["current inventory too low, " + state.get({
+    //       path: "system.probe.cost"
+    //     }).toLocaleString(2) + " toast matter needed"],
+    //     format: "normal"
+    //   });
+    // }
   };
 
   var boostProcessor = function() {

@@ -33,7 +33,7 @@
                 <p class="card-text mb-0">Lifetime Toast: <span class="float-right" data-toast-readout="toasted.lifetime" data-format="local"></span></p>
               </div>
               <div class="card-footer">
-                <button class="btn btn-primary" id="stage-toast-button-toast">Toast Bread +<span data-toast-readout="system.processor.power"></span></button>
+                <button class="btn btn-primary" data-toast-button="action:toast">Toast Bread +<span data-toast-readout="system.processor.power"></span></button>
               </div>
             </div>
 
@@ -45,7 +45,7 @@
                 <p class="card-text mb-0">Processor Power: <strong class="float-right" data-toast-readout="system.processor.power" data-format="local"></strong></p>
                 <p class="card-text mb-2 small">Boost processor power with reverse antimatter quantum particles for more toast with every click</p>
                 <p class="card-text mb-2 small">Cost <strong data-toast-readout="system.processor.cost" data-format="local"></strong> toast matter</p>
-                <button class="btn btn-sm btn-dark" id="stage-system-button-processor-boost">Boost Processor Power +1</button>
+                <button class="btn btn-sm btn-dark" data-toast-button="action:boostProcessor">Boost Processor Power +1</button>
               </div>
             </div>
 
@@ -60,16 +60,16 @@
                 <p class="card-text mb-0"><abbr title="Subordinate Auto Toasters">SATs</abbr> Count: <strong class="float-right" data-toast-readout="autoToaster.count" data-format="suffix"></strong></p>
                 <p class="card-text mb-2 small">Subordinate auto toasters producing <strong data-toast-readout="autoToaster.output" data-format="suffix"></strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
                 <p class="card-text mb-2 small">1 SAT cost <strong data-toast-readout="autoToaster.cost" data-format="local"></strong> toast matter</p>
-                <button class="btn btn-sm btn-dark" id="stage-auto-toaster-button-build-1">Build +1</button>
-                <button class="btn btn-sm btn-dark" id="stage-auto-toaster-button-build-100">+100</button>
-                <button class="btn btn-sm btn-dark" id="stage-auto-toaster-button-build-100000">+100,000</button>
+                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#1">Build +1</button>
+                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#100">+100</button>
+                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#100000">+100,000</button>
                 <div class="d-none" id="stage-auto-toaster-substage-speed">
                   <hr>
                   <p class="card-text mb-0">Speed: <span class="float-right"><strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</span></p>
                   <div id="stage-auto-toaster-substage-speed-controls">
                     <p class="card-text mb-2 small">Improve toast per second speed with zipp-crumb particals and rocket fuel.</p>
                     <p class="card-text mb-2 small">Cost <strong data-toast-readout="autoToaster.speed.cost" data-format="local"></strong> toast matter</p>
-                    <button class="btn btn-sm btn-dark" id="stage-auto-toaster-button-speed">Improve Speed -1</button>
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterSpeed">Improve Speed -1</button>
                   </div>
                 </div>
                 <div class="d-none" id="stage-auto-toaster-substage-efficiency">
@@ -77,7 +77,7 @@
                   <p class="card-text mb-0">Efficiency: <strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
                   <p class="card-text mb-2 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
                   <p class="card-text mb-2 small">Cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
-                  <button class="btn btn-sm btn-dark" id="stage-auto-toaster-button-efficiency">Improve Efficiency +1</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency">Improve Efficiency +1</button>
                 </div>
               </div>
             </div>
@@ -87,22 +87,22 @@
                 <p class="card-text mb-0"><strong>Sensors</strong></p>
               </div>
               <div class="card-body">
-                <div id="stage-sensors-substage-electromagnetic-encrypted">
+                <div id="stage-sensors-substage-encrypted-electromagnetic">
                   <p class="card-text mb-0 lead">Encrypted</p>
                   <p class="card-text mb-2">Unrecognised sub system</p>
                   <p class="card-text mb-2 small">Cost <strong data-toast-readout="sensor.electromagnetic.break" data-format="local"></strong> toast matter</p>
-                  <button class="btn btn-sm btn-dark" id="stage-sensors-substage-electromagnetic-button-break-shackle">Break Code Shackle</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:decrypt,subStage:electromagnetic">Break Code Shackle</button>
                 </div>
-                <div class="d-none-" id="stage-sensors-substage-electromagnetic">
+                <div class="d-none" id="stage-sensors-substage-electromagnetic">
                 </div>
-                <div id="stage-sensors-substage-sonic-encrypted">
+                <div id="stage-sensors-substage-encrypted-sonic">
                   <hr>
                   <p class="card-text mb-0 lead">Encrypted</p>
                   <p class="card-text mb-2">Unrecognised sub system</p>
                   <p class="card-text mb-2 small">Cost <strong data-toast-readout="sensor.sonic.break" data-format="local"></strong> toast matter</p>
-                  <button class="btn btn-sm btn-dark" id="stage-sensors-substage-sonic-button-break-shackle">Break Code Shackle</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:decrypt,subStage:sonic">Break Code Shackle</button>
                 </div>
-                <div class="d-none-" id="stage-sensors-substage-sonic">
+                <div class="d-none" id="stage-sensors-substage-sonic">
                 </div>
               </div>
             </div>

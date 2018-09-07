@@ -54,7 +54,7 @@ body {
   }
 
   .report {
-    padding: 1em 2em 3em 0;
+    padding: 1em 2em 3em 1em;
     width: 50vw;
   }
 }
