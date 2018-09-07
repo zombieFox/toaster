@@ -336,6 +336,8 @@ var toast = (function() {
 
   var restore = function() {
     if (data.load("toast")) {
+      console.log("state restore");
+      console.log(JSON.parse(data.load("toast")));
       toast.state.set({
         full: JSON.parse(data.load("toast"))
       });
