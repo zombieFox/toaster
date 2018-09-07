@@ -200,28 +200,28 @@ var toast = (function() {
             autoToaster: false
           }
         }, {
-          count: 100000,
+          count: 1000000,
           check: {
             lifetime: false,
             consumed: false,
             autoToaster: false
           }
         }, {
-          count: 200000,
+          count: 2000000,
           check: {
             lifetime: false,
             consumed: false,
             autoToaster: false
           }
         }, {
-          count: 300000,
+          count: 3000000,
           check: {
             lifetime: false,
             consumed: false,
             autoToaster: false
           }
         }, {
-          count: 500000,
+          count: 5000000,
           check: {
             lifetime: false,
             consumed: false,
@@ -229,292 +229,91 @@ var toast = (function() {
           }
         }]
       },
-      unlocks: [{
-        stage: "system",
+      events: [{
         passed: false,
-        address: "toasted.lifetime",
-        count: 50
-      }, {
-        stage: "auto-toaster",
-        passed: false,
-        address: "toasted.lifetime",
-        count: 30
-      }, {
-        stage: "auto-toaster-substage-speed",
-        passed: false,
-        address: "autoToaster.count",
-        count: 10
-      }, {
-        stage: "auto-toaster-substage-efficiency",
-        passed: false,
-        address: "autoToaster.count",
-        count: 20
-      }, {
-        stage: "sensors",
-        passed: false,
-        address: "toasted.lifetime",
-        count: 500
-      }, {
-        stage: "consumed",
-        passed: false,
-        address: "toasted.lifetime",
-        count: 10
-      }],
-      locks: [{
-        stage: "auto-toaster-substage-speed",
-        passed: false,
-        address: "autoToaster.speed.level",
-        count: 1
-      }],
-      triggers: [{
-        func: "consume",
+        type: "unlock",
         address: "toasted.lifetime",
         count: 10,
+        stage: "consumed"
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "toasted.lifetime",
+        count: 30,
+        stage: "auto-toaster",
+        message: {
+          type: "normal",
+          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement", "subordinate auto toasters discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "toasted.lifetime",
+        count: 50,
+        stage: "system",
+        message: {
+          type: "normal",
+          message: ["system memory discovered", "self improvement possible"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "toasted.lifetime",
+        count: 500,
+        stage: "sensors",
+        message: {
+          type: "normal",
+          message: ["system sensors discovered", "access restricted: SensBlocker.dat"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "autoToaster.count",
+        count: 5,
+        stage: "auto-toaster-substage-speed",
+        message: {
+          type: "normal",
+          message: ["subordinate auto toasters speed improvement discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "autoToaster.count",
+        count: 10,
+        stage: "auto-toaster-substage-efficiency",
+        message: {
+          type: "normal",
+          message: ["subordinate auto toasters efficiency improvement discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "lock",
+        address: "autoToaster.speed.level",
+        count: 1,
+        stage: "auto-toaster-substage-speed-controls"
+      }, {
+        passed: false,
+        type: "trigger",
+        address: "toasted.lifetime",
+        count: 10,
+        func: "consume",
         message: {
           type: "normal",
           message: ["toast is being consumed", "consumer unknown..."],
           format: "normal"
         }
       }, {
-        func: "autoToast",
+        passed: false,
+        type: "trigger",
         address: "autoToaster.count",
-        count: 1
-      }],
-      milestonesxxx: {
-        toasted: {
-          message: {
-            prefix: "milestone: ",
-            suffix: " lifetime toast!"
-          },
-          address: "toasted.lifetime",
-          all: [{
-            count: 10,
-            passed: false,
-            unlock: {
-              stage: ["#stage-consumed"],
-              message: {
-                type: "normal",
-                message: ["toast is being consumed", "consumer unknown..."],
-                format: "normal"
-              },
-              func: "consume"
-            }
-          }, {
-            count: 20,
-            passed: false,
-            unlock: {
-              stage: ["#stage-auto-toaster"],
-              message: {
-                type: "normal",
-                message: ["toast matter conversion discovered", "toast matter can be repurposed into utilities and self improvement", "subordinate auto toasters discovered"],
-                format: "normal"
-              },
-              func: "autoToast"
-            }
-          }, {
-            count: 50,
-            passed: false,
-            unlock: {
-              stage: ["#stage-system"],
-              message: {
-                type: "normal",
-                message: ["system memory discovered", "self improvement possible"],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 100,
-            passed: false
-          }, {
-            count: 200,
-            passed: false
-          }, {
-            count: 300,
-            passed: false,
-            unlock: {
-              stage: ["#stage-sensors"],
-              message: {
-                type: "normal",
-                message: ["system sensors discovered", "access restricted: SensBlocker.dat"],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 400,
-            passed: false
-          }, {
-            count: 500,
-            passed: false
-          }, {
-            count: 600,
-            passed: false
-          }, {
-            count: 700,
-            passed: false
-          }, {
-            count: 800,
-            passed: false
-          }, {
-            count: 900,
-            passed: false
-          }, {
-            count: 1000,
-            passed: false
-          }]
-        },
-        consumed: {
-          message: {
-            prefix: "milestone: ",
-            suffix: " consumed toast!"
-          },
-          address: "consumed.count",
-          all: [{
-            count: 10,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 20,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["valuable toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 50,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["irreplaceable toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 100,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["priceless toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 200,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["unparalleled toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 300,
-            passed: false,
-            unlock: {
-              message: {
-                type: "normal",
-                message: ["godly toast is still being consumed..."],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 400,
-            passed: false
-          }, {
-            count: 500,
-            passed: false
-          }, {
-            count: 600,
-            passed: false
-          }, {
-            count: 700,
-            passed: false
-          }, {
-            count: 800,
-            passed: false
-          }, {
-            count: 900,
-            passed: false
-          }, {
-            count: 1000,
-            passed: false
-          }]
-        },
-        autoToaster: {
-          message: {
-            prefix: "milestone: ",
-            suffix: " subordinate auto toasters online!"
-          },
-          address: "autoToaster.count",
-          all: [{
-            count: 10,
-            passed: false,
-            unlock: {
-              stage: ["#stage-auto-toaster-substage-speed"],
-              message: {
-                type: "normal",
-                message: ["subordinate auto toasters speed improvement discovered"],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 20,
-            passed: false,
-            unlock: {
-              stage: ["#stage-auto-toaster-substage-efficiency"],
-              message: {
-                type: "normal",
-                message: ["subordinate auto toasters efficiency improvement discovered"],
-                format: "normal"
-              }
-            }
-          }, {
-            count: 50,
-            passed: false
-          }, {
-            count: 100,
-            passed: false
-          }, {
-            count: 200,
-            passed: false
-          }, {
-            count: 300,
-            passed: false
-          }, {
-            count: 400,
-            passed: false
-          }, {
-            count: 500,
-            passed: false
-          }, {
-            count: 600,
-            passed: false
-          }, {
-            count: 700,
-            passed: false
-          }, {
-            count: 800,
-            passed: false
-          }, {
-            count: 900,
-            passed: false
-          }, {
-            count: 1000,
-            passed: false
-          }]
-        }
-      }
+        count: 1,
+        func: "autoToast"
+      }]
     };
 
     var get = function(override) {
@@ -571,16 +370,15 @@ var toast = (function() {
 
   var restore = function() {
     if (data.load("toast")) {
-      console.log("state restore");
-      // console.log(JSON.parse(data.load("toast")));
-      toast.state.set({
-        full: JSON.parse(data.load("toast"))
-      });
-      restoreMilestones();
-      checkMilestones();
-      checkUnlocks();
-      checkLocks();
-      render();
+      // console.log("state restore");
+      // toast.state.set({
+      //   full: JSON.parse(data.load("toast"))
+      // });
+      // restoreMilestones();
+      milestones();
+      // checkUnlocks();
+      // checkLocks();
+      // render();
     }
   };
 
@@ -591,46 +389,51 @@ var toast = (function() {
         makeToast(state.get({
           path: "system.processor.power"
         }));
-        checkMilestones();
-        checkUnlocks();
-        checkLocks();
-        triggerConsume();
+        milestones();
+        // checkUnlocks();
+        // checkLocks();
+        // triggerConsume();
+        events();
         render();
         store();
       },
       boostProcessor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
-        checkMilestones();
-        checkUnlocks();
-        checkLocks();
-        triggerAutotoast();
+        milestones();
+        // checkUnlocks();
+        // checkLocks();
+        // triggerAutotoast();
+        events();
         render();
         store();
       },
       makeAutoToast: function(buttonOptions) {
         makeAutoToaster(buttonOptions.amount);
-        checkMilestones();
-        checkUnlocks();
-        checkLocks();
-        triggerAutotoast();
+        milestones();
+        // checkUnlocks();
+        // checkLocks();
+        // triggerAutotoast();
+        events();
         render();
         store();
       },
       autoToasterSpeed: function(buttonOptions) {
         autoToasterSpeed();
-        checkMilestones();
-        checkUnlocks();
-        checkLocks();
-        triggerAutotoast();
+        milestones();
+        // checkUnlocks();
+        // checkLocks();
+        // triggerAutotoast();
+        events();
         render();
         store();
       },
       autoToasterEfficiency: function(buttonOptions) {
         autoToasterEfficiency(buttonOptions.amount);
-        checkMilestones();
-        checkUnlocks();
-        checkLocks();
-        triggerAutotoast();
+        milestones();
+        // checkUnlocks();
+        // checkLocks();
+        // triggerAutotoast();
+        events();
         render();
         store();
       },
@@ -675,27 +478,25 @@ var toast = (function() {
   };
 
   var autoToast = function() {
-    console.log((state.get({
+    var amount = (state.get({
       path: "autoToaster.count"
     }) * state.get({
       path: "autoToaster.efficiency.level"
-    })), "auto toast made");
-    makeToast((state.get({
-      path: "autoToaster.count"
-    }) * state.get({
-      path: "autoToaster.efficiency.level"
-    })));
-    store();
-    checkMilestones();
-    checkUnlocks();
-    checkLocks();
+    }));
+    console.log(amount + " auto toast made");
+    makeToast(amount);
+    milestones();
+    // checkUnlocks();
+    // checkLocks();
     render();
+    store();
   };
 
   var consumeToast = function() {
-    console.log(state.get({
+    var amount = state.get({
       path: "consumed.rate"
-    }), "toast consumed");
+    });
+    console.log(amount + " toast consumed");
     if (state.get({
         path: "toasted.inventory"
       }) > 0) {
@@ -721,11 +522,11 @@ var toast = (function() {
           });
         }
       };
-      store();
-      checkMilestones();
-      checkUnlocks();
-      checkLocks();
+      milestones();
+      // checkUnlocks();
+      // checkLocks();
       render();
+      store();
     }
   };
 
@@ -751,7 +552,104 @@ var toast = (function() {
     // }
   };
 
-  var checkMilestones = function() {
+  var events = function() {
+    var allEvents = state.get({
+      path: "events"
+    });
+    allEvents.forEach(function(arrayItem, index) {
+      var valueToCheck = state.get({
+        path: arrayItem.address
+      });
+      if (!arrayItem.passed) {
+        if (arrayItem.type == "unlock") {
+          if (valueToCheck >= arrayItem.count) {
+            arrayItem.passed = true;
+            unlockStage({
+              stage: arrayItem.stage
+            });
+            if (arrayItem.message != undefined) {
+              message.render({
+                type: arrayItem.message.type,
+                message: arrayItem.message.message,
+                format: arrayItem.message.format
+              });
+            }
+          }
+        } else if (arrayItem.type == "lock") {
+          if (valueToCheck <= arrayItem.count) {
+            arrayItem.passed = true;
+            lockStage({
+              stage: arrayItem.stage
+            });
+            if (arrayItem.message != undefined) {
+              message.render({
+                type: arrayItem.message.type,
+                message: arrayItem.message.message,
+                format: arrayItem.message.format
+              });
+            }
+          }
+        } else if (arrayItem.type == "trigger") {
+          if (valueToCheck >= arrayItem.count) {
+            arrayItem.passed = true;
+            fireTrigger({
+              func: arrayItem.func
+            });
+            if (arrayItem.message != undefined) {
+              message.render({
+                type: arrayItem.message.type,
+                message: arrayItem.message.message,
+                format: arrayItem.message.format
+              });
+            }
+          }
+        }
+      }
+    });
+  };
+
+  var unlockStage = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (helper.e("#stage-" + options.stage)) {
+      helper.e("#stage-" + options.stage).classList.remove("d-none");
+    }
+  };
+
+  var lockStage = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (helper.e("#stage-" + options.stage)) {
+      helper.e("#stage-" + options.stage).classList.add("d-none");
+    }
+  };
+
+  var fireTrigger = function(override) {
+    var options = {
+      func: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (options.func == "consume") {
+      triggerConsume();
+    } else if (options.func == "autoToast") {
+      triggerAutotoast();
+    }
+  };
+
+
+
+
+  var milestones = function() {
     var allMilestones = state.get({
       path: "milestones"
     });
@@ -855,44 +753,6 @@ var toast = (function() {
       message: [messageParts[options.type].prefix + options.count.toLocaleString(2) + messageParts[options.type].suffix],
       format: "normal"
     });
-  };
-
-  var unlockStage = function(override) {
-    var options = {
-      stage: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    if (helper.e("#stage-" + options.stage)) {
-      helper.e("#stage-" + options.stage).classList.remove("d-none");
-    }
-  };
-
-  var lockStage = function(override) {
-    var options = {
-      stage: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    if (helper.e("#stage-" + options.stage)) {
-      helper.e("#stage-" + options.stage).classList.add("d-none");
-    }
-  };
-
-  var fireTrigger = function(override) {
-    var options = {
-      func: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    if (options.func == "consume") {
-      triggerConsume();
-    } else if (options.func == "autoToast") {
-      triggerAutotoast();
-    }
   };
 
   var triggerConsume = function() {

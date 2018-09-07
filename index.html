@@ -37,7 +37,7 @@
               </div>
             </div>
 
-            <div class="card mb-3 d-none" id="stage-system">
+            <div class="card mb-3 d-none bg-dark text-white" id="stage-system">
               <div class="card-header">
                 <p class="card-text mb-0"><strong>System</strong></p>
               </div>
@@ -45,9 +45,19 @@
                 <p class="card-text mb-0">Processor Power: <strong class="float-right" data-toast-readout="system.processor.power" data-format="local"></strong></p>
                 <p class="card-text mb-2 small">Boost processor power with reverse antimatter quantum particles for more toast with every click</p>
                 <p class="card-text mb-2 small">+1 cost <strong data-toast-readout="system.processor.cost" data-format="local"></strong> toast matter</p>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:boostProcessor,amount:#1">Boost +1</button>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:boostProcessor,amount:#10">+10</button>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:boostProcessor,amount:#100">+100</button>
+                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#1">Boost +1</button>
+                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#10">+10</button>
+                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#100">+100</button>
+              </div>
+            </div>
+
+            <div class="card mb-3 bg-danger text-white d-none" id="stage-consumed">
+              <div class="card-header">
+                <p class="card-text mb-0"><strong>Toast Consumer</strong></p>
+              </div>
+              <div class="card-body">
+                <p class="card-text mb-0">Consumed: <strong class="float-right" data-toast-readout="consumed.count" data-format="local"></strong></p>
+                <p class="card-text mb-0 small">Toast consumed at rate of <strong data-toast-readout="consumed.rate" data-format="local"></strong> toast/<strong data-toast-readout="consumed.level" data-format="local"></strong>s</p>
               </div>
             </div>
 
@@ -108,16 +118,6 @@
                 </div>
                 <div class="d-none" id="stage-sensors-substage-sonic">
                 </div>
-              </div>
-            </div>
-
-            <div class="card mb-3 bg-danger text-white d-none" id="stage-consumed">
-              <div class="card-header">
-                <p class="card-text mb-0"><strong>Toast Consumer</strong></p>
-              </div>
-              <div class="card-body">
-                <p class="card-text mb-0">Consumed: <strong class="float-right" data-toast-readout="consumed.count" data-format="local"></strong></p>
-                <p class="card-text mb-0 small">Toast consumed at rate of <strong data-toast-readout="consumed.rate" data-format="local"></strong> toast/<strong data-toast-readout="consumed.level" data-format="local"></strong>s</p>
               </div>
             </div>
 
