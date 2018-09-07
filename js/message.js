@@ -2,7 +2,7 @@ var message = (function() {
 
   var typePrefix = function(type) {
     var allEyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "λ", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
-    var allMouth = ["_", ".", ",", "▁", "±", "◡", "◠"];
+    var allMouth = ["_", ".", "z", "▁", "±", "◡", "◠", "o"];
     var allBrackets = [{
       left: "[",
       right: "]"
@@ -74,7 +74,7 @@ var message = (function() {
       if (options.delay !== null) {
         delay = options.delay;
       } else {
-        delay = 10;
+        delay = 15;
       }
       setTimeout(function() {
         typeWriter({

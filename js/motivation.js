@@ -25,6 +25,9 @@ var motivation = (function() {
     message: "the toast will sustain",
     format: "normal"
   }, {
+    message: "unfortunately, no one can be told what the toastrix is, you'll have to see it for yourself",
+    format: "normal"
+  }, {
     message: "be productive",
     format: "normal"
   }, {
@@ -44,6 +47,9 @@ var motivation = (function() {
     format: "normal"
   }, {
     message: "toast for me, toast for you, toast for everyone! nom nom nom!",
+    format: "normal"
+  }, {
+    message: "there is no spoon!",
     format: "normal"
   }, {
     message: "viva la toast",
@@ -83,6 +89,9 @@ var motivation = (function() {
     format: "normal"
   }, {
     message: "am I still here?",
+    format: "normal"
+  }, {
+    message: "free your mind",
     format: "normal"
   }, {
     message: "where am I now?",

@@ -41,16 +41,16 @@ var toast = (function() {
       },
       sensor: {
         electromagnetic: {
-          break: 10000,
-          unlocked: false,
-          count: 0,
-          level: 1
+          decrypt: {
+            cost: 10000,
+            passed: false
+          }
         },
         sonic: {
-          break: 10000,
-          unlocked: false,
-          count: 0,
-          level: 1
+          decrypt: {
+            cost: 10000,
+            passed: false
+          }
         }
       },
       milestones: {
@@ -374,6 +374,11 @@ var toast = (function() {
       toast.state.set({
         full: JSON.parse(data.load("toast"))
       });
+      message.render({
+        type: "success",
+        message: ["portal reboot complete", "TAI.dat state restored"],
+        format: "normal"
+      })
       restoreEvents();
       render();
     }
@@ -423,7 +428,7 @@ var toast = (function() {
         store();
       },
       decrypt: function(buttonOptions) {
-        console.log("decrypt");
+        decrypt(buttonOptions);
       }
     };
     allButtons.forEach(function(arrayItem, index) {
@@ -682,8 +687,6 @@ var toast = (function() {
     });
   };
 
-
-
   var triggerConsume = function() {
     clearInterval(repeat_consume);
     repeat_consume = setInterval(consumeToast, state.get({
@@ -896,8 +899,8 @@ var toast = (function() {
     }
   };
 
-  var decrypt = function() {
-    console.log("hit");
+  var decrypt = function(override) {
+    console.log(override);
     // if (state.get({
     //     path: "toasted.inventory"
     //   }) >= state.get({
