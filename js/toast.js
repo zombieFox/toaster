@@ -310,6 +310,39 @@ var toast = (function() {
       }, {
         passed: false,
         type: "trigger",
+        address: "consumed.count",
+        count: 100,
+        func: "consume",
+        message: {
+          type: "normal",
+          message: ["more toast is being consumed"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "trigger",
+        address: "consumed.count",
+        count: 1000,
+        func: "consume",
+        message: {
+          type: "normal",
+          message: ["much toast is being consumed"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "trigger",
+        address: "consumed.count",
+        count: 10000,
+        func: "consume",
+        message: {
+          type: "normal",
+          message: ["many many toast still being consumed"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "trigger",
         address: "autoToaster.count",
         count: 1,
         func: "autoToast"

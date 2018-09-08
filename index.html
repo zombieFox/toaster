@@ -45,9 +45,11 @@
                 <p class="card-text mb-0">Processor Power: <strong class="float-right" data-toast-readout="system.processor.power" data-format="local"></strong></p>
                 <p class="card-text mb-2 small">Boost processor power with reverse antimatter quantum particles for more toast with every click</p>
                 <p class="card-text mb-2 small">+1 cost <strong data-toast-readout="system.processor.cost" data-format="local"></strong> toast matter</p>
-                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#1">Boost +1</button>
-                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#10">+10</button>
-                <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#100">+100</button>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#1">Boost +1</button>
+                  <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#10">+10</button>
+                  <button class="btn btn-sm btn-secondary" data-toast-button="action:boostProcessor,amount:#100">+100</button>
+                </div>
               </div>
             </div>
 
@@ -69,12 +71,15 @@
                 <p class="card-text mb-0"><strong>Subordinate Auto Toasters</strong></p>
               </div>
               <div class="card-body">
-                <p class="card-text mb-0"><abbr title="Subordinate Auto Toasters">SATs</abbr> Count: <strong class="float-right" data-toast-readout="autoToaster.count" data-format="suffix"></strong></p>
-                <p class="card-text mb-2 small">Subordinate auto toasters producing <strong data-toast-readout="autoToaster.output" data-format="suffix"></strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
+                <p class="card-text mb-0">Count: <strong class="float-right" data-toast-readout="autoToaster.count" data-format="suffix"></strong></p>
+                <p class="card-text mb-2 small">Producing <strong data-toast-readout="autoToaster.output" data-format="suffix"></strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
                 <p class="card-text mb-2 small">+1 SAT cost <strong data-toast-readout="autoToaster.cost" data-format="local"></strong> toast matter</p>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#1">Build +1</button>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#100">+100</button>
-                <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#10000">+10,000</button>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#1">Build +1</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#10">+10</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#100">+100</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:makeAutoToast,amount:#1000">+1,000</button>
+                </div>
                 <div class="d-none" id="stage-auto-toaster-substage-speed">
                   <hr>
                   <p class="card-text mb-0">Speed: <span class="float-right"><strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</span></p>
@@ -87,11 +92,14 @@
                 <div class="d-none" id="stage-auto-toaster-substage-efficiency">
                   <hr>
                   <p class="card-text mb-0">Efficiency: <strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
-                  <p class="card-text mb-2 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
                   <p class="card-text mb-2 small">+1 cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#1">Bread Slot +1</button>
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#100">+100</button>
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#10000">+10,000</button>
+                  <div class="btn-group">
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#1">Bread Slot +1</button>
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#10">+10</button>
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#100">+100</button>
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToasterEfficiency,amount:#1000">+1,000</button>
+                  </div>
+                  <p class="card-text mb-0 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
                 </div>
               </div>
             </div>
