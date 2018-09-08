@@ -1,10 +1,14 @@
-var toast = (function() {
+var toaster = (function() {
 
   var state = (function() {
     var gameState = {
-      toasted: {
+      toast: {
         lifetime: 0,
         inventory: 0
+      },
+      bread: {
+        count: 10000,
+        increase: 100
       },
       system: {
         processor: {
@@ -41,7 +45,7 @@ var toast = (function() {
           decrypt: {
             cost: 10000,
             processor: 4,
-            delay: 30
+            delay: 100
           }
         },
         sonic: {
@@ -49,13 +53,13 @@ var toast = (function() {
           decrypt: {
             cost: 10000,
             processor: 5,
-            delay: 30
+            delay: 100
           }
         }
       },
       milestones: {
         address: {
-          lifetime: "toasted.lifetime",
+          lifetime: "toast.lifetime",
           consumed: "consumed.count",
           autoToaster: "autoToaster.count"
         },
@@ -232,14 +236,14 @@ var toast = (function() {
       events: [{
         passed: false,
         type: "unlock",
-        address: "toasted.lifetime",
+        address: "toast.lifetime",
         operator: "grater",
         count: 10,
         stage: "consumed"
       }, {
         passed: false,
         type: "feedback",
-        address: "toasted.lifetime",
+        address: "toast.lifetime",
         operator: "grater",
         count: 20,
         message: {
@@ -250,7 +254,7 @@ var toast = (function() {
       }, {
         passed: false,
         type: "unlock",
-        address: "toasted.lifetime",
+        address: "toast.lifetime",
         operator: "grater",
         count: 20,
         stage: "system",
@@ -355,7 +359,7 @@ var toast = (function() {
       }, {
         passed: false,
         type: "trigger",
-        address: "toasted.lifetime",
+        address: "toast.lifetime",
         operator: "grater",
         count: 10,
         func: "consume",
@@ -456,14 +460,14 @@ var toast = (function() {
   var repeat_autoToast;
 
   var store = function() {
-    data.save("toast", JSON.stringify(toast.state.get()));
+    data.save("toaster", JSON.stringify(state.get()));
   };
 
   var restore = function() {
-    if (data.load("toast")) {
+    if (data.load("toaster")) {
       console.log("state restore");
-      toast.state.set({
-        full: JSON.parse(data.load("toast"))
+      state.set({
+        full: JSON.parse(data.load("toaster"))
       });
       message.render({
         type: "success",
@@ -476,7 +480,7 @@ var toast = (function() {
   };
 
   var reboot = function() {
-    data.clear("toast")
+    data.clear("toaster")
     location.reload();
   };
 
@@ -488,7 +492,12 @@ var toast = (function() {
           path: "system.processor.power"
         }));
       },
-      boostProcessor: function(buttonOptions) {
+      bread: function(buttonOptions) {
+        makeBread(state.get({
+          path: "bread.increase"
+        }));
+      },
+      processor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
       },
       autoToast: {
@@ -544,15 +553,24 @@ var toast = (function() {
 
   var makeToast = function(amount) {
     state.set({
-      path: "toasted.lifetime",
+      path: "toast.lifetime",
       value: increase(state.get({
-        path: "toasted.lifetime"
+        path: "toast.lifetime"
       }), amount)
     });
     state.set({
-      path: "toasted.inventory",
+      path: "toast.inventory",
       value: increase(state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
+      }), amount)
+    });
+  };
+
+  var makeBread = function(amount) {
+    state.set({
+      path: "bread.count",
+      value: increase(state.get({
+        path: "bread.count"
       }), amount)
     });
   };
@@ -577,7 +595,7 @@ var toast = (function() {
     });
     console.log(amount + " toast consumed");
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) > 0) {
       var rate = state.get({
         path: "consumed.rate"
@@ -585,12 +603,12 @@ var toast = (function() {
       while (rate > 0) {
         rate = rate - 1;
         if (state.get({
-            path: "toasted.inventory"
+            path: "toast.inventory"
           }) > 0) {
           state.set({
-            path: "toasted.inventory",
+            path: "toast.inventory",
             value: decrease(state.get({
-              path: "toasted.inventory"
+              path: "toast.inventory"
             }), 1)
           });
           state.set({
@@ -784,14 +802,14 @@ var toast = (function() {
 
   var boostProcessor = function(amount) {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= (state.get({
         path: "system.processor.cost"
       }) * amount)) {
       state.set({
-        path: "toasted.inventory",
+        path: "toast.inventory",
         value: decrease(state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }), (state.get({
           path: "system.processor.cost"
         }) * amount))
@@ -830,14 +848,14 @@ var toast = (function() {
 
   var makeAutoToaster = function(amount) {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= (state.get({
         path: "autoToaster.cost"
       }) * amount)) {
       state.set({
-        path: "toasted.inventory",
+        path: "toast.inventory",
         value: decrease(state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }), (state.get({
           path: "autoToaster.cost"
         }) * amount))
@@ -876,14 +894,14 @@ var toast = (function() {
 
   var autoToasterSpeed = function() {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= state.get({
         path: "autoToaster.speed.cost"
       })) {
       state.set({
-        path: "toasted.inventory",
+        path: "toast.inventory",
         value: decrease(state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }), state.get({
           path: "autoToaster.speed.cost"
         }))
@@ -928,14 +946,14 @@ var toast = (function() {
 
   var autoToasterEfficiency = function(amount) {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= (state.get({
         path: "autoToaster.efficiency.cost"
       }) * amount)) {
       state.set({
-        path: "toasted.inventory",
+        path: "toast.inventory",
         value: decrease(state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }), (state.get({
           path: "autoToaster.efficiency.cost"
         }) * amount))
@@ -982,7 +1000,7 @@ var toast = (function() {
 
   var decryptElectromagnetic = function() {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= state.get({
         path: "sensor.electromagnetic.decrypt.cost"
       }) && state.get({
@@ -997,21 +1015,21 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃"],
+        message: ["┃ 0 ━━ crumbBitEncrp ━━ 512 ┃"],
         format: "pre"
       });
       message.render({
         type: "system",
-        message: ["█████████████████████████████"],
+        message: ["░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░"],
         format: "pre",
         delay: state.get({
           path: "sensor.electromagnetic.decrypt.delay"
         }),
         callback: function() {
           state.set({
-            path: "toasted.inventory",
+            path: "toast.inventory",
             value: decrease(state.get({
-              path: "toasted.inventory"
+              path: "toast.inventory"
             }), state.get({
               path: "sensor.electromagnetic.decrypt.cost"
             }))
@@ -1030,7 +1048,7 @@ var toast = (function() {
     } else {
       var messageArray = [];
       if (state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }) < state.get({
           path: "sensor.electromagnetic.decrypt.cost"
         })) {
@@ -1056,7 +1074,7 @@ var toast = (function() {
   };
   var decryptSonic = function() {
     if (state.get({
-        path: "toasted.inventory"
+        path: "toast.inventory"
       }) >= state.get({
         path: "sensor.sonic.decrypt.cost"
       }) && state.get({
@@ -1071,21 +1089,21 @@ var toast = (function() {
       });
       message.render({
         type: "system",
-        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃"],
+        message: ["┃ 0 ━━ crumbBitEncrp ━━ 512 ┃"],
         format: "pre"
       });
       message.render({
         type: "system",
-        message: ["█████████████████████████████"],
+        message: ["░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░"],
         format: "pre",
         delay: state.get({
           path: "sensor.sonic.decrypt.delay"
         }),
         callback: function() {
           state.set({
-            path: "toasted.inventory",
+            path: "toast.inventory",
             value: decrease(state.get({
-              path: "toasted.inventory"
+              path: "toast.inventory"
             }), state.get({
               path: "sensor.sonic.decrypt.cost"
             }))
@@ -1104,7 +1122,7 @@ var toast = (function() {
     } else {
       var messageArray = [];
       if (state.get({
-          path: "toasted.inventory"
+          path: "toast.inventory"
         }) < state.get({
           path: "sensor.sonic.decrypt.cost"
         })) {
