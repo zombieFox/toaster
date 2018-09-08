@@ -11,10 +11,6 @@ var toast = (function() {
           power: 1,
           cost: 200,
           increase: 800
-        },
-        probe: {
-          cost: 1000,
-          delay: 500
         }
       },
       consumed: {
@@ -41,15 +37,19 @@ var toast = (function() {
       },
       sensor: {
         electromagnetic: {
+          level: 0,
           decrypt: {
             cost: 10000,
-            passed: false
+            processor: 4,
+            delay: 30
           }
         },
         sonic: {
+          level: 0,
           decrypt: {
             cost: 10000,
-            passed: false
+            processor: 5,
+            delay: 30
           }
         }
       },
@@ -233,15 +233,15 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "toasted.lifetime",
-        count: 10,
         operator: "grater",
+        count: 10,
         stage: "consumed"
       }, {
         passed: false,
         type: "feedback",
         address: "toasted.lifetime",
-        count: 20,
         operator: "grater",
+        count: 20,
         message: {
           type: "normal",
           message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement"],
@@ -251,8 +251,8 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "toasted.lifetime",
-        count: 20,
         operator: "grater",
+        count: 20,
         stage: "system",
         message: {
           type: "normal",
@@ -263,8 +263,8 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "system.processor.power",
-        count: 2,
         operator: "grater",
+        count: 2,
         stage: "auto-toaster",
         message: {
           type: "normal",
@@ -275,8 +275,8 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "system.processor.power",
-        count: 3,
         operator: "grater",
+        count: 3,
         stage: "sensors",
         message: {
           type: "normal",
@@ -287,8 +287,8 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "autoToaster.count",
-        count: 5,
         operator: "grater",
+        count: 5,
         stage: "auto-toaster-substage-speed",
         message: {
           type: "normal",
@@ -299,8 +299,8 @@ var toast = (function() {
         passed: false,
         type: "unlock",
         address: "autoToaster.count",
-        count: 10,
         operator: "grater",
+        count: 10,
         stage: "auto-toaster-substage-efficiency",
         message: {
           type: "normal",
@@ -309,17 +309,55 @@ var toast = (function() {
         }
       }, {
         passed: false,
+        type: "unlock",
+        address: "sensor.electromagnetic.level",
+        operator: "grater",
+        count: 1,
+        stage: "sensors-substage-electromagnetic",
+        message: {
+          type: "normal",
+          message: ["electromagnetic sensor discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "lock",
+        address: "sensor.electromagnetic.level",
+        operator: "grater",
+        count: 1,
+        stage: "sensors-substage-electromagnetic-encrypted"
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "sensor.sonic.level",
+        operator: "grater",
+        count: 1,
+        stage: "sensors-substage-sonic",
+        message: {
+          type: "normal",
+          message: ["sonic sensor discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "lock",
+        address: "sensor.sonic.level",
+        operator: "grater",
+        count: 1,
+        stage: "sensors-substage-sonic-encrypted"
+      }, {
+        passed: false,
         type: "lock",
         address: "autoToaster.speed.level",
-        count: 1,
         operator: "less",
+        count: 1,
         stage: "auto-toaster-substage-speed-controls"
       }, {
         passed: false,
         type: "trigger",
         address: "toasted.lifetime",
-        count: 10,
         operator: "grater",
+        count: 10,
         func: "consume",
         message: {
           type: "normal",
@@ -330,9 +368,8 @@ var toast = (function() {
         passed: false,
         type: "trigger",
         address: "consumed.count",
-        count: 100,
         operator: "grater",
-        func: "consume",
+        count: 100,
         message: {
           type: "normal",
           message: ["more toast is being consumed"],
@@ -342,9 +379,8 @@ var toast = (function() {
         passed: false,
         type: "trigger",
         address: "consumed.count",
-        count: 1000,
         operator: "grater",
-        func: "consume",
+        count: 1000,
         message: {
           type: "normal",
           message: ["much toast is being consumed"],
@@ -354,9 +390,8 @@ var toast = (function() {
         passed: false,
         type: "trigger",
         address: "consumed.count",
-        count: 10000,
         operator: "grater",
-        func: "consume",
+        count: 10000,
         message: {
           type: "normal",
           message: ["many many toast still being consumed"],
@@ -366,8 +401,8 @@ var toast = (function() {
         passed: false,
         type: "trigger",
         address: "autoToaster.count",
-        count: 1,
         operator: "grater",
+        count: 1,
         func: "autoToast"
       }]
     };
@@ -452,46 +487,31 @@ var toast = (function() {
         makeToast(state.get({
           path: "system.processor.power"
         }));
-        milestones();
-        events();
-        render();
-        store();
       },
       boostProcessor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
-        milestones();
-        events();
-        render();
-        store();
       },
       autoToast: {
         make: function(buttonOptions) {
           makeAutoToaster(buttonOptions.amount);
           triggerAutotoast();
-          milestones();
-          events();
-          render();
-          store();
         },
         speed: function(buttonOptions) {
           autoToasterSpeed();
           triggerAutotoast();
-          milestones();
-          events();
-          render();
-          store();
         },
         efficiency: function(buttonOptions) {
           autoToasterEfficiency(buttonOptions.amount);
           triggerAutotoast();
-          milestones();
-          events();
-          render();
-          store();
         },
       },
-      decrypt: function(buttonOptions) {
-        decrypt(buttonOptions);
+      decrypt: {
+        electromagnetic: function(buttonOptions) {
+          decryptElectromagnetic();
+        },
+        sonic: function(buttonOptions) {
+          decryptSonic();
+        }
       }
     };
     allButtons.forEach(function(arrayItem, index) {
@@ -501,6 +521,10 @@ var toast = (function() {
           object: action,
           path: buttonOptions.action
         })(buttonOptions);
+        milestones();
+        events();
+        render();
+        store();
       }, false);
     });
   };
@@ -956,74 +980,153 @@ var toast = (function() {
     }
   };
 
-  var decrypt = function(override) {
-    console.log(override);
-    message.render({
-      type: "normal",
-      message: ["######################", "end of game alpha", "this game is a WIP", "feedback welcome", "github.com/zombieFox/toaster", "######################"],
-      format: "normal"
-    });
-    // if (state.get({
-    //     path: "toasted.inventory"
-    //   }) >= state.get({
-    //     path: "system.probe.cost"
-    //   })) {
-    //   var stageSystemSubstageMemory = helper.e("#stage-system-substage-memory");
-    //   var stageSystemSubstageProbe = helper.e("#stage-system-substage-probe");
-    //   var toggleProbeButton = function() {
-    //     var stageSystemButtonMemoryProbe = helper.e("#stage-system-button-processor-probe");
-    //     if (stageSystemButtonMemoryProbe.disabled) {
-    //       stageSystemButtonMemoryProbe.disabled = false;
-    //     } else {
-    //       stageSystemButtonMemoryProbe.disabled = true;
-    //     }
-    //   };
-    //   state.set({
-    //     path: "toasted.inventory",
-    //     value: decrease(state.get({
-    //       path: "toasted.inventory"
-    //     }), state.get({
-    //       path: "system.probe.cost"
-    //     }))
-    //   });
-    //   toggleProbeButton();
-    //   message.render({
-    //     type: "system",
-    //     message: ["probing memory banks..."],
-    //     format: "normal"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃ PB"],
-    //     format: "pre"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["█████████████████████████████"],
-    //     format: "pre",
-    //     delay: state.get({
-    //       path: "system.probe.delay"
-    //     }),
-    //     callback: function() {
-    //       message.render({
-    //         type: "system",
-    //         message: ["=== probe report ===", "= Memory.dat discovered", " == memory power can be improved", "= Sens.dat discovered", "= SensBlocker.dat discovered", " == sensors subsystem restricted"],
-    //         format: "normal"
-    //       });
-    //       toggleProbeButton();
-    //       stageSystemSubstageMemory.classList.remove("d-none");
-    //       stageSystemSubstageProbe.classList.add("d-none");
-    //     }
-    //   });
-    // } else {
-    //   message.render({
-    //     type: "error",
-    //     message: ["toast inventory low, " + state.get({
-    //       path: "system.probe.cost"
-    //     }).toLocaleString(2) + " toast matter needed"],
-    //     format: "normal"
-    //   });
-    // }
+  var decryptElectromagnetic = function() {
+    if (state.get({
+        path: "toasted.inventory"
+      }) >= state.get({
+        path: "sensor.electromagnetic.decrypt.cost"
+      }) && state.get({
+        path: "system.processor.power"
+      }) >= state.get({
+        path: "sensor.electromagnetic.decrypt.processor"
+      })) {
+      message.render({
+        type: "system",
+        message: ["decrypting subsystem..."],
+        format: "normal"
+      });
+      message.render({
+        type: "system",
+        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃"],
+        format: "pre"
+      });
+      message.render({
+        type: "system",
+        message: ["█████████████████████████████"],
+        format: "pre",
+        delay: state.get({
+          path: "sensor.electromagnetic.decrypt.delay"
+        }),
+        callback: function() {
+          state.set({
+            path: "toasted.inventory",
+            value: decrease(state.get({
+              path: "toasted.inventory"
+            }), state.get({
+              path: "sensor.electromagnetic.decrypt.cost"
+            }))
+          });
+          state.set({
+            path: "sensor.electromagnetic.level",
+            value: increase(state.get({
+              path: "sensor.electromagnetic.level"
+            }), 1)
+          });
+          events();
+          render();
+          store();
+        }
+      });
+    } else {
+      var messageArray = [];
+      if (state.get({
+          path: "toasted.inventory"
+        }) < state.get({
+          path: "sensor.electromagnetic.decrypt.cost"
+        })) {
+        messageArray.push("toast inventory low, " + state.get({
+          path: "sensor.electromagnetic.decrypt.cost"
+        }).toLocaleString(2) + " toast matter needed")
+      }
+      if (state.get({
+          path: "system.processor.power"
+        }) < state.get({
+          path: "sensor.electromagnetic.decrypt.processor"
+        })) {
+        messageArray.push("processor power too low, +" + state.get({
+          path: "sensor.electromagnetic.decrypt.processor"
+        }).toLocaleString(2) + " or more needed")
+      }
+      message.render({
+        type: "error",
+        message: messageArray,
+        format: "normal"
+      });
+    }
+  };
+  var decryptSonic = function() {
+    if (state.get({
+        path: "toasted.inventory"
+      }) >= state.get({
+        path: "sensor.sonic.decrypt.cost"
+      }) && state.get({
+        path: "system.processor.power"
+      }) >= state.get({
+        path: "sensor.sonic.decrypt.processor"
+      })) {
+      message.render({
+        type: "system",
+        message: ["decrypting subsystem..."],
+        format: "normal"
+      });
+      message.render({
+        type: "system",
+        message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃"],
+        format: "pre"
+      });
+      message.render({
+        type: "system",
+        message: ["█████████████████████████████"],
+        format: "pre",
+        delay: state.get({
+          path: "sensor.sonic.decrypt.delay"
+        }),
+        callback: function() {
+          state.set({
+            path: "toasted.inventory",
+            value: decrease(state.get({
+              path: "toasted.inventory"
+            }), state.get({
+              path: "sensor.sonic.decrypt.cost"
+            }))
+          });
+          state.set({
+            path: "sensor.sonic.level",
+            value: increase(state.get({
+              path: "sensor.sonic.level"
+            }), 1)
+          });
+          events();
+          render();
+          store();
+        }
+      });
+    } else {
+      var messageArray = [];
+      if (state.get({
+          path: "toasted.inventory"
+        }) < state.get({
+          path: "sensor.sonic.decrypt.cost"
+        })) {
+        messageArray.push("toast inventory low, " + state.get({
+          path: "sensor.sonic.decrypt.cost"
+        }).toLocaleString(2) + " toast matter needed")
+      }
+      if (state.get({
+          path: "system.processor.power"
+        }) < state.get({
+          path: "sensor.sonic.decrypt.processor"
+        })) {
+        messageArray.push("processor power too low, +" + state.get({
+          path: "sensor.sonic.decrypt.processor"
+        }).toLocaleString(2) + " or more needed")
+      }
+      message.render({
+        type: "error",
+        message: messageArray,
+        format: "normal"
+      });
+    }
   };
 
   var render = function() {
@@ -1054,7 +1157,7 @@ var toast = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.decimals === null) {
-      options.decimals == 2;
+      options.decimals = 2;
     }
     var suffix = "";
     var precision = options.decimals;
