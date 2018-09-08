@@ -4,12 +4,12 @@ var data = (function() {
     localStorage.setItem(key, data);
   };
 
-  var clear = function(key) {
-    localStorage.removeItem(key);
-  };
-
   var load = function(key) {
     return localStorage.getItem(key);
+  };
+
+  var clear = function(key) {
+    localStorage.removeItem(key);
   };
 
   return {

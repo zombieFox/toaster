@@ -234,16 +234,29 @@ var toast = (function() {
         type: "unlock",
         address: "toasted.lifetime",
         count: 10,
+        operator: "grater",
         stage: "consumed"
+      }, {
+        passed: false,
+        type: "feedback",
+        address: "toasted.lifetime",
+        count: 20,
+        operator: "grater",
+        message: {
+          type: "normal",
+          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement"],
+          format: "normal"
+        }
       }, {
         passed: false,
         type: "unlock",
         address: "toasted.lifetime",
         count: 20,
+        operator: "grater",
         stage: "system",
         message: {
           type: "normal",
-          message: ["system memory discovered", "self improvement possible"],
+          message: ["system discovered"],
           format: "normal"
         }
       }, {
@@ -251,10 +264,11 @@ var toast = (function() {
         type: "unlock",
         address: "system.processor.power",
         count: 2,
+        operator: "grater",
         stage: "auto-toaster",
         message: {
           type: "normal",
-          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement", "subordinate auto toasters discovered"],
+          message: ["subordinate auto toasters discovered"],
           format: "normal"
         }
       }, {
@@ -262,10 +276,11 @@ var toast = (function() {
         type: "unlock",
         address: "system.processor.power",
         count: 3,
+        operator: "grater",
         stage: "sensors",
         message: {
           type: "normal",
-          message: ["system sensors discovered", "access restricted: SensBlocker.dat"],
+          message: ["sensors discovered", "access restricted: SensBlocker.dat"],
           format: "normal"
         }
       }, {
@@ -273,6 +288,7 @@ var toast = (function() {
         type: "unlock",
         address: "autoToaster.count",
         count: 5,
+        operator: "grater",
         stage: "auto-toaster-substage-speed",
         message: {
           type: "normal",
@@ -284,6 +300,7 @@ var toast = (function() {
         type: "unlock",
         address: "autoToaster.count",
         count: 10,
+        operator: "grater",
         stage: "auto-toaster-substage-efficiency",
         message: {
           type: "normal",
@@ -295,12 +312,14 @@ var toast = (function() {
         type: "lock",
         address: "autoToaster.speed.level",
         count: 1,
+        operator: "less",
         stage: "auto-toaster-substage-speed-controls"
       }, {
         passed: false,
         type: "trigger",
         address: "toasted.lifetime",
         count: 10,
+        operator: "grater",
         func: "consume",
         message: {
           type: "normal",
@@ -312,6 +331,7 @@ var toast = (function() {
         type: "trigger",
         address: "consumed.count",
         count: 100,
+        operator: "grater",
         func: "consume",
         message: {
           type: "normal",
@@ -323,6 +343,7 @@ var toast = (function() {
         type: "trigger",
         address: "consumed.count",
         count: 1000,
+        operator: "grater",
         func: "consume",
         message: {
           type: "normal",
@@ -334,6 +355,7 @@ var toast = (function() {
         type: "trigger",
         address: "consumed.count",
         count: 10000,
+        operator: "grater",
         func: "consume",
         message: {
           type: "normal",
@@ -345,6 +367,7 @@ var toast = (function() {
         type: "trigger",
         address: "autoToaster.count",
         count: 1,
+        operator: "grater",
         func: "autoToast"
       }]
     };
@@ -417,6 +440,11 @@ var toast = (function() {
     }
   };
 
+  var reboot = function() {
+    data.clear("toast")
+    location.reload();
+  };
+
   var bind = function() {
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
@@ -436,29 +464,31 @@ var toast = (function() {
         render();
         store();
       },
-      makeAutoToast: function(buttonOptions) {
-        makeAutoToaster(buttonOptions.amount);
-        triggerAutotoast();
-        milestones();
-        events();
-        render();
-        store();
-      },
-      autoToasterSpeed: function(buttonOptions) {
-        autoToasterSpeed();
-        triggerAutotoast();
-        milestones();
-        events();
-        render();
-        store();
-      },
-      autoToasterEfficiency: function(buttonOptions) {
-        autoToasterEfficiency(buttonOptions.amount);
-        triggerAutotoast();
-        milestones();
-        events();
-        render();
-        store();
+      autoToast: {
+        make: function(buttonOptions) {
+          makeAutoToaster(buttonOptions.amount);
+          triggerAutotoast();
+          milestones();
+          events();
+          render();
+          store();
+        },
+        speed: function(buttonOptions) {
+          autoToasterSpeed();
+          triggerAutotoast();
+          milestones();
+          events();
+          render();
+          store();
+        },
+        efficiency: function(buttonOptions) {
+          autoToasterEfficiency(buttonOptions.amount);
+          triggerAutotoast();
+          milestones();
+          events();
+          render();
+          store();
+        },
       },
       decrypt: function(buttonOptions) {
         decrypt(buttonOptions);
@@ -467,7 +497,10 @@ var toast = (function() {
     allButtons.forEach(function(arrayItem, index) {
       arrayItem.addEventListener("click", function() {
         var buttonOptions = helper.makeObject(this.dataset.toastButton);
-        action[buttonOptions.action](buttonOptions);
+        helper.getObject({
+          object: action,
+          path: buttonOptions.action
+        })(buttonOptions);
       }, false);
     });
   };
@@ -582,48 +615,39 @@ var toast = (function() {
       var valueToCheck = state.get({
         path: arrayItem.address
       });
+      var eventPassed = false;
       if (!arrayItem.passed) {
-        if (arrayItem.type == "unlock") {
+        if (arrayItem.operator == "grater") {
           if (valueToCheck >= arrayItem.count) {
             arrayItem.passed = true;
+            eventPassed = true;
+          }
+        } else if (arrayItem.operator == "less") {
+          if (valueToCheck <= arrayItem.count) {
+            arrayItem.passed = true;
+            eventPassed = true;
+          }
+        }
+        if (eventPassed) {
+          if (arrayItem.type == "unlock") {
             unlockStage({
               stage: arrayItem.stage
             });
-            if (arrayItem.message != undefined) {
-              message.render({
-                type: arrayItem.message.type,
-                message: arrayItem.message.message,
-                format: arrayItem.message.format
-              });
-            }
-          }
-        } else if (arrayItem.type == "lock") {
-          if (valueToCheck <= arrayItem.count) {
-            arrayItem.passed = true;
+          } else if (arrayItem.type == "lock") {
             lockStage({
               stage: arrayItem.stage
             });
-            if (arrayItem.message != undefined) {
-              message.render({
-                type: arrayItem.message.type,
-                message: arrayItem.message.message,
-                format: arrayItem.message.format
-              });
-            }
-          }
-        } else if (arrayItem.type == "trigger") {
-          if (valueToCheck >= arrayItem.count) {
-            arrayItem.passed = true;
+          } else if (arrayItem.type == "trigger") {
             fireTrigger({
               func: arrayItem.func
             });
-            if (arrayItem.message != undefined) {
-              message.render({
-                type: arrayItem.message.type,
-                message: arrayItem.message.message,
-                format: arrayItem.message.format
-              });
-            }
+          }
+          if (arrayItem.message != undefined) {
+            message.render({
+              type: arrayItem.message.type,
+              message: arrayItem.message.message,
+              format: arrayItem.message.format
+            });
           }
         }
       }
@@ -772,7 +796,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + (state.get({
+        message: ["toast inventory low, " + (state.get({
           path: "system.processor.cost"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
@@ -818,7 +842,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + (state.get({
+        message: ["toast inventory low, " + (state.get({
           path: "autoToaster.cost"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
@@ -870,7 +894,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + state.get({
+        message: ["toast inventory low, " + state.get({
           path: "autoToaster.speed.cost"
         }).toLocaleString(2) + " toast matter needed"],
         format: "normal"
@@ -924,7 +948,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["current inventory too low, " + (state.get({
+        message: ["toast inventory low, " + (state.get({
           path: "autoToaster.efficiency.cost"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
@@ -989,7 +1013,7 @@ var toast = (function() {
     // } else {
     //   message.render({
     //     type: "error",
-    //     message: ["current inventory too low, " + state.get({
+    //     message: ["toast inventory low, " + state.get({
     //       path: "system.probe.cost"
     //     }).toLocaleString(2) + " toast matter needed"],
     //     format: "normal"
@@ -1089,6 +1113,7 @@ var toast = (function() {
   return {
     state: state,
     store: store,
+    reboot: reboot,
     restore: restore,
     render: render,
     bind: bind
