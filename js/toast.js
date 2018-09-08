@@ -432,7 +432,7 @@ var toast = (function() {
       });
       message.render({
         type: "success",
-        message: ["portal reboot complete", "TAI.dat state restored"],
+        message: ["reboot complete", "TAI.dat state restored"],
         format: "normal"
       })
       restoreEvents();
@@ -958,6 +958,11 @@ var toast = (function() {
 
   var decrypt = function(override) {
     console.log(override);
+    message.render({
+      type: "normal",
+      message: ["######################", "end of game alpha", "this game is a WIP", "feedback welcome", "github.com/zombieFox/toaster", "######################"],
+      format: "normal"
+    });
     // if (state.get({
     //     path: "toasted.inventory"
     //   }) >= state.get({
