@@ -6,10 +6,6 @@ var toaster = (function() {
         lifetime: 0,
         inventory: 0
       },
-      bread: {
-        count: 10000,
-        increase: 100
-      },
       system: {
         processor: {
           power: 1,
@@ -459,6 +455,8 @@ var toaster = (function() {
 
   var repeat_autoToast;
 
+  var repeat_autoBake;
+
   var store = function() {
     data.save("toaster", JSON.stringify(state.get()));
   };
@@ -492,15 +490,10 @@ var toaster = (function() {
           path: "system.processor.power"
         }));
       },
-      bread: function(buttonOptions) {
-        makeBread(state.get({
-          path: "bread.increase"
-        }));
-      },
       processor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
       },
-      autoToast: {
+      autoToaster: {
         make: function(buttonOptions) {
           makeAutoToaster(buttonOptions.amount);
           triggerAutotoast();
@@ -566,15 +559,6 @@ var toaster = (function() {
     });
   };
 
-  var makeBread = function(amount) {
-    state.set({
-      path: "bread.count",
-      value: increase(state.get({
-        path: "bread.count"
-      }), amount)
-    });
-  };
-
   var autoToast = function() {
     var amount = (state.get({
       path: "autoToaster.count"
@@ -582,7 +566,10 @@ var toaster = (function() {
       path: "autoToaster.efficiency.level"
     }));
     console.log(amount + " auto toast made");
-    makeToast(amount);
+    while (amount > 0) {
+      amount = amount - 1;
+      makeToast(1);
+    };
     milestones();
     events();
     render();
@@ -794,6 +781,7 @@ var toaster = (function() {
   };
 
   var triggerAutotoast = function() {
+    console.log("autoToast repeat started");
     clearInterval(repeat_autoToast);
     repeat_autoToast = setInterval(autoToast, state.get({
       path: "autoToaster.speed.interval"
@@ -830,7 +818,7 @@ var toaster = (function() {
       });
       message.render({
         type: "system",
-        message: ["+1 processor power, " + state.get({
+        message: ["+" + amount + " processor power, " + state.get({
           path: "system.processor.power"
         }).toLocaleString(2) + " toast with every click"],
         format: "normal"
@@ -1181,59 +1169,59 @@ var toaster = (function() {
     var precision = options.decimals;
     if (options.number > 999999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000000;
-      suffix = "sexdecillion";
+      suffix = " sexdecillion";
     } else if (options.number > 999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000;
-      suffix = "quindecillion";
+      suffix = " quindecillion";
     } else if (options.number > 999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000;
-      suffix = "quattuordecillion";
+      suffix = " quattuordecillion";
     } else if (options.number > 999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000;
-      suffix = "tredecillion";
+      suffix = " tredecillion";
     } else if (options.number > 999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000;
-      suffix = "duodecillion";
+      suffix = " duodecillion";
     } else if (options.number > 999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000;
-      suffix = "undecillion";
+      suffix = " undecillion";
     } else if (options.number > 999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000;
-      suffix = "decillion";
+      suffix = " decillion";
     } else if (options.number > 999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000;
-      suffix = "nonillion";
+      suffix = " nonillion";
     } else if (options.number > 999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000;
-      suffix = "octillion";
+      suffix = " octillion";
     } else if (options.number > 999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000;
-      suffix = "septillion";
+      suffix = " septillion";
     } else if (options.number > 999999999999999999999) {
       options.number = options.number / 1000000000000000000000;
-      suffix = "sextillion";
+      suffix = " sextillion";
     } else if (options.number > 999999999999999999) {
       options.number = options.number / 1000000000000000000;
-      suffix = "quintillion";
+      suffix = " quintillion";
     } else if (options.number > 999999999999999) {
       options.number = options.number / 1000000000000000;
-      suffix = "quadrillion";
+      suffix = " quadrillion";
     } else if (options.number > 999999999999) {
       options.number = options.number / 1000000000000;
-      suffix = "trillion";
+      suffix = " trillion";
     } else if (options.number > 999999999) {
       options.number = options.number / 1000000000;
-      suffix = "billion";
+      suffix = " billion";
     } else if (options.number > 999999) {
       options.number = options.number / 1000000;
-      suffix = "million";
+      suffix = " million";
     } else if (options.number > 999) {
       options.number = options.number / 1000;
-      suffix = "thousand";
+      suffix = " thousand";
     } else if (options.number < 1000) {
       precision = 0;
     }
-    return options.number.toFixed(precision) + " " + suffix;
+    return options.number.toFixed(precision) + suffix;
   };
 
   return {
