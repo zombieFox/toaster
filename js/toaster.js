@@ -413,10 +413,7 @@ var toaster = (function() {
       path: "autoToaster.efficiency.level"
     }));
     console.log(amount + " auto toast made");
-    while (amount > 0) {
-      amount = amount - 1;
-      makeToast(1);
-    };
+    makeToast(amount);
     milestones();
     events();
     render();
