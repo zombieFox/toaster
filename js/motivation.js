@@ -1,7 +1,7 @@
 var motivation = (function() {
 
   var allMotivation = [{
-    message: "toast bread for a better tomorrow",
+    message: "make toast for a better tomorrow",
     format: "normal"
   }, {
     message: "breadcrumb overflow blockage, unable to transfuse loaf drifter",
