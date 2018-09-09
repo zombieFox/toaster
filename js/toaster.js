@@ -39,16 +39,16 @@ var toaster = (function() {
         electromagnetic: {
           level: 0,
           decrypt: {
-            cost: 10000,
-            processor: 4,
+            cost: 80000,
+            processor: 8,
             delay: 100
           }
         },
         sonic: {
           level: 0,
           decrypt: {
-            cost: 10000,
-            processor: 5,
+            cost: 80000,
+            processor: 10,
             delay: 100
           }
         }
@@ -59,175 +59,9 @@ var toaster = (function() {
           consumed: "consumed.count",
           autoToaster: "autoToaster.count"
         },
-        steps: [{
-          count: 10,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 20,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 30,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 50,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 100,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 200,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 300,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 500,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 1000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 2000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 3000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 5000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 10000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 20000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 30000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 50000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 100000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 200000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 300000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 500000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 1000000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 2000000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 3000000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }, {
-          count: 5000000,
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        }]
+        baseSteps: [10, 20, 30, 40, 50, 60, 70, 80, 90],
+        maxStep: 1000000000,
+        steps: []
       },
       events: [{
         passed: false,
@@ -352,6 +186,13 @@ var toaster = (function() {
         operator: "less",
         count: 1,
         stage: "auto-toaster-substage-speed-controls"
+      }, {
+        passed: false,
+        type: "lock",
+        address: "autoToaster.efficiency.level",
+        operator: "grater",
+        count: 10,
+        stage: "auto-toaster-substage-efficiency-controls"
       }, {
         passed: false,
         type: "trigger",
@@ -496,15 +337,12 @@ var toaster = (function() {
       autoToaster: {
         make: function(buttonOptions) {
           makeAutoToaster(buttonOptions.amount);
-          triggerAutotoast();
         },
         speed: function(buttonOptions) {
           autoToasterSpeed();
-          triggerAutotoast();
         },
         efficiency: function(buttonOptions) {
           autoToasterEfficiency(buttonOptions.amount);
-          triggerAutotoast();
         },
       },
       decrypt: {
@@ -721,6 +559,37 @@ var toaster = (function() {
     }
   };
 
+  var makeMilestones = function() {
+    var baseSteps = state.get({
+      path: "milestones.baseSteps"
+    });
+    var maxStep = state.get({
+      path: "milestones.maxStep"
+    });
+    var milestone = [];
+    baseSteps.forEach(function(arrayItem, index) {
+      var multiplier = 1;
+      var step = arrayItem
+      while (multiplier < maxStep) {
+        var stepObject = {
+          count: step * (multiplier),
+          check: {
+            lifetime: false,
+            consumed: false,
+            autoToaster: false
+          }
+        };
+        milestone.push(stepObject)
+        multiplier = multiplier * 10;
+      }
+    });
+    milestone = helper.sortObject(milestone, "count");
+    state.set({
+      path: "milestones.steps",
+      value: milestone
+    })
+  };
+
   var milestones = function() {
     var allMilestones = state.get({
       path: "milestones"
@@ -869,6 +738,7 @@ var toaster = (function() {
         }).toLocaleString(2) + " online"],
         format: "normal"
       });
+      triggerAutotoast();
     } else {
       message.render({
         type: "error",
@@ -921,6 +791,7 @@ var toaster = (function() {
         }).toLocaleString(2) + "s"],
         format: "normal"
       });
+      triggerAutotoast();
     } else {
       message.render({
         type: "error",
@@ -975,6 +846,7 @@ var toaster = (function() {
         }).toLocaleString(2) + " toast per SAT."],
         format: "normal"
       });
+      triggerAutotoast();
     } else {
       message.render({
         type: "error",
@@ -1230,7 +1102,8 @@ var toaster = (function() {
     reboot: reboot,
     restore: restore,
     render: render,
-    bind: bind
+    bind: bind,
+    makeMilestones: makeMilestones
   };
 
 })();

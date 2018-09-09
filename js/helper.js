@@ -175,12 +175,29 @@ var helper = (function() {
     };
   };
 
+  function sortObject(object, key) {
+    object.sort(function(a, b) {
+      var textA = a[key];
+      var textB = b[key];
+      if (textA < textB) {
+        return -1;
+      } else if (textA > textB) {
+        return 1;
+      } else {
+        return 0;
+      };
+      // return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
+    return object;
+  };
+
   return {
     e: e,
     eA: eA,
     getObject: getObject,
     setObject: setObject,
     makeObject: makeObject,
+    sortObject: sortObject,
     applyOptions: applyOptions
   };
 

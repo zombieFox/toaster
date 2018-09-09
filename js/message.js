@@ -39,7 +39,6 @@ var message = (function() {
         var randomBracket = allBrackets[Math.round(Math.random() * (allBrackets.length - 1))];
         var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))];
         var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))];
-        // return randomEyes + randomMouth + randomEyes;
         return randomBracket.left + randomEyes + randomMouth + randomEyes + randomBracket.right;
       };
       return makeFace();
@@ -143,6 +142,9 @@ var message = (function() {
     messageText.setAttribute("class", "report-message-text");
     newMessage.appendChild(messageType);
     newMessage.appendChild(messageText);
+    while (report.childNodes.length > 30) {
+      report.firstChild.remove();
+    }
     report.appendChild(newMessage);
     startTypeWriter({
       textArray: options.message,

@@ -92,14 +92,16 @@
                 <div class="d-none" id="stage-auto-toaster-substage-efficiency">
                   <hr>
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Efficiency:</span><strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
-                  <p class="card-text mb-2 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
-                  <div class="btn-group mb-2">
-                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1">Bread Slot +1</button>
-                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#10">+10</button>
-                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#100">+100</button>
-                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1000">+1,000</button>
+                  <div id="stage-auto-toaster-substage-efficiency-controls">
+                    <p class="card-text mb-2 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
+                    <div class="btn-group mb-2">
+                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1">Bread Slot +1</button>
+                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#10">+10</button>
+                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#100">+100</button>
+                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1000">+1,000</button>
+                    </div>
+                    <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
                   </div>
-                  <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
                 </div>
               </div>
             </div>
