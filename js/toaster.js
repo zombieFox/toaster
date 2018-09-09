@@ -21,7 +21,7 @@ var toaster = (function() {
       },
       autoToaster: {
         count: 0,
-        cost: 100,
+        cost: 200,
         output: 0,
         speed: {
           level: 10,
@@ -31,8 +31,8 @@ var toaster = (function() {
         },
         efficiency: {
           level: 1,
-          cost: 200,
-          increase: 800
+          cost: 800,
+          increase: 3200
         }
       },
       sensor: {
@@ -347,16 +347,17 @@ var toaster = (function() {
       },
       decrypt: {
         electromagnetic: function(buttonOptions) {
-          decryptElectromagnetic();
+          decryptElectromagnetic(buttonOptions);
         },
         sonic: function(buttonOptions) {
-          decryptSonic();
+          decryptSonic(buttonOptions);
         }
       }
     };
     allButtons.forEach(function(arrayItem, index) {
       arrayItem.addEventListener("click", function() {
         var buttonOptions = helper.makeObject(this.dataset.toastButton);
+        buttonOptions.button = this;
         helper.getObject({
           object: action,
           path: buttonOptions.action
@@ -367,6 +368,14 @@ var toaster = (function() {
         store();
       }, false);
     });
+  };
+
+  var disableButton = function(button) {
+    button.disabled = true;
+  };
+
+  var enableButton = function(button) {
+    button.disabled = false;
   };
 
   var increase = function(value, increment) {
@@ -858,7 +867,7 @@ var toaster = (function() {
     }
   };
 
-  var decryptElectromagnetic = function() {
+  var decryptElectromagnetic = function(buttonOptions) {
     if (state.get({
         path: "toast.inventory"
       }) >= state.get({
@@ -868,6 +877,9 @@ var toaster = (function() {
       }) >= state.get({
         path: "sensor.electromagnetic.decrypt.processor"
       })) {
+      if (buttonOptions.disable) {
+        disableButton(buttonOptions.button);
+      }
       message.render({
         type: "system",
         message: ["decrypting subsystem..."],
@@ -932,7 +944,8 @@ var toaster = (function() {
       });
     }
   };
-  var decryptSonic = function() {
+
+  var decryptSonic = function(buttonOptions) {
     if (state.get({
         path: "toast.inventory"
       }) >= state.get({
@@ -942,6 +955,9 @@ var toaster = (function() {
       }) >= state.get({
         path: "sensor.sonic.decrypt.processor"
       })) {
+      if (buttonOptions.disable) {
+        disableButton(buttonOptions.button);
+      }
       message.render({
         type: "system",
         message: ["decrypting subsystem..."],

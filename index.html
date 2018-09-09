@@ -94,12 +94,7 @@
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Efficiency:</span><strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
                   <div id="stage-auto-toaster-substage-efficiency-controls">
                     <p class="card-text mb-2 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
-                    <div class="btn-group mb-2">
-                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1">Bread Slot +1</button>
-                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#10">+10</button>
-                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#100">+100</button>
-                      <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1000">+1,000</button>
-                    </div>
+                    <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.efficiency,amount:#1">Bread Slot +1</button>
                     <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="autoToaster.efficiency.cost" data-format="local"></strong> toast matter</p>
                   </div>
                 </div>
@@ -114,25 +109,25 @@
                 <div id="stage-sensors-substage-electromagnetic-encrypted">
                   <p class="card-text mb-0 lead">Encrypted</p>
                   <p class="card-text mb-2">Inaccessible subsystem</p>
-                  <button class="btn btn-sm btn-danger mb-2" data-toast-button="action:decrypt.electromagnetic">Break Code Shackle</button>
+                  <button class="btn btn-sm btn-danger mb-2" data-toast-button="action:decrypt.electromagnetic,disable:true">Break Code Shackle</button>
                   <p class="card-text mb-0 small">Decrypt cost <strong data-toast-readout="sensor.electromagnetic.decrypt.cost" data-format="local"></strong> toast matter <strong>and</strong> processor power +<strong data-toast-readout="sensor.electromagnetic.decrypt.processor" data-format="local"></strong></p>
                 </div>
                 <div class="d-none" id="stage-sensors-substage-electromagnetic">
-                  <p>Electromagnetic game area in development!</p>
                   <p>WIP!</p>
+                  <p>Electromagnetic game area in development</p>
                   <p>Watch this space</p>
                 </div>
                 <div id="stage-sensors-substage-sonic-encrypted">
                   <hr>
                   <p class="card-text mb-0 lead">Encrypted</p>
                   <p class="card-text mb-2">Inaccessible subsystem</p>
-                  <button class="btn btn-sm btn-danger mb-2" data-toast-button="action:decrypt.sonic">Break Code Shackle</button>
+                  <button class="btn btn-sm btn-danger mb-2" data-toast-button="action:decrypt.sonic,disable:true">Break Code Shackle</button>
                   <p class="card-text mb-0 small">Decrypt cost <strong data-toast-readout="sensor.sonic.decrypt.cost" data-format="local"></strong> toast matter <strong>and</strong> processor power +<strong data-toast-readout="sensor.sonic.decrypt.processor" data-format="local"></strong></p>
                 </div>
                 <div class="d-none" id="stage-sensors-substage-sonic">
                   <hr>
-                  <p>Sonic game area in development!</p>
                   <p>WIP!</p>
+                  <p>Sonic game area in development</p>
                   <p>Watch this space</p>
                 </div>
               </div>
