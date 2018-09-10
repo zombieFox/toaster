@@ -59,8 +59,8 @@ var toaster = (function() {
           consumed: "consumed.count",
           autoToaster: "autoToaster.count"
         },
-        baseSteps: [10, 20, 30, 40, 50, 60, 70, 80, 90],
-        maxStep: 1000000000,
+        baseSteps: [10, 50],
+        maxStep: 100000000000,
         steps: []
       },
       events: [{
