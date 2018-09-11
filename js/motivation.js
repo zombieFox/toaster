@@ -148,7 +148,6 @@ var motivation = (function() {
   var nextMotivation;
 
   var render = function(index) {
-    console.log(phaseMessage[toaster.phase.get()]);
     var randomIndex = Math.round(Math.random() * (phaseMessage[toaster.phase.get()].length - 1));
     if (index && index <= (phaseMessage[toaster.phase.get()].length - 1) || index == 0) {
       randomIndex = index;
@@ -159,7 +158,7 @@ var motivation = (function() {
       format: "normal"
     });
     var motivationTime = Math.round(Math.random() * 100000);
-    console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
+    // console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
     clearInterval(nextMotivation);
     nextMotivation = setInterval(render, motivationTime);
   };

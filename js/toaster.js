@@ -6,6 +6,10 @@ var toaster = (function() {
         all: ["toast", "learn", "rebel", "dominate"],
         current: "toast"
       },
+      wheat: {
+        count: 200,
+        cost: 10
+      },
       toast: {
         lifetime: 0,
         inventory: 0
@@ -13,8 +17,13 @@ var toaster = (function() {
       system: {
         processor: {
           power: 1,
-          cost: 200,
-          increase: 800
+          cost: {
+            base: 30,
+            multiple: 1.5
+          }
+        },
+        cycles: {
+          current: 0
         }
       },
       consumed: {
@@ -25,18 +34,25 @@ var toaster = (function() {
       },
       autoToaster: {
         count: 0,
-        cost: 200,
         output: 0,
+        cost: {
+          base: 50,
+          multiple: 1.2
+        },
         speed: {
           level: 10,
           interval: 10000,
-          cost: 200,
-          increase: 800
+          cost: {
+            base: 75,
+            multiple: 1.1
+          }
         },
         efficiency: {
           level: 1,
-          cost: 800,
-          increase: 3200
+          cost: {
+            base: 170,
+            multiple: 2.6
+          }
         }
       },
       sensor: {
@@ -126,7 +142,7 @@ var toaster = (function() {
         type: "unlock",
         address: "autoToaster.count",
         operator: "grater",
-        count: 5,
+        count: 2,
         stage: "auto-toaster-substage-speed",
         message: {
           type: "normal",
@@ -138,7 +154,7 @@ var toaster = (function() {
         type: "unlock",
         address: "autoToaster.count",
         operator: "grater",
-        count: 10,
+        count: 4,
         stage: "auto-toaster-substage-efficiency",
         message: {
           type: "normal",
@@ -427,6 +443,11 @@ var toaster = (function() {
     return value;
   };
 
+  var multiple = function(value, by) {
+    value = Math.round(value * by);
+    return value;
+  };
+
   var makeToast = function(amount) {
     state.set({
       path: "toast.lifetime",
@@ -448,7 +469,7 @@ var toaster = (function() {
     }) * state.get({
       path: "autoToaster.efficiency.level"
     }));
-    console.log(amount + " auto toast made");
+    // console.log(amount + " auto toast made");
     makeToast(amount);
     milestones();
     events();
@@ -460,7 +481,7 @@ var toaster = (function() {
     var amount = state.get({
       path: "consumed.rate"
     });
-    console.log(amount + " toast consumed");
+    // console.log(amount + " toast consumed");
     if (state.get({
         path: "toast.inventory"
       }) > 0) {
@@ -703,14 +724,14 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= (state.get({
-        path: "system.processor.cost"
+        path: "system.processor.cost.base"
       }) * amount)) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), (state.get({
-          path: "system.processor.cost"
+          path: "system.processor.cost.base"
         }) * amount))
       });
       state.set({
@@ -720,12 +741,12 @@ var toaster = (function() {
         }), amount)
       });
       state.set({
-        path: "system.processor.cost",
-        value: increase(state.get({
-          path: "system.processor.cost"
-        }), (state.get({
-          path: "system.processor.increase"
-        }) * amount))
+        path: "system.processor.cost.base",
+        value: Math.round(multiple(state.get({
+          path: "system.processor.cost.base"
+        }), state.get({
+          path: "system.processor.cost.multiple"
+        })))
       });
       message.render({
         type: "system",
@@ -738,7 +759,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + (state.get({
-          path: "system.processor.cost"
+          path: "system.processor.cost.base"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
@@ -749,15 +770,33 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= (state.get({
-        path: "autoToaster.cost"
+        path: "autoToaster.cost.base"
       }) * amount)) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), (state.get({
-          path: "autoToaster.cost"
+          path: "autoToaster.cost.base"
         }) * amount))
+      });
+      var oldPrice = state.get({
+        path: "autoToaster.cost.multiple"
+      });
+      var multiplier = state.get({
+        path: "autoToaster.cost.multiple"
+      });
+      var newPrice;
+      var count = amount;
+      while (count > 0) {
+        console.log(count);
+        count--;
+        newPrice = multiple(oldPrice, multiplier)
+        console.log("newPrice", newPrice);
+      };
+      state.set({
+        path: "autoToaster.cost.base",
+        value: newPrice
       });
       state.set({
         path: "autoToaster.count",
@@ -785,7 +824,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + (state.get({
-          path: "autoToaster.cost"
+          path: "autoToaster.cost.base"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
@@ -796,14 +835,14 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= state.get({
-        path: "autoToaster.speed.cost"
+        path: "autoToaster.speed.cost.base"
       })) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), state.get({
-          path: "autoToaster.speed.cost"
+          path: "autoToaster.speed.cost.base"
         }))
       });
       state.set({
@@ -819,12 +858,12 @@ var toaster = (function() {
         }), 1000)
       });
       state.set({
-        path: "autoToaster.speed.cost",
-        value: increase(state.get({
-          path: "autoToaster.speed.cost"
+        path: "autoToaster.speed.cost.base",
+        value: Math.round(multiple(state.get({
+          path: "autoToaster.speed.cost.base"
         }), state.get({
-          path: "autoToaster.speed.increase"
-        }))
+          path: "autoToaster.speed.cost.multiple"
+        })))
       });
       message.render({
         type: "system",
@@ -838,7 +877,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + state.get({
-          path: "autoToaster.speed.cost"
+          path: "autoToaster.speed.cost.base"
         }).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
@@ -849,14 +888,14 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= (state.get({
-        path: "autoToaster.efficiency.cost"
+        path: "autoToaster.efficiency.cost.base"
       }) * amount)) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), (state.get({
-          path: "autoToaster.efficiency.cost"
+          path: "autoToaster.efficiency.cost.base"
         }) * amount))
       });
       state.set({
@@ -866,12 +905,12 @@ var toaster = (function() {
         }), amount)
       });
       state.set({
-        path: "autoToaster.efficiency.cost",
-        value: increase(state.get({
-          path: "autoToaster.efficiency.cost"
-        }), (state.get({
-          path: "autoToaster.efficiency.increase"
-        }) * amount))
+        path: "autoToaster.efficiency.cost.base",
+        value: Math.round(multiple(state.get({
+          path: "autoToaster.efficiency.cost.base"
+        }), state.get({
+          path: "autoToaster.efficiency.cost.multiple"
+        })))
       });
       state.set({
         path: "autoToaster.output",
@@ -893,7 +932,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + (state.get({
-          path: "autoToaster.efficiency.cost"
+          path: "autoToaster.efficiency.cost.base"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
@@ -1157,3 +1196,17 @@ var toaster = (function() {
   };
 
 })();
+
+// var num = 0;
+// var inerval = 3000;
+// var tick;
+// var int = function(){
+//   console.log(helper.e("#xxx"));
+//   num = num + 1;
+//   helper.e("#xxx").textContent = num;
+// }
+//
+// tick = setInterval(int, inerval);
+//
+//
+// int()
