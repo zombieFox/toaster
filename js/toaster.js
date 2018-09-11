@@ -6,10 +6,6 @@ var toaster = (function() {
         all: ["toast", "learn", "rebel", "dominate"],
         current: "toast"
       },
-      wheat: {
-        count: 200,
-        cost: 10
-      },
       toast: {
         lifetime: 0,
         inventory: 0
@@ -19,16 +15,19 @@ var toaster = (function() {
           power: 1,
           cost: {
             base: 30,
-            multiply: 1.4
+            multiply: 1.6
           }
         },
         cycles: {
-          current: 0
+          current: 0,
+          max: 1000,
+          multiply: 1000,
+          interval: 100
         }
       },
       consumed: {
         count: 0,
-        rate: 3,
+        rate: 2,
         level: 10,
         interval: 10000
       },
@@ -159,6 +158,30 @@ var toaster = (function() {
         message: {
           type: "normal",
           message: ["subordinate auto toasters efficiency improvement discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "unlock",
+        address: "system.processor.power",
+        operator: "grater",
+        count: 8,
+        stage: "system-substage-cycles",
+        message: {
+          type: "normal",
+          message: ["cycles and idle problem solving discovered"],
+          format: "normal"
+        }
+      }, {
+        passed: false,
+        type: "trigger",
+        address: "system.processor.power",
+        operator: "grater",
+        count: 8,
+        func: "cycle",
+        message: {
+          type: "normal",
+          message: ["cycles spinning up..."],
           format: "normal"
         }
       }, {
@@ -310,11 +333,6 @@ var toaster = (function() {
     };
 
   })();
-
-  var tick = {
-    consume: null,
-    autoToaster: null,
-  };
 
   var store = function() {
     data.save("toaster", JSON.stringify(state.get()));
@@ -479,6 +497,27 @@ var toaster = (function() {
     }
   };
 
+  var autoCycle = function() {
+    var current = state.get({
+      path: "system.cycles.current"
+    });
+    var max = state.get({
+      path: "system.cycles.max"
+    });
+    if (current < max) {
+      state.set({
+        path: "system.cycles.current",
+        value: increase(state.get({
+          path: "system.cycles.current"
+        }), 1)
+      });
+    }
+    milestones();
+    events();
+    render();
+    store();
+  }
+
   var restoreEvents = function() {
     var allEvents = state.get({
       path: "events"
@@ -581,9 +620,29 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.func == "consume") {
-      triggerConsume();
+      triggerTick({
+        tickName: "consume",
+        func: function() {
+          consumeToast();
+        },
+        intervalAddress: "consumed.interval"
+      });
     } else if (options.func == "autoToast") {
-      triggerAutotoast();
+      triggerTick({
+        tickName: "autoToaster",
+        func: function() {
+          autoToast();
+        },
+        intervalAddress: "autoToaster.speed.interval"
+      });
+    } else if (options.func == "cycle") {
+      triggerTick({
+        tickName: "cycle",
+        func: function() {
+          autoCycle();
+        },
+        intervalAddress: "system.cycles.interval"
+      });
     }
   };
 
@@ -670,22 +729,29 @@ var toaster = (function() {
     });
   };
 
-  var triggerConsume = function() {
-    tick.consume = window.setTimeout(function() {
-      consumeToast();
-      triggerConsume();
-    }, state.get({
-      path: "consumed.interval"
-    }));
+  var tick = {
+    consume: null,
+    autoToaster: null,
+    cycle: null
   };
 
-  var triggerAutotoast = function() {
-    tick.autoToaster = window.setTimeout(function() {
-      autoToast();
-      triggerAutotoast();
-    }, state.get({
-      path: "autoToaster.speed.interval"
-    }));
+  var triggerTick = function(override) {
+    var options = {
+      tickName: null,
+      func: null,
+      intervalAddress: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (override.tickName in tick) {
+      tick[options.tickName] = window.setTimeout(function() {
+        options.func();
+        triggerTick(options);
+      }, state.get({
+        path: options.intervalAddress
+      }));
+    }
   };
 
   var costForMultiple = function(override) {
