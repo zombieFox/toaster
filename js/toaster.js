@@ -19,7 +19,7 @@ var toaster = (function() {
           power: 1,
           cost: {
             base: 30,
-            multiply: 1.5
+            multiply: 1.4
           }
         },
         cycles: {
@@ -688,7 +688,6 @@ var toaster = (function() {
     }));
   };
 
-
   var costForMultiple = function(override) {
     var options = {
       amount: null,
@@ -703,7 +702,7 @@ var toaster = (function() {
     var costFull = 0;
     var costBase = state.get({
       path: options.address.base
-    })
+    });
     for (var i = 0; i < options.amount; i++) {
       costFull = costFull + costBase;
       costBase = multiply(costBase, state.get({
@@ -714,46 +713,61 @@ var toaster = (function() {
   };
 
   var boostProcessor = function(amount) {
-    if (state.get({
-        path: "toast.inventory"
-      }) >= (state.get({
-        path: "system.processor.cost.base"
-      }) * amount)) {
+    var make = function() {
+      // remove cost from inventory
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
-        }), (state.get({
+        }), state.get({
           path: "system.processor.cost.base"
-        }) * amount))
+        }))
       });
+      // set new cost
+      state.set({
+        path: "system.processor.cost.base",
+        value: multiply(state.get({
+          path: "system.processor.cost.base"
+        }), state.get({
+          path: "system.processor.cost.multiply"
+        }))
+      });
+      // add auto toasters
       state.set({
         path: "system.processor.power",
         value: increase(state.get({
           path: "system.processor.power"
-        }), amount)
+        }), 1)
       });
-      state.set({
-        path: "system.processor.cost.base",
-        value: Math.round(multiply(state.get({
-          path: "system.processor.cost.base"
-        }), state.get({
-          path: "system.processor.cost.multiply"
-        })))
-      });
+    };
+    // if inventory => autoToaster cost
+    if (state.get({
+        path: "toast.inventory"
+      }) >= costForMultiple({
+        amount: amount,
+        address: {
+          base: "system.processor.cost.base",
+          multiply: "system.processor.cost.multiply"
+        }
+      })) {
+      for (var i = 0; i < amount; i++) {
+        make();
+      };
       message.render({
         type: "system",
-        message: ["+" + amount + " processor power, " + state.get({
-          path: "system.processor.power"
-        }).toLocaleString(2) + " toast with every click"],
+        message: ["+" + amount + " processor power, " + amount.toLocaleString(2) + " toast with every click"],
         format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["toast inventory low, " + (state.get({
-          path: "system.processor.cost.base"
-        }) * amount).toLocaleString(2) + " toast matter needed"],
+        message: ["toast inventory low, " + costForMultiple({
+          amount: amount,
+          address: {
+            base: "system.processor.cost.base",
+            multiply: "system.processor.cost.multiply"
+          }
+        }).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
     }
