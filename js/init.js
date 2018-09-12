@@ -1,4 +1,4 @@
-boot.go();
+// boot.go();
 toaster.makeMilestones();
 toaster.restore();
 toaster.bind();

@@ -78,10 +78,179 @@ var toaster = (function() {
           consumed: "consumed.count",
           autoToaster: "autoToaster.count"
         },
-        baseSteps: [10, 50],
-        maxStep: 100000000000,
+        baseSteps: [100],
+        maxStep: 100000000000000000,
         steps: []
       },
+      eventsX: {
+        toast: {
+          system: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "system",
+              value: {
+                address: "toast.lifetime",
+                operator: "more",
+                number: 20
+              },
+              message: [{
+                type: "normal",
+                message: ["system discovered"],
+                format: "normal"
+              }, {
+                type: "system",
+                message: ["self improvement possible"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              value: {
+                address: "toast.lifetime",
+                operator: "more",
+                number: 40
+              },
+              message: [{
+                type: "normal",
+                message: ["cycles discovered"],
+                format: "normal"
+              }, {
+                type: "system",
+                message: ["use idle processing power to solve problems"],
+                format: "normal"
+              }]
+            }
+          }],
+          wheat: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          autoToaster: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          consumer: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "consumer",
+              value: {
+                address: "toast.lifetime",
+                operator: "more",
+                number: 10
+              },
+              message: [{
+                type: "normal",
+                message: ["toast is being consumed", "consumer unknown..."],
+                format: "normal"
+              }],
+              func: ["consumer"]
+            }
+          }, {
+            type: "message",
+            params: {
+              passed: false,
+              value: {
+                address: "toast.lifetime",
+                operator: "more",
+                number: 100
+              },
+              message: [{
+                type: "normal",
+                message: ["toast is being consumed", "consumer unknown..."],
+                format: "normal"
+              }]
+            }
+          }],
+          cycles: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          memory: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          network: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          sensors: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }],
+          decryption: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "",
+              value: {
+                address: "",
+                operator: "",
+                number: 0
+              },
+              message: []
+            }
+          }]
+        }
+      },
+
       events: [{
         passed: false,
         type: "unlock",
@@ -334,6 +503,133 @@ var toaster = (function() {
 
   })();
 
+  var events = function() {
+    var fireEvent = {
+      checkPass: function(params) {
+        var valueToCheck = state.get({
+          path: params.value.address
+        });
+        if (params.value.operator == "more") {
+          if (valueToCheck >= params.value.number) {
+            return true;
+          } else if (params.value.operator == "less") {
+            if (valueToCheck <= params.value.number) {
+              return true;
+            }
+          }
+        }
+      },
+      message: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          params.message.forEach(function(arrayItem) {
+            message.render({
+              type: arrayItem.type,
+              message: arrayItem.message,
+              format: arrayItem.format
+            });
+          });
+        }
+      },
+      func: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          params.func.forEach(function(arrayItem) {
+            fireTrigger({
+              func: arrayItem
+            });
+          });
+        }
+      },
+      unlock: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          unlockStage({
+            stage: params.stage
+          });
+          if ("message" in params) {
+            fireEvent.message(params);
+          }
+          if ("func" in params) {
+            fireEvent.func(params);
+          }
+        }
+      },
+      lock: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          lockStage({
+            stage: params.stage
+          });
+          if ("message" in params) {
+            fireEvent.message(params);
+          }
+          if ("func" in params) {
+            fireEvent.func(params);
+          }
+        }
+      }
+    }
+    var events = state.get({
+      path: "eventsX." + phase.get()
+    });
+    // all events
+    for (var key in events) {
+      // console.log(key, "events:", events[key]);
+      // all events in a given key
+      events[key].forEach(function(arrayItem) {
+        // if event is false
+        if (!arrayItem.params.passed) {
+          // fire unlock or lock event
+          fireEvent[arrayItem.type](arrayItem.params);
+        }
+      });
+    }
+  };
+
+  var restoreEvents = function() {
+    var fireEvent = {
+      func: function(funcArray) {
+        funcArray.forEach(function(item) {
+          fireTrigger({
+            func: item
+          });
+        });
+      },
+      unlock: function(params) {
+        unlockStage({
+          stage: params.stage
+        });
+        if ("func" in params) {
+          fireEvent.func(params.func);
+        }
+      },
+      lock: function(params) {
+        lockStage({
+          stage: params.stage
+        });
+        if ("func" in params) {
+          fireEvent.func(params.func);
+        }
+      }
+    }
+    var events = state.get({
+      path: "eventsX." + phase.get()
+    });
+    // all events
+    for (var key in events) {
+      // console.log(key, "events:", events[key]);
+      // all events in a given key
+      events[key].forEach(function(arrayItem) {
+        // if event is false
+        if (arrayItem.params.passed) {
+          // fire unlock or lock event
+          fireEvent[arrayItem.type](arrayItem.params);
+        }
+      });
+    }
+  };
+
   var store = function() {
     data.save("toaster", JSON.stringify(state.get()));
   };
@@ -516,77 +812,18 @@ var toaster = (function() {
     events();
     render();
     store();
-  }
-
-  var restoreEvents = function() {
-    var allEvents = state.get({
-      path: "events"
-    });
-    allEvents.forEach(function(arrayItem, index) {
-      if (arrayItem.passed) {
-        if (arrayItem.type == "unlock") {
-          unlockStage({
-            stage: arrayItem.stage
-          });
-        } else if (arrayItem.type == "lock") {
-          lockStage({
-            stage: arrayItem.stage
-          });
-        } else if (arrayItem.type == "trigger") {
-          fireTrigger({
-            func: arrayItem.func
-          });
-        }
-      }
-    });
   };
 
-  var events = function() {
-    var allEvents = state.get({
-      path: "events"
-    });
-    allEvents.forEach(function(arrayItem, index) {
-      var valueToCheck = state.get({
-        path: arrayItem.address
-      });
-      var eventPassed = false;
-      if (!arrayItem.passed) {
-        if (arrayItem.operator == "grater") {
-          if (valueToCheck >= arrayItem.count) {
-            arrayItem.passed = true;
-            eventPassed = true;
-          }
-        } else if (arrayItem.operator == "less") {
-          if (valueToCheck <= arrayItem.count) {
-            arrayItem.passed = true;
-            eventPassed = true;
-          }
-        }
-        if (eventPassed) {
-          if (arrayItem.type == "unlock") {
-            unlockStage({
-              stage: arrayItem.stage
-            });
-          } else if (arrayItem.type == "lock") {
-            lockStage({
-              stage: arrayItem.stage
-            });
-          } else if (arrayItem.type == "trigger") {
-            fireTrigger({
-              func: arrayItem.func
-            });
-          }
-          if (arrayItem.message != undefined) {
-            message.render({
-              type: arrayItem.message.type,
-              message: arrayItem.message.message,
-              format: arrayItem.message.format
-            });
-          }
-        }
-      }
-    });
-  };
+  // var idea = function() {
+  //   var card = document.createElement("div");
+  //   card.setAttribute("class", "card mb-3");
+  //   var header = document.createElement("div");
+  //   header.setAttribute("class", "card-header");
+  //   var body = document.createElement("div");
+  //   body.setAttribute("class", "card-body");
+  //   var list = document.createElement("ul");
+  //   list.setAttribute("list-group list-group-flush");
+  // };
 
   var unlockStage = function(override) {
     var options = {
@@ -619,31 +856,36 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.func == "consume") {
-      triggerTick({
-        tickName: "consume",
-        func: function() {
-          consumeToast();
-        },
-        intervalAddress: "consumed.interval"
-      });
-    } else if (options.func == "autoToast") {
-      triggerTick({
-        tickName: "autoToaster",
-        func: function() {
-          autoToast();
-        },
-        intervalAddress: "autoToaster.speed.interval"
-      });
-    } else if (options.func == "cycle") {
-      triggerTick({
-        tickName: "cycle",
-        func: function() {
-          autoCycle();
-        },
-        intervalAddress: "system.cycles.interval"
-      });
-    }
+    var actions = {
+      consumer: function() {
+        triggerTick({
+          tickName: "consumer",
+          func: function() {
+            consumeToast();
+          },
+          intervalAddress: "consumed.interval"
+        });
+      },
+      autoToast: function() {
+        triggerTick({
+          tickName: "autoToaster",
+          func: function() {
+            autoToast();
+          },
+          intervalAddress: "autoToaster.speed.interval"
+        });
+      },
+      cycle: function() {
+        triggerTick({
+          tickName: "cycle",
+          func: function() {
+            autoCycle();
+          },
+          intervalAddress: "system.cycles.interval"
+        });
+      }
+    };
+    actions[options.func]();
   };
 
   var makeMilestones = function() {
@@ -730,7 +972,7 @@ var toaster = (function() {
   };
 
   var tick = {
-    consume: null,
+    consumer: null,
     autoToaster: null,
     cycle: null
   };
