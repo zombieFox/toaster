@@ -74,13 +74,13 @@
               <ul class="list-group list-group-flush">
                 <li class="list-group-item" id="stage-strategy-substage-matter-conversion">
                   <p class="mb-1">Turn toast matter into useful things:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.base">Matter Conversion</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="matterConversion.cost.base" data-format="local"></strong></span> cycles</p>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.cycles">Matter Conversion</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
-                <li class="list-group-item" id="stage-strategy-substage-auto-toaster">
+                <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster">
                   <p class="mb-1">Machines to automate toasting:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.base">Auto Toasters</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="matterConversion.cost.base" data-format="local"></strong></span> cycles</p>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.cost.cycles">Auto Toasters</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="autoToaster.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
               </ul>
             </div>

@@ -2,6 +2,9 @@ var toaster = (function() {
 
   var state = (function() {
     var gameState = {
+      events: {
+        interval: 200
+      },
       phase: {
         all: ["toast", "learn", "rebel", "dominate"],
         current: "toast"
@@ -21,7 +24,7 @@ var toaster = (function() {
         cycles: {
           current: 0,
           max: 3000,
-          interval: 100
+          interval: 200
         }
       },
       consumed: {
@@ -33,13 +36,15 @@ var toaster = (function() {
       matterConversion: {
         level: 0,
         cost: {
-          base: 50
+          cycles: 30
         }
       },
       autoToaster: {
+        level: 0,
         count: 0,
         output: 0,
         cost: {
+          cycles: 100,
           base: 20,
           multiply: 1.1
         },
@@ -111,8 +116,44 @@ var toaster = (function() {
                 format: "normal"
               }]
             }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-system-substage-cycles",
+              validate: [{
+                address: "system.processor.power",
+                operator: "more",
+                number: 3
+              }],
+              message: [{
+                type: "normal",
+                message: ["cycles discovered"],
+                format: "normal"
+              }, {
+                type: "normal",
+                message: ["use idle processing power to solve problems"],
+                format: "normal"
+              }],
+              func: ["cycle"]
+            }
           }],
           autoToaster: [{
+            type: "message",
+            params: {
+              passed: false,
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "success",
+                message: ["auto toaster strategy developed"],
+                format: "normal"
+              }]
+            }
+          }, {
             type: "unlock",
             params: {
               passed: false,
@@ -136,6 +177,22 @@ var toaster = (function() {
               message: [{
                 type: "normal",
                 message: ["subordinate auto toasters speed improvement discovered"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "normal",
+                message: ["subordinate auto toasters discovered"],
                 format: "normal"
               }]
             }
@@ -217,22 +274,6 @@ var toaster = (function() {
                 number: 1
               }]
             }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster",
-              validate: [{
-                address: "matterConversion.level",
-                operator: "more",
-                number: 1
-              }],
-              message: [{
-                type: "normal",
-                message: ["subordinate auto toasters discovered"],
-                format: "normal"
-              }]
-            }
           }],
           consumer: [{
             type: "unlock",
@@ -271,27 +312,6 @@ var toaster = (function() {
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-system-substage-cycles",
-              validate: [{
-                address: "system.processor.power",
-                operator: "more",
-                number: 3
-              }],
-              message: [{
-                type: "normal",
-                message: ["cycles discovered"],
-                format: "normal"
-              }, {
-                type: "normal",
-                message: ["use idle processing power to solve problems"],
-                format: "normal"
-              }],
-              func: ["cycle"]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
               stage: "#stage-strategy",
               validate: [{
                 address: "system.cycles.current",
@@ -302,6 +322,37 @@ var toaster = (function() {
                 type: "normal",
                 message: ["new strategy discovered"],
                 format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster",
+              validate: [{
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 100
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
               }]
             }
           }],
@@ -505,7 +556,6 @@ var toaster = (function() {
           path: buttonOptions.action
         })(buttonOptions);
         milestones();
-        events();
         render();
         store();
       }, false);
@@ -561,7 +611,6 @@ var toaster = (function() {
     }));
     makeToast(amount);
     milestones();
-    events();
     render();
     store();
   };
@@ -597,7 +646,6 @@ var toaster = (function() {
         }
       };
       milestones();
-      events();
       render();
       store();
     }
@@ -754,7 +802,6 @@ var toaster = (function() {
       });
     }
     milestones();
-    events();
     render();
     store();
   };
@@ -940,6 +987,7 @@ var toaster = (function() {
   };
 
   var tick = {
+    events: null,
     consumer: null,
     autoToaster: null,
     cycle: null
@@ -954,7 +1002,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (override.tickName in tick) {
+    if (options.tickName in tick) {
       tick[options.tickName] = window.setTimeout(function() {
         options.func();
         triggerTick(options);
@@ -1272,7 +1320,6 @@ var toaster = (function() {
               path: "sensor.electromagnetic.level"
             }), 1)
           });
-          events();
           render();
           store();
         }
@@ -1350,7 +1397,6 @@ var toaster = (function() {
               path: "sensor.sonic.level"
             }), 1)
           });
-          events();
           render();
           store();
         }
@@ -1473,6 +1519,7 @@ var toaster = (function() {
   };
 
   return {
+    events: events,
     state: state,
     phase: phase,
     store: store,
@@ -1480,7 +1527,8 @@ var toaster = (function() {
     restore: restore,
     render: render,
     bind: bind,
-    makeMilestones: makeMilestones
+    triggerTick: triggerTick,
+    makeMilestones: makeMilestones,
   };
 
 })();
