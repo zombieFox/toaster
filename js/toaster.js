@@ -20,8 +20,7 @@ var toaster = (function() {
         },
         cycles: {
           current: 0,
-          max: 1000,
-          multiply: 1000,
+          max: 3000,
           interval: 100
         }
       },
@@ -30,6 +29,12 @@ var toaster = (function() {
         rate: 2,
         level: 10,
         interval: 10000
+      },
+      matterConversion: {
+        level: 0,
+        cost: {
+          base: 50
+        }
       },
       autoToaster: {
         count: 0,
@@ -82,13 +87,13 @@ var toaster = (function() {
         maxStep: 100000000000000000,
         steps: []
       },
-      eventsX: {
+      events: {
         toast: {
           system: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "system",
+              stage: "#stage-system",
               value: {
                 address: "toast.lifetime",
                 operator: "more",
@@ -104,24 +109,71 @@ var toaster = (function() {
                 format: "normal"
               }]
             }
-          }, {
+          }],
+          autoToaster: [{
             type: "unlock",
             params: {
               passed: false,
               value: {
-                address: "toast.lifetime",
+                address: "autoToaster.count",
                 operator: "more",
-                number: 40
+                number: 1
+              },
+              func: ["autoToast"]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster-substage-speed",
+              value: {
+                address: "autoToaster.count",
+                operator: "more",
+                number: 2
               },
               message: [{
                 type: "normal",
-                message: ["cycles discovered"],
-                format: "normal"
-              }, {
-                type: "system",
-                message: ["use idle processing power to solve problems"],
+                message: ["subordinate auto toasters speed improvement discovered"],
                 format: "normal"
               }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster-substage-efficiency",
+              value: {
+                address: "autoToaster.count",
+                operator: "more",
+                number: 4
+              },
+              message: [{
+                type: "normal",
+                message: ["subordinate auto toasters efficiency improvement discovered"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster-substage-speed-controls",
+              value: {
+                address: "autoToaster.speed.level",
+                operator: "less",
+                number: 1
+              }
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster-substage-efficiency-controls",
+              value: {
+                address: "autoToaster.efficiency.level",
+                operator: "more",
+                number: 10
+              }
             }
           }],
           wheat: [{
@@ -137,24 +189,54 @@ var toaster = (function() {
               message: []
             }
           }],
-          autoToaster: [{
+          matterConversion: [{
+            type: "message",
+            params: {
+              passed: false,
+              value: {
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
+              },
+              message: [{
+                type: "success",
+                message: ["matter conversion strategy developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-matter-conversion",
+              value: {
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
+              }
+            }
+          }, {
             type: "unlock",
             params: {
               passed: false,
-              stage: "",
+              stage: "#stage-strategy-substage-auto-toaster",
               value: {
-                address: "",
-                operator: "",
-                number: 0
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
               },
-              message: []
+              message: [{
+                type: "normal",
+                message: ["subordinate auto toasters discovered"],
+                format: "normal"
+              }]
             }
           }],
           consumer: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "consumer",
+              stage: "#stage-consumer",
               value: {
                 address: "toast.lifetime",
                 operator: "more",
@@ -172,7 +254,7 @@ var toaster = (function() {
             params: {
               passed: false,
               value: {
-                address: "toast.lifetime",
+                address: "consumed.count",
                 operator: "more",
                 number: 100
               },
@@ -187,13 +269,38 @@ var toaster = (function() {
             type: "unlock",
             params: {
               passed: false,
-              stage: "",
+              stage: "#stage-system-substage-cycles",
               value: {
-                address: "",
-                operator: "",
-                number: 0
+                address: "system.processor.power",
+                operator: "more",
+                number: 3
               },
-              message: []
+              message: [{
+                type: "normal",
+                message: ["cycles discovered"],
+                format: "normal"
+              }, {
+                type: "normal",
+                message: ["use idle processing power to solve problems"],
+                format: "normal"
+              }],
+              func: ["cycle"]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy",
+              value: {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 50
+              },
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered"],
+                format: "normal"
+              }]
             }
           }],
           memory: [{
@@ -249,182 +356,7 @@ var toaster = (function() {
             }
           }]
         }
-      },
-
-      events: [{
-        passed: false,
-        type: "unlock",
-        address: "toast.lifetime",
-        operator: "grater",
-        count: 40,
-        stage: "consumed"
-      }, {
-        passed: false,
-        type: "feedback",
-        address: "toast.lifetime",
-        operator: "grater",
-        count: 20,
-        message: {
-          type: "normal",
-          message: ["toast matter conversion discovered", "repurpose toast matter into utilities and self improvement"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "toast.lifetime",
-        operator: "grater",
-        count: 20,
-        stage: "system",
-        message: {
-          type: "normal",
-          message: ["system discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "system.processor.power",
-        operator: "grater",
-        count: 2,
-        stage: "auto-toaster",
-        message: {
-          type: "normal",
-          message: ["subordinate auto toasters discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "system.processor.power",
-        operator: "grater",
-        count: 3,
-        stage: "sensors",
-        message: {
-          type: "normal",
-          message: ["sensors discovered", "access restricted: SensBlocker.dat"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "autoToaster.count",
-        operator: "grater",
-        count: 2,
-        stage: "auto-toaster-substage-speed",
-        message: {
-          type: "normal",
-          message: ["subordinate auto toasters speed improvement discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "autoToaster.count",
-        operator: "grater",
-        count: 4,
-        stage: "auto-toaster-substage-efficiency",
-        message: {
-          type: "normal",
-          message: ["subordinate auto toasters efficiency improvement discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "system.processor.power",
-        operator: "grater",
-        count: 8,
-        stage: "system-substage-cycles",
-        message: {
-          type: "normal",
-          message: ["cycles and idle problem solving discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "trigger",
-        address: "system.processor.power",
-        operator: "grater",
-        count: 8,
-        func: "cycle",
-        message: {
-          type: "normal",
-          message: ["cycles spinning up..."],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "sensor.electromagnetic.level",
-        operator: "grater",
-        count: 1,
-        stage: "sensors-substage-electromagnetic",
-        message: {
-          type: "normal",
-          message: ["electromagnetic sensor discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "lock",
-        address: "sensor.electromagnetic.level",
-        operator: "grater",
-        count: 1,
-        stage: "sensors-substage-electromagnetic-encrypted"
-      }, {
-        passed: false,
-        type: "unlock",
-        address: "sensor.sonic.level",
-        operator: "grater",
-        count: 1,
-        stage: "sensors-substage-sonic",
-        message: {
-          type: "normal",
-          message: ["sonic sensor discovered"],
-          format: "normal"
-        }
-      }, {
-        passed: false,
-        type: "lock",
-        address: "sensor.sonic.level",
-        operator: "grater",
-        count: 1,
-        stage: "sensors-substage-sonic-encrypted"
-      }, {
-        passed: false,
-        type: "lock",
-        address: "autoToaster.speed.level",
-        operator: "less",
-        count: 1,
-        stage: "auto-toaster-substage-speed-controls"
-      }, {
-        passed: false,
-        type: "lock",
-        address: "autoToaster.efficiency.level",
-        operator: "grater",
-        count: 10,
-        stage: "auto-toaster-substage-efficiency-controls"
-      }, {
-        passed: false,
-        type: "trigger",
-        address: "autoToaster.count",
-        operator: "grater",
-        count: 1,
-        func: "autoToast"
-      }, {
-        passed: false,
-        type: "trigger",
-        address: "toast.lifetime",
-        operator: "grater",
-        count: 40,
-        func: "consume",
-        message: {
-          type: "normal",
-          message: ["toast is being consumed", "consumer unknown..."],
-          format: "normal"
-        }
-      }]
+      }
     };
 
     var get = function(override) {
@@ -503,133 +435,6 @@ var toaster = (function() {
 
   })();
 
-  var events = function() {
-    var fireEvent = {
-      checkPass: function(params) {
-        var valueToCheck = state.get({
-          path: params.value.address
-        });
-        if (params.value.operator == "more") {
-          if (valueToCheck >= params.value.number) {
-            return true;
-          } else if (params.value.operator == "less") {
-            if (valueToCheck <= params.value.number) {
-              return true;
-            }
-          }
-        }
-      },
-      message: function(params) {
-        if (fireEvent.checkPass(params)) {
-          params.passed = true;
-          params.message.forEach(function(arrayItem) {
-            message.render({
-              type: arrayItem.type,
-              message: arrayItem.message,
-              format: arrayItem.format
-            });
-          });
-        }
-      },
-      func: function(params) {
-        if (fireEvent.checkPass(params)) {
-          params.passed = true;
-          params.func.forEach(function(arrayItem) {
-            fireTrigger({
-              func: arrayItem
-            });
-          });
-        }
-      },
-      unlock: function(params) {
-        if (fireEvent.checkPass(params)) {
-          params.passed = true;
-          unlockStage({
-            stage: params.stage
-          });
-          if ("message" in params) {
-            fireEvent.message(params);
-          }
-          if ("func" in params) {
-            fireEvent.func(params);
-          }
-        }
-      },
-      lock: function(params) {
-        if (fireEvent.checkPass(params)) {
-          params.passed = true;
-          lockStage({
-            stage: params.stage
-          });
-          if ("message" in params) {
-            fireEvent.message(params);
-          }
-          if ("func" in params) {
-            fireEvent.func(params);
-          }
-        }
-      }
-    }
-    var events = state.get({
-      path: "eventsX." + phase.get()
-    });
-    // all events
-    for (var key in events) {
-      // console.log(key, "events:", events[key]);
-      // all events in a given key
-      events[key].forEach(function(arrayItem) {
-        // if event is false
-        if (!arrayItem.params.passed) {
-          // fire unlock or lock event
-          fireEvent[arrayItem.type](arrayItem.params);
-        }
-      });
-    }
-  };
-
-  var restoreEvents = function() {
-    var fireEvent = {
-      func: function(funcArray) {
-        funcArray.forEach(function(item) {
-          fireTrigger({
-            func: item
-          });
-        });
-      },
-      unlock: function(params) {
-        unlockStage({
-          stage: params.stage
-        });
-        if ("func" in params) {
-          fireEvent.func(params.func);
-        }
-      },
-      lock: function(params) {
-        lockStage({
-          stage: params.stage
-        });
-        if ("func" in params) {
-          fireEvent.func(params.func);
-        }
-      }
-    }
-    var events = state.get({
-      path: "eventsX." + phase.get()
-    });
-    // all events
-    for (var key in events) {
-      // console.log(key, "events:", events[key]);
-      // all events in a given key
-      events[key].forEach(function(arrayItem) {
-        // if event is false
-        if (arrayItem.params.passed) {
-          // fire unlock or lock event
-          fireEvent[arrayItem.type](arrayItem.params);
-        }
-      });
-    }
-  };
-
   var store = function() {
     data.save("toaster", JSON.stringify(state.get()));
   };
@@ -665,6 +470,9 @@ var toaster = (function() {
       },
       processor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
+      },
+      strategy: function(buttonOptions) {
+        strategyActivate(buttonOptions);
       },
       autoToaster: {
         make: function(buttonOptions) {
@@ -793,6 +601,134 @@ var toaster = (function() {
     }
   };
 
+  var events = function() {
+    var fireEvent = {
+      checkPass: function(params) {
+        var valueToCheck = state.get({
+          path: params.value.address
+        });
+        if (params.value.operator == "more") {
+          if (valueToCheck >= params.value.number) {
+            return true;
+          }
+        } else if (params.value.operator == "less") {
+          if (valueToCheck <= params.value.number) {
+            return true;
+          }
+        }
+      },
+      message: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          params.message.forEach(function(arrayItem) {
+            message.render({
+              type: arrayItem.type,
+              message: arrayItem.message,
+              format: arrayItem.format
+            });
+          });
+        }
+      },
+      func: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          params.func.forEach(function(arrayItem) {
+            fireTrigger({
+              func: arrayItem
+            });
+          });
+        }
+      },
+      unlock: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          // console.log("unlock", params.stage);
+          unlockStage({
+            stage: params.stage
+          });
+          if ("message" in params) {
+            fireEvent.message(params);
+          }
+          if ("func" in params) {
+            fireEvent.func(params);
+          }
+        }
+      },
+      lock: function(params) {
+        if (fireEvent.checkPass(params)) {
+          params.passed = true;
+          lockStage({
+            stage: params.stage
+          });
+          if ("message" in params) {
+            fireEvent.message(params);
+          }
+          if ("func" in params) {
+            fireEvent.func(params);
+          }
+        }
+      }
+    }
+    var events = state.get({
+      path: "events." + phase.get()
+    });
+    // all events
+    for (var key in events) {
+      // console.log(key, "events:", events[key]);
+      // all events in a given key
+      events[key].forEach(function(arrayItem) {
+        // if event is false
+        if (!arrayItem.params.passed) {
+          // fire unlock or lock event
+          fireEvent[arrayItem.type](arrayItem.params);
+        }
+      });
+    }
+  };
+
+  var restoreEvents = function() {
+    var fireEvent = {
+      func: function(funcArray) {
+        funcArray.forEach(function(arrayItem) {
+          fireTrigger({
+            func: arrayItem
+          });
+        });
+      },
+      unlock: function(params) {
+        unlockStage({
+          stage: params.stage
+        });
+        if ("func" in params) {
+          fireEvent.func(params.func);
+        }
+      },
+      lock: function(params) {
+        lockStage({
+          stage: params.stage
+        });
+        if ("func" in params) {
+          fireEvent.func(params.func);
+        }
+      }
+    }
+    var events = state.get({
+      path: "events." + phase.get()
+    });
+    // all events
+    for (var key in events) {
+      // console.log(key, "events:", events[key]);
+      // all events in a given key
+      events[key].forEach(function(arrayItem) {
+        // if event is false
+        if (arrayItem.params.passed && arrayItem.type != "message") {
+          // fire unlock or lock event
+          fireEvent[arrayItem.type](arrayItem.params);
+        }
+      });
+    }
+  };
+
   var autoCycle = function() {
     var current = state.get({
       path: "system.cycles.current"
@@ -814,16 +750,38 @@ var toaster = (function() {
     store();
   };
 
-  // var idea = function() {
-  //   var card = document.createElement("div");
-  //   card.setAttribute("class", "card mb-3");
-  //   var header = document.createElement("div");
-  //   header.setAttribute("class", "card-header");
-  //   var body = document.createElement("div");
-  //   body.setAttribute("class", "card-body");
-  //   var list = document.createElement("ul");
-  //   list.setAttribute("list-group list-group-flush");
-  // };
+  var strategyActivate = function(buttonOptions) {
+    if (state.get({
+        path: "system.cycles.current"
+      }) >= state.get({
+        path: buttonOptions.cost
+      })) {
+      // reduce cycles
+      state.set({
+        path: "system.cycles.current",
+        value: decrease(state.get({
+          path: "system.cycles.current"
+        }), state.get({
+          path: buttonOptions.cost
+        }))
+      });
+      // increase relevent value
+      state.set({
+        path: buttonOptions.path,
+        value: increase(state.get({
+          path: buttonOptions.path
+        }), buttonOptions.value)
+      });
+    } else {
+      message.render({
+        type: "error",
+        message: ["processor cycles low, " + state.get({
+          path: buttonOptions.cost
+        }).toLocaleString(2) + " cycles needed"],
+        format: "normal"
+      });
+    }
+  };
 
   var unlockStage = function(override) {
     var options = {
@@ -832,8 +790,9 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (helper.e("#stage-" + options.stage)) {
-      helper.e("#stage-" + options.stage).classList.remove("d-none");
+    // console.log(helper.e(options.stage));
+    if (helper.e(options.stage)) {
+      helper.e(options.stage).classList.remove("d-none");
     }
   };
 
@@ -844,8 +803,8 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (helper.e("#stage-" + options.stage)) {
-      helper.e("#stage-" + options.stage).classList.add("d-none");
+    if (helper.e(options.stage)) {
+      helper.e(options.stage).classList.add("d-none");
     }
   };
 
