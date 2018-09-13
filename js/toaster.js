@@ -83,9 +83,11 @@ var toaster = (function() {
           consumed: "consumed.count",
           autoToaster: "autoToaster.count"
         },
-        baseSteps: [100],
-        maxStep: 100000000000000000,
-        steps: []
+        steps: {
+          base: [100],
+          max: 100000000000000000,
+          all: []
+        }
       },
       events: {
         toast: {
@@ -849,10 +851,10 @@ var toaster = (function() {
 
   var makeMilestones = function() {
     var baseSteps = state.get({
-      path: "milestones.baseSteps"
+      path: "milestones.steps.base"
     });
     var maxStep = state.get({
-      path: "milestones.maxStep"
+      path: "milestones.steps.max"
     });
     var milestone = [];
     baseSteps.forEach(function(arrayItem, index) {
@@ -873,7 +875,7 @@ var toaster = (function() {
     });
     milestone = helper.sortObject(milestone, "count");
     state.set({
-      path: "milestones.steps",
+      path: "milestones.steps.all",
       value: milestone
     })
   };
@@ -882,7 +884,7 @@ var toaster = (function() {
     var allMilestones = state.get({
       path: "milestones"
     });
-    allMilestones.steps.forEach(function(arrayItem, index) {
+    allMilestones.steps.all.forEach(function(arrayItem, index) {
       // console.log(arrayItem);
       var step = arrayItem;
       for (var key in step.check) {
