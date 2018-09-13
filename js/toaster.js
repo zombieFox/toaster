@@ -96,11 +96,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-system",
-              value: {
+              validate: [{
                 address: "toast.lifetime",
                 operator: "more",
                 number: 20
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["system discovered"],
@@ -116,11 +116,11 @@ var toaster = (function() {
             type: "unlock",
             params: {
               passed: false,
-              value: {
+              validate: [{
                 address: "autoToaster.count",
                 operator: "more",
                 number: 1
-              },
+              }],
               func: ["autoToast"]
             }
           }, {
@@ -128,11 +128,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-auto-toaster-substage-speed",
-              value: {
+              validate: [{
                 address: "autoToaster.count",
                 operator: "more",
                 number: 2
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["subordinate auto toasters speed improvement discovered"],
@@ -144,11 +144,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-auto-toaster-substage-efficiency",
-              value: {
+              validate: [{
                 address: "autoToaster.count",
                 operator: "more",
                 number: 4
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["subordinate auto toasters efficiency improvement discovered"],
@@ -160,22 +160,22 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-auto-toaster-substage-speed-controls",
-              value: {
+              validate: [{
                 address: "autoToaster.speed.level",
                 operator: "less",
                 number: 1
-              }
+              }]
             }
           }, {
             type: "lock",
             params: {
               passed: false,
               stage: "#stage-auto-toaster-substage-efficiency-controls",
-              value: {
+              validate: [{
                 address: "autoToaster.efficiency.level",
                 operator: "more",
                 number: 10
-              }
+              }]
             }
           }],
           wheat: [{
@@ -183,11 +183,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "",
-              value: {
+              validate: [{
                 address: "",
                 operator: "",
                 number: 0
-              },
+              }],
               message: []
             }
           }],
@@ -195,11 +195,11 @@ var toaster = (function() {
             type: "message",
             params: {
               passed: false,
-              value: {
+              validate: [{
                 address: "matterConversion.level",
                 operator: "more",
                 number: 1
-              },
+              }],
               message: [{
                 type: "success",
                 message: ["matter conversion strategy developed"],
@@ -211,22 +211,22 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-strategy-substage-matter-conversion",
-              value: {
+              validate: [{
                 address: "matterConversion.level",
                 operator: "more",
                 number: 1
-              }
+              }]
             }
           }, {
             type: "unlock",
             params: {
               passed: false,
               stage: "#stage-strategy-substage-auto-toaster",
-              value: {
+              validate: [{
                 address: "matterConversion.level",
                 operator: "more",
                 number: 1
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["subordinate auto toasters discovered"],
@@ -239,11 +239,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-consumer",
-              value: {
+              validate: [{
                 address: "toast.lifetime",
                 operator: "more",
                 number: 10
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["toast is being consumed", "consumer unknown..."],
@@ -255,11 +255,11 @@ var toaster = (function() {
             type: "message",
             params: {
               passed: false,
-              value: {
+              validate: [{
                 address: "consumed.count",
                 operator: "more",
                 number: 100
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["toast is being consumed", "consumer unknown..."],
@@ -272,11 +272,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-system-substage-cycles",
-              value: {
+              validate: [{
                 address: "system.processor.power",
                 operator: "more",
                 number: 3
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["cycles discovered"],
@@ -293,11 +293,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "#stage-strategy",
-              value: {
+              validate: [{
                 address: "system.cycles.current",
                 operator: "more",
                 number: 50
-              },
+              }],
               message: [{
                 type: "normal",
                 message: ["new strategy discovered"],
@@ -310,11 +310,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "",
-              value: {
+              validate: [{
                 address: "",
                 operator: "",
                 number: 0
-              },
+              }],
               message: []
             }
           }],
@@ -323,11 +323,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "",
-              value: {
+              validate: [{
                 address: "",
                 operator: "",
                 number: 0
-              },
+              }],
               message: []
             }
           }],
@@ -336,11 +336,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "",
-              value: {
+              validate: [{
                 address: "",
                 operator: "",
                 number: 0
-              },
+              }],
               message: []
             }
           }],
@@ -349,11 +349,11 @@ var toaster = (function() {
             params: {
               passed: false,
               stage: "",
-              value: {
+              validate: [{
                 address: "",
                 operator: "",
                 number: 0
-              },
+              }],
               message: []
             }
           }]
@@ -606,18 +606,25 @@ var toaster = (function() {
   var events = function() {
     var fireEvent = {
       checkPass: function(params) {
-        var valueToCheck = state.get({
-          path: params.value.address
-        });
-        if (params.value.operator == "more") {
-          if (valueToCheck >= params.value.number) {
-            return true;
+        var passNeeded = params.validate.length;
+        var currentPass = 0;
+        params.validate.forEach(function(arrayItem) {
+          var valueToCheck = state.get({
+            path: arrayItem.address
+          });
+          if (arrayItem.operator == "more") {
+            if (valueToCheck >= arrayItem.number) {
+              currentPass++;
+            }
+          } else if (arrayItem.operator == "less") {
+            if (valueToCheck <= arrayItem.number) {
+              currentPass++;
+            }
           }
-        } else if (params.value.operator == "less") {
-          if (valueToCheck <= params.value.number) {
-            return true;
-          }
-        }
+        })
+        if (currentPass >= passNeeded) {
+          return true;
+        };
       },
       message: function(params) {
         if (fireEvent.checkPass(params)) {
