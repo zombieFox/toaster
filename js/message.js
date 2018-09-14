@@ -127,6 +127,7 @@ var message = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    var maxMessages = 100;
     var report = helper.e("#report");
     var newMessage = document.createElement("pre");
     newMessage.setAttribute("class", "mb-2 text-" + colour[options.type] + " report-message");
@@ -142,7 +143,7 @@ var message = (function() {
     messageText.setAttribute("class", "report-message-text");
     newMessage.appendChild(messageType);
     newMessage.appendChild(messageText);
-    while (report.childNodes.length > 30) {
+    while (report.childNodes.length > maxMessages) {
       report.firstChild.remove();
     }
     report.appendChild(newMessage);

@@ -57,7 +57,7 @@ var boot = (function() {
     }
   }];
 
-  var go = function() {
+  var init = function() {
     var delay = 0;
     intro.forEach(function(arrayItem, index) {
       for (var key in arrayItem) {
@@ -83,7 +83,7 @@ var boot = (function() {
   };
 
   return {
-    go: go
+    init: init
   };
 
 })();

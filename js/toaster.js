@@ -52,6 +52,7 @@ var toaster = (function() {
           level: 10,
           interval: 10000,
           cost: {
+            cycles: 1000,
             base: 75,
             multiply: 1.1
           }
@@ -59,6 +60,7 @@ var toaster = (function() {
         efficiency: {
           level: 1,
           cost: {
+            cycles: 2000,
             base: 170,
             multiply: 2.6
           }
@@ -139,48 +141,6 @@ var toaster = (function() {
             }
           }],
           autoToaster: [{
-            type: "message",
-            params: {
-              passed: false,
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 1
-              }],
-              message: [{
-                type: "success",
-                message: ["auto toaster strategy developed"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              validate: [{
-                address: "autoToaster.count",
-                operator: "more",
-                number: 1
-              }],
-              func: ["autoToast"]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-auto-toaster-substage-speed",
-              validate: [{
-                address: "autoToaster.count",
-                operator: "more",
-                number: 2
-              }],
-              message: [{
-                type: "normal",
-                message: ["subordinate auto toasters speed improvement discovered"],
-                format: "normal"
-              }]
-            }
-          }, {
             type: "unlock",
             params: {
               passed: false,
@@ -194,21 +154,22 @@ var toaster = (function() {
                 type: "normal",
                 message: ["subordinate auto toasters discovered"],
                 format: "normal"
-              }]
+              }],
+              func: ["autoToast"]
             }
           }, {
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-auto-toaster-substage-efficiency",
+              stage: "#stage-auto-toaster-substage-speed",
               validate: [{
-                address: "autoToaster.count",
+                address: "autoToaster.level",
                 operator: "more",
-                number: 4
+                number: 2
               }],
               message: [{
                 type: "normal",
-                message: ["subordinate auto toasters efficiency improvement discovered"],
+                message: ["subordinate auto toasters speed improvement discovered"],
                 format: "normal"
               }]
             }
@@ -221,6 +182,22 @@ var toaster = (function() {
                 address: "autoToaster.speed.level",
                 operator: "less",
                 number: 1
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-auto-toaster-substage-efficiency",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 3
+              }],
+              message: [{
+                type: "normal",
+                message: ["subordinate auto toasters efficiency improvement discovered"],
+                format: "normal"
               }]
             }
           }, {
@@ -320,7 +297,22 @@ var toaster = (function() {
               }],
               message: [{
                 type: "normal",
-                message: ["new strategy discovered"],
+                message: ["strategies discovered"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "message",
+            params: {
+              passed: false,
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "success",
+                message: ["auto toaster strategy developed"],
                 format: "normal"
               }]
             }
@@ -340,7 +332,7 @@ var toaster = (function() {
               }],
               message: [{
                 type: "normal",
-                message: ["new strategy discovered"],
+                message: ["new strategy discovered", "subordinate auto toasters"],
                 format: "normal"
               }]
             }
@@ -353,6 +345,68 @@ var toaster = (function() {
                 address: "autoToaster.level",
                 operator: "more",
                 number: 1
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster-speed",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 200
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered", "subordinate auto toaster speed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster-speed",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 2
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster-efficiency",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 2
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 200
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered", "subordinate auto toaster efficiency"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: "#stage-strategy-substage-auto-toaster-efficiency",
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 3
               }]
             }
           }],
@@ -1518,7 +1572,22 @@ var toaster = (function() {
     return options.number.toFixed(precision) + suffix;
   };
 
+  var init = function() {
+    makeMilestones();
+    triggerTick({
+      tickName: "events",
+      func: function() {
+        events();
+      },
+      intervalAddress: "system.cycles.interval"
+    });
+    restore();
+    bind();
+    render();
+  };
+
   return {
+    init: init,
     events: events,
     state: state,
     phase: phase,
@@ -1526,9 +1595,7 @@ var toaster = (function() {
     reboot: reboot,
     restore: restore,
     render: render,
-    bind: bind,
-    triggerTick: triggerTick,
-    makeMilestones: makeMilestones,
+    bind: bind
   };
 
 })();

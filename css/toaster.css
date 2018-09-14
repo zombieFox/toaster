@@ -86,9 +86,8 @@ body {
 }
 
 .report-message-type {
-  width: 4em;
+  width: 5em;
   text-align: center;
-  margin-right: 0.5em;
   flex-grow: 0;
   flex-shrink: 0;
 }
