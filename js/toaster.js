@@ -18,13 +18,14 @@ var toaster = (function() {
           power: 1,
           cost: {
             toast: 25,
-            multiply: 1.4
+            multiply: 1.5
           }
         },
         cycles: {
+          level: 0,
           current: 0,
           max: 100,
-          interval: 400
+          interval: 100
         },
         matterConversion: {
           level: 0,
@@ -58,10 +59,10 @@ var toaster = (function() {
           multiply: 1.05
         },
         speed: {
-          level: 10,
+          level: 1,
           interval: 10000,
           cost: {
-            cycles: 600,
+            cycles: 300,
             toast: 75,
             multiply: 1.1
           }
@@ -69,7 +70,7 @@ var toaster = (function() {
         efficiency: {
           level: 1,
           cost: {
-            cycles: 1200,
+            cycles: 600,
             toast: 170,
             multiply: 2.6
           }
@@ -369,7 +370,7 @@ var toaster = (function() {
             validate: [{
               address: "autoToaster.speed.level",
               operator: "less",
-              number: 1
+              number: 10
             }],
             actions: {
               lock: ["#stage-auto-toaster-substage-speed-controls"],
@@ -525,7 +526,30 @@ var toaster = (function() {
         }));
       },
       processor: function(buttonOptions) {
-        boostProcessor(buttonOptions.amount);
+        changeElement({
+          change: {
+            target: "system.processor.power",
+            amount: buttonOptions.amount
+          },
+          cost: {
+            base: "system.processor.cost.toast",
+            multiply: "system.processor.cost.multiply"
+          },
+          message: {
+            success: ["+" + buttonOptions.amount + " processor power, " + (state.get({
+              path: "system.processor.power"
+            }) + buttonOptions.amount).toLocaleString(2) + " toast with every click"],
+            error: ["fail"]
+            // error: ["toast inventory low, " + costForMultiple({
+            //   amount: buttonOptions.amount,
+            //   address: {
+            //     base: "system.processor.cost.toast",
+            //     multiply: "system.processor.cost.multiply"
+            //   }
+            // }).toLocaleString(2) + " toast matter needed"]
+          }
+        });
+        // boostProcessor(buttonOptions.amount);
         setMaxCycles();
       },
       strategy: function(buttonOptions) {
@@ -536,7 +560,7 @@ var toaster = (function() {
           makeAutoToaster(buttonOptions.amount);
         },
         speed: function(buttonOptions) {
-          autoToasterSpeed();
+          autoToasterSpeed(buttonOptions.amount);
         },
         efficiency: function(buttonOptions) {
           autoToasterEfficiency(buttonOptions.amount);
@@ -1018,75 +1042,90 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var costFull = 0;
-    var costBase = state.get({
+    var cost = {
+      full: 0,
+      base: 0
+    };
+    cost.base = state.get({
       path: options.address.base
     });
     for (var i = 0; i < options.amount; i++) {
-      costFull = costFull + costBase;
-      costBase = multiply(costBase, state.get({
+      cost.full = cost.full + cost.base;
+      cost.base = multiply(cost.base, state.get({
         path: options.address.multiply
       }));
     };
-    return costFull;
+    return cost;
   };
 
-  var boostProcessor = function(amount) {
+  var changeElement = function(override) {
+    var options = {
+      change: {
+        target: null,
+        amount: null
+      },
+      cost: {
+        base: null,
+        multiply: null
+      },
+      message: {
+        success: null,
+        error: null
+      }
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var cost = costForMultiple({
+      amount: options.change.amount,
+      address: {
+        base: options.cost.base,
+        multiply: options.cost.multiply
+      }
+    });
+    console.log(cost);
+    var checkToastInventory = function() {
+      if (state.get({
+          path: "toast.inventory"
+        }) >= cost.full) {
+        return true;
+      } else {
+        return false;
+      }
+    };
     var make = function() {
-      // remove cost from inventory
+      // increase target
+      state.set({
+        path: options.change.target,
+        value: increase(state.get({
+          path: options.change.target
+        }), options.change.amount)
+      });
+      // remove cost from toast inventory
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
-        }), state.get({
-          path: "system.processor.cost.toast"
-        }))
+        }), cost.full)
       });
-      // set new cost
+      // set new base cost
       state.set({
-        path: "system.processor.cost.toast",
-        value: multiply(state.get({
-          path: "system.processor.cost.toast"
-        }), state.get({
-          path: "system.processor.cost.multiply"
-        }))
-      });
-      // add processor
-      state.set({
-        path: "system.processor.power",
-        value: increase(state.get({
-          path: "system.processor.power"
-        }), 1)
+        path: options.cost.base,
+        value: cost.base
       });
     };
-    // if inventory => autoToaster cost
-    if (state.get({
-        path: "toast.inventory"
-      }) >= costForMultiple({
-        amount: amount,
-        address: {
-          base: "system.processor.cost.toast",
-          multiply: "system.processor.cost.multiply"
-        }
-      })) {
-      for (var i = 0; i < amount; i++) {
-        make();
-      };
+    // if inventory => cost
+    if (checkToastInventory()) {
+      make();
       message.render({
         type: "system",
-        message: ["+" + amount + " processor power, " + amount.toLocaleString(2) + " toast with every click"],
+        message: options.message.success,
         format: "normal"
       });
     } else {
       message.render({
         type: "error",
-        message: ["toast inventory low, " + costForMultiple({
-          amount: amount,
-          address: {
-            base: "system.processor.cost.toast",
-            multiply: "system.processor.cost.multiply"
-          }
-        }).toLocaleString(2) + " toast matter needed"],
+        message: options.message.error,
         format: "normal"
       });
     }
