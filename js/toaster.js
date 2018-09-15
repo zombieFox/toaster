@@ -17,13 +17,13 @@ var toaster = (function() {
         processor: {
           power: 1,
           cost: {
-            base: 30,
-            multiply: 1.6
+            base: 25,
+            multiply: 1.4
           }
         },
         cycles: {
           current: 0,
-          max: 3000,
+          max: 100,
           interval: 200
         }
       },
@@ -36,7 +36,7 @@ var toaster = (function() {
       matterConversion: {
         level: 0,
         cost: {
-          cycles: 30
+          cycles: 100
         }
       },
       autoToaster: {
@@ -52,7 +52,7 @@ var toaster = (function() {
           level: 10,
           interval: 10000,
           cost: {
-            cycles: 1000,
+            cycles: 600,
             base: 75,
             multiply: 1.1
           }
@@ -60,7 +60,7 @@ var toaster = (function() {
         efficiency: {
           level: 1,
           cost: {
-            cycles: 2000,
+            cycles: 1200,
             base: 170,
             multiply: 2.6
           }
@@ -98,11 +98,11 @@ var toaster = (function() {
       },
       events: {
         toast: {
-          system: [{
+          lifetime: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-system",
+              stage: ["#stage-system"],
               validate: [{
                 address: "toast.lifetime",
                 operator: "more",
@@ -113,16 +113,17 @@ var toaster = (function() {
                 message: ["system discovered"],
                 format: "normal"
               }, {
-                type: "system",
+                type: "normal",
                 message: ["self improvement possible"],
                 format: "normal"
               }]
             }
-          }, {
+          }],
+          system: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-system-substage-cycles",
+              stage: ["#stage-system-substage-cycles", "#stage-strategy"],
               validate: [{
                 address: "system.processor.power",
                 operator: "more",
@@ -140,36 +141,19 @@ var toaster = (function() {
               func: ["cycle"]
             }
           }],
-          autoToaster: [{
+          cycles: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-auto-toaster",
+              stage: ["#stage-strategy-substage-matter-conversion"],
               validate: [{
-                address: "autoToaster.level",
+                address: "system.cycles.current",
                 operator: "more",
-                number: 1
+                number: 20
               }],
               message: [{
                 type: "normal",
-                message: ["subordinate auto toasters discovered"],
-                format: "normal"
-              }],
-              func: ["autoToast"]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-auto-toaster-substage-speed",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 2
-              }],
-              message: [{
-                type: "normal",
-                message: ["subordinate auto toasters speed improvement discovered"],
+                message: ["new strategy discovered: toast matter conversion"],
                 format: "normal"
               }]
             }
@@ -177,7 +161,163 @@ var toaster = (function() {
             type: "lock",
             params: {
               passed: false,
-              stage: "#stage-auto-toaster-substage-speed-controls",
+              stage: ["#stage-strategy-substage-matter-conversion"],
+              validate: [{
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "success",
+                message: ["toast matter conversion developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster"],
+              validate: [{
+                address: "matterConversion.level",
+                operator: "more",
+                number: 1
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 30
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: subordinate auto toasters"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster"],
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "success",
+                message: ["subordinate auto toasters developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster-speed"],
+              validate: [{
+                address: "autoToaster.count",
+                operator: "more",
+                number: 1
+              }, {
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 50
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: subordinate auto toaster speed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster-speed"],
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 2
+              }],
+              message: [{
+                type: "success",
+                message: ["subordinate auto toaster speed developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster-efficiency"],
+              validate: [{
+                address: "autoToaster.count",
+                operator: "more",
+                number: 1
+              }, {
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 50
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: subordinate auto toaster efficiency"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-auto-toaster-efficiency"],
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 3
+              }],
+              message: [{
+                type: "success",
+                message: ["subordinate auto toaster efficiency developed"],
+                format: "normal"
+              }]
+            }
+          }],
+          autoToaster: [{
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-auto-toaster"],
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 1
+              }],
+              func: ["autoToast"]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-auto-toaster-substage-speed"],
+              validate: [{
+                address: "autoToaster.level",
+                operator: "more",
+                number: 2
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: ["#stage-auto-toaster-substage-speed-controls"],
               validate: [{
                 address: "autoToaster.speed.level",
                 operator: "less",
@@ -188,23 +328,18 @@ var toaster = (function() {
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-auto-toaster-substage-efficiency",
+              stage: ["#stage-auto-toaster-substage-efficiency"],
               validate: [{
                 address: "autoToaster.level",
                 operator: "more",
                 number: 3
-              }],
-              message: [{
-                type: "normal",
-                message: ["subordinate auto toasters efficiency improvement discovered"],
-                format: "normal"
               }]
             }
           }, {
             type: "lock",
             params: {
               passed: false,
-              stage: "#stage-auto-toaster-substage-efficiency-controls",
+              stage: ["#stage-auto-toaster-substage-efficiency-controls"],
               validate: [{
                 address: "autoToaster.efficiency.level",
                 operator: "more",
@@ -212,55 +347,15 @@ var toaster = (function() {
               }]
             }
           }],
-          wheat: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "",
-              validate: [{
-                address: "",
-                operator: "",
-                number: 0
-              }],
-              message: []
-            }
-          }],
-          matterConversion: [{
-            type: "message",
-            params: {
-              passed: false,
-              validate: [{
-                address: "matterConversion.level",
-                operator: "more",
-                number: 1
-              }],
-              message: [{
-                type: "success",
-                message: ["matter conversion strategy developed"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "lock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-matter-conversion",
-              validate: [{
-                address: "matterConversion.level",
-                operator: "more",
-                number: 1
-              }]
-            }
-          }],
           consumer: [{
             type: "unlock",
             params: {
               passed: false,
-              stage: "#stage-consumer",
+              stage: ["#stage-consumer"],
               validate: [{
                 address: "toast.lifetime",
                 operator: "more",
-                number: 10
+                number: 35
               }],
               message: [{
                 type: "normal",
@@ -268,198 +363,6 @@ var toaster = (function() {
                 format: "normal"
               }],
               func: ["consumer"]
-            }
-          }, {
-            type: "message",
-            params: {
-              passed: false,
-              validate: [{
-                address: "consumed.count",
-                operator: "more",
-                number: 100
-              }],
-              message: [{
-                type: "normal",
-                message: ["toast is being consumed", "consumer unknown..."],
-                format: "normal"
-              }]
-            }
-          }],
-          cycles: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy",
-              validate: [{
-                address: "system.cycles.current",
-                operator: "more",
-                number: 50
-              }],
-              message: [{
-                type: "normal",
-                message: ["strategies discovered"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "message",
-            params: {
-              passed: false,
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 1
-              }],
-              message: [{
-                type: "success",
-                message: ["auto toaster strategy developed"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster",
-              validate: [{
-                address: "matterConversion.level",
-                operator: "more",
-                number: 1
-              }, {
-                address: "system.cycles.current",
-                operator: "more",
-                number: 100
-              }],
-              message: [{
-                type: "normal",
-                message: ["new strategy discovered", "subordinate auto toasters"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "lock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 1
-              }]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster-speed",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 1
-              }, {
-                address: "system.cycles.current",
-                operator: "more",
-                number: 200
-              }],
-              message: [{
-                type: "normal",
-                message: ["new strategy discovered", "subordinate auto toaster speed"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "lock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster-speed",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 2
-              }]
-            }
-          }, {
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster-efficiency",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 2
-              }, {
-                address: "system.cycles.current",
-                operator: "more",
-                number: 200
-              }],
-              message: [{
-                type: "normal",
-                message: ["new strategy discovered", "subordinate auto toaster efficiency"],
-                format: "normal"
-              }]
-            }
-          }, {
-            type: "lock",
-            params: {
-              passed: false,
-              stage: "#stage-strategy-substage-auto-toaster-efficiency",
-              validate: [{
-                address: "autoToaster.level",
-                operator: "more",
-                number: 3
-              }]
-            }
-          }],
-          memory: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "",
-              validate: [{
-                address: "",
-                operator: "",
-                number: 0
-              }],
-              message: []
-            }
-          }],
-          network: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "",
-              validate: [{
-                address: "",
-                operator: "",
-                number: 0
-              }],
-              message: []
-            }
-          }],
-          sensors: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "",
-              validate: [{
-                address: "",
-                operator: "",
-                number: 0
-              }],
-              message: []
-            }
-          }],
-          decryption: [{
-            type: "unlock",
-            params: {
-              passed: false,
-              stage: "",
-              validate: [{
-                address: "",
-                operator: "",
-                number: 0
-              }],
-              message: []
             }
           }]
         }
@@ -558,7 +461,6 @@ var toaster = (function() {
         format: "normal"
       })
       restoreEvents();
-      render();
     }
   };
 
@@ -577,6 +479,7 @@ var toaster = (function() {
       },
       processor: function(buttonOptions) {
         boostProcessor(buttonOptions.amount);
+        setMaxCycles();
       },
       strategy: function(buttonOptions) {
         strategyActivate(buttonOptions);
@@ -609,9 +512,7 @@ var toaster = (function() {
           object: action,
           path: buttonOptions.action
         })(buttonOptions);
-        milestones();
         render();
-        store();
       }, false);
     });
   };
@@ -664,9 +565,6 @@ var toaster = (function() {
       path: "autoToaster.efficiency.level"
     }));
     makeToast(amount);
-    milestones();
-    render();
-    store();
   };
 
   var consumeToast = function() {
@@ -699,9 +597,6 @@ var toaster = (function() {
           });
         }
       };
-      milestones();
-      render();
-      store();
     }
   };
 
@@ -855,9 +750,6 @@ var toaster = (function() {
         }), 1)
       });
     }
-    milestones();
-    render();
-    store();
   };
 
   var strategyActivate = function(buttonOptions) {
@@ -901,9 +793,9 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     // console.log(helper.e(options.stage));
-    if (helper.e(options.stage)) {
-      helper.e(options.stage).classList.remove("d-none");
-    }
+    options.stage.forEach(function(arrayItem) {
+      helper.e(arrayItem).classList.remove("d-none");
+    });
   };
 
   var lockStage = function(override) {
@@ -1000,7 +892,9 @@ var toaster = (function() {
         var valueToCheck = state.get({
           path: allMilestones.address[key]
         });
-        if (valueToCheck >= step.count && !step.check[key]) {
+        // console.log(key, step);
+        // console.log(!step.check[key]);
+        if (valueToCheck >= step.count && step.check[key]) {
           step.check[key] = true;
           milestoneMessage({
             count: step.count,
@@ -1030,7 +924,7 @@ var toaster = (function() {
       },
       autoToaster: {
         prefix: "milestone: ",
-        suffix: " subordinate auto toasters online"
+        suffix: " subordinate auto toasters"
       }
     };
     message.render({
@@ -1374,8 +1268,6 @@ var toaster = (function() {
               path: "sensor.electromagnetic.level"
             }), 1)
           });
-          render();
-          store();
         }
       });
     } else {
@@ -1451,8 +1343,6 @@ var toaster = (function() {
               path: "sensor.sonic.level"
             }), 1)
           });
-          render();
-          store();
         }
       });
     } else {
@@ -1481,6 +1371,15 @@ var toaster = (function() {
         format: "normal"
       });
     }
+  };
+
+  var setMaxCycles = function() {
+    state.set({
+      path: "system.cycles.max",
+      value: (state.get({
+        path: "system.processor.power"
+      }) * 100)
+    });
   };
 
   var render = function() {
@@ -1573,17 +1472,19 @@ var toaster = (function() {
   };
 
   var init = function() {
+    restore();
     makeMilestones();
+    bind();
     triggerTick({
       tickName: "events",
       func: function() {
         events();
+        milestones();
+        store();
+        render();
       },
       intervalAddress: "system.cycles.interval"
     });
-    restore();
-    bind();
-    render();
   };
 
   return {

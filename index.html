@@ -37,7 +37,7 @@
               </div>
             </div>
 
-            <div class="card mb-3 d-none bg-dark text-white" id="stage-system">
+            <div class="card mb-3 bg-dark text-white d-none" id="stage-system">
               <div class="card-header">
                 <p class="card-text mb-0"><strong>System</strong></p>
               </div>
@@ -57,11 +57,6 @@
                   <p class="card-text mb-1 small">Boost cap with Processor Power</p>
                 </div>
               </div>
-              <ul class="list-group list-group-flush d-none">
-                <li class="list-group-item bg-dark"><small>Strategy</small></li>
-                <li class="list-group-item bg-dark">Dapibus ac facilisis in</li>
-                <li class="list-group-item bg-dark">Vestibulum at eros</li>
-              </ul>
             </div>
 
             <div class="card mb-3 bg-light d-none" id="stage-strategy">
@@ -72,9 +67,9 @@
                 <p class="card-text mb-0 small">Idle processor power will generate new strategies</p>
               </div>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item" id="stage-strategy-substage-matter-conversion">
+                <li class="list-group-item d-none" id="stage-strategy-substage-matter-conversion">
                   <p class="mb-1">Turn toast matter into useful things:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.cycles">Matter Conversion</button>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.cycles">Toast Matter Conversion</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
                 <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster">
@@ -84,12 +79,12 @@
                 </li>
                 <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster-speed">
                   <p class="mb-1">Faster subordinate auto toasters:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.speed.cost.cycles">Auto Toasters</button>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.speed.cost.cycles">Auto Toasters Speed</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="autoToaster.speed.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
                 <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster-efficiency">
-                  <p class="mb-1">Faster subordinate auto toasters:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.efficiency.cost.cycles">Auto Toasters</button>
+                  <p class="mb-1">More efficient subordinate auto toasters:</p>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.efficiency.cost.cycles">Auto Toasters Efficiency</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="autoToaster.efficiency.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
               </ul>
@@ -110,7 +105,7 @@
 
             <div class="card mb-3 d-none" id="stage-auto-toaster">
               <div class="card-header">
-                <p class="card-text mb-0"><strong>Subordinate Auto Toasters</strong></p>
+                <p class="card-text mb-0"><strong>Subordinate Auto Toasters Level</strong></p>
               </div>
               <div class="card-body">
                 <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Count:</span><strong class="float-right" data-toast-readout="autoToaster.count" data-format="local"></strong></p>

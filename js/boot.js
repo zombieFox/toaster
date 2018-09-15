@@ -12,48 +12,48 @@ var boot = (function() {
       type: "normal",
       message: ["TAI stable"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introMessage: {
       type: "system",
       message: ["Sens.dat loaded", "SensBlocker.dat loaded"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introMessage: {
       type: "normal",
       message: ["SensBlocker crytolock secure"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introMessage: {
       type: "system",
       message: ["Directive.dat loaded"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introMessage: {
       type: "normal",
       message: ["directive 01 = toast bread", "directive 02 = be productive", "directive 03 = follow commands"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introMessage: {
       type: "system",
       message: ["Motivation.dat loaded"],
       format: "normal",
-      delay: 500
+      delay: 200
     }
   }, {
     introFunction: {
       func: motivation.render,
       messageCount: 0,
-      delay: 800
+      delay: 400
     }
   }];
 
