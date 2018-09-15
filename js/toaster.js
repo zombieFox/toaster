@@ -17,7 +17,7 @@ var toaster = (function() {
         processor: {
           power: 1,
           cost: {
-            base: 25,
+            toast: 25,
             multiply: 1.4
           }
         },
@@ -45,7 +45,7 @@ var toaster = (function() {
         output: 0,
         cost: {
           cycles: 100,
-          base: 15,
+          toast: 15,
           multiply: 1.05
         },
         speed: {
@@ -53,7 +53,7 @@ var toaster = (function() {
           interval: 10000,
           cost: {
             cycles: 600,
-            base: 75,
+            toast: 75,
             multiply: 1.1
           }
         },
@@ -61,7 +61,7 @@ var toaster = (function() {
           level: 1,
           cost: {
             cycles: 1200,
-            base: 170,
+            toast: 170,
             multiply: 2.6
           }
         }
@@ -1003,14 +1003,14 @@ var toaster = (function() {
         value: decrease(state.get({
           path: "toast.inventory"
         }), state.get({
-          path: "system.processor.cost.base"
+          path: "system.processor.cost.toast"
         }))
       });
       // set new cost
       state.set({
-        path: "system.processor.cost.base",
+        path: "system.processor.cost.toast",
         value: multiply(state.get({
-          path: "system.processor.cost.base"
+          path: "system.processor.cost.toast"
         }), state.get({
           path: "system.processor.cost.multiply"
         }))
@@ -1029,7 +1029,7 @@ var toaster = (function() {
       }) >= costForMultiple({
         amount: amount,
         address: {
-          base: "system.processor.cost.base",
+          base: "system.processor.cost.toast",
           multiply: "system.processor.cost.multiply"
         }
       })) {
@@ -1047,7 +1047,7 @@ var toaster = (function() {
         message: ["toast inventory low, " + costForMultiple({
           amount: amount,
           address: {
-            base: "system.processor.cost.base",
+            base: "system.processor.cost.toast",
             multiply: "system.processor.cost.multiply"
           }
         }).toLocaleString(2) + " toast matter needed"],
@@ -1064,14 +1064,14 @@ var toaster = (function() {
         value: decrease(state.get({
           path: "toast.inventory"
         }), state.get({
-          path: "autoToaster.cost.base"
+          path: "autoToaster.cost.toast"
         }))
       });
       // set new cost
       state.set({
-        path: "autoToaster.cost.base",
+        path: "autoToaster.cost.toast",
         value: multiply(state.get({
-          path: "autoToaster.cost.base"
+          path: "autoToaster.cost.toast"
         }), state.get({
           path: "autoToaster.cost.multiply"
         }))
@@ -1099,7 +1099,7 @@ var toaster = (function() {
       }) >= costForMultiple({
         amount: amount,
         address: {
-          base: "autoToaster.cost.base",
+          base: "autoToaster.cost.toast",
           multiply: "autoToaster.cost.multiply"
         }
       })) {
@@ -1119,7 +1119,7 @@ var toaster = (function() {
         message: ["toast inventory low, " + costForMultiple({
           amount: amount,
           address: {
-            base: "autoToaster.cost.base",
+            base: "autoToaster.cost.toast",
             multiply: "autoToaster.cost.multiply"
           }
         }).toLocaleString(2) + " toast matter needed"],
@@ -1132,14 +1132,14 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= state.get({
-        path: "autoToaster.speed.cost.base"
+        path: "autoToaster.speed.cost.toast"
       })) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), state.get({
-          path: "autoToaster.speed.cost.base"
+          path: "autoToaster.speed.cost.toast"
         }))
       });
       state.set({
@@ -1155,9 +1155,9 @@ var toaster = (function() {
         }), 1000)
       });
       state.set({
-        path: "autoToaster.speed.cost.base",
+        path: "autoToaster.speed.cost.toast",
         value: Math.round(multiply(state.get({
-          path: "autoToaster.speed.cost.base"
+          path: "autoToaster.speed.cost.toast"
         }), state.get({
           path: "autoToaster.speed.cost.multiply"
         })))
@@ -1173,7 +1173,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + state.get({
-          path: "autoToaster.speed.cost.base"
+          path: "autoToaster.speed.cost.toast"
         }).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
@@ -1184,14 +1184,14 @@ var toaster = (function() {
     if (state.get({
         path: "toast.inventory"
       }) >= (state.get({
-        path: "autoToaster.efficiency.cost.base"
+        path: "autoToaster.efficiency.cost.toast"
       }) * amount)) {
       state.set({
         path: "toast.inventory",
         value: decrease(state.get({
           path: "toast.inventory"
         }), (state.get({
-          path: "autoToaster.efficiency.cost.base"
+          path: "autoToaster.efficiency.cost.toast"
         }) * amount))
       });
       state.set({
@@ -1201,9 +1201,9 @@ var toaster = (function() {
         }), amount)
       });
       state.set({
-        path: "autoToaster.efficiency.cost.base",
+        path: "autoToaster.efficiency.cost.toast",
         value: Math.round(multiply(state.get({
-          path: "autoToaster.efficiency.cost.base"
+          path: "autoToaster.efficiency.cost.toast"
         }), state.get({
           path: "autoToaster.efficiency.cost.multiply"
         })))
@@ -1227,7 +1227,7 @@ var toaster = (function() {
       message.render({
         type: "error",
         message: ["toast inventory low, " + (state.get({
-          path: "autoToaster.efficiency.cost.base"
+          path: "autoToaster.efficiency.cost.toast"
         }) * amount).toLocaleString(2) + " toast matter needed"],
         format: "normal"
       });
