@@ -17,8 +17,8 @@ var toaster = (function() {
         processor: {
           power: 1,
           cost: {
-            toast: 25,
-            multiply: 1.5
+            toast: 20,
+            multiply: 1.2
           }
         },
         cycles: {
@@ -539,14 +539,13 @@ var toaster = (function() {
             success: ["+" + buttonOptions.amount + " processor power, " + (state.get({
               path: "system.processor.power"
             }) + buttonOptions.amount).toLocaleString(2) + " toast with every click"],
-            error: ["fail"]
-            // error: ["toast inventory low, " + costForMultiple({
-            //   amount: buttonOptions.amount,
-            //   address: {
-            //     base: "system.processor.cost.toast",
-            //     multiply: "system.processor.cost.multiply"
-            //   }
-            // }).toLocaleString(2) + " toast matter needed"]
+            error: ["toast inventory low, " + costForMultiple({
+              amount: buttonOptions.amount,
+              address: {
+                base: "system.processor.cost.toast",
+                multiply: "system.processor.cost.multiply"
+              }
+            }).full.toLocaleString(2) + " toast matter needed"]
           }
         });
         // boostProcessor(buttonOptions.amount);
@@ -1083,7 +1082,6 @@ var toaster = (function() {
         multiply: options.cost.multiply
       }
     });
-    console.log(cost);
     var checkToastInventory = function() {
       if (state.get({
           path: "toast.inventory"
