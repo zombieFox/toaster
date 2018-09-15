@@ -56,6 +56,11 @@
                   <p class="card-text mb-0 small">Use idle processor power to solve problems and to derive new ideas</p>
                   <p class="card-text mb-1 small">Boost cap with Processor Power</p>
                 </div>
+                <div class="d-none" id="stage-system-substage-matter-conversion">
+                  <hr>
+                  <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Matter Conversion Level:</span><strong data-toast-readout="system.matterConversion.level" data-format="local"></strong></p>
+                  <p class="card-text mb-0 small">Turn toast matter into useful things</p>
+                </div>
               </div>
             </div>
 
@@ -69,8 +74,8 @@
               <ul class="list-group list-group-flush">
                 <li class="list-group-item d-none" id="stage-strategy-substage-matter-conversion">
                   <p class="mb-1">Turn toast matter into useful things:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:matterConversion.level,value:#1,cost:matterConversion.cost.cycles">Toast Matter Conversion</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:system.matterConversion.level,value:#1,cost:system.matterConversion.cost.cycles">Toast Matter Conversion</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="system.matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
                 <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster">
                   <p class="mb-1">Machines to automate toasting:</p>

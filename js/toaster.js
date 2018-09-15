@@ -25,6 +25,12 @@ var toaster = (function() {
           current: 0,
           max: 100,
           interval: 200
+        },
+        matterConversion: {
+          level: 0,
+          cost: {
+            cycles: 100
+          }
         }
       },
       consumed: {
@@ -33,20 +39,14 @@ var toaster = (function() {
         level: 10,
         interval: 10000
       },
-      matterConversion: {
-        level: 0,
-        cost: {
-          cycles: 100
-        }
-      },
       autoToaster: {
         level: 0,
         count: 0,
         output: 0,
         cost: {
           cycles: 100,
-          base: 20,
-          multiply: 1.1
+          base: 15,
+          multiply: 1.05
         },
         speed: {
           level: 10,
@@ -163,7 +163,7 @@ var toaster = (function() {
               passed: false,
               stage: ["#stage-strategy-substage-matter-conversion"],
               validate: [{
-                address: "matterConversion.level",
+                address: "system.matterConversion.level",
                 operator: "more",
                 number: 1
               }],
@@ -177,9 +177,20 @@ var toaster = (function() {
             type: "unlock",
             params: {
               passed: false,
+              stage: ["#stage-system-substage-matter-conversion"],
+              validate: [{
+                address: "system.matterConversion.level",
+                operator: "more",
+                number: 1
+              }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
               stage: ["#stage-strategy-substage-auto-toaster"],
               validate: [{
-                address: "matterConversion.level",
+                address: "system.matterConversion.level",
                 operator: "more",
                 number: 1
               }, {
@@ -894,7 +905,7 @@ var toaster = (function() {
         });
         // console.log(key, step);
         // console.log(!step.check[key]);
-        if (valueToCheck >= step.count && step.check[key]) {
+        if (valueToCheck >= step.count && !step.check[key]) {
           step.check[key] = true;
           milestoneMessage({
             count: step.count,
