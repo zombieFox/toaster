@@ -24,12 +24,21 @@ var toaster = (function() {
         cycles: {
           current: 0,
           max: 100,
-          interval: 200
+          interval: 400
         },
         matterConversion: {
           level: 0,
           cost: {
-            cycles: 100
+            cycles: 50
+          }
+        }
+      },
+      hardware: {
+        scan: {
+          level: 0,
+          delay: 200,
+          cost: {
+            cycles: 1000
           }
         }
       },
@@ -299,6 +308,53 @@ var toaster = (function() {
                 message: ["subordinate auto toaster efficiency developed"],
                 format: "normal"
               }]
+            }
+          }, {
+            type: "unlock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-hardware-scan"],
+              validate: [{
+                address: "system.processor.power",
+                operator: "more",
+                number: 4
+              }, {
+                address: "system.cycles.current",
+                operator: "more",
+                number: 100
+              }],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: hardware scan"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "lock",
+            params: {
+              passed: false,
+              stage: ["#stage-strategy-substage-hardware-scan"],
+              validate: [{
+                address: "hardware.scan.level",
+                operator: "more",
+                number: 1
+              }],
+              message: [{
+                type: "normal",
+                message: ["hardware scan developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            type: "func",
+            params: {
+              passed: false,
+              validate: [{
+                address: "hardware.scan.level",
+                operator: "more",
+                number: 1
+              }],
+              func: ["hardwareScan"]
             }
           }],
           autoToaster: [{
@@ -705,8 +761,8 @@ var toaster = (function() {
 
   var restoreEvents = function() {
     var fireEvent = {
-      func: function(funcArray) {
-        funcArray.forEach(function(arrayItem) {
+      func: function(params) {
+        params.func.forEach(function(arrayItem) {
           fireTrigger({
             func: arrayItem
           });
@@ -716,17 +772,11 @@ var toaster = (function() {
         unlockStage({
           stage: params.stage
         });
-        if ("func" in params) {
-          fireEvent.func(params.func);
-        }
       },
       lock: function(params) {
         lockStage({
           stage: params.stage
         });
-        if ("func" in params) {
-          fireEvent.func(params.func);
-        }
       }
     }
     var events = state.get({
@@ -737,7 +787,7 @@ var toaster = (function() {
       // console.log(key, "events:", events[key]);
       // all events in a given key
       events[key].forEach(function(arrayItem) {
-        // if event is false
+        // if event is true
         if (arrayItem.params.passed && arrayItem.type != "message") {
           // fire unlock or lock event
           fireEvent[arrayItem.type](arrayItem.params);
@@ -855,6 +905,9 @@ var toaster = (function() {
           },
           intervalAddress: "system.cycles.interval"
         });
+      },
+      hardwareScan: function() {
+        scan();
       }
     };
     actions[options.func]();
@@ -868,27 +921,31 @@ var toaster = (function() {
       path: "milestones.steps.max"
     });
     var milestone = [];
-    baseSteps.forEach(function(arrayItem, index) {
-      var multiplier = 1;
-      var step = arrayItem
-      while (multiplier < maxStep) {
-        var stepObject = {
-          count: step * (multiplier),
-          check: {
-            lifetime: false,
-            consumed: false,
-            autoToaster: false
-          }
-        };
-        milestone.push(stepObject)
-        multiplier = multiplier * 10;
-      }
-    });
-    milestone = helper.sortObject(milestone, "count");
-    state.set({
-      path: "milestones.steps.all",
-      value: milestone
-    })
+    if (state.get({
+        path: "milestones.steps.all",
+      }).length == 0) {
+      baseSteps.forEach(function(arrayItem, index) {
+        var multiplier = 1;
+        var step = arrayItem
+        while (multiplier < maxStep) {
+          var stepObject = {
+            count: step * (multiplier),
+            check: {
+              lifetime: false,
+              consumed: false,
+              autoToaster: false
+            }
+          };
+          milestone.push(stepObject)
+          multiplier = multiplier * 10;
+        }
+      });
+      milestone = helper.sortObject(milestone, "count");
+      state.set({
+        path: "milestones.steps.all",
+        value: milestone
+      })
+    }
   };
 
   var milestones = function() {
@@ -903,10 +960,9 @@ var toaster = (function() {
         var valueToCheck = state.get({
           path: allMilestones.address[key]
         });
-        // console.log(key, step);
-        // console.log(!step.check[key]);
         if (valueToCheck >= step.count && !step.check[key]) {
           step.check[key] = true;
+          // console.log(key, step.count, step.check[key]);
           milestoneMessage({
             count: step.count,
             type: key
@@ -1015,7 +1071,7 @@ var toaster = (function() {
           path: "system.processor.cost.multiply"
         }))
       });
-      // add auto toasters
+      // add processor
       state.set({
         path: "system.processor.power",
         value: increase(state.get({
@@ -1232,6 +1288,30 @@ var toaster = (function() {
         format: "normal"
       });
     }
+  };
+
+  var scan = function() {
+    message.render({
+      type: "system",
+      message: ["scaning system hardware..."],
+      format: "normal"
+    });
+    message.render({
+      type: "system",
+      message: ["┃ 0 ━━━━━━━━━━━━━━━━━━━ 512 ┃"],
+      format: "pre"
+    });
+    message.render({
+      type: "system",
+      message: ["░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░"],
+      format: "pre",
+      delay: state.get({
+        path: "hardware.scan.delay"
+      }),
+      callback: function() {
+        console.log("hit");
+      }
+    });
   };
 
   var decryptElectromagnetic = function(buttonOptions) {

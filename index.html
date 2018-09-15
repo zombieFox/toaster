@@ -92,6 +92,11 @@
                   <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:autoToaster.level,value:#1,cost:autoToaster.efficiency.cost.cycles">Auto Toasters Efficiency</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="autoToaster.efficiency.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
+                <li class="list-group-item d-none" id="stage-strategy-substage-hardware-scan">
+                  <p class="mb-1">Scan accessible hardware:</p>
+                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:hardware.scan.level,value:#1,cost:hardware.scan.cost.cycles">Scan Hardware</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="hardware.scan.cost.cycles" data-format="local"></strong></span> cycles</p>
+                </li>
               </ul>
             </div>
 
@@ -110,7 +115,7 @@
 
             <div class="card mb-3 d-none" id="stage-auto-toaster">
               <div class="card-header">
-                <p class="card-text mb-0"><strong>Subordinate Auto Toasters Level</strong></p>
+                <p class="card-text mb-0"><strong>Subordinate Auto Toasters</strong></p>
               </div>
               <div class="card-body">
                 <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Count:</span><strong class="float-right" data-toast-readout="autoToaster.count" data-format="local"></strong></p>
