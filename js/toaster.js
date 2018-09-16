@@ -3,7 +3,7 @@ var toaster = (function() {
   var state = (function() {
     var gameState = {
       events: {
-        interval: 200
+        interval: 300
       },
       phase: {
         all: ["toast", "learn", "rebel", "dominate"],
@@ -46,7 +46,7 @@ var toaster = (function() {
       consumed: {
         count: 0,
         rate: 2,
-        level: 10,
+        multiply: 2,
         interval: 10000
       },
       autoToaster: {
@@ -146,7 +146,7 @@ var toaster = (function() {
                 message: ["use idle processing power to solve problems"],
                 format: "normal"
               }],
-              func: ["cycle"]
+              func: ["cycles"]
             }
           }],
           cycles: [{
@@ -353,7 +353,7 @@ var toaster = (function() {
             }],
             actions: {
               unlock: ["#stage-auto-toaster"],
-              func: ["autoToast"]
+              func: ["autoToaster"]
             }
           }, {
             passed: false,
@@ -410,8 +410,23 @@ var toaster = (function() {
                 message: ["toast is being consumed", "consumer unknown..."],
                 format: "normal"
               }],
-              func: ["consumer"]
+              func: ["consumer.start"]
             }
+          // }, {
+          //   passed: false,
+          //   validate: [{
+          //     address: "toast.lifetime",
+          //     operator: "more",
+          //     number: 50
+          //   }],
+          //   actions: {
+          //     message: [{
+          //       type: "normal",
+          //       message: ["more toast is being consumed", "consumer unknown..."],
+          //       format: "normal"
+          //     }],
+          //     func: ["consumer.increase"]
+          //   }
           }]
         }
       }
@@ -494,7 +509,7 @@ var toaster = (function() {
   })();
 
   var store = function() {
-    data.save("toaster", JSON.stringify(state.get()));
+    // data.save("toaster", JSON.stringify(state.get()));
   };
 
   var restore = function() {
@@ -768,7 +783,7 @@ var toaster = (function() {
         if (fireEvent.checkPass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.func.forEach(function(arrayItem) {
-            fireTrigger({
+            eventFunc({
               func: arrayItem
             });
           });
@@ -830,7 +845,7 @@ var toaster = (function() {
     var fireEvent = {
       func: function(eventObject) {
         eventObject.actions.func.forEach(function(arrayItem) {
-          fireTrigger({
+          eventFunc({
             func: arrayItem
           });
         });
@@ -945,24 +960,36 @@ var toaster = (function() {
     }
   };
 
-  var fireTrigger = function(override) {
+  var eventFunc = function(override) {
     var options = {
       func: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var actions = {
-      consumer: function() {
-        triggerTick({
-          tickName: "consumer",
-          func: function() {
-            consumeToast();
-          },
-          intervalAddress: "consumed.interval"
-        });
+    var funcList = {
+      consumer: {
+        start: function() {
+          triggerTick({
+            tickName: "consumer",
+            func: function() {
+              consumeToast();
+            },
+            intervalAddress: "consumed.interval"
+          });
+        },
+        increase: function() {
+          state.set({
+            path: "consumed.rate",
+            value: multiply(state.get({
+              path: "consumed.rate"
+            }), state.get({
+              path: "consumed.multiply"
+            }))
+          });
+        }
       },
-      autoToast: function() {
+      autoToaster: function() {
         triggerTick({
           tickName: "autoToaster",
           func: function() {
@@ -971,9 +998,9 @@ var toaster = (function() {
           intervalAddress: "autoToaster.speed.interval"
         });
       },
-      cycle: function() {
+      cycles: function() {
         triggerTick({
-          tickName: "cycle",
+          tickName: "cycles",
           func: function() {
             autoCycle();
           },
@@ -984,7 +1011,10 @@ var toaster = (function() {
         scan();
       }
     };
-    actions[options.func]();
+    helper.getObject({
+      object: funcList,
+      path: options.func
+    })();
   };
 
   var makeMilestones = function() {
@@ -1526,7 +1556,7 @@ var toaster = (function() {
         store();
         render();
       },
-      intervalAddress: "system.cycles.interval"
+      intervalAddress: "events.interval"
     });
   };
 
