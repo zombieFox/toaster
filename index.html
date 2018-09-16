@@ -45,9 +45,10 @@
                 <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Processor Power:</span><strong data-toast-readout="system.processor.power" data-format="local"></strong></p>
                 <p class="card-text mb-1 small">Boost processor power with reverse antimatter quantum particles for more toast with every click</p>
                 <div class="btn-group mb-1">
-                  <button class="btn btn-sm btn-secondary" data-toast-button="action:processor,amount:#1">Boost +1</button>
-                  <button class="btn btn-sm btn-secondary" data-toast-button="action:processor,amount:#10">+10</button>
-                  <button class="btn btn-sm btn-secondary" data-toast-button="action:processor,amount:#100">+100</button>
+                  <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost,modify:increase,target:system.processor.power,amount:#1,cost:system.processor.cost.toast,multiply:system.processor.cost.multiply">Boost +1</button>
+                  <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost,modify:increase,target:system.processor.power,amount:#10,cost:system.processor.cost.toast,multiply:system.processor.cost.multiply">+10</button>
+                  <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost,modify:increase,target:system.processor.power,amount:#20,cost:system.processor.cost.toast,multiply:system.processor.cost.multiply">+20</button>
+                  <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost,modify:increase,target:system.processor.power,amount:#50,cost:system.processor.cost.toast,multiply:system.processor.cost.multiply">+50</button>
                 </div>
                 <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="system.processor.cost.toast" data-format="local"></strong> toast matter</p>
                 <div class="d-none" id="stage-system-substage-cycles">
@@ -121,9 +122,10 @@
                 <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Count:</span><strong class="float-right" data-toast-readout="autoToaster.count" data-format="local"></strong></p>
                 <p class="card-text mb-1 small">Producing <strong data-toast-readout="autoToaster.output" data-format="local"></strong> toast/<strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</p>
                 <div class="btn-group mb-1">
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,amount:#1">Build +1</button>
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,amount:#10">+10</button>
-                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,amount:#50">+50</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,modify:increase,target:autoToaster.count,amount:#1,cost:autoToaster.cost.toast,multiply:autoToaster.cost.multiply">Build +1</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,modify:increase,target:autoToaster.count,amount:#10,cost:autoToaster.cost.toast,multiply:autoToaster.cost.multiply">+10</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,modify:increase,target:autoToaster.count,amount:#20,cost:autoToaster.cost.toast,multiply:autoToaster.cost.multiply">+20</button>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:autoToaster.make,modify:increase,target:autoToaster.count,amount:#50,cost:autoToaster.cost.toast,multiply:autoToaster.cost.multiply">+50</button>
                 </div>
                 <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="autoToaster.cost.toast" data-format="local"></strong> toast matter</p>
                 <div class="d-none" id="stage-auto-toaster-substage-speed">
@@ -131,7 +133,7 @@
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Speed:</span><span class="float-right"><strong data-toast-readout="autoToaster.speed.level" data-format="local"></strong>s</span></p>
                   <div id="stage-auto-toaster-substage-speed-controls">
                     <p class="card-text mb-1 small">Improve toast per second speed with zipp-crumb particals and rocket fuel.</p>
-                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:autoToaster.speed,amount:#1">Improve Speed -1</button>
+                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:autoToaster.speed,modify:decrease,target:autoToaster.speed.level,amount:#1,cost:autoToaster.speed.cost.toast,multiply:autoToaster.speed.cost.multiply">Speed -1</button>
                     <p class="card-text mb-0 small">-1 cost <strong data-toast-readout="autoToaster.speed.cost.toast" data-format="local"></strong> toast matter</p>
                   </div>
                 </div>
@@ -140,7 +142,7 @@
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Efficiency:</span><strong class="float-right" data-toast-readout="autoToaster.efficiency.level" data-format="local"></strong></p>
                   <div id="stage-auto-toaster-substage-efficiency-controls">
                     <p class="card-text mb-1 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
-                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:autoToaster.efficiency,amount:#1">Bread Slot +1</button>
+                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:autoToaster.efficiency,modify:increase,target:autoToaster.efficiency.level,amount:#1,cost:autoToaster.efficiency.cost.toast,multiply:autoToaster.efficiency.cost.multiply">Bread Slot -1</button>
                     <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="autoToaster.efficiency.cost.toast" data-format="local"></strong> toast matter</p>
                   </div>
                 </div>

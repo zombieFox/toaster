@@ -70,6 +70,7 @@ body {
   .report {
     padding: 2em 2em 4em 1em;
     width: 30vw;
+    min-width: 25em;
   }
 }
 
