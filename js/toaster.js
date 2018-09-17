@@ -25,7 +25,7 @@ var toaster = (function() {
           level: 0,
           current: 0,
           max: 100,
-          interval: 1000
+          interval: 500
         },
         matterConversion: {
           level: 0,
@@ -54,7 +54,7 @@ var toaster = (function() {
         count: 0,
         output: 0,
         cost: {
-          cycles: 100,
+          cycles: 50,
           toast: 15,
           multiply: 1.05
         },
@@ -139,11 +139,7 @@ var toaster = (function() {
               unlock: ["#stage-system-substage-cycles", "#stage-strategy"],
               message: [{
                 type: "normal",
-                message: ["cycles discovered"],
-                format: "normal"
-              }, {
-                type: "normal",
-                message: ["use idle processing power to solve problems"],
+                message: ["cycles discovered", "use idle processing power to solve problems"],
                 format: "normal"
               }],
               func: ["cycles"]
@@ -154,7 +150,7 @@ var toaster = (function() {
             validate: [{
               address: "system.cycles.current",
               operator: "more",
-              number: 20
+              number: 10
             }],
             actions: {
               unlock: ["#stage-strategy-substage-matter-conversion"],
@@ -198,7 +194,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 30
+              number: 20
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster"],
@@ -410,23 +406,8 @@ var toaster = (function() {
                 message: ["toast is being consumed", "consumer unknown..."],
                 format: "normal"
               }],
-              func: ["consumer.start"]
+              func: ["consumer"]
             }
-          // }, {
-          //   passed: false,
-          //   validate: [{
-          //     address: "toast.lifetime",
-          //     operator: "more",
-          //     number: 50
-          //   }],
-          //   actions: {
-          //     message: [{
-          //       type: "normal",
-          //       message: ["more toast is being consumed", "consumer unknown..."],
-          //       format: "normal"
-          //     }],
-          //     func: ["consumer.increase"]
-          //   }
           }]
         }
       }
@@ -439,7 +420,7 @@ var toaster = (function() {
       if (override) {
         options = helper.applyOptions(options, override);
       }
-      if (options.path !== null) {
+      if (options.path != null) {
         return helper.getObject({
           object: gameState,
           path: options.path
@@ -458,7 +439,7 @@ var toaster = (function() {
       if (override) {
         options = helper.applyOptions(options, override);
       }
-      if (options.full !== null) {
+      if (options.full != null) {
         gameState = options.full;
       } else {
         helper.setObject({
@@ -509,7 +490,7 @@ var toaster = (function() {
   })();
 
   var store = function() {
-    // data.save("toaster", JSON.stringify(state.get()));
+    data.save("toaster", JSON.stringify(state.get()));
   };
 
   var restore = function() {
@@ -528,6 +509,9 @@ var toaster = (function() {
   };
 
   var reboot = function() {
+    for (var key in tick) {
+      clearTimeout(tick[key]);
+    }
     data.clear("toaster");
     location.reload();
   };
@@ -549,6 +533,7 @@ var toaster = (function() {
               amount: buttonOptions.amount
             },
             cost: {
+              currency: buttonOptions.currency,
               base: buttonOptions.cost,
               multiply: buttonOptions.multiply
             },
@@ -569,7 +554,26 @@ var toaster = (function() {
         }
       },
       strategy: function(buttonOptions) {
-        strategyActivate(buttonOptions);
+        changeToasterValue({
+          change: {
+            modify: buttonOptions.modify,
+            target: buttonOptions.target,
+            amount: buttonOptions.amount
+          },
+          cost: {
+            currency: buttonOptions.currency,
+            base: buttonOptions.cost
+          },
+          message: {
+            success: [state.get({
+              path: buttonOptions.cost
+            }) + " cycles spun on new strategy"],
+            error: ["processor cycles low, " + state.get({
+              path: buttonOptions.cost
+            }) + " cycles needed"]
+          }
+        });
+        // strategyActivate(buttonOptions);
       },
       autoToaster: {
         make: function(buttonOptions) {
@@ -580,6 +584,7 @@ var toaster = (function() {
               amount: buttonOptions.amount
             },
             cost: {
+              currency: buttonOptions.currency,
               base: buttonOptions.cost,
               multiply: buttonOptions.multiply
             },
@@ -606,6 +611,7 @@ var toaster = (function() {
               amount: buttonOptions.amount
             },
             cost: {
+              currency: buttonOptions.currency,
               base: buttonOptions.cost,
               multiply: buttonOptions.multiply
             },
@@ -632,6 +638,7 @@ var toaster = (function() {
               amount: buttonOptions.amount
             },
             cost: {
+              currency: buttonOptions.currency,
               base: buttonOptions.cost,
               multiply: buttonOptions.multiply
             },
@@ -968,26 +975,14 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var funcList = {
-      consumer: {
-        start: function() {
-          triggerTick({
-            tickName: "consumer",
-            func: function() {
-              consumeToast();
-            },
-            intervalAddress: "consumed.interval"
-          });
-        },
-        increase: function() {
-          state.set({
-            path: "consumed.rate",
-            value: multiply(state.get({
-              path: "consumed.rate"
-            }), state.get({
-              path: "consumed.multiply"
-            }))
-          });
-        }
+      consumer: function() {
+        triggerTick({
+          tickName: "consumer",
+          func: function() {
+            consumeToast();
+          },
+          intervalAddress: "consumed.interval"
+        });
       },
       autoToaster: function() {
         triggerTick({
@@ -1109,7 +1104,7 @@ var toaster = (function() {
     events: null,
     consumer: null,
     autoToaster: null,
-    cycle: null
+    cycles: null
   };
 
   var triggerTick = function(override) {
@@ -1121,14 +1116,12 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.tickName in tick) {
-      tick[options.tickName] = window.setTimeout(function() {
-        options.func();
-        triggerTick(options);
-      }, state.get({
-        path: options.intervalAddress
-      }));
-    }
+    tick[options.tickName] = window.setTimeout(function() {
+      options.func();
+      triggerTick(options);
+    }, state.get({
+      path: options.intervalAddress
+    }));
   };
 
   var costForMultiple = function(override) {
@@ -1166,6 +1159,7 @@ var toaster = (function() {
         amount: null
       },
       cost: {
+        currency: null,
         base: null,
         multiply: null
       },
@@ -1178,17 +1172,29 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var cost = costForMultiple({
-      amount: options.change.amount,
-      address: {
-        base: options.cost.base,
-        multiply: options.cost.multiply
+    var calculatedCost;
+    if (options.cost.multiply != null) {
+      calculatedCost = costForMultiple({
+        amount: options.change.amount,
+        address: {
+          base: options.cost.base,
+          multiply: options.cost.multiply
+        }
+      });
+    } else {
+      calculatedCost = {
+        base: state.get({
+          path: options.cost.base
+        }),
+        full: state.get({
+          path: options.cost.base
+        })
       }
-    });
+    }
     var checkToastInventory = function() {
       if (state.get({
-          path: "toast.inventory"
-        }) >= cost.full) {
+          path: options.cost.currency
+        }) >= calculatedCost.full) {
         return true;
       } else {
         return false;
@@ -1217,37 +1223,45 @@ var toaster = (function() {
       modify[options.change.modify]();
       // remove cost from toast inventory
       state.set({
-        path: "toast.inventory",
+        path: options.cost.currency,
         value: decrease(state.get({
-          path: "toast.inventory"
-        }), cost.full)
+          path: options.cost.currency
+        }), calculatedCost.full)
       });
       // set new base cost
       state.set({
         path: options.cost.base,
-        value: cost.base
+        value: calculatedCost.base
       });
     };
-    // if inventory => cost
-    if (checkToastInventory()) {
-      make();
-      if (options.callback !== null) {
-        options.callback();
-      }
-      if (options.message.success) {
+    var feedbackMessage = {
+      success: function() {
         message.render({
           type: "system",
           message: options.message.success,
           format: "normal"
         });
-      }
-    } else {
-      if (options.message.error) {
+      },
+      error: function() {
         message.render({
           type: "error",
           message: options.message.error,
           format: "normal"
         });
+      }
+    }
+    // if inventory => cost
+    if (checkToastInventory()) {
+      make();
+      if (options.callback != null) {
+        options.callback();
+      }
+      if (options.message.success != null) {
+        feedbackMessage.success();
+      }
+    } else {
+      if (options.message.error != null) {
+        feedbackMessage.error();
       }
     }
   };
