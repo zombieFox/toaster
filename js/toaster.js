@@ -22,10 +22,13 @@ var toaster = (function() {
           }
         },
         cycles: {
-          level: 0,
           current: 0,
           max: 100,
-          interval: 500
+          interval: 1000,
+          cost: {
+            toast: 100,
+            multiply: 2.2
+          }
         },
         matterConversion: {
           level: 0,
@@ -553,6 +556,29 @@ var toaster = (function() {
           });
         }
       },
+      cycles: {
+        speed: function(buttonOptions) {
+          changeToasterValue({
+            change: {
+              modify: buttonOptions.modify,
+              target: buttonOptions.target,
+              by: buttonOptions.by,
+              amount: buttonOptions.amount
+            },
+            cost: {
+              currency: buttonOptions.currency,
+              base: buttonOptions.cost,
+              multiply: buttonOptions.multiply
+            },
+            message: {
+              success: ["+" + buttonOptions.by + "% cycles speed"],
+              error: ["toast inventory low, " + state.get({
+                path: buttonOptions.cost
+              }).toLocaleString(2) + " toast matter needed"]
+            }
+          });
+        }
+      },
       strategy: function(buttonOptions) {
         changeToasterValue({
           change: {
@@ -567,13 +593,12 @@ var toaster = (function() {
           message: {
             success: [state.get({
               path: buttonOptions.cost
-            }) + " cycles spun on new strategy"],
+            }).toLocaleString(2) + " cycles spun on new strategy"],
             error: ["processor cycles low, " + state.get({
               path: buttonOptions.cost
-            }) + " cycles needed"]
+            }).toLocaleString(2) + " cycles needed"]
           }
         });
-        // strategyActivate(buttonOptions);
       },
       autoToaster: {
         make: function(buttonOptions) {
@@ -695,6 +720,14 @@ var toaster = (function() {
 
   var decrease = function(value, increment) {
     value = value - increment;
+    if (value < 0) {
+      value = 0;
+    }
+    return value;
+  };
+
+  var divide = function(value, increment) {
+    value = Math.round(value - ((increment / 100) * value));
     if (value < 0) {
       value = 0;
     }
@@ -906,39 +939,6 @@ var toaster = (function() {
         value: increase(state.get({
           path: "system.cycles.current"
         }), 1)
-      });
-    }
-  };
-
-  var strategyActivate = function(buttonOptions) {
-    if (state.get({
-        path: "system.cycles.current"
-      }) >= state.get({
-        path: buttonOptions.cost
-      })) {
-      // reduce cycles
-      state.set({
-        path: "system.cycles.current",
-        value: decrease(state.get({
-          path: "system.cycles.current"
-        }), state.get({
-          path: buttonOptions.cost
-        }))
-      });
-      // increase relevent value
-      state.set({
-        path: buttonOptions.path,
-        value: increase(state.get({
-          path: buttonOptions.path
-        }), buttonOptions.value)
-      });
-    } else {
-      message.render({
-        type: "error",
-        message: ["processor cycles low, " + state.get({
-          path: buttonOptions.cost
-        }).toLocaleString(2) + " cycles needed"],
-        format: "normal"
       });
     }
   };
@@ -1156,6 +1156,7 @@ var toaster = (function() {
       change: {
         modify: null,
         target: null,
+        by: null,
         amount: null
       },
       cost: {
@@ -1215,6 +1216,14 @@ var toaster = (function() {
           value: decrease(state.get({
             path: options.change.target
           }), options.change.amount)
+        });
+      },
+      divide: function() {
+        state.set({
+          path: options.change.target,
+          value: divide(state.get({
+            path: options.change.target
+          }), options.change.by)
         });
       }
     }
@@ -1473,6 +1482,9 @@ var toaster = (function() {
     var allDataReadouts = helper.eA("[data-toast-readout]");
     allDataReadouts.forEach(function(arrayItem, index) {
       // console.log(arrayItem.dataset.toastReadout);
+      
+      // console.log(arrayItem.dataset.toastReadout);
+        var readoutOptions = helper.makeObject(arrayItem.dataset.toastReadout);
       var data = state.get({
         path: arrayItem.dataset.toastReadout
       });

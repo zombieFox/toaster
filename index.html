@@ -54,8 +54,10 @@
                 <div class="d-none" id="stage-system-substage-cycles">
                   <hr>
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap"><span class="mr-1">Cycles:</span><span><strong data-toast-readout="system.cycles.current" data-format="local"></strong> / <span data-toast-readout="system.cycles.max" data-format="local"></span></p>
-                  <p class="card-text mb-0 small">Use idle processor power to solve problems and to derive new ideas</p>
-                  <p class="card-text mb-1 small">Boost cap with Processor Power</p>
+                  <p class="card-text mb-1 small">Capped by processor power x100</p>
+                  <button class="btn btn-sm btn-secondary mb-1" data-toast-button="action:cycles.speed,modify:divide,by:#15,target:system.cycles.interval,amount:#1,cost:system.cycles.cost.toast,currency:toast.inventory,multiply:system.cycles.cost.multiply">Speed +15%</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="system.cycles.cost.toast" data-format="local"></strong></span> toast matter</p>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="system.cycles.interval" data-format="local"></strong></span> toast matter</p>
                 </div>
                 <div class="d-none" id="stage-system-substage-matter-conversion">
                   <hr>
@@ -78,11 +80,8 @@
                   <button class="btn btn-sm btn-dark" data-toast-button="action:strategy,modify:increase,target:system.matterConversion.level,amount:#1,cost:system.matterConversion.cost.cycles,currency:system.cycles.current">Boost +1</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="system.matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
                 </li>
-                <!-- <li class="list-group-item " id="stage-strategy-substage-cycles-speed-1">
-                  <p class="mb-1">Faster cycless:</p>
-                  <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:strategy,path:system.matterConversion.level,value:#1,cost:system.matterConversion.cost.cycles">Cycles +10% speed</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="system.matterConversion.cost.cycles" data-format="local"></strong></span> cycles</p>
-                </li> -->
+                <li class="list-group-item " id="stage-strategy-substage-cycles-speed-1">
+                </li>
                 <li class="list-group-item d-none" id="stage-strategy-substage-auto-toaster">
                   <p class="mb-1">Machines to automate toasting:</p>
                   <button class="btn btn-sm btn-dark" data-toast-button="action:strategy,modify:increase,target:autoToaster.level,amount:#1,cost:autoToaster.cost.cycles,currency:system.cycles.current">Auto Toasters</button>
