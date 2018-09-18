@@ -1481,19 +1481,16 @@ var toaster = (function() {
   var render = function() {
     var allDataReadouts = helper.eA("[data-toast-readout]");
     allDataReadouts.forEach(function(arrayItem, index) {
-      // console.log(arrayItem.dataset.toastReadout);
-      
-      // console.log(arrayItem.dataset.toastReadout);
-        var readoutOptions = helper.makeObject(arrayItem.dataset.toastReadout);
+      var readoutOptions = helper.makeObject(arrayItem.dataset.toastReadout);
       var data = state.get({
-        path: arrayItem.dataset.toastReadout
+        path: readoutOptions.path
       });
-      if (arrayItem.dataset.format == "suffix") {
+      if (readoutOptions.format == "suffix") {
         data = numberSuffix({
           number: data,
           decimals: 2
         });
-      } else if (arrayItem.dataset.format == "local") {
+      } else if (readoutOptions.format == "local") {
         data = data.toLocaleString(2);
       }
       arrayItem.textContent = data;
