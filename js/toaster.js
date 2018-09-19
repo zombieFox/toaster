@@ -27,7 +27,7 @@ var toaster = (function() {
           interval: 1000,
           cost: {
             toast: 100,
-            multiply: 2.2
+            multiply: 1.9
           }
         },
         matterConversion: {
@@ -529,15 +529,18 @@ var toaster = (function() {
       },
       processor: {
         boost: function(buttonOptions) {
+          console.log(buttonOptions);
           changeToasterValue({
             change: {
-              modify: buttonOptions.modify,
               target: buttonOptions.target,
+              operation: buttonOptions.operation,
+              suboperation: buttonOptions.suboperation,
               amount: buttonOptions.amount
             },
             cost: {
               currency: buttonOptions.currency,
-              base: buttonOptions.cost,
+              toast: buttonOptions.toast,
+              inflation: buttonOptions.inflation,
               multiply: buttonOptions.multiply
             },
             message: {
@@ -560,14 +563,15 @@ var toaster = (function() {
         speed: function(buttonOptions) {
           changeToasterValue({
             change: {
-              modify: buttonOptions.modify,
               target: buttonOptions.target,
-              by: buttonOptions.by,
+              operation: buttonOptions.operation,
+              suboperation: buttonOptions.suboperation,
               amount: buttonOptions.amount
             },
             cost: {
               currency: buttonOptions.currency,
-              base: buttonOptions.cost,
+              toast: buttonOptions.toast,
+              inflation: buttonOptions.inflation,
               multiply: buttonOptions.multiply
             },
             message: {
@@ -584,6 +588,7 @@ var toaster = (function() {
           change: {
             modify: buttonOptions.modify,
             target: buttonOptions.target,
+            operation: buttonOptions.operation,
             amount: buttonOptions.amount
           },
           cost: {
@@ -606,6 +611,7 @@ var toaster = (function() {
             change: {
               modify: buttonOptions.modify,
               target: buttonOptions.target,
+              operation: buttonOptions.operation,
               amount: buttonOptions.amount
             },
             cost: {
@@ -633,6 +639,7 @@ var toaster = (function() {
             change: {
               modify: buttonOptions.modify,
               target: buttonOptions.target,
+              operation: buttonOptions.operation,
               amount: buttonOptions.amount
             },
             cost: {
@@ -660,6 +667,7 @@ var toaster = (function() {
             change: {
               modify: buttonOptions.modify,
               target: buttonOptions.target,
+              operation: buttonOptions.operation,
               amount: buttonOptions.amount
             },
             cost: {
@@ -726,8 +734,16 @@ var toaster = (function() {
     return value;
   };
 
-  var divide = function(value, increment) {
-    value = Math.round(value - ((increment / 100) * value));
+  // var divide = function(value, increment) {
+  //   value = Math.round(value - ((increment / 100) * value));
+  //   if (value < 0) {
+  //     value = 0;
+  //   }
+  //   return value;
+  // };
+
+  var percentage = function(value, increment) {
+    value = Math.round((increment / 100) * value);
     if (value < 0) {
       value = 0;
     }
@@ -1154,14 +1170,15 @@ var toaster = (function() {
   var changeToasterValue = function(override) {
     var options = {
       change: {
-        modify: null,
         target: null,
-        by: null,
+        operation: null,
+        step: null,
+        percentage: null,
         amount: null
       },
       cost: {
         currency: null,
-        base: null,
+        toast: null,
         multiply: null
       },
       message: {
@@ -1173,76 +1190,26 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    console.log(options);
     var calculatedCost;
-    if (options.cost.multiply != null) {
+    if (options.cost.inflation) {
       calculatedCost = costForMultiple({
         amount: options.change.amount,
         address: {
-          base: options.cost.base,
+          base: options.cost.toast,
           multiply: options.cost.multiply
         }
       });
     } else {
       calculatedCost = {
         base: state.get({
-          path: options.cost.base
+          path: options.cost.toast
         }),
         full: state.get({
-          path: options.cost.base
+          path: options.cost.toast
         })
       }
     }
-    var checkToastInventory = function() {
-      if (state.get({
-          path: options.cost.currency
-        }) >= calculatedCost.full) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-    var modify = {
-      increase: function() {
-        state.set({
-          path: options.change.target,
-          value: increase(state.get({
-            path: options.change.target
-          }), options.change.amount)
-        });
-      },
-      decrease: function() {
-        state.set({
-          path: options.change.target,
-          value: decrease(state.get({
-            path: options.change.target
-          }), options.change.amount)
-        });
-      },
-      divide: function() {
-        state.set({
-          path: options.change.target,
-          value: divide(state.get({
-            path: options.change.target
-          }), options.change.by)
-        });
-      }
-    }
-    var make = function() {
-      // modify target
-      modify[options.change.modify]();
-      // remove cost from toast inventory
-      state.set({
-        path: options.cost.currency,
-        value: decrease(state.get({
-          path: options.cost.currency
-        }), calculatedCost.full)
-      });
-      // set new base cost
-      state.set({
-        path: options.cost.base,
-        value: calculatedCost.base
-      });
-    };
     var feedbackMessage = {
       success: function() {
         message.render({
@@ -1258,7 +1225,73 @@ var toaster = (function() {
           format: "normal"
         });
       }
+    };
+    var checkToastInventory = function() {
+      if (state.get({
+          path: options.cost.currency
+        }) >= calculatedCost.full) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    var operation = {
+      increase: {
+        increment: function() {
+          state.set({
+            path: options.change.target,
+            value: increase(state.get({
+              path: options.change.target
+            }), options.change.amount)
+          });
+        },
+        percentage: function() {
+          state.set({
+            path: options.change.target,
+            value: increase(state.get({
+              path: options.change.target
+            }), percentage(state.get({
+              path: options.change.target
+            }), options.change.amount))
+          });
+        }
+      },
+      decrease: {
+        increment: function() {
+          state.set({
+            path: options.change.target,
+            value: decrease(state.get({
+              path: options.change.target
+            }), options.change.amount)
+          });
+        },
+        percentage: function() {
+          state.set({
+            path: options.change.target,
+            value: decrease(state.get({
+              path: options.change.target
+            }), percentage(state.get({
+              path: options.change.target
+            }), options.change.amount))
+          });
+        }
+      }
     }
+    var make = function() {
+      operation[options.change.operation][options.change.suboperation]();
+      // remove cost from toast inventory
+      state.set({
+        path: options.cost.currency,
+        value: decrease(state.get({
+          path: options.cost.currency
+        }), calculatedCost.full)
+      });
+      // set new base cost
+      state.set({
+        path: options.cost.toast,
+        value: calculatedCost.base
+      });
+    };
     // if inventory => cost
     if (checkToastInventory()) {
       make();
@@ -1485,14 +1518,31 @@ var toaster = (function() {
       var data = state.get({
         path: readoutOptions.path
       });
-      if (readoutOptions.format == "suffix") {
-        data = numberSuffix({
-          number: data,
-          decimals: 2
-        });
-      } else if (readoutOptions.format == "local") {
-        data = data.toLocaleString(2);
-      }
+      var format = {
+        suffix: function(data) {
+          data = numberSuffix({
+            number: data,
+            decimals: readoutOptions.decimals
+          });
+          return data;
+        },
+        local: function(data) {
+          data = data.toLocaleString(2);
+          return data;
+        }
+      };
+      // var modify = {
+      //   divide: function(data) {
+      //     data = divide(data, readoutOptions.by);
+      //     return data;
+      //   }
+      // };
+      // if (readoutOptions.modify != null) {
+      //   // console.log(data);
+      //   data = modify[readoutOptions.modify](data)
+      //   // console.log(data);
+      // }
+      data = format[readoutOptions.format](data);
       arrayItem.textContent = data;
     });
   };
