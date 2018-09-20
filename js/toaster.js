@@ -21,10 +21,10 @@ var toaster = (function() {
         cycles: {
           current: 0,
           max: 100,
-          interval: 2000,
+          interval: 1000,
           cost: {
             toast: 100,
-            multiply: 2.5
+            multiply: 1.9
           }
         },
         matterConversion: {
@@ -120,11 +120,7 @@ var toaster = (function() {
               unlock: ["#stage-system"],
               message: [{
                 type: "normal",
-                message: ["system discovered"],
-                format: "normal"
-              }, {
-                type: "normal",
-                message: ["self improvement possible"],
+                message: ["system discovered", "self improvement possible"],
                 format: "normal"
               }]
             }
@@ -527,7 +523,6 @@ var toaster = (function() {
       },
       processor: {
         boost: function(buttonOptions) {
-          console.log(buttonOptions);
           changeToasterValue({
             change: {
               target: buttonOptions.target,
@@ -805,9 +800,6 @@ var toaster = (function() {
   };
 
   var consumeToast = function() {
-    var amount = state.get({
-      path: "consumed.rate"
-    });
     // console.log(amount + " toast consumed");
     if (state.get({
         path: "toast.inventory"
@@ -817,7 +809,6 @@ var toaster = (function() {
       });
       while (rate > 0) {
         rate = rate - 1;
-
         if (state.get({
             path: "toast.inventory"
           }) > 0) {
@@ -836,13 +827,12 @@ var toaster = (function() {
             value: operator({
               type: "increase",
               value: state.get({
-                path: "toast.inventory"
+                path: "consumed.count"
               }),
               by: 1
             })
           });
         }
-
       };
     }
   };
@@ -1611,7 +1601,6 @@ var toaster = (function() {
   };
 
   var render = function() {
-    // console.log("RENDER");
     var allDataReadouts = helper.eA("[data-toast-readout]");
     allDataReadouts.forEach(function(arrayItem, index) {
       var options = helper.makeObject(arrayItem.dataset.toastReadout);
@@ -1628,7 +1617,7 @@ var toaster = (function() {
         local: function() {
           data = data.toLocaleString();
         },
-        divide: function(){
+        divide: function() {
           data = operator({
             type: "divide",
             value: data,
@@ -1639,7 +1628,9 @@ var toaster = (function() {
       if (options.modify != null) {
         format[options.modify]();
       }
-      format[options.format]();
+      if (options.format != null) {
+        format[options.format]();
+      }
       arrayItem.textContent = data;
     });
   };
