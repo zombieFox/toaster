@@ -67,9 +67,9 @@
                     </span>
                   </p>
                   <p class="card-text mb-1 small">Capped by processor power x100</p>
-                  <button class="btn btn-sm btn-secondary mb-1" data-toast-button="action:cycles.speed,target:system.cycles.interval,operation:decrease,suboperation:percentage,amount:#50,currency:toast.inventory,toast:system.cycles.cost.toast,inflation:true,multiply:system.cycles.cost.multiply">Speed +50%</button>
+                  <button class="btn btn-sm btn-secondary mb-1" data-toast-button="action:cycles.speed,target:system.cycles.interval,operation:decrease,suboperation:percentage,percentageAmount:#10,amount:#1,currency:toast.inventory,toast:system.cycles.cost.toast,inflation:true,multiply:system.cycles.cost.multiply">Speed +10%</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:system.cycles.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
-                  <p class="card-text mb-0 small">1 cycle / <strong data-toast-readout="path:system.cycles.interval,format:local,decimals:#2,modify:divide,by:#1000"></strong>s</p>
+                  <p class="card-text mb-0 small">1 cycle / <strong data-toast-readout="path:system.cycles.interval,format:local,decimals:#2,modify:divide,by:#1000,round:false"></strong>s</p>
                 </div>
                 <div class="d-none" id="stage-system-substage-matter-conversion">
                   <hr>
