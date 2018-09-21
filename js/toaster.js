@@ -107,7 +107,7 @@ var toaster = (function() {
         }
       },
       events: {
-        interval: 300,
+        interval: 100,
         toast: {
           lifetime: [{
             passed: false,
@@ -522,29 +522,32 @@ var toaster = (function() {
         }));
       },
       processor: {
-        boost: function(buttonOptions) {
+        boost: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           changeToasterValue({
             change: {
-              target: buttonOptions.target,
-              operation: buttonOptions.operation,
-              suboperation: buttonOptions.suboperation,
-              amount: buttonOptions.amount
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount
             },
             cost: {
-              currency: buttonOptions.currency,
-              toast: buttonOptions.toast,
-              inflation: buttonOptions.inflation,
-              multiply: buttonOptions.multiply
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
             },
             message: {
-              success: ["+" + buttonOptions.amount + " processor power, " + (state.get({
-                path: buttonOptions.target
-              }) + buttonOptions.amount).toLocaleString(2) + " toast with every click"],
+              success: ["+" + change.amount + " processor power, " + (state.get({
+                path: change.target
+              }) + change.amount).toLocaleString(2) + " toast with every click"],
               error: ["toast inventory low, " + costForMultiple({
-                amount: buttonOptions.amount,
-                address: {
-                  base: buttonOptions.cost,
-                  multiply: buttonOptions.multiply
+                amount: change.amount,
+                cost: {
+                  base: cost.amount,
+                  multiply: cost.multiply
                 }
               }).full.toLocaleString(2) + " toast matter needed"]
             },
@@ -553,131 +556,151 @@ var toaster = (function() {
         }
       },
       cycles: {
-        speed: function(buttonOptions) {
+        speed: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           changeToasterValue({
             change: {
-              target: buttonOptions.target,
-              operation: buttonOptions.operation,
-              suboperation: buttonOptions.suboperation,
-              percentageAmount: buttonOptions.percentageAmount,
-              amount: buttonOptions.amount
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount
             },
             cost: {
-              currency: buttonOptions.currency,
-              toast: buttonOptions.toast,
-              inflation: buttonOptions.inflation,
-              multiply: buttonOptions.multiply
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
             },
             message: {
-              success: ["+" + buttonOptions.by + "% cycles speed"],
+              success: ["+" + change.percentage + "% cycles speed"],
               error: ["toast inventory low, " + state.get({
-                path: buttonOptions.cost
+                path: cost.amount
               }).toLocaleString(2) + " toast matter needed"]
-            }
+            },
+            callback: changeMaxCycles
           });
         }
       },
-      strategy: function(buttonOptions) {
+      strategy: function(button) {
+        var change = helper.makeObject(button.dataset.toastButtonChange);
+        var cost = helper.makeObject(button.dataset.toastButtonCost);
         changeToasterValue({
           change: {
-            modify: buttonOptions.modify,
-            target: buttonOptions.target,
-            operation: buttonOptions.operation,
-            amount: buttonOptions.amount
+            target: change.target,
+            operation: change.operation,
+            suboperation: change.suboperation,
+            percentage: change.percentage,
+            amount: change.amount
           },
           cost: {
-            currency: buttonOptions.currency,
-            base: buttonOptions.cost
+            currency: cost.currency,
+            amount: cost.amount,
+            multiply: cost.multiply,
+            inflation: cost.inflation
           },
           message: {
             success: [state.get({
-              path: buttonOptions.cost
+              path: cost.amount
             }).toLocaleString(2) + " cycles spun on new strategy"],
             error: ["processor cycles low, " + state.get({
-              path: buttonOptions.cost
+              path: cost.amount
             }).toLocaleString(2) + " cycles needed"]
           }
         });
       },
       autoToaster: {
-        make: function(buttonOptions) {
+        make: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           changeToasterValue({
             change: {
-              modify: buttonOptions.modify,
-              target: buttonOptions.target,
-              operation: buttonOptions.operation,
-              amount: buttonOptions.amount
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount
             },
             cost: {
-              currency: buttonOptions.currency,
-              base: buttonOptions.cost,
-              multiply: buttonOptions.multiply
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
             },
             message: {
-              success: ["+" + buttonOptions.amount + " subordinate auto toasters, " + (state.get({
+              success: ["+" + change.amount + " subordinate auto toasters, " + (state.get({
                 path: "autoToaster.count"
-              }) + buttonOptions.amount).toLocaleString(2) + " online"],
+              }) + change.amount).toLocaleString(2) + " online"],
               error: ["toast inventory low, " + costForMultiple({
-                amount: buttonOptions.amount,
-                address: {
-                  base: buttonOptions.cost,
-                  multiply: buttonOptions.multiply
+                amount: change.amount,
+                cost: {
+                  base: cost.amount,
+                  multiply: cost.multiply
                 }
               }).full.toLocaleString(2) + " toast matter needed"]
             },
             callback: changeAutoToasterOutput
           });
         },
-        speed: function(buttonOptions) {
+        speed: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           changeToasterValue({
             change: {
-              modify: buttonOptions.modify,
-              target: buttonOptions.target,
-              operation: buttonOptions.operation,
-              amount: buttonOptions.amount
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount
             },
             cost: {
-              currency: buttonOptions.currency,
-              base: buttonOptions.cost,
-              multiply: buttonOptions.multiply
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
             },
             message: {
-              success: ["-" + buttonOptions.amount + " subordinate auto toaster speed, toast every" + (state.get({
+              success: ["-" + change.amount + " subordinate auto toaster speed, toast every " + (state.get({
                 path: "autoToaster.speed.level"
-              }) + buttonOptions.amount).toLocaleString(2) + "s"],
+              }) - change.amount).toLocaleString(2) + "s"],
               error: ["toast inventory low, " + costForMultiple({
-                amount: buttonOptions.amount,
-                address: {
-                  base: buttonOptions.cost,
-                  multiply: buttonOptions.multiply
+                amount: change.amount,
+                cost: {
+                  base: cost.amount,
+                  multiply: cost.multiply
                 }
               }).full.toLocaleString(2) + " toast matter needed"]
             },
             callback: changeAutoToasterSpeed
           });
         },
-        efficiency: function(buttonOptions) {
+        efficiency: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           changeToasterValue({
             change: {
-              modify: buttonOptions.modify,
-              target: buttonOptions.target,
-              operation: buttonOptions.operation,
-              amount: buttonOptions.amount
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount
             },
             cost: {
-              currency: buttonOptions.currency,
-              base: buttonOptions.cost,
-              multiply: buttonOptions.multiply
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
             },
             message: {
-              success: ["+" + buttonOptions.amount + " subordinate auto toasters efficiency, each producing " + (state.get({
+              success: ["+" + change.amount + " subordinate auto toasters efficiency, each producing " + (state.get({
                 path: "autoToaster.efficiency.level"
-              }) + buttonOptions.amount).toLocaleString(2) + " toast"],
+              }) + change.amount).toLocaleString(2) + " toast"],
               error: ["toast inventory low, " + costForMultiple({
-                amount: buttonOptions.amount,
-                address: {
-                  base: buttonOptions.cost,
-                  multiply: buttonOptions.multiply
+                amount: change.amount,
+                cost: {
+                  base: cost.amount,
+                  multiply: cost.multiply
                 }
               }).full.toLocaleString(2) + " toast matter needed"]
             },
@@ -696,12 +719,13 @@ var toaster = (function() {
     };
     allButtons.forEach(function(arrayItem, index) {
       arrayItem.addEventListener("click", function() {
-        var buttonOptions = helper.makeObject(this.dataset.toastButton);
-        buttonOptions.button = this;
+        // var buttonOptions = helper.makeObject(this.dataset.toastButton);
+        // buttonOptions.button = this;
+        var toastButton = helper.makeObject(this.dataset.toastButton);
         helper.getObject({
           object: action,
-          path: buttonOptions.action
-        })(buttonOptions);
+          path: toastButton.action
+        })(this);
         render();
       }, false);
     });
@@ -1172,7 +1196,7 @@ var toaster = (function() {
   var costForMultiple = function(override) {
     var options = {
       amount: null,
-      address: {
+      cost: {
         base: null,
         multiply: null
       }
@@ -1185,7 +1209,7 @@ var toaster = (function() {
       base: 0
     };
     cost.base = state.get({
-      path: options.address.base
+      path: options.cost.base
     });
     for (var i = 0; i < options.amount; i++) {
       cost.full = cost.full + cost.base;
@@ -1193,7 +1217,7 @@ var toaster = (function() {
         type: "multiply",
         value: cost.base,
         by: state.get({
-          path: options.address.multiply
+          path: options.cost.multiply
         }),
         integer: true
       })
@@ -1206,14 +1230,15 @@ var toaster = (function() {
       change: {
         target: null,
         operation: null,
-        step: null,
+        suboperation: null,
         percentage: null,
         amount: null
       },
       cost: {
         currency: null,
-        toast: null,
-        multiply: null
+        amount: null,
+        multiply: null,
+        inflation: null
       },
       message: {
         success: null,
@@ -1224,22 +1249,23 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    // console.log(options);
     var calculatedCost;
     if (options.cost.inflation) {
       calculatedCost = costForMultiple({
         amount: options.change.amount,
-        address: {
-          base: options.cost.toast,
+        cost: {
+          base: options.cost.amount,
           multiply: options.cost.multiply
         }
       });
     } else {
       calculatedCost = {
         base: state.get({
-          path: options.cost.toast
+          path: options.cost.amount
         }),
         full: state.get({
-          path: options.cost.toast
+          path: options.cost.amount
         })
       }
     }
@@ -1295,7 +1321,7 @@ var toaster = (function() {
                 value: state.get({
                   path: options.change.target
                 }),
-                percentage: options.change.percentageAmount,
+                percentage: options.change.percentage,
                 integer: true
               })
             })
@@ -1328,7 +1354,7 @@ var toaster = (function() {
                 value: state.get({
                   path: options.change.target
                 }),
-                percentage: options.change.percentageAmount,
+                percentage: options.change.percentage,
                 integer: true
               })
             })
@@ -1351,7 +1377,7 @@ var toaster = (function() {
       });
       // set new base cost
       state.set({
-        path: options.cost.toast,
+        path: options.cost.amount,
         value: calculatedCost.base
       });
     };
