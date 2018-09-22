@@ -21,10 +21,10 @@ var toaster = (function() {
         cycles: {
           current: 0,
           max: 100,
-          interval: 500,
+          interval: 1000,
           cost: {
             toast: 100,
-            multiply: 1.9
+            multiply: 1.8
           }
         },
         matterConversion: {
@@ -136,10 +136,20 @@ var toaster = (function() {
               unlock: ["#stage-system-substage-cycles"],
               message: [{
                 type: "normal",
-                message: ["cycles discovered"],
+                message: ["system cycles discovered"],
                 format: "normal"
               }],
               func: ["cycles"]
+            }
+          }, {
+            passed: false,
+            validate: [{
+              address: "system.cycles.interval",
+              operator: "less",
+              number: 50
+            }],
+            actions: {
+              lock: ["#stage-system-substage-cycles-controls"]
             }
           }],
           cycles: [{
@@ -153,7 +163,7 @@ var toaster = (function() {
               unlock: ["#stage-strategy"],
               message: [{
                 type: "normal",
-                message: ["use idle processing power to solve problems"],
+                message: ["strategies discovered"],
                 format: "normal"
               }]
             }
@@ -206,7 +216,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 50
+              number: 30
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster"],
@@ -244,7 +254,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 50
+              number: 40
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster-speed"],
@@ -282,7 +292,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 50
+              number: 40
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster-efficiency"],
@@ -556,16 +566,8 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: ["+" + change.amount + " processor power, " + (state.get({
-                path: change.target
-              }) + change.amount).toLocaleString(2) + " toast with every click"],
-              error: ["toast inventory low, " + costForMultiple({
-                amount: change.amount,
-                cost: {
-                  base: cost.amount,
-                  multiply: cost.multiply
-                }
-              }).full.toLocaleString(2) + " toast matter needed"]
+              success: "processor.boost.success",
+              fail: "processor.boost.fail"
             },
             callback: changeMaxCycles
           });
@@ -591,10 +593,8 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: ["+" + change.percentage + "% cycles speed"],
-              error: ["toast inventory low, " + state.get({
-                path: cost.amount
-              }).toLocaleString(2) + " toast matter needed"]
+              success: "processor.cycles.speed.success",
+              fail: "processor.cycles.speed.fail"
             },
             callback: changeMaxCycles
           });
@@ -619,12 +619,8 @@ var toaster = (function() {
             inflation: cost.inflation
           },
           message: {
-            success: [state.get({
-              path: cost.amount
-            }).toLocaleString(2) + " cycles spun on new strategy"],
-            error: ["processor cycles low, " + state.get({
-              path: cost.amount
-            }).toLocaleString(2) + " cycles needed"]
+            success: "strategy.success",
+            fail: "strategy.fail"
           }
         });
       },
@@ -648,16 +644,8 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: ["+" + change.amount + " subordinate auto toasters, " + (state.get({
-                path: "autoToaster.count"
-              }) + change.amount).toLocaleString(2) + " online"],
-              error: ["toast inventory low, " + costForMultiple({
-                amount: change.amount,
-                cost: {
-                  base: cost.amount,
-                  multiply: cost.multiply
-                }
-              }).full.toLocaleString(2) + " toast matter needed"]
+              success: "autoToaster.make.success",
+              fail: "autoToaster.make.fail"
             },
             callback: changeAutoToasterOutput
           });
@@ -681,16 +669,8 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: ["-" + change.amount + " subordinate auto toaster speed, toast every " + (state.get({
-                path: "autoToaster.speed.level"
-              }) - change.amount).toLocaleString(2) + "s"],
-              error: ["toast inventory low, " + costForMultiple({
-                amount: change.amount,
-                cost: {
-                  base: cost.amount,
-                  multiply: cost.multiply
-                }
-              }).full.toLocaleString(2) + " toast matter needed"]
+              success: "autoToaster.speed.success",
+              fail: "autoToaster.speed.fail"
             }
           });
         },
@@ -713,16 +693,8 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: ["+" + change.amount + " subordinate auto toasters efficiency, each producing " + (state.get({
-                path: "autoToaster.efficiency.level"
-              }) + change.amount).toLocaleString(2) + " toast"],
-              error: ["toast inventory low, " + costForMultiple({
-                amount: change.amount,
-                cost: {
-                  base: cost.amount,
-                  multiply: cost.multiply
-                }
-              }).full.toLocaleString(2) + " toast matter needed"]
+              success: "autoToaster.efficiency.success",
+              fail: "autoToaster.efficiency.fail"
             },
             callback: changeAutoToasterOutput
           });
@@ -1247,6 +1219,135 @@ var toaster = (function() {
     return cost;
   };
 
+  var changeToasterValueMessages = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null
+      },
+      cost: {
+        unites: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      },
+      message: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var allMessages = {
+      processor: {
+        boost: {
+          success: function() {
+            return ["+" + options.change.amount + " processor power, " + state.get({
+              path: options.change.target
+            }).toLocaleString(2) + " toast with every click"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple({
+              amount: options.cost.unites,
+              cost: {
+                base: options.cost.amount,
+                multiply: options.cost.multiply
+              }
+            }).full.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        cycles: {
+          speed: {
+            success: function() {
+              return ["+" + options.change.percentage + "% cycles speed"];
+            },
+            fail: function() {
+              return ["toast inventory low, " + state.get({
+                path: options.cost.amount
+              }).toLocaleString(2) + " toast matter needed"];
+            }
+          }
+        }
+      },
+      strategy: {
+        success: function() {
+          return [state.get({
+            path: options.cost.amount
+          }).toLocaleString(2) + " cycles used to spin up new strategy"];
+        },
+        fail: function() {
+          return ["processor cycles low, " + state.get({
+            path: options.cost.amount
+          }).toLocaleString(2) + " cycles needed"];
+        }
+      },
+      autoToaster: {
+        make: {
+          success: function() {
+            return ["+" + options.change.amount + " subordinate auto toasters, " + state.get({
+              path: "autoToaster.count"
+            }).toLocaleString(2) + " online"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple({
+              amount: options.cost.unites,
+              cost: {
+                base: options.cost.amount,
+                multiply: options.cost.multiply
+              }
+            }).full.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        speed: {
+          success: function() {
+            return ["-" + operator({
+              type: "divide",
+              value: options.change.amount,
+              by: 1000
+            }) + "s subordinate auto toaster speed, each toasting every " + operator({
+              type: "divide",
+              value: state.get({
+                path: "autoToaster.speed.interval"
+              }),
+              by: 1000
+            }).toLocaleString(2) + "s"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple({
+              amount: options.cost.unites,
+              cost: {
+                base: options.cost.amount,
+                multiply: options.cost.multiply
+              }
+            }).full.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        efficiency: {
+          success: function() {
+            return ["+" + options.change.amount + " subordinate auto toasters efficiency, each producing " + state.get({
+              path: "autoToaster.efficiency.level"
+            }).toLocaleString(2) + " toast"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple({
+              amount: options.cost.unites,
+              cost: {
+                base: options.cost.amount,
+                multiply: options.cost.multiply
+              }
+            }).full.toLocaleString(2) + " toast matter needed"];
+          }
+        }
+      }
+    };
+    return helper.getObject({
+      object: allMessages,
+      path: options.message
+    })();
+  };
+
   var changeToasterValue = function(override) {
     var options = {
       change: {
@@ -1293,16 +1394,18 @@ var toaster = (function() {
     }
     var feedbackMessage = {
       success: function() {
+        options.message = options.message.success;
         message.render({
           type: "system",
-          message: options.message.success,
+          message: changeToasterValueMessages(options),
           format: "normal"
         });
       },
-      error: function() {
+      fail: function() {
+        options.message = options.message.fail;
         message.render({
           type: "error",
-          message: options.message.error,
+          message: changeToasterValueMessages(options),
           format: "normal"
         });
       }
@@ -1413,8 +1516,8 @@ var toaster = (function() {
         feedbackMessage.success();
       }
     } else {
-      if (options.message.error != null) {
-        feedbackMessage.error();
+      if (options.message.fail != null) {
+        feedbackMessage.fail();
       }
     }
   };
