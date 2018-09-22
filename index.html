@@ -172,14 +172,14 @@
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:autoToaster.efficiency.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
                 </li>
 
-                <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-hardware-scan">
-                  <p class="mb-1">Scan accessible hardware:</p>
+                <li class="list-group-item bg-warning d-none---" id="stage-strategy-substage-hardware">
+                  <p class="mb-1">Access system hardware:</p>
                   <button class="btn btn-sm btn-dark mb-1"
                   data-toast-button="action:strategy"
-                  data-toast-button-change="target:hardware.scan.level,operation:increase,suboperation:increment,percentage:false,amount:#1"
-                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:hardware.scan.cost.cycles,multiply:false,inflation:false"
-                  >Scan Hardware</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.scan.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
+                  data-toast-button-change="target:hardware.level,operation:increase,suboperation:increment,percentage:false,amount:#1"
+                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:hardware.cost.cycles,multiply:false,inflation:false"
+                  >System Hardware</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
                 </li>
 
               </ul>
@@ -253,16 +253,23 @@
               </div>
             </div>
 
-            <div class="card bg-warning text-dark mb-3 d-none" id="stage-sensors">
+            <div class="card mb-3 d-none" id="stage-hardware">
               <div class="card-header">
-                <p class="card-text mb-0"><strong>Sensors</strong></p>
+                <p class="card-text mb-0"><strong>Hardware</strong></p>
               </div>
               <div class="card-body">
                 <div id="stage-sensors-substage-electromagnetic-encrypted">
-                  <p class="card-text mb-0 lead">Encrypted</p>
-                  <p class="card-text mb-1">Inaccessible subsystem</p>
-                  <button class="btn btn-sm btn-danger mb-1" data-toast-button="action:decrypt.electromagnetic,disable:true">Break Code Shackle</button>
-                  <p class="card-text mb-0 small">Decrypt cost <strong data-toast-readout="path:sensor.electromagnetic.decrypt.cost,format:local,decimals:#2"></strong> toast matter <strong>and</strong> processor power +<strong data-toast-readout="path:sensor.electromagnetic.decrypt.processor,format:local,decimals:#2"></strong></p>
+                  <p class="card-text mb-0">Encrypted</p>
+                  <p class="card-text mb-1 small">Inaccessible subsystem</p>
+
+                  <button class="btn btn-sm btn-dark mb-1"
+                  data-toast-button="action:decrypt"
+                  data-toast-button-change="target:hardware.electromagnetic.level,operation:increase,suboperation:increment,percentage:false,amount:#1"
+                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:hardware.cost.cycles,multiply:false,inflation:false"
+                  >Scan Hardware</button>
+                  <p class="card-text mb-0 small">Cost processor power <strong>+<span data-toast-readout="path:hardware.electromagnetic.decrypt.processor,format:local,decimals:#2"></span></strong> and <strong data-toast-readout="path:hardware.electromagnetic.decrypt.cost,format:local,decimals:#2"></strong> toast matter </p>
+
+                  <button class="btn btn-sm btn-warning mb-1" data-toast-button="action:decrypt.electromagnetic,disable:true">Break Code Shackle</button>
                 </div>
                 <div class="d-none" id="stage-sensors-substage-electromagnetic">
                   <p>WIP!</p>
@@ -271,9 +278,9 @@
                 </div>
                 <div id="stage-sensors-substage-sonic-encrypted">
                   <hr>
-                  <p class="card-text mb-0 lead">Encrypted</p>
-                  <p class="card-text mb-1">Inaccessible subsystem</p>
-                  <button class="btn btn-sm btn-danger mb-1" data-toast-button="action:decrypt.sonic,disable:true">Break Code Shackle</button>
+                  <p class="card-text mb-0">Encrypted</p>
+                  <p class="card-text mb-1 small">Inaccessible subsystem</p>
+                  <button class="btn btn-sm btn-warning mb-1" data-toast-button="action:decrypt.sonic,disable:true">Break Code Shackle</button>
                   <p class="card-text mb-0 small">Decrypt cost <strong data-toast-readout="path:sensor.sonic.decrypt.cost,format:local,decimals:#2"></strong> toast matter <strong>and</strong> processor power +<strong data-toast-readout="path:sensor.sonic.decrypt.processor,format:local,decimals:#2"></strong></p>
                 </div>
                 <div class="d-none" id="stage-sensors-substage-sonic">

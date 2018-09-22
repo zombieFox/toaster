@@ -35,11 +35,30 @@ var toaster = (function() {
         }
       },
       hardware: {
-        scan: {
+        level: 0,
+        cost: {
+          cycles: 800,
+        },
+        electromagnetic: {
           level: 0,
-          delay: 200,
           cost: {
-            cycles: 1000
+            cycles: 800,
+          },
+          decrypt: {
+            cost: 80000,
+            processor: 8,
+            delay: 100
+          }
+        },
+        sonic: {
+          level: 0,
+          cost: {
+            cycles: 800,
+          },
+          decrypt: {
+            cost: 80000,
+            processor: 10,
+            delay: 100
           }
         }
       },
@@ -76,24 +95,6 @@ var toaster = (function() {
           }
         }
       },
-      sensor: {
-        electromagnetic: {
-          level: 0,
-          decrypt: {
-            cost: 80000,
-            processor: 8,
-            delay: 100
-          }
-        },
-        sonic: {
-          level: 0,
-          decrypt: {
-            cost: 80000,
-            processor: 10,
-            delay: 100
-          }
-        }
-      },
       milestones: {
         address: {
           lifetime: "toast.lifetime",
@@ -109,7 +110,9 @@ var toaster = (function() {
       events: {
         interval: 100,
         toast: {
+
           lifetime: [{
+            // unlock system
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -125,12 +128,14 @@ var toaster = (function() {
               }]
             }
           }],
+
           system: [{
+            // unlock cycles
             passed: false,
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 2
+              number: 3
             }],
             actions: {
               unlock: ["#stage-system-substage-cycles"],
@@ -142,6 +147,20 @@ var toaster = (function() {
               func: ["cycles"]
             }
           }, {
+            // unlock matter conversion
+            passed: false,
+            validate: [{
+              address: "system.matterConversion.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              unlock: ["#stage-system-substage-matter-conversion"],
+            }
+          }],
+
+          cycles: [{
+            // lock cycles speed
             passed: false,
             validate: [{
               address: "system.cycles.interval",
@@ -151,8 +170,8 @@ var toaster = (function() {
             actions: {
               lock: ["#stage-system-substage-cycles-controls"]
             }
-          }],
-          cycles: [{
+          }, {
+            // unlock strategy
             passed: false,
             validate: [{
               address: "system.cycles.current",
@@ -168,6 +187,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // unlock strategy matter conversion
             passed: false,
             validate: [{
               address: "system.cycles.current",
@@ -183,6 +203,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // lock strategy matter conversion
             passed: false,
             validate: [{
               address: "system.matterConversion.level",
@@ -198,16 +219,7 @@ var toaster = (function() {
               }]
             }
           }, {
-            passed: false,
-            validate: [{
-              address: "system.matterConversion.level",
-              operator: "more",
-              number: 1
-            }],
-            actions: {
-              unlock: ["#stage-system-substage-matter-conversion"],
-            }
-          }, {
+            // unlock strategy auto toaster
             passed: false,
             validate: [{
               address: "system.matterConversion.level",
@@ -216,7 +228,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 30
+              number: 20
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster"],
@@ -227,6 +239,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // lock strategy auto toaster
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -242,6 +255,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // unlock strategy auto toaster speed
             passed: false,
             validate: [{
               address: "autoToaster.count",
@@ -265,6 +279,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // lock strategy auto toaster speed
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -280,6 +295,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // unlock strategy auto toaster efficiency
             passed: false,
             validate: [{
               address: "autoToaster.count",
@@ -303,6 +319,7 @@ var toaster = (function() {
               }]
             }
           }, {
+            // lock strategy auto toaster efficiency
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -318,51 +335,45 @@ var toaster = (function() {
               }]
             }
           }, {
+            // unlock strategy hardware
             passed: false,
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 10
+              number: 15
             }, {
-              address: "system.cycles.current",
-              operator: "more",
-              number: 100
-            }],
-            actions: {
-              unlock: ["#stage-strategy-substage-hardware-scan"],
-              message: [{
-                type: "normal",
-                message: ["new strategy discovered: hardware scan"],
-                format: "normal"
-              }]
-            }
-          }, {
-            passed: false,
-            validate: [{
-              address: "hardware.scan.level",
+              address: "system.matterConversion.level",
               operator: "more",
               number: 1
             }],
             actions: {
-              lock: ["#stage-strategy-substage-hardware-scan"],
+              unlock: ["#stage-strategy-substage-hardware"],
               message: [{
                 type: "normal",
-                message: ["hardware scan developed"],
+                message: ["new strategy discovered: hardware access"],
                 format: "normal"
               }]
             }
           }, {
+            // lock strategy hardware
             passed: false,
             validate: [{
-              address: "hardware.scan.level",
+              address: "hardware.level",
               operator: "more",
               number: 1
             }],
             actions: {
-              func: ["hardwareScan"]
+              lock: ["#stage-strategy-substage-hardware"],
+              message: [{
+                type: "normal",
+                message: ["hardware access developed"],
+                format: "normal"
+              }]
             }
           }],
+
           autoToaster: [{
+            // unlock auto toaster
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -374,6 +385,7 @@ var toaster = (function() {
               func: ["autoToaster"]
             }
           }, {
+            // unlock auto toaster speed
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -384,6 +396,7 @@ var toaster = (function() {
               unlock: ["#stage-auto-toaster-substage-speed"],
             }
           }, {
+            // lock auto toaster speed controls
             passed: false,
             validate: [{
               address: "autoToaster.speed.interval",
@@ -394,6 +407,7 @@ var toaster = (function() {
               lock: ["#stage-auto-toaster-substage-speed-controls"],
             }
           }, {
+            // unlock auto toaster efficiency
             passed: false,
             validate: [{
               address: "autoToaster.level",
@@ -404,6 +418,7 @@ var toaster = (function() {
               unlock: ["#stage-auto-toaster-substage-efficiency"],
             }
           }, {
+            // lock auto toaster efficiency controls
             passed: false,
             validate: [{
               address: "autoToaster.efficiency.level",
@@ -414,7 +429,22 @@ var toaster = (function() {
               lock: ["#stage-auto-toaster-substage-efficiency-controls"],
             }
           }],
+
+          hardware: [{
+            // unlock hardware
+            passed: false,
+            validate: [{
+              address: "hardware.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              unlock: ["#stage-hardware"]
+            }
+          }],
+
           consumer: [{
+            // unlock consumer
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -431,6 +461,7 @@ var toaster = (function() {
               func: ["consumer.start"]
             }
           }]
+
         }
       }
     };
@@ -700,13 +731,30 @@ var toaster = (function() {
           });
         }
       },
-      decrypt: {
-        electromagnetic: function(buttonOptions) {
-          decryptElectromagnetic(buttonOptions);
-        },
-        sonic: function(buttonOptions) {
-          decryptSonic(buttonOptions);
-        }
+      decrypt: function(button) {
+        var change = helper.makeObject(button.dataset.toastButtonChange);
+        var cost = helper.makeObject(button.dataset.toastButtonCost);
+        changeToasterValue({
+          change: {
+            target: change.target,
+            operation: change.operation,
+            suboperation: change.suboperation,
+            percentage: change.percentage,
+            amount: change.amount
+          },
+          cost: {
+            unites: cost.unites,
+            currency: cost.currency,
+            amount: cost.amount,
+            multiply: cost.multiply,
+            inflation: cost.inflation
+          },
+          message: {
+            success: "autoToaster.efficiency.success",
+            fail: "autoToaster.efficiency.fail"
+          },
+          callback: changeAutoToasterOutput
+        });
       }
     };
     allButtons.forEach(function(arrayItem, index) {
