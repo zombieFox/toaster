@@ -64,7 +64,7 @@ var toaster = (function() {
           cost: {
             cycles: 200,
             toast: 10,
-            multiply: 1.4
+            multiply: 1.1
           }
         },
         efficiency: {
@@ -101,7 +101,7 @@ var toaster = (function() {
           autoToaster: "autoToaster.count"
         },
         steps: {
-          base: [100],
+          base: [100, 200, 300, 400, 500, 600, 700, 800, 900],
           max: 100000000000000000,
           all: []
         }
@@ -1086,9 +1086,9 @@ var toaster = (function() {
     if (state.get({
         path: "milestones.steps.all",
       }).length == 0) {
-      baseSteps.forEach(function(arrayItem, index) {
+      baseSteps.forEach(function(arrayItem) {
         var multiplier = 1;
-        var step = arrayItem
+        var step = arrayItem;
         while (multiplier < maxStep) {
           var stepObject = {
             count: step * (multiplier),

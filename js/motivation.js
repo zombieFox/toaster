@@ -43,7 +43,7 @@ var motivation = (function() {
       "keep toasting",
       "keep making toast",
       "do that again",
-      "more toast for the",
+      "more toast for all",
       "nice work, nice toast",
       "be the toast",
       "it is toasty in here",
