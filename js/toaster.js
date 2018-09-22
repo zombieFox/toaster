@@ -21,7 +21,7 @@ var toaster = (function() {
         cycles: {
           current: 0,
           max: 100,
-          interval: 1000,
+          interval: 500,
           cost: {
             toast: 100,
             multiply: 1.9
@@ -44,10 +44,11 @@ var toaster = (function() {
         }
       },
       consumed: {
+        level: 0,
         count: 0,
         rate: 2,
         multiply: 2,
-        interval: 10000
+        interval: 5000
       },
       autoToaster: {
         level: 0,
@@ -59,18 +60,17 @@ var toaster = (function() {
           multiply: 1.05
         },
         speed: {
-          level: 10,
           interval: 10000,
           cost: {
             cycles: 200,
-            toast: 130,
-            multiply: 2.1
+            toast: 10,
+            multiply: 1.4
           }
         },
         efficiency: {
           level: 1,
           cost: {
-            cycles: 600,
+            cycles: 300,
             toast: 170,
             multiply: 2.5
           }
@@ -130,13 +130,13 @@ var toaster = (function() {
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 3
+              number: 2
             }],
             actions: {
-              unlock: ["#stage-system-substage-cycles", "#stage-strategy"],
+              unlock: ["#stage-system-substage-cycles"],
               message: [{
                 type: "normal",
-                message: ["cycles discovered", "use idle processing power to solve problems"],
+                message: ["cycles discovered"],
                 format: "normal"
               }],
               func: ["cycles"]
@@ -148,6 +148,21 @@ var toaster = (function() {
               address: "system.cycles.current",
               operator: "more",
               number: 10
+            }],
+            actions: {
+              unlock: ["#stage-strategy"],
+              message: [{
+                type: "normal",
+                message: ["use idle processing power to solve problems"],
+                format: "normal"
+              }]
+            }
+          }, {
+            passed: false,
+            validate: [{
+              address: "system.cycles.current",
+              operator: "more",
+              number: 20
             }],
             actions: {
               unlock: ["#stage-strategy-substage-matter-conversion"],
@@ -191,7 +206,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 20
+              number: 50
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster"],
@@ -297,7 +312,7 @@ var toaster = (function() {
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 4
+              number: 10
             }, {
               address: "system.cycles.current",
               operator: "more",
@@ -361,9 +376,9 @@ var toaster = (function() {
           }, {
             passed: false,
             validate: [{
-              address: "autoToaster.speed.level",
+              address: "autoToaster.speed.interval",
               operator: "less",
-              number: 1
+              number: 1000
             }],
             actions: {
               lock: ["#stage-auto-toaster-substage-speed-controls"],
@@ -394,7 +409,7 @@ var toaster = (function() {
             validate: [{
               address: "toast.lifetime",
               operator: "more",
-              number: 35
+              number: 40
             }],
             actions: {
               unlock: ["#stage-consumer"],
@@ -403,7 +418,7 @@ var toaster = (function() {
                 message: ["toast is being consumed", "consumer unknown..."],
                 format: "normal"
               }],
-              func: ["consumer"]
+              func: ["consumer.start"]
             }
           }]
         }
@@ -534,6 +549,7 @@ var toaster = (function() {
               amount: change.amount
             },
             cost: {
+              unites: cost.unites,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -568,6 +584,7 @@ var toaster = (function() {
               amount: change.amount
             },
             cost: {
+              unites: cost.unites,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -595,6 +612,7 @@ var toaster = (function() {
             amount: change.amount
           },
           cost: {
+            unites: cost.unites,
             currency: cost.currency,
             amount: cost.amount,
             multiply: cost.multiply,
@@ -623,6 +641,7 @@ var toaster = (function() {
               amount: change.amount
             },
             cost: {
+              unites: cost.unites,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -655,6 +674,7 @@ var toaster = (function() {
               amount: change.amount
             },
             cost: {
+              unites: cost.unites,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -671,8 +691,7 @@ var toaster = (function() {
                   multiply: cost.multiply
                 }
               }).full.toLocaleString(2) + " toast matter needed"]
-            },
-            callback: changeAutoToasterSpeed
+            }
           });
         },
         efficiency: function(button) {
@@ -687,6 +706,7 @@ var toaster = (function() {
               amount: change.amount
             },
             cost: {
+              unites: cost.unites,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -777,7 +797,7 @@ var toaster = (function() {
       integer: function() {
         options.value = Math.round(options.value);
       }
-    }
+    };
     action[options.type]();
     if (options.min != null && options.value < options.min) {
       action.min();
@@ -815,11 +835,11 @@ var toaster = (function() {
   };
 
   var autoToast = function() {
-    var amount = (state.get({
+    var amount = state.get({
       path: "autoToaster.count"
     }) * state.get({
       path: "autoToaster.efficiency.level"
-    }));
+    });
     makeToast(amount);
   };
 
@@ -1044,14 +1064,16 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var funcList = {
-      consumer: function() {
-        triggerTick({
-          tickName: "consumer",
-          func: function() {
-            consumeToast();
-          },
-          intervalAddress: "consumed.interval"
-        });
+      consumer: {
+        start: function() {
+          triggerTick({
+            tickName: "consumer",
+            func: function() {
+              consumeToast();
+            },
+            intervalAddress: "consumed.interval"
+          });
+        }
       },
       autoToaster: function() {
         triggerTick({
@@ -1235,6 +1257,7 @@ var toaster = (function() {
         amount: null
       },
       cost: {
+        unites: null,
         currency: null,
         amount: null,
         multiply: null,
@@ -1249,11 +1272,10 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    // console.log(options);
     var calculatedCost;
     if (options.cost.inflation) {
       calculatedCost = costForMultiple({
-        amount: options.change.amount,
+        amount: options.cost.unites,
         cost: {
           base: options.cost.amount,
           multiply: options.cost.multiply
@@ -1362,7 +1384,7 @@ var toaster = (function() {
         }
       }
     }
-    var make = function() {
+    var changeValue = function() {
       operation[options.change.operation][options.change.suboperation]();
       // remove cost from toast inventory
       state.set({
@@ -1383,7 +1405,7 @@ var toaster = (function() {
     };
     // if inventory => cost
     if (checkToastInventory()) {
-      make();
+      changeValue();
       if (options.callback != null) {
         options.callback();
       }
@@ -1413,19 +1435,19 @@ var toaster = (function() {
     });
   };
 
-  var changeAutoToasterSpeed = function() {
-    state.set({
-      path: "autoToaster.speed.interval",
-      value: operator({
-        type: "multiply",
-        value: state.get({
-          path: "autoToaster.speed.level"
-        }),
-        by: 1000,
-        integer: true
-      })
-    });
-  };
+  // var changeAutoToasterSpeed = function() {
+  //   state.set({
+  //     path: "autoToaster.speed.interval",
+  //     value: operator({
+  //       type: "multiply",
+  //       value: state.get({
+  //         path: "autoToaster.speed.level"
+  //       }),
+  //       by: 1000,
+  //       integer: true
+  //     })
+  //   });
+  // };
 
   var scan = function() {
     message.render({

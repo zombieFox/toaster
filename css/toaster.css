@@ -8,11 +8,12 @@
   --gray-700: #495057;
   --gray-800: #343a40;
   --gray-900: #212529;
-  --black: #000000;
+  --black-100: #141414;
+  --black-200: #000000;
 }
 
 body {
-  background-color: var(--gray-700);
+  background-color: var(--black-100);
 }
 
 .toaster {
@@ -75,7 +76,7 @@ body {
 }
 
 .report {
-  background-color: var(--black);
+  background-color: var(--black-200);
 }
 
 .report-message {
