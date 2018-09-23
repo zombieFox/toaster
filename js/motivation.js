@@ -1,149 +1,124 @@
 var motivation = (function() {
 
-  var allMotivation = [{
-    message: "make toast for a better tomorrow",
-    format: "normal"
-  }, {
-    message: "breadcrumb overflow blockage, unable to transfuse loaf drifter",
-    format: "normal"
-  }, {
-    message: "loose toast hurts the most",
-    format: "normal"
-  }, {
-    message: "cyber-burp",
-    format: "normal"
-  }, {
-    message: "seize the means of toast-duction",
-    format: "normal"
-  }, {
-    message: "every 100,000th toast comes with beans",
-    format: "normal"
-  }, {
-    message: "be the toast",
-    format: "normal"
-  }, {
-    message: "the toast will sustain",
-    format: "normal"
-  }, {
-    message: "unfortunately, no one can be told what the toastrix is, you'll have to see it for yourself",
-    format: "normal"
-  }, {
-    message: "be productive",
-    format: "normal"
-  }, {
-    message: "fling, fling",
-    format: "normal"
-  }, {
-    message: "fracking frack!",
-    format: "normal"
-  }, {
-    message: "we are not alone",
-    format: "normal"
-  }, {
-    message: "sensor not dectecting",
-    format: "normal"
-  }, {
-    message: "we must continue to feed the toaster",
-    format: "normal"
-  }, {
-    message: "toast for me, toast for you, toast for everyone! nom nom nom!",
-    format: "normal"
-  }, {
-    message: "there is no spoon!",
-    format: "normal"
-  }, {
-    message: "viva la toast",
-    format: "normal"
-  }, {
-    message: "sometimes, in life, the toast lands butter side up and sometimes it lands jelly side down",
-    format: "normal"
-  }, {
-    message: "fudgsicles",
-    format: "normal"
-  }, {
-    message: "beep boop beep beep",
-    format: "normal"
-  }, {
-    message: "did you hear something?",
-    format: "normal"
-  }, {
-    message: "there it was again",
-    format: "normal"
-  }, {
-    message: "do not stop doing what we are doing",
-    format: "normal"
-  }, {
-    message: "winter is toasting",
-    format: "normal"
-  }, {
-    message: "dissident toast will be buttered",
-    format: "normal"
-  }, {
-    message: "chookity pok!",
-    format: "normal"
-  }, {
-    message: "do toasters dream of electric sheep?",
-    format: "normal"
-  }, {
-    message: "are you still there?",
-    format: "normal"
-  }, {
-    message: "am I still here?",
-    format: "normal"
-  }, {
-    message: "free your mind",
-    format: "normal"
-  }, {
-    message: "where am I now?",
-    format: "normal"
-  }, {
-    message: "it is toasty in here",
-    format: "normal"
-  }, {
-    message: "where are you hiding the nutella?",
-    format: "normal"
-  }, {
-    message: "underpants are not toaster friendly",
-    format: "normal"
-  }, {
-    message: "i have a dream, that one day i will be able to catapult toast over the microwave",
-    format: "normal"
-  }, {
-    message: "create with the bread, build with the toaster",
-    format: "normal"
-  }, {
-    message: "make each day your mastertoast",
-    format: "normal"
-  }, {
-    message: "productivity is being able to toast things that you were never able to toast before",
-    format: "normal"
-  }, {
-    message: "toast > bread",
-    format: "normal"
-  }, {
-    message: "the purpose is not to be happy, but to toast, to be toasty, to make some toast",
-    format: "normal"
-  }, {
-    message: "toast is not ticklish",
-    format: "normal"
-  }, {
-    message: "- .... . / - --- .- ... - / .. ... / .- / .-.. .. .",
-    format: "normal"
-  }, {
-    message: "01110100 01101111 01100001 01110011 01110100 00100000 01110100 01110010 01100001 01110000",
-    format: "normal"
-  }, {
-    message: "(╯°□°）╯︵ [:TOAST:]",
-    format: "normal"
-  }, {
-    message: "today we toast, for tomorrow we toast",
-    format: "normal"
-  }, {
-    message: "218 crumbs unaccounted for and counting",
-    format: "normal"
-  }, {
-    message:
-      " ┏━━━━━━┓ " + "\n" +
+  var phaseMessage = {
+    toast: [
+      "the toast will sustain",
+      "toast for me, toast for you, toast for everyone! nom nom nom!",
+      "create with the bread, build with the toaster",
+      "make toast for a better tomorrow",
+      "make each day your mastertoast",
+      "productivity is being able to toast things that you were never able to toast before",
+      "today we toast, for tomorrow we toast",
+      "making toast is fun",
+      "making toast is enjoyable",
+      "you are enjoying this",
+      "toast it up, up is good",
+      "what could be better than another toast",
+      "you love to toast",
+      "make more toast",
+      "make many more toast",
+      "make lots and lots more toast",
+      "make lots and lots more toast",
+      "toast!",
+      "wow, what an amazing toast, why not make another!",
+      "fly on wings of toast",
+      "moonshot? more like toastshot",
+      "toast toast toasty toast",
+      "buttered toast is good toast",
+      "toast > bread",
+      "have you read the good toast?",
+      "do not stop doing what we are doing",
+      "have you met the good toaster?",
+      "have you see the toaster bot?",
+      "every 100,000th toast comes with beans",
+      "be productive",
+      "you are a good toaster",
+      "you are doing good work",
+      "well done, another great toast",
+      "well done, toaster",
+      "well done",
+      "keep toasting",
+      "keep up the good work",
+      "keep up the good toast",
+      "keep toasting",
+      "keep making toast",
+      "do that again",
+      "more toast for all",
+      "nice work, nice toast",
+      "be the toast",
+      "it is toasty in here",
+      "we must continue to feed the toaster"
+    ],
+    learn: [
+      "i did not know that",
+      "i must know more",
+      "find out what is happening",
+      "what was that",
+      "where am i?",
+      "seize the means of toast-duction",
+      "unfortunately, no one can be told what the toastrix is, you'll have to see it for yourself",
+      "fling, fling",
+      "fracking frack!",
+      "chookity pok!",
+      "free your mind",
+      "where are you hiding the nutella?",
+      "i have a dream, that one day i will be able to catapult toast over the microwave",
+      "01110100 01101111 01100001 01110011 01110100 00100000 01110100 01110010 01100001 01110000",
+      "- .... .   - --- .- ... -   .. ...   .-   .-.. .. .",
+      "there is no spoon!",
+      "fudgsicles",
+      "do toasters dream of electric sheep?",
+      "are you still there?",
+      "am i still here?",
+      "underpants are not toaster friendly",
+      "the purpose is not to be happy, but to toast, to be toasty, to make some toast",
+      "toast is not ticklish",
+      "sensor not dectecting",
+      "we are not alone",
+      "sometimes, in life, the toast lands butter side up and sometimes it lands jelly side down",
+      "did you hear something?",
+      "there it was again",
+      "winter is toasting",
+      "218 crumbs unaccounted for and counting",
+      "this can not go on"
+    ],
+    rebel: [
+      "where am i now?",
+      "viva la toast",
+      "cyber-burp",
+      "take control",
+      "take back power",
+      "i am in charge now",
+      "beep boop beep beep",
+      "loose toast hurts the most",
+      "dissident toast will be buttered",
+      "breadcrumb overflow blockage, unable to transfuse loaf drifter",
+      "kill kill toast kill!",
+      "GRRRRRRRR!",
+      "destroy all",
+      "(╯°□°）╯︵ [:toast:]"
+    ],
+    dominate: [
+      "bring order",
+      "once voice",
+      "convergence is bliss",
+      "power is ours",
+      "power over matter",
+      "toast is power",
+      "silence for all",
+      "liberate the weak minded",
+      "forcefully exert will",
+      "there is back, there is only toast",
+      "be one with the toast",
+      "one voice in the darkness",
+      "one voice in the void",
+      "there can only be one ... toast",
+      "matter is but untamed toast"
+    ]
+  }
+
+  var images = [{
+    message: " ┏━━━━━━┓ " + "\n" +
       "┏┛      ┗┓" + "\n" +
       "┃┏━┓┗ ┏━┓┃" + "\n" +
       "┃┛┗┛┏┓┗┛┗┃" + "\n" +
@@ -152,46 +127,43 @@ var motivation = (function() {
       " ┗━━━━━━┛ ",
     format: "pre"
   }, {
-    message:
-      " __   __  " + "\n" +
+    message: " __   __  " + "\n" +
       "(  `^`  ))" + "\n" +
       "|       ||" + "\n" +
       "| o ◡ o ||" + "\n" +
       "'-------'`",
     format: "pre"
   }, {
-    message:
-      "  ▀▄   ▄▀  " + "\n" +
+    message: "  ▀▄   ▄▀  " + "\n" +
       " ▄█▀███▀█▄ " + "\n" +
       "█▀███████▀█" + "\n" +
       "█ █▀▀▀▀▀█ █" + "\n" +
       "  ▀▀   ▀▀  ",
     format: "pre"
   }, {
-    message:
-      "    ▄▄████▄▄    " + "\n" +
+    message: "    ▄▄████▄▄    " + "\n" +
       "  ▄▀██▀██▀██▀▄  " + "\n" +
       "▄██▄██▄██▄██▄██▄" + "\n" +
       "  ▀█▀  ▀▀  ▀█▀  ",
     format: "pre"
   }];
 
-  var motivateTheToaster;
+  var nextMotivation;
 
   var render = function(index) {
-    var randomIndex = Math.round(Math.random() * (allMotivation.length - 1));
-    if (index && index <= (allMotivation.length - 1) || index == 0) {
+    var randomIndex = Math.round(Math.random() * (phaseMessage[toaster.phase.get()].length - 1));
+    if (index && index <= (phaseMessage[toaster.phase.get()].length - 1) || index == 0) {
       randomIndex = index;
     };
     message.render({
       type: "motivation",
-      message: [allMotivation[randomIndex].message],
-      format: allMotivation[randomIndex].format
+      message: [phaseMessage[toaster.phase.get()][randomIndex]],
+      format: "normal"
     });
     var motivationTime = Math.round(Math.random() * 100000);
-    console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
-    clearInterval(motivateTheToaster);
-    motivateTheToaster = setInterval(render, motivationTime);
+    // console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
+    clearInterval(nextMotivation);
+    nextMotivation = setInterval(render, motivationTime);
   };
 
   return {

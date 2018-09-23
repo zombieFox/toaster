@@ -8,11 +8,12 @@
   --gray-700: #495057;
   --gray-800: #343a40;
   --gray-900: #212529;
-  --black: #000000;
+  --black-100: #141414;
+  --black-200: #000000;
 }
 
 body {
-  background-color: var(--gray-700);
+  background-color: var(--black-100);
 }
 
 .toaster {
@@ -70,11 +71,12 @@ body {
   .report {
     padding: 2em 2em 4em 1em;
     width: 30vw;
+    min-width: 25em;
   }
 }
 
 .report {
-  background-color: var(--black);
+  background-color: var(--black-200);
 }
 
 .report-message {
@@ -86,9 +88,8 @@ body {
 }
 
 .report-message-type {
-  width: 4em;
+  width: 5em;
   text-align: center;
-  margin-right: 0.5em;
   flex-grow: 0;
   flex-shrink: 0;
 }

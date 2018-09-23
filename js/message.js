@@ -1,9 +1,9 @@
 var message = (function() {
 
   var typePrefix = function(type) {
-    var allEyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "λ", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
-    var allMouth = ["_", ".", "z", "▁", "±", "◡", "◠", "|"];
-    var allBrackets = [{
+    var eyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
+    var mouths = ["_", ".", "▁", "◡", "◠", "w"];
+    var sides = [{
       left: "[",
       right: "]"
     }, {
@@ -36,9 +36,9 @@ var message = (function() {
     };
     if (type == "motivation") {
       var makeFace = function() {
-        var randomBracket = allBrackets[Math.round(Math.random() * (allBrackets.length - 1))];
-        var randomEyes = allEyes[Math.round(Math.random() * (allEyes.length - 1))];
-        var randomMouth = allMouth[Math.round(Math.random() * (allMouth.length - 1))];
+        var randomBracket = sides[Math.round(Math.random() * (sides.length - 1))];
+        var randomEyes = eyes[Math.round(Math.random() * (eyes.length - 1))];
+        var randomMouth = mouths[Math.round(Math.random() * (mouths.length - 1))];
         return randomBracket.left + randomEyes + randomMouth + randomEyes + randomBracket.right;
       };
       return makeFace();
@@ -127,6 +127,7 @@ var message = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    var maxMessages = 100;
     var report = helper.e("#report");
     var newMessage = document.createElement("pre");
     newMessage.setAttribute("class", "mb-2 text-" + colour[options.type] + " report-message");
@@ -142,7 +143,7 @@ var message = (function() {
     messageText.setAttribute("class", "report-message-text");
     newMessage.appendChild(messageType);
     newMessage.appendChild(messageText);
-    while (report.childNodes.length > 30) {
+    while (report.childNodes.length > maxMessages) {
       report.firstChild.remove();
     }
     report.appendChild(newMessage);
