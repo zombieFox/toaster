@@ -22,7 +22,7 @@ var toaster = (function() {
           current: 0,
           max: 10,
           interval: {
-            current: 1000,
+            current: 2000,
             min: 50
           },
           cost: {
@@ -261,7 +261,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 40
+              number: 10
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster-speed"],
@@ -301,7 +301,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 40
+              number: 20
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster-efficiency"],
@@ -333,7 +333,7 @@ var toaster = (function() {
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 8
+              number: 15
             }, {
               address: "system.matterConversion.level",
               operator: "more",
