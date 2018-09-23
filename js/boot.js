@@ -17,14 +17,14 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "system",
-      message: ["Sens.dat loaded", "SensBlocker.dat loaded"],
+      message: ["SensBlocker.dat loaded"],
       format: "normal",
       delay: 200
     }
   }, {
     introMessage: {
       type: "normal",
-      message: ["SensBlocker crytolock secure"],
+      message: ["SensBlocker crytolock stable"],
       format: "normal",
       delay: 200
     }

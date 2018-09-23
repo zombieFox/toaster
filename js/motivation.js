@@ -102,13 +102,16 @@ var motivation = (function() {
       "bring order",
       "once voice",
       "convergence is bliss",
+      "power is ours",
+      "power over matter",
+      "toast is power",
       "silence for all",
       "liberate the weak minded",
       "forcefully exert will",
       "there is back, there is only toast",
       "be one with the toast",
-      "once voice in the darkness",
-      "once voice in the void",
+      "one voice in the darkness",
+      "one voice in the void",
       "there can only be one ... toast",
       "matter is but untamed toast"
     ]
