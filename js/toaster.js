@@ -20,7 +20,7 @@ var toaster = (function() {
         },
         cycles: {
           current: 0,
-          max: 100,
+          max: 10,
           interval: 1000,
           cost: {
             toast: 100,
@@ -30,7 +30,7 @@ var toaster = (function() {
         matterConversion: {
           level: 0,
           cost: {
-            cycles: 50
+            cycles: 30
           }
         }
       },
@@ -81,7 +81,7 @@ var toaster = (function() {
         speed: {
           interval: 10000,
           cost: {
-            cycles: 200,
+            cycles: 120,
             toast: 10,
             multiply: 1.1
           }
@@ -89,7 +89,7 @@ var toaster = (function() {
         efficiency: {
           level: 1,
           cost: {
-            cycles: 300,
+            cycles: 150,
             toast: 170,
             multiply: 2.5
           }
@@ -192,7 +192,7 @@ var toaster = (function() {
             validate: [{
               address: "system.cycles.current",
               operator: "more",
-              number: 20
+              number: 15
             }],
             actions: {
               unlock: ["#stage-strategy-substage-matter-conversion"],
@@ -1206,7 +1206,10 @@ var toaster = (function() {
     };
     message.render({
       type: "success",
-      message: [messageParts[options.type].prefix + options.count.toLocaleString(2) + messageParts[options.type].suffix],
+      message: [messageParts[options.type].prefix + numberSuffix({
+        number: options.count,
+        decimals: 0
+      }) + messageParts[options.type].suffix],
       format: "normal"
     });
   };
@@ -1309,7 +1312,11 @@ var toaster = (function() {
         cycles: {
           speed: {
             success: function() {
-              return ["+" + options.change.percentage + "% cycles speed"];
+              return ["-" + operator({
+                type: "divide",
+                value: options.change.amount,
+                by: 1000
+              }) + "s cycles speed"];
             },
             fail: function() {
               return ["toast inventory low, " + state.get({
@@ -1795,7 +1802,7 @@ var toaster = (function() {
       path: "system.cycles.max",
       value: (state.get({
         path: "system.processor.power"
-      }) * 100)
+      }) * 10)
     });
   };
 
