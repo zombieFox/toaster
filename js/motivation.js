@@ -160,8 +160,8 @@ var motivation = (function() {
       message: [phaseMessage[toaster.phase.get()][randomIndex]],
       format: "normal"
     });
-    var motivationTime = Math.round(Math.random() * 100000);
-    // console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
+    var motivationTime = Math.round(Math.random() * 300000);
+    console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
     clearInterval(nextMotivation);
     nextMotivation = setInterval(render, motivationTime);
   };

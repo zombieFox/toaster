@@ -33,7 +33,7 @@
                   <strong data-toast-readout="path:toast.inventory,format:local,decimals:#2"></strong>
                 </p>
                 <hr>
-                <p id="xxx" class="card-text mb-0 small d-flex justify-content-between flex-wrap"><span class="mr-1">Lifetime Toast:</span><span data-toast-readout="path:toast.lifetime,format:local,decimals:#2"></span></p>
+                <p class="card-text mb-0 small d-flex justify-content-between flex-wrap"><span class="mr-1">Lifetime Toast:</span><span data-toast-readout="path:toast.lifetime,format:local,decimals:#2"></span></p>
               </div>
               <div class="card-footer">
                 <button class="btn btn-primary" data-toast-button="action:toast">Toast +<span data-toast-readout="path:system.processor.power,format:local,decimals:#2"></span></button>
@@ -79,20 +79,18 @@
                   <hr>
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Cycles:</span>
-                    <span>
-                      <strong data-toast-readout="path:system.cycles.current,format:local,decimals:#2"></strong> / <span data-toast-readout="path:system.cycles.max,format:local,decimals:#2"></span>
-                    </span>
+                    <span><strong data-toast-readout="path:system.cycles.current,format:local,decimals:#2"></strong> / <span data-toast-readout="path:system.cycles.max,format:local,decimals:#2"></span></span>
                   </p>
-                  <p class="card-text mb-1 small">1 cycle / <strong data-toast-readout="path:system.cycles.interval.current,format:local,decimals:#2,modify:divide,by:#1000,round:false"></strong>s, max cycles = processor power x10</p>
+                  <p class="card-text mb-1 small">1 cycle / <strong data-toast-readout="path:system.cycles.speed.interval.current,format:local,decimals:#2,modify:divide,by:#1000,round:false"></strong>s, max cycles = processor power x10</p>
 
-                  <div id="stage-system-substage-cycles-controls">
+                  <div class="d-none" id="stage-system-substage-cycles-controls">
                     <p class="card-text mb-1 small">Speed up cycles by adding more hamsters in wheels</p>
                     <button class="btn btn-sm btn-secondary mb-1"
                     data-toast-button="action:cycles.speed"
-                    data-toast-button-change="target:system.cycles.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.interval.min,max:false"
-                    data-toast-button-cost="unites:#1,currency:toast.inventory,amount:system.cycles.cost.toast,multiply:system.cycles.cost.multiply,inflation:true"
+                    data-toast-button-change="target:system.cycles.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.speed.interval.min,max:false"
+                    data-toast-button-cost="unites:#1,currency:toast.inventory,amount:system.cycles.speed.cost.toast,multiply:system.cycles.speed.cost.multiply,inflation:true"
                     >Speed -0.05s</button>
-                    <p class="card-text mb-0 small">-0.05s cost <strong data-toast-readout="path:system.cycles.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                    <p class="card-text mb-0 small">-0.05s cost <strong data-toast-readout="path:system.cycles.speed.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                   </div>
 
                 </div>
@@ -116,11 +114,11 @@
                   <span class="mr-1">Wheat matter:</span>
                   <strong data-toast-readout="path:wheat.current,format:local,decimals:#2"></strong>
                 </p>
-                <button class="btn btn-sm btn-secondary"
+                <!-- <button class="btn btn-sm btn-secondary"
                 data-toast-button="action:wheat"
-                data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#3,min:false,max:false"
-                data-toast-button-cost="unites:#3,currency:false,amount:false,multiply:false,inflation:false"
-                >Wheat +3</button>
+                data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#4,min:false,max:false"
+                data-toast-button-cost="unites:#4,currency:false,amount:false,multiply:false,inflation:false"
+                >Wheat +4</button> -->
                 <p class="card-text mb-0 small">1 wheat matter lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
               </div>
             </div>
@@ -149,6 +147,16 @@
                 <p class="card-text mb-0 small">Use idle system cycles to solve problems</p>
               </div>
               <ul class="list-group list-group-flush">
+
+                <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-cycles-speed">
+                  <p class="mb-1">Spin some extra toast and speed up system cycles:</p>
+                  <button class="btn btn-sm btn-dark mb-1"
+                  data-toast-button="action:strategy"
+                  data-toast-button-change="target:system.cycles.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:system.cycles.cost.cycles,multiply:false,inflation:false"
+                  >Cycles Speed</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:system.cycles.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
+                </li>
 
                 <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-matter-conversion">
                   <p class="mb-1">Turn toast matter into useful things:</p>

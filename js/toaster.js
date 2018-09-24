@@ -11,7 +11,7 @@ var toaster = (function() {
         inventory: 0
       },
       wheat: {
-        current: 570,
+        current: 100000,
         loaf: {
           slice: 0,
           max: 5
@@ -21,26 +21,32 @@ var toaster = (function() {
         processor: {
           power: 1,
           cost: {
-            toast: 20,
-            multiply: 1.2
+            toast: 12,
+            multiply: 1.1
           }
         },
         cycles: {
+          level: 0,
           current: 0,
           max: 10,
-          interval: {
-            current: 2000,
-            min: 50
-          },
           cost: {
-            toast: 100,
-            multiply: 1.8
+            cycles: 10
+          },
+          speed: {
+            interval: {
+              current: 2000,
+              min: 50
+            },
+            cost: {
+              toast: 5,
+              multiply: 1.5
+            }
           }
         },
         matterConversion: {
           level: 0,
           cost: {
-            cycles: 30
+            cycles: 20
           }
         }
       },
@@ -135,7 +141,7 @@ var toaster = (function() {
             validate: [{
               address: "system.processor.power",
               operator: "more",
-              number: 3
+              number: 2
             }],
             actions: {
               unlock: ["#stage-system-substage-cycles"],
@@ -145,6 +151,28 @@ var toaster = (function() {
                 format: "normal"
               }],
               func: ["cycles"]
+            }
+          }, {
+            // unlock cycles speed
+            passed: false,
+            validate: [{
+              address: "system.cycles.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              unlock: ["#stage-system-substage-cycles-controls"]
+            }
+          }, {
+            // lock cycles speed
+            passed: false,
+            validate: [{
+              address: "system.cycles.speed.interval.current",
+              operator: "less",
+              number: 50
+            }],
+            actions: {
+              lock: ["#stage-system-substage-cycles-controls"]
             }
           }, {
             // unlock matter conversion
@@ -160,23 +188,12 @@ var toaster = (function() {
           }],
 
           cycles: [{
-            // lock cycles speed
-            passed: false,
-            validate: [{
-              address: "system.cycles.interval.current",
-              operator: "less",
-              number: 50
-            }],
-            actions: {
-              lock: ["#stage-system-substage-cycles-controls"]
-            }
-          }, {
             // unlock strategy
             passed: false,
             validate: [{
               address: "system.cycles.current",
               operator: "more",
-              number: 3
+              number: 1
             }],
             actions: {
               unlock: ["#stage-strategy"],
@@ -187,12 +204,44 @@ var toaster = (function() {
               }]
             }
           }, {
+            // unlock strategy cycles speed
+            passed: false,
+            validate: [{
+              address: "system.cycles.current",
+              operator: "more",
+              number: 2
+            }],
+            actions: {
+              unlock: ["#stage-strategy-substage-cycles-speed"],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: cycles speed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            // lock strategy cycles speed
+            passed: false,
+            validate: [{
+              address: "system.cycles.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              lock: ["#stage-strategy-substage-cycles-speed"],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: cycles speed"],
+                format: "normal"
+              }]
+            }
+          }, {
             // unlock strategy matter conversion
             passed: false,
             validate: [{
               address: "system.cycles.current",
               operator: "more",
-              number: 15
+              number: 3
             }],
             actions: {
               unlock: ["#stage-strategy-substage-matter-conversion"],
@@ -228,7 +277,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 20
+              number: 5
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster"],
@@ -268,7 +317,7 @@ var toaster = (function() {
             }, {
               address: "system.cycles.current",
               operator: "more",
-              number: 10
+              number: 20
             }],
             actions: {
               unlock: ["#stage-strategy-substage-auto-toaster-speed"],
@@ -1213,7 +1262,7 @@ var toaster = (function() {
           func: function() {
             autoCycle();
           },
-          intervalAddress: "system.cycles.interval.current"
+          intervalAddress: "system.cycles.speed.interval.current"
         });
       },
       hardwareScan: function() {
@@ -1422,7 +1471,13 @@ var toaster = (function() {
               type: "divide",
               value: options.change.amount,
               by: 1000
-            }) + "s cycles speed"];
+            }) + "s cycles speed, 1 cycle / " + operator({
+              type: "divide",
+              value: state.get({
+                path: "system.cycles.speed.interval.current"
+              }),
+              by: 1000
+            }) + "s"];
           },
           fail: function() {
             return ["toast inventory low, " + state.get({
