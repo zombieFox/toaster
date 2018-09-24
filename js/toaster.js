@@ -79,6 +79,7 @@ var toaster = (function() {
           multiply: 1.05
         },
         speed: {
+          level: 0,
           interval: {
             current: 10000,
             min: 1000
@@ -90,10 +91,9 @@ var toaster = (function() {
           }
         },
         efficiency: {
-          level: {
-            current: 1,
-            max: 10
-          },
+          level: 0,
+          current: 1,
+          max: 10,
           cost: {
             cycles: 80,
             toast: 170,
@@ -331,9 +331,9 @@ var toaster = (function() {
             // lock strategy auto toaster speed
             passed: false,
             validate: [{
-              address: "autoToaster.level",
+              address: "autoToaster.speed.level",
               operator: "more",
-              number: 2
+              number: 1
             }],
             actions: {
               lock: ["#stage-strategy-substage-auto-toaster-speed"],
@@ -371,9 +371,9 @@ var toaster = (function() {
             // lock strategy auto toaster efficiency
             passed: false,
             validate: [{
-              address: "autoToaster.level",
+              address: "autoToaster.efficiency.level",
               operator: "more",
-              number: 3
+              number: 1
             }],
             actions: {
               lock: ["#stage-strategy-substage-auto-toaster-efficiency"],
@@ -437,9 +437,9 @@ var toaster = (function() {
             // unlock auto toaster speed
             passed: false,
             validate: [{
-              address: "autoToaster.level",
+              address: "autoToaster.speed.level",
               operator: "more",
-              number: 2
+              number: 1
             }],
             actions: {
               unlock: ["#stage-auto-toaster-substage-speed"],
@@ -459,9 +459,9 @@ var toaster = (function() {
             // unlock auto toaster efficiency
             passed: false,
             validate: [{
-              address: "autoToaster.level",
+              address: "autoToaster.efficiency.level",
               operator: "more",
-              number: 3
+              number: 1
             }],
             actions: {
               unlock: ["#stage-auto-toaster-substage-efficiency"],
@@ -470,7 +470,7 @@ var toaster = (function() {
             // lock auto toaster efficiency controls
             passed: false,
             validate: [{
-              address: "autoToaster.efficiency.level.current",
+              address: "autoToaster.efficiency.current",
               operator: "more",
               number: 10
             }],
@@ -1010,7 +1010,7 @@ var toaster = (function() {
     var amount = state.get({
       path: "autoToaster.count"
     }) * state.get({
-      path: "autoToaster.efficiency.level.current"
+      path: "autoToaster.efficiency.current"
     });
     makeToast(amount);
   };
@@ -1542,7 +1542,7 @@ var toaster = (function() {
         efficiency: {
           success: function() {
             return ["+" + options.change.amount + " subordinate auto toasters efficiency, each producing " + state.get({
-              path: "autoToaster.efficiency.level.current"
+              path: "autoToaster.efficiency.current"
             }).toLocaleString(2) + " toast"];
           },
           fail: function() {
@@ -1796,7 +1796,7 @@ var toaster = (function() {
           path: "autoToaster.count"
         }),
         by: state.get({
-          path: "autoToaster.efficiency.level.current"
+          path: "autoToaster.efficiency.current"
         }),
         integer: true
       })
