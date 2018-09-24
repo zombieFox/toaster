@@ -10,6 +10,13 @@ var toaster = (function() {
         lifetime: 0,
         inventory: 0
       },
+      wheat: {
+        current: 570,
+        loaf: {
+          slice: 0,
+          max: 5
+        }
+      },
       system: {
         processor: {
           power: 1,
@@ -45,7 +52,7 @@ var toaster = (function() {
         sensors: {
           level: 0,
           cost: {
-            toast: 80000
+            toast: 60000
           }
         }
       },
@@ -110,7 +117,7 @@ var toaster = (function() {
             validate: [{
               address: "toast.lifetime",
               operator: "more",
-              number: 20
+              number: 10
             }],
             actions: {
               unlock: ["#stage-system"],
@@ -577,10 +584,38 @@ var toaster = (function() {
   var bind = function() {
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
-      toast: function(buttonOptions) {
+      toast: function() {
         makeToast(state.get({
           path: "system.processor.power"
         }));
+      },
+      wheat: function(button) {
+        var change = helper.makeObject(button.dataset.toastButtonChange);
+        var cost = helper.makeObject(button.dataset.toastButtonCost);
+        changeToasterValue({
+          change: {
+            target: change.target,
+            operation: change.operation,
+            suboperation: change.suboperation,
+            percentage: change.percentage,
+            amount: change.amount,
+            min: change.min,
+            max: change.max
+          },
+          cost: {
+            unites: cost.unites,
+            currency: cost.currency,
+            amount: cost.amount,
+            multiply: cost.multiply,
+            inflation: cost.inflation
+          },
+          message: {
+            success: "wheat.success",
+            fail: "wheat.fail"
+          },
+          button: button,
+          callback: changeMaxCycles
+        });
       },
       processor: {
         boost: function(button) {
@@ -850,26 +885,76 @@ var toaster = (function() {
   };
 
   var makeToast = function(amount) {
-    state.set({
-      path: "toast.lifetime",
-      value: operator({
-        type: "increase",
-        value: state.get({
-          path: "toast.lifetime"
-        }),
-        by: amount
+    var wheat = function(amount) {
+      while (amount > 0) {
+        amount--;
+        state.set({
+          path: "wheat.loaf.slice",
+          value: operator({
+            type: "increase",
+            value: state.get({
+              path: "wheat.loaf.slice"
+            }),
+            by: 1
+          })
+        });
+        // if slice == max reduce total wheat
+        if (state.get({
+            path: "wheat.loaf.slice"
+          }) == state.get({
+            path: "wheat.loaf.max"
+          })) {
+          state.set({
+            path: "wheat.loaf.slice",
+            value: 0
+          });
+          state.set({
+            path: "wheat.current",
+            value: operator({
+              type: "decrease",
+              value: state.get({
+                path: "wheat.current"
+              }),
+              by: 1
+            })
+          });
+        }
+      }
+    };
+    var toast = function(amount) {
+      state.set({
+        path: "toast.lifetime",
+        value: operator({
+          type: "increase",
+          value: state.get({
+            path: "toast.lifetime"
+          }),
+          by: amount
+        })
+      });
+      state.set({
+        path: "toast.inventory",
+        value: operator({
+          type: "increase",
+          value: state.get({
+            path: "toast.inventory"
+          }),
+          by: amount
+        })
+      });
+    };
+    if (state.get({
+        path: "wheat.current"
+      }) >= amount) {
+      wheat(amount);
+      toast(amount);
+    } else {
+      message.render({
+        type: "error",
+        message: ["wheat matter low"],
+        format: "normal"
       })
-    });
-    state.set({
-      path: "toast.inventory",
-      value: operator({
-        type: "increase",
-        value: state.get({
-          path: "toast.inventory"
-        }),
-        by: amount
-      })
-    });
+    }
   };
 
   var autoToast = function() {
@@ -1310,6 +1395,10 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var allMessages = {
+      wheat: {
+        success: ["yes"],
+        fail: ["no"]
+      },
       processor: {
         boost: {
           success: function() {
@@ -1418,7 +1507,7 @@ var toaster = (function() {
             return ["decrypted: sensors"];
           },
           fail: function() {
-            return [state.get({
+            return ["toast inventory low, " + state.get({
               path: "hardware.sensors.cost.toast"
             }).toLocaleString(2) + " toast matter needed"];
           }
@@ -1460,34 +1549,36 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var calculatedCost;
-    if (options.cost.inflation) {
-      calculatedCost = costForMultiple({
-        amount: options.cost.unites,
-        cost: {
-          base: options.cost.amount,
-          multiply: options.cost.multiply
+    var getCostObject = function() {
+      if (options.cost.inflation) {
+        calculatedCost = costForMultiple({
+          amount: options.cost.unites,
+          cost: {
+            base: options.cost.amount,
+            multiply: options.cost.multiply
+          }
+        });
+      } else {
+        calculatedCost = {
+          base: state.get({
+            path: options.cost.amount
+          }),
+          full: state.get({
+            path: options.cost.amount
+          })
         }
-      });
-    } else {
-      calculatedCost = {
-        base: state.get({
-          path: options.cost.amount
-        }),
-        full: state.get({
-          path: options.cost.amount
-        })
       }
-    }
-    var feedbackMessage = {
-      success: function() {
+      return calculatedCost;
+    };
+    var feedbackMessage = function(validate) {
+      if (validate == "success") {
         options.message = options.message.success;
         message.render({
           type: "system",
           message: changeToasterValueMessages(options),
           format: "normal"
         });
-      },
-      fail: function() {
+      } else if (validate == "fail") {
         options.message = options.message.fail;
         message.render({
           type: "error",
@@ -1505,77 +1596,7 @@ var toaster = (function() {
         return false;
       }
     };
-    var operation = {
-      increase: {
-        increment: function() {
-          state.set({
-            path: options.change.target,
-            value: operator({
-              type: "increase",
-              value: state.get({
-                path: options.change.target
-              }),
-              by: options.change.amount
-            })
-          });
-        },
-        percentage: function() {
-          state.set({
-            path: options.change.target,
-            value: operator({
-              type: "increase",
-              value: state.get({
-                path: options.change.target
-              }),
-              by: operator({
-                type: "percentage",
-                value: state.get({
-                  path: options.change.target
-                }),
-                percentage: options.change.percentage,
-                integer: true
-              })
-            })
-          });
-        }
-      },
-      decrease: {
-        increment: function() {
-          state.set({
-            path: options.change.target,
-            value: operator({
-              type: "decrease",
-              value: state.get({
-                path: options.change.target
-              }),
-              by: options.change.amount
-            })
-          });
-        },
-        percentage: function() {
-          state.set({
-            path: options.change.target,
-            value: operator({
-              type: "decrease",
-              value: state.get({
-                path: options.change.target
-              }),
-              by: operator({
-                type: "percentage",
-                value: state.get({
-                  path: options.change.target
-                }),
-                percentage: options.change.percentage,
-                integer: true
-              })
-            })
-          });
-        }
-      }
-    }
-    var changeValue = function() {
-      operation[options.change.operation][options.change.suboperation]();
-      // remove cost from toast inventory
+    var payCost = function() {
       state.set({
         path: options.cost.currency,
         value: operator({
@@ -1591,10 +1612,79 @@ var toaster = (function() {
         path: options.cost.amount,
         value: calculatedCost.base
       });
+    }
+    var changeValue = function() {
+      var operation = {
+        increase: {
+          increment: function() {
+            state.set({
+              path: options.change.target,
+              value: operator({
+                type: "increase",
+                value: state.get({
+                  path: options.change.target
+                }),
+                by: options.change.amount
+              })
+            });
+          },
+          percentage: function() {
+            state.set({
+              path: options.change.target,
+              value: operator({
+                type: "increase",
+                value: state.get({
+                  path: options.change.target
+                }),
+                by: operator({
+                  type: "percentage",
+                  value: state.get({
+                    path: options.change.target
+                  }),
+                  percentage: options.change.percentage,
+                  integer: true
+                })
+              })
+            });
+          }
+        },
+        decrease: {
+          increment: function() {
+            state.set({
+              path: options.change.target,
+              value: operator({
+                type: "decrease",
+                value: state.get({
+                  path: options.change.target
+                }),
+                by: options.change.amount
+              })
+            });
+          },
+          percentage: function() {
+            state.set({
+              path: options.change.target,
+              value: operator({
+                type: "decrease",
+                value: state.get({
+                  path: options.change.target
+                }),
+                by: operator({
+                  type: "percentage",
+                  value: state.get({
+                    path: options.change.target
+                  }),
+                  percentage: options.change.percentage,
+                  integer: true
+                })
+              })
+            });
+          }
+        }
+      };
+      operation[options.change.operation][options.change.suboperation]();
     };
-    // if inventory => cost
-    if (checkToastInventory()) {
-      changeValue();
+    var disableButton = function() {
       if (options.change.min != null && options.change.min) {
         if (state.get({
             path: options.change.target
@@ -1612,16 +1702,33 @@ var toaster = (function() {
           options.button.disabled = true;
         }
       }
-      if (options.callback != null) {
-        options.callback();
-      }
-      if (options.message.success != null) {
-        feedbackMessage.success();
+    }
+    // cost of base and inflated
+    if (options.cost.currency) {
+      calculatedCost = getCostObject();
+    } else {
+      calculatedCost = false;
+    }
+    // if cost exists
+    if (calculatedCost) {
+      // if inventory => cost
+      if (checkToastInventory()) {
+        payCost();
+        changeValue();
+        disableButton();
+        if (options.callback != null) {
+          options.callback();
+        }
+        if (options.message.success != null) {
+          feedbackMessage("success");
+        }
+      } else {
+        if (options.message.fail != null) {
+          feedbackMessage("fail");
+        }
       }
     } else {
-      if (options.message.fail != null) {
-        feedbackMessage.fail();
-      }
+      changeValue();
     }
   };
 

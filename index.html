@@ -107,6 +107,24 @@
               </div>
             </div>
 
+            <div class="card bg-light mb-3" id="stage-wheat">
+              <div class="card-header">
+                <p class="card-text mb-0"><strong>Wheat</strong></p>
+              </div>
+              <div class="card-body">
+                <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
+                  <span class="mr-1">Wheat matter:</span>
+                  <strong data-toast-readout="path:wheat.current,format:local,decimals:#2"></strong>
+                </p>
+                <button class="btn btn-sm btn-secondary"
+                data-toast-button="action:wheat"
+                data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#3,min:false,max:false"
+                data-toast-button-cost="unites:#3,currency:false,amount:false,multiply:false,inflation:false"
+                >Wheat +3</button>
+                <p class="card-text mb-0 small">1 wheat matter lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
+              </div>
+            </div>
+
             <div class="card mb-3 bg-danger text-white d-none" id="stage-consumer">
               <div class="card-header">
                 <p class="card-text mb-0"><strong>Toast Consumer</strong></p>
