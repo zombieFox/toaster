@@ -94,6 +94,14 @@
                   </div>
 
                 </div>
+                <div class="d-none" id="stage-system-substage-sensors">
+                  <hr>
+                  <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
+                    <span class="mr-1">Sensors Level:</span>
+                    <strong data-toast-readout="path:system.sensors.level,format:local,decimals:#2"></strong>
+                  </p>
+                  <p class="card-text mb-0 small">Electromagnetic & Sonic Sensors with extra spicy sauce</p>
+                </div>
                 <div class="d-none" id="stage-system-substage-matter-conversion">
                   <hr>
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
@@ -210,14 +218,14 @@
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:autoToaster.efficiency.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
                 </li>
 
-                <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-hardware">
-                  <p class="mb-1">Access system hardware:</p>
+                <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-sensors">
+                  <p class="mb-1">System sensors access blocked, disable SensBlocker.dat:</p>
                   <button class="btn btn-sm btn-dark mb-1"
-                  data-toast-button="action:strategy"
-                  data-toast-button-change="target:hardware.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
-                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:hardware.cost.cycles,multiply:false,inflation:false"
-                  >System Hardware</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
+                  data-toast-button="action:decrypt.sensors"
+                  data-toast-button-change="target:system.sensors.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:system.sensors.cost.cycles,multiply:false,inflation:false"
+                  >Break Code Shackles</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:system.sensors.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
                 </li>
 
               </ul>
@@ -307,6 +315,12 @@
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.sensors.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                 </div>
                 <div class="d-none" id="stage-hardware-substage-sensors">
+                  <button class="btn btn-sm btn-dark mb-1"
+                  data-toast-button="action:hardware.probe"
+                  data-toast-button-change="target:hardware.sensors.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                  data-toast-button-cost="unites:#1,currency:toast.inventory,amount:hardware.sensors.cost.toast,multiply:false,inflation:false"
+                  >Probe Local</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.sensors.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                   <p class="mb-0">=====================</p>
                 </div>
               </div>
