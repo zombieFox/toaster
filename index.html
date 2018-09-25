@@ -111,15 +111,17 @@
               </div>
               <div class="card-body">
                 <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
-                  <span class="mr-1">Wheat matter:</span>
+                  <span class="mr-1">Wheat Lump Inventory:</span>
                   <strong data-toast-readout="path:wheat.current,format:local,decimals:#2"></strong>
                 </p>
-                <!-- <button class="btn btn-sm btn-secondary"
-                data-toast-button="action:wheat"
-                data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#4,min:false,max:false"
-                data-toast-button-cost="unites:#4,currency:false,amount:false,multiply:false,inflation:false"
-                >Wheat +4</button> -->
-                <p class="card-text mb-0 small">1 wheat matter lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
+                <p class="card-text mb-2 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
+                <div class="d-none" id="stage-collect-wheat">
+                  <button class="btn btn-sm btn-secondary"
+                  data-toast-button="action:wheat"
+                  data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                  data-toast-button-cost="unites:#1,currency:false,amount:false,multiply:false,inflation:false"
+                  >Collect Wheat +1</button>
+                </div>
               </div>
             </div>
 
@@ -156,6 +158,16 @@
                   data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:system.cycles.cost.cycles,multiply:false,inflation:false"
                   >Cycles Speed</button>
                   <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:system.cycles.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
+                </li>
+
+                <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-collect-wheat">
+                  <p class="mb-1">Replenish wheat lump stocks</p>
+                  <button class="btn btn-sm btn-dark mb-1"
+                  data-toast-button="action:strategy"
+                  data-toast-button-change="target:wheat.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                  data-toast-button-cost="unites:#1,currency:system.cycles.current,amount:wheat.cost.cycles,multiply:false,inflation:false"
+                  >Collect Wheat</button>
+                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.cost.cycles,format:local,decimals:#2"></strong> cycles</p>
                 </li>
 
                 <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-matter-conversion">

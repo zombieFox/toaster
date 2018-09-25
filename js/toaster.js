@@ -11,7 +11,11 @@ var toaster = (function() {
         inventory: 0
       },
       wheat: {
-        current: 100000,
+        level: 0,
+        current: 1000,
+        cost: {
+          cycles: 5
+        },
         loaf: {
           slice: 0,
           max: 5
@@ -191,6 +195,10 @@ var toaster = (function() {
             // unlock strategy
             passed: false,
             validate: [{
+              address: "system.processor.power",
+              operator: "more",
+              number: 2
+            }, {
               address: "system.cycles.current",
               operator: "more",
               number: 1
@@ -200,6 +208,38 @@ var toaster = (function() {
               message: [{
                 type: "normal",
                 message: ["strategies discovered"],
+                format: "normal"
+              }]
+            }
+          }, {
+            // unlock strategy wheat collect
+            passed: false,
+            validate: [{
+              address: "system.cycles.current",
+              operator: "more",
+              number: 2
+            }],
+            actions: {
+              unlock: ["#stage-strategy-substage-collect-wheat"],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: collect wheat"],
+                format: "normal"
+              }]
+            }
+          }, {
+            // lock strategy wheat collect
+            passed: false,
+            validate: [{
+              address: "wheat.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              lock: ["#stage-strategy-substage-collect-wheat"],
+              message: [{
+                type: "success",
+                message: ["collect wheat developed"],
                 format: "normal"
               }]
             }
@@ -230,8 +270,8 @@ var toaster = (function() {
             actions: {
               lock: ["#stage-strategy-substage-cycles-speed"],
               message: [{
-                type: "normal",
-                message: ["new strategy discovered: cycles speed"],
+                type: "success",
+                message: ["cycles speed discovered"],
                 format: "normal"
               }]
             }
@@ -418,6 +458,19 @@ var toaster = (function() {
                 message: ["hardware access developed"],
                 format: "normal"
               }]
+            }
+          }],
+
+          wheat: [{
+            // unlock wheat collect
+            passed: false,
+            validate: [{
+              address: "wheat.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              unlock: ["#stage-collect-wheat"]
             }
           }],
 
@@ -2129,7 +2182,7 @@ var toaster = (function() {
       tickName: "events",
       func: function() {
         events();
-        // milestones();
+        milestones();
         store();
         render();
       },
