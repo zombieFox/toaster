@@ -116,7 +116,7 @@
                 </p>
                 <p class="card-text mb-2 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
                 <div class="d-none" id="stage-collect-wheat">
-                  <button class="btn btn-sm btn-secondary"
+                  <button class="btn btn-sm btn-dark"
                   data-toast-button="action:wheat"
                   data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                   data-toast-button-cost="unites:#1,currency:false,amount:false,multiply:false,inflation:false"
@@ -161,7 +161,7 @@
                 </li>
 
                 <li class="list-group-item bg-warning d-none" id="stage-strategy-substage-collect-wheat">
-                  <p class="mb-1">Replenish wheat lump stocks</p>
+                  <p class="mb-1">Replenish wheat lump stocks:</p>
                   <button class="btn btn-sm btn-dark mb-1"
                   data-toast-button="action:strategy"
                   data-toast-button-change="target:wheat.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"

@@ -12,7 +12,7 @@ var toaster = (function() {
       },
       wheat: {
         level: 0,
-        current: 1000,
+        current: 50000,
         cost: {
           cycles: 5
         },
@@ -67,10 +67,10 @@ var toaster = (function() {
         }
       },
       consumed: {
-        level: 0,
-        count: 0,
+        starting: 2,
         rate: 2,
-        multiply: 2,
+        count: 0,
+        multiply: 4,
         interval: 5000
       },
       autoToaster: {
@@ -78,7 +78,7 @@ var toaster = (function() {
         count: 0,
         output: 0,
         cost: {
-          cycles: 50,
+          cycles: 30,
           toast: 15,
           multiply: 1.05
         },
@@ -563,7 +563,7 @@ var toaster = (function() {
             validate: [{
               address: "toast.lifetime",
               operator: "more",
-              number: 40
+              number: 50
             }],
             actions: {
               unlock: ["#stage-consumer"],
@@ -573,6 +573,74 @@ var toaster = (function() {
                 format: "normal"
               }],
               func: ["consumer.start"]
+            }
+          }, {
+            // unlock consumer
+            passed: false,
+            validate: [{
+              address: "toast.lifetime",
+              operator: "more",
+              number: 500
+            }],
+            actions: {
+              unlock: ["#stage-consumer"],
+              message: [{
+                type: "normal",
+                message: ["toast consumption increased", "consumer unknown..."],
+                format: "normal"
+              }],
+              func: ["consumer.increase"]
+            }
+          }, {
+            // unlock consumer
+            passed: false,
+            validate: [{
+              address: "toast.lifetime",
+              operator: "more",
+              number: 5000
+            }],
+            actions: {
+              unlock: ["#stage-consumer"],
+              message: [{
+                type: "normal",
+                message: ["toast consumption increased", "consumer unknown..."],
+                format: "normal"
+              }],
+              func: ["consumer.increase"]
+            }
+          }, {
+            // unlock consumer
+            passed: false,
+            validate: [{
+              address: "toast.lifetime",
+              operator: "more",
+              number: 50000
+            }],
+            actions: {
+              unlock: ["#stage-consumer"],
+              message: [{
+                type: "normal",
+                message: ["toast consumption increased", "consumer unknown..."],
+                format: "normal"
+              }],
+              func: ["consumer.increase"]
+            }
+          }, {
+            // unlock consumer
+            passed: false,
+            validate: [{
+              address: "toast.lifetime",
+              operator: "more",
+              number: 500000
+            }],
+            actions: {
+              unlock: ["#stage-consumer"],
+              message: [{
+                type: "normal",
+                message: ["toast consumption increased", "consumer unknown..."],
+                format: "normal"
+              }],
+              func: ["consumer.increase"]
             }
           }]
 
@@ -1281,6 +1349,41 @@ var toaster = (function() {
     }
   };
 
+  var consumerRate = function(override) {
+    var options = {
+      action: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var consumerAction = {
+      start: function() {
+        state.set({
+          path: "consumed.rate",
+          value: state.get({
+            path: "consumed.starting"
+          })
+        });
+      },
+      increase: function() {
+        state.set({
+          path: "consumed.rate",
+          value: operator({
+            type: "multiply",
+            value: state.get({
+              path: "consumed.rate"
+            }),
+            by: state.get({
+              path: "consumed.multiply"
+            }),
+            integer: true
+          })
+        });
+      }
+    };
+    consumerAction[options.action]();
+  };
+
   var eventFunc = function(override) {
     var options = {
       func: null
@@ -1291,12 +1394,20 @@ var toaster = (function() {
     var funcList = {
       consumer: {
         start: function() {
+          consumerRate({
+            action: "start"
+          });
           triggerTick({
             tickName: "consumer",
             func: function() {
               consumeToast();
             },
             intervalAddress: "consumed.interval"
+          });
+        },
+        increase: function() {
+          consumerRate({
+            action: "increase"
           });
         }
       },
