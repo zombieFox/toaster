@@ -64,6 +64,8 @@ var toaster = (function() {
           cost: {
             toast: 60000
           }
+          scan: {
+          }
         }
       },
       consumed: {
@@ -553,7 +555,12 @@ var toaster = (function() {
             }],
             actions: {
               lock: ["#stage-hardware-substage-sensors-encrypted"],
-              unlock: ["#stage-hardware-substage-sensors"]
+              unlock: ["#stage-hardware-substage-sensors"],
+              message: [{
+                type: "system",
+                message: ["SensBlocker.dat disabled"],
+                format: "normal"
+              }],
             }
           }],
 
@@ -575,7 +582,7 @@ var toaster = (function() {
               func: ["consumer.start"]
             }
           }, {
-            // unlock consumer
+            // increase consumer
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -583,7 +590,6 @@ var toaster = (function() {
               number: 500
             }],
             actions: {
-              unlock: ["#stage-consumer"],
               message: [{
                 type: "normal",
                 message: ["toast consumption increased", "consumer unknown..."],
@@ -592,7 +598,7 @@ var toaster = (function() {
               func: ["consumer.increase"]
             }
           }, {
-            // unlock consumer
+            // increase consumer
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -600,7 +606,6 @@ var toaster = (function() {
               number: 5000
             }],
             actions: {
-              unlock: ["#stage-consumer"],
               message: [{
                 type: "normal",
                 message: ["toast consumption increased", "consumer unknown..."],
@@ -609,7 +614,7 @@ var toaster = (function() {
               func: ["consumer.increase"]
             }
           }, {
-            // unlock consumer
+            // increase consumer
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -617,7 +622,6 @@ var toaster = (function() {
               number: 50000
             }],
             actions: {
-              unlock: ["#stage-consumer"],
               message: [{
                 type: "normal",
                 message: ["toast consumption increased", "consumer unknown..."],
@@ -626,7 +630,7 @@ var toaster = (function() {
               func: ["consumer.increase"]
             }
           }, {
-            // unlock consumer
+            // increase consumer
             passed: false,
             validate: [{
               address: "toast.lifetime",
@@ -634,7 +638,6 @@ var toaster = (function() {
               number: 500000
             }],
             actions: {
-              unlock: ["#stage-consumer"],
               message: [{
                 type: "normal",
                 message: ["toast consumption increased", "consumer unknown..."],
@@ -1349,41 +1352,6 @@ var toaster = (function() {
     }
   };
 
-  var consumerRate = function(override) {
-    var options = {
-      action: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var consumerAction = {
-      start: function() {
-        state.set({
-          path: "consumed.rate",
-          value: state.get({
-            path: "consumed.starting"
-          })
-        });
-      },
-      increase: function() {
-        state.set({
-          path: "consumed.rate",
-          value: operator({
-            type: "multiply",
-            value: state.get({
-              path: "consumed.rate"
-            }),
-            by: state.get({
-              path: "consumed.multiply"
-            }),
-            integer: true
-          })
-        });
-      }
-    };
-    consumerAction[options.action]();
-  };
-
   var eventFunc = function(override) {
     var options = {
       func: null
@@ -1394,7 +1362,7 @@ var toaster = (function() {
     var funcList = {
       consumer: {
         start: function() {
-          consumerRate({
+          changeConsumerRate({
             action: "start"
           });
           triggerTick({
@@ -1406,7 +1374,7 @@ var toaster = (function() {
           });
         },
         increase: function() {
-          consumerRate({
+          changeConsumerRate({
             action: "increase"
           });
         }
@@ -1528,30 +1496,6 @@ var toaster = (function() {
       }) + messageParts[options.type].suffix],
       format: "normal"
     });
-  };
-
-  var tick = {
-    events: null,
-    consumer: null,
-    autoToaster: null,
-    cycles: null
-  };
-
-  var triggerTick = function(override) {
-    var options = {
-      tickName: null,
-      func: null,
-      intervalAddress: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    tick[options.tickName] = window.setTimeout(function() {
-      options.func();
-      triggerTick(options);
-    }, state.get({
-      path: options.intervalAddress
-    }));
   };
 
   var costForMultiple = function(override) {
@@ -1967,20 +1911,6 @@ var toaster = (function() {
     });
   };
 
-  // var changeAutoToasterSpeed = function() {
-  //   state.set({
-  //     path: "autoToaster.speed.interval.current",
-  //     value: operator({
-  //       type: "multiply",
-  //       value: state.get({
-  //         path: "autoToaster.speed.level"
-  //       }),
-  //       by: 1000,
-  //       integer: true
-  //     })
-  //   });
-  // };
-
   var scan = function() {
     message.render({
       type: "system",
@@ -2171,6 +2101,41 @@ var toaster = (function() {
     }
   };
 
+  var changeConsumerRate = function(override) {
+    var options = {
+      action: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var consumerAction = {
+      start: function() {
+        state.set({
+          path: "consumed.rate",
+          value: state.get({
+            path: "consumed.starting"
+          })
+        });
+      },
+      increase: function() {
+        state.set({
+          path: "consumed.rate",
+          value: operator({
+            type: "multiply",
+            value: state.get({
+              path: "consumed.rate"
+            }),
+            by: state.get({
+              path: "consumed.multiply"
+            }),
+            integer: true
+          })
+        });
+      }
+    };
+    consumerAction[options.action]();
+  };
+
   var changeMaxCycles = function() {
     state.set({
       path: "system.cycles.max",
@@ -2283,6 +2248,30 @@ var toaster = (function() {
       precision = 0;
     }
     return options.number.toFixed(precision) + suffix;
+  };
+
+  var tick = {
+    events: null,
+    consumer: null,
+    autoToaster: null,
+    cycles: null
+  };
+
+  var triggerTick = function(override) {
+    var options = {
+      tickName: null,
+      func: null,
+      intervalAddress: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    tick[options.tickName] = window.setTimeout(function() {
+      options.func();
+      triggerTick(options);
+    }, state.get({
+      path: options.intervalAddress
+    }));
   };
 
   var init = function() {
