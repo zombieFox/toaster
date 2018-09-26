@@ -12,13 +12,16 @@ var toaster = (function() {
       },
       wheat: {
         level: 0,
-        current: 50000,
+        current: 25000,
         cost: {
-          cycles: 5
+          cycles: 20,
+          multiply: 2.5,
+          toast: 200
         },
         loaf: {
           slice: 0,
-          max: 5
+          max: 5,
+          multiply: 2
         }
       },
       system: {
@@ -66,7 +69,7 @@ var toaster = (function() {
         rate: 2,
         count: 0,
         multiply: 4,
-        interval: 5000
+        interval: 10000
       },
       autoToaster: {
         level: 0,
@@ -85,8 +88,8 @@ var toaster = (function() {
           },
           cost: {
             cycles: 70,
-            toast: 10,
-            multiply: 1.1
+            toast: 160,
+            multiply: 1.8
           }
         },
         efficiency: {
@@ -95,7 +98,7 @@ var toaster = (function() {
           max: 10,
           cost: {
             cycles: 80,
-            toast: 170,
+            toast: 180,
             multiply: 2.5
           }
         }
@@ -246,6 +249,42 @@ var toaster = (function() {
               message: [{
                 type: "success",
                 message: ["collect wheat developed"],
+                format: "normal"
+              }]
+            }
+          }, {
+            // unlock strategy more toast from wheat 
+            passed: false,
+            validate: [{
+              address: "system.cycles.current",
+              operator: "more",
+              number: 20
+            }, {
+              address: "wheat.level",
+              operator: "more",
+              number: 1
+            }],
+            actions: {
+              unlock: ["#stage-strategy-substage-more-toast-from-wheat"],
+              message: [{
+                type: "normal",
+                message: ["new strategy discovered: more toast from wheat"],
+                format: "normal"
+              }]
+            }
+          }, {
+            // lock strategy more toast from wheat
+            passed: false,
+            validate: [{
+              address: "wheat.level",
+              operator: "more",
+              number: 2
+            }],
+            actions: {
+              lock: ["#stage-strategy-substage-more-toast-from-wheat"],
+              message: [{
+                type: "success",
+                message: ["more toast from wheat developed"],
                 format: "normal"
               }]
             }
@@ -481,6 +520,17 @@ var toaster = (function() {
             }],
             actions: {
               unlock: ["#stage-collect-wheat"]
+            }
+          }, {
+            // unlock wheat collect
+            passed: false,
+            validate: [{
+              address: "wheat.level",
+              operator: "more",
+              number: 2
+            }],
+            actions: {
+              func: ["wheat.moreToast"]
             }
           }],
 
@@ -756,7 +806,7 @@ var toaster = (function() {
             max: change.max
           },
           cost: {
-            unites: cost.unites,
+            units: cost.units,
             currency: cost.currency,
             amount: cost.amount,
             multiply: cost.multiply,
@@ -766,8 +816,7 @@ var toaster = (function() {
             success: "wheat.success",
             fail: "wheat.fail"
           },
-          button: button,
-          callback: changeMaxCycles
+          button: button
         });
       },
       processor: {
@@ -785,7 +834,7 @@ var toaster = (function() {
               max: change.max
             },
             cost: {
-              unites: cost.unites,
+              units: cost.units,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -817,7 +866,7 @@ var toaster = (function() {
                   max: change.max
                 },
                 cost: {
-                  unites: cost.unites,
+                  units: cost.units,
                   currency: cost.currency,
                   amount: cost.amount,
                   multiply: cost.multiply,
@@ -844,7 +893,7 @@ var toaster = (function() {
               max: change.max
             },
             cost: {
-              unites: cost.unites,
+              units: cost.units,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -873,7 +922,7 @@ var toaster = (function() {
             max: change.max
           },
           cost: {
-            unites: cost.unites,
+            units: cost.units,
             currency: cost.currency,
             amount: cost.amount,
             multiply: cost.multiply,
@@ -901,7 +950,7 @@ var toaster = (function() {
               max: change.max
             },
             cost: {
-              unites: cost.unites,
+              units: cost.units,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -929,7 +978,7 @@ var toaster = (function() {
               max: change.max
             },
             cost: {
-              unites: cost.unites,
+              units: cost.units,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -956,7 +1005,7 @@ var toaster = (function() {
               max: change.max
             },
             cost: {
-              unites: cost.unites,
+              units: cost.units,
               currency: cost.currency,
               amount: cost.amount,
               multiply: cost.multiply,
@@ -1377,12 +1426,32 @@ var toaster = (function() {
           },
           intervalAddress: "system.cycles.speed.interval.current"
         });
+      },
+      wheat: {
+        moreToast: function() {
+          doubleToastFromWheat();
+        }
       }
     };
     helper.getObject({
       object: funcList,
       path: options.func
     })();
+  };
+
+  var doubleToastFromWheat = function() {
+    state.set({
+      path: "wheat.loaf.max",
+      value: operator({
+        type: "multiply",
+        value: state.get({
+          path: "wheat.loaf.max"
+        }),
+        by: state.get({
+          path: "wheat.loaf.multiply"
+        })
+      })
+    })
   };
 
   var makeMilestones = function() {
@@ -1478,33 +1547,57 @@ var toaster = (function() {
 
   var costForMultiple = function(override) {
     var options = {
-      amount: null,
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
       cost: {
-        base: null,
-        multiply: null
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
       }
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var cost = {
-      full: 0,
-      base: 0
-    };
-    cost.base = state.get({
-      path: options.cost.base
-    });
-    for (var i = 0; i < options.amount; i++) {
-      cost.full = cost.full + cost.base;
-      cost.base = operator({
-        type: "multiply",
-        value: cost.base,
-        by: state.get({
-          path: options.cost.multiply
+    var cost = {};
+    if (options.cost.currency != null && options.cost.currency) {
+      cost = {
+        amount: options.cost.units,
+        starting: state.get({
+          path: options.cost.amount
         }),
-        integer: true
-      })
-    };
+        next: state.get({
+          path: options.cost.amount
+        }),
+        multiple: 0
+      };
+      if (options.cost.multiply != null && options.cost.multiply) {
+        for (var i = 0; i < options.cost.units; i++) {
+          cost.multiple = cost.multiple + cost.next;
+          cost.next = operator({
+            type: "multiply",
+            value: cost.next,
+            by: state.get({
+              path: options.cost.multiply
+            }),
+            integer: true
+          });
+        };
+      } else {
+        cost.multiple = cost.next;
+      };
+      cost.free = false;
+    } else {
+      cost.free = true;
+    }
     return cost;
   };
 
@@ -1518,7 +1611,7 @@ var toaster = (function() {
         amount: null
       },
       cost: {
-        unites: null,
+        units: null,
         currency: null,
         amount: null,
         multiply: null,
@@ -1529,6 +1622,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    console.log(options.message);
     var allMessages = {
       wheat: {
         success: ["yes"],
@@ -1542,13 +1636,7 @@ var toaster = (function() {
             }).toLocaleString(2) + " toast with every click"];
           },
           fail: function() {
-            return ["toast inventory low, " + costForMultiple({
-              amount: options.cost.unites,
-              cost: {
-                base: options.cost.amount,
-                multiply: options.cost.multiply
-              }
-            }).full.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
           }
         },
         cycles: {
@@ -1592,13 +1680,7 @@ var toaster = (function() {
             }).toLocaleString(2) + " online"];
           },
           fail: function() {
-            return ["toast inventory low, " + costForMultiple({
-              amount: options.cost.unites,
-              cost: {
-                base: options.cost.amount,
-                multiply: options.cost.multiply
-              }
-            }).full.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
           }
         },
         speed: {
@@ -1616,13 +1698,7 @@ var toaster = (function() {
             }).toLocaleString(2) + "s"];
           },
           fail: function() {
-            return ["toast inventory low, " + costForMultiple({
-              amount: options.cost.unites,
-              cost: {
-                base: options.cost.amount,
-                multiply: options.cost.multiply
-              }
-            }).full.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
           }
         },
         efficiency: {
@@ -1632,13 +1708,7 @@ var toaster = (function() {
             }).toLocaleString(2) + " toast"];
           },
           fail: function() {
-            return ["toast inventory low, " + costForMultiple({
-              amount: options.cost.unites,
-              cost: {
-                base: options.cost.amount,
-                multiply: options.cost.multiply
-              }
-            }).full.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
           }
         }
       }
@@ -1647,6 +1717,38 @@ var toaster = (function() {
       object: allMessages,
       path: options.message
     })();
+  };
+
+  var validateAction = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      }
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var cost = costForMultiple(options);
+    var validate = false
+    if (state.get({
+        path: options.cost.currency
+      }) >= cost.multiple) {
+      validate = true;
+    }
+    return validate;
   };
 
   var changeToasterValue = function(override) {
@@ -1661,7 +1763,7 @@ var toaster = (function() {
         max: null
       },
       cost: {
-        unites: null,
+        units: null,
         currency: null,
         amount: null,
         multiply: null,
@@ -1677,28 +1779,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var calculatedCost;
-    var getCostObject = function() {
-      if (options.cost.inflation) {
-        calculatedCost = costForMultiple({
-          amount: options.cost.unites,
-          cost: {
-            base: options.cost.amount,
-            multiply: options.cost.multiply
-          }
-        });
-      } else {
-        calculatedCost = {
-          base: state.get({
-            path: options.cost.amount
-          }),
-          full: state.get({
-            path: options.cost.amount
-          })
-        }
-      }
-      return calculatedCost;
-    };
+    var cost = costForMultiple(options);
     var feedbackMessage = function(validate) {
       if (validate == "success") {
         options.message = options.message.success;
@@ -1716,15 +1797,6 @@ var toaster = (function() {
         });
       }
     };
-    var checkToastInventory = function() {
-      if (state.get({
-          path: options.cost.currency
-        }) >= calculatedCost.full) {
-        return true;
-      } else {
-        return false;
-      }
-    };
     var payCost = function() {
       state.set({
         path: options.cost.currency,
@@ -1733,13 +1805,13 @@ var toaster = (function() {
           value: state.get({
             path: options.cost.currency
           }),
-          by: calculatedCost.full
+          by: cost.multiple
         })
       });
       // set new base cost
       state.set({
         path: options.cost.amount,
-        value: calculatedCost.base
+        value: cost.next
       });
     }
     var changeValue = function() {
@@ -1832,16 +1904,9 @@ var toaster = (function() {
         }
       }
     }
-    // cost of base and inflated
-    if (options.cost.currency) {
-      calculatedCost = getCostObject();
-    } else {
-      calculatedCost = false;
-    }
-    // if cost exists
-    if (calculatedCost) {
-      // if inventory => cost
-      if (checkToastInventory()) {
+    if (!cost.free) {
+      // if inventory is greater or equal to cost
+      if (validateAction(options)) {
         payCost();
         changeValue();
         disableButton();
@@ -2099,6 +2164,7 @@ var toaster = (function() {
   };
 
   return {
+    costForMultiple: costForMultiple,
     operator: operator,
     init: init,
     events: events,
