@@ -29,7 +29,7 @@ var toaster = (function() {
           power: 1,
           cost: {
             toast: 12,
-            multiply: 1.1
+            multiply: 1.3
           },
           delay: 200
         },
@@ -87,9 +87,9 @@ var toaster = (function() {
             min: 1000
           },
           cost: {
-            cycles: 70,
-            toast: 160,
-            multiply: 1.8
+            cycles: 30,
+            toast: 60,
+            multiply: 1.6
           }
         },
         efficiency: {
@@ -97,9 +97,9 @@ var toaster = (function() {
           current: 1,
           max: 10,
           cost: {
-            cycles: 80,
-            toast: 180,
-            multiply: 2.5
+            cycles: 40,
+            toast: 140,
+            multiply: 2.2
           }
         }
       },
