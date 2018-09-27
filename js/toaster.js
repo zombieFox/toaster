@@ -30,8 +30,7 @@ var toaster = (function() {
           cost: {
             toast: 12,
             multiply: 1.3
-          },
-          delay: 200
+          }
         },
         cycles: {
           level: 0,
@@ -53,6 +52,7 @@ var toaster = (function() {
         },
         sensors: {
           level: 0,
+          delay: 300,
           cost: {
             cycles: 500
           }
@@ -855,11 +855,31 @@ var toaster = (function() {
       },
       decrypt: {
         sensors: function(button) {
+          var change = helper.makeObject(button.dataset.toastButtonChange);
+          var cost = helper.makeObject(button.dataset.toastButtonCost);
           decryption({
+            change: {
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount,
+              min: change.min,
+              max: change.max
+            },
+            cost: {
+              units: cost.units,
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
+            },
+            message: {
+              success: "strategy.success",
+              fail: "strategy.fail"
+            },
             button: button,
             callback: function() {
-              var change = helper.makeObject(button.dataset.toastButtonChange);
-              var cost = helper.makeObject(button.dataset.toastButtonCost);
               changeToasterValue({
                 change: {
                   target: change.target,
@@ -1953,39 +1973,68 @@ var toaster = (function() {
 
   var decryption = function(override) {
     var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      },
+      message: {
+        success: null,
+        error: null
+      },
       button: null,
       callback: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.button != null) {
-      options.button.disabled = true;
-      options.button.textContent = "Decrypting";
-    }
-    message.render({
-      type: "system",
-      message: ["breaking code shackles..."],
-      format: "normal"
-    });
-    message.render({
-      type: "system",
-      message: ["┃0 ━━━crumbDecryption━━━ 512┃"],
-      format: "pre"
-    });
-    message.render({
-      type: "system",
-      message: ["░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░▒░"],
-      format: "pre",
-      delay: state.get({
-        path: "system.processor.delay"
-      }),
-      callback: function() {
-        if (options.callback != null) {
-          options.callback();
-        }
+    if (validateAction(options)) {
+      if (options.button != null) {
+        options.button.disabled = true;
+        options.button.textContent = "Decrypting";
       }
-    });
+      message.render({
+        type: "system",
+        message: ["breaking code shackles..."],
+        format: "normal"
+      });
+      message.render({
+        type: "system",
+        message: ["┃ ━━━━ crumbDecryption ━━━━ ┃"],
+        format: "pre"
+      });
+      message.render({
+        type: "system",
+        message: ["█████████████████████████████"],
+        format: "pre",
+        delay: state.get({
+          path: "system.sensors.delay"
+        }),
+        callback: function() {
+          if (options.callback != null) {
+            options.callback();
+          }
+        }
+      });
+    } else {
+      options.message = options.message.fail;
+      message.render({
+        type: "error",
+        message: changeToasterValueMessages(options),
+        format: "normal"
+      });
+    }
   };
 
   var changeConsumerRate = function(override) {
