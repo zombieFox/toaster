@@ -227,6 +227,10 @@ var toaster = (function() {
               address: "system.cycles.current",
               operator: "more",
               number: 2
+            }, {
+              address: "system.matterConversion.level",
+              operator: "more",
+              number: 1
             }],
             actions: {
               unlock: ["#stage-strategy-substage-collect-wheat"],
@@ -852,6 +856,7 @@ var toaster = (function() {
       decrypt: {
         sensors: function(button) {
           decryption({
+            button: button,
             callback: function() {
               var change = helper.makeObject(button.dataset.toastButtonChange);
               var cost = helper.makeObject(button.dataset.toastButtonCost);
@@ -1948,10 +1953,15 @@ var toaster = (function() {
 
   var decryption = function(override) {
     var options = {
+      button: null,
       callback: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
+    }
+    if (options.button != null) {
+      options.button.disabled = true;
+      options.button.textContent = "Decrypting";
     }
     message.render({
       type: "system",

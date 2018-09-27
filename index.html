@@ -40,7 +40,7 @@
               </div>
             </div>
 
-            <div class="card mb-3 bg-dark text-white d-none" id="stage-system">
+            <div class="card mb-3 bg-light d-none" id="stage-system">
               <div class="card-header">
                 <p class="card-text mb-0">
                   <strong>System</strong>
@@ -53,22 +53,22 @@
                 </p>
                 <p class="card-text mb-1 small">Boost processor power with reverse antimatter quantum particles for more toast with every click</p>
                 <div class="btn-group mb-1">
-                  <button class="btn btn-sm btn-secondary"
+                  <button class="btn btn-sm btn-info"
                   data-toast-button="action:processor.boost"
                   data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                   data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true"
                   >Boost +1</button>
-                  <button class="btn btn-sm btn-secondary"
+                  <button class="btn btn-sm btn-info"
                   data-toast-button="action:processor.boost"
                   data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
                   data-toast-button-cost="units:#10,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true"
                   >+10</button>
-                  <button class="btn btn-sm btn-secondary"
+                  <button class="btn btn-sm btn-info"
                   data-toast-button="action:processor.boost"
                   data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#20,min:false,max:false"
                   data-toast-button-cost="units:#20,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true"
                   >+20</button>
-                  <button class="btn btn-sm btn-secondary"
+                  <button class="btn btn-sm btn-info"
                   data-toast-button="action:processor.boost"
                   data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#50,min:false,max:false"
                   data-toast-button-cost="units:#50,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true"
@@ -85,7 +85,7 @@
 
                   <div class="d-none" id="stage-system-substage-cycles-controls">
                     <p class="card-text mb-1 small">Speed up cycles by adding more hamsters in wheels</p>
-                    <button class="btn btn-sm btn-secondary mb-1"
+                    <button class="btn btn-sm btn-info mb-1"
                     data-toast-button="action:cycles.speed"
                     data-toast-button-change="target:system.cycles.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.speed.interval.min,max:false"
                     data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.cycles.speed.cost.toast,multiply:system.cycles.speed.cost.multiply,inflation:true"
@@ -307,33 +307,6 @@
                     >Efficiency +1</button>
                     <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:autoToaster.efficiency.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card mb-3 d-none" id="stage-hardware">
-              <div class="card-header">
-                <p class="card-text mb-0"><strong>Hardware</strong></p>
-              </div>
-              <div class="card-body">
-                <div class="d-none" id="stage-hardware-substage-sensors-encrypted">
-                  <p class="card-text mb-0">Encrypted</p>
-                  <p class="card-text mb-1 small">SensBlocker.dat blocking access to subsystem</p>
-                  <button class="btn btn-sm btn-warning mb-1"
-                  data-toast-button="action:decrypt.sensors"
-                  data-toast-button-change="target:hardware.sensors.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
-                  data-toast-button-cost="units:#1,currency:toast.inventory,amount:hardware.sensors.cost.toast,multiply:false,inflation:false"
-                  >Break Code Shackle</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.sensors.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
-                </div>
-                <div class="d-none" id="stage-hardware-substage-sensors">
-                  <button class="btn btn-sm btn-dark mb-1"
-                  data-toast-button="action:hardware.probe"
-                  data-toast-button-change="target:hardware.sensors.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
-                  data-toast-button-cost="units:#1,currency:toast.inventory,amount:hardware.sensors.cost.toast,multiply:false,inflation:false"
-                  >Probe Local</button>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:hardware.sensors.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
-                  <p class="mb-0">=====================</p>
                 </div>
               </div>
             </div>
