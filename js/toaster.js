@@ -1622,12 +1622,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    console.log(options.message);
     var allMessages = {
-      wheat: {
-        success: ["yes"],
-        fail: ["no"]
-      },
       processor: {
         boost: {
           success: function() {
@@ -1711,6 +1706,14 @@ var toaster = (function() {
             return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
           }
         }
+      },
+      wheat: {
+        success: function() {
+          return ["+" + options.change.amount + " wheat lumps"];
+        },
+        fail: function() {
+          return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
+        }
       }
     };
     return helper.getObject({
@@ -1780,15 +1783,16 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var cost = costForMultiple(options);
-    var feedbackMessage = function(validate) {
-      if (validate == "success") {
+    var feedbackMessage = {
+      success: function() {
         options.message = options.message.success;
         message.render({
           type: "system",
           message: changeToasterValueMessages(options),
           format: "normal"
         });
-      } else if (validate == "fail") {
+      },
+      fail: function() {
         options.message = options.message.fail;
         message.render({
           type: "error",
@@ -1914,11 +1918,11 @@ var toaster = (function() {
           options.callback();
         }
         if (options.message.success != null) {
-          feedbackMessage("success");
+          feedbackMessage.success();
         }
       } else {
         if (options.message.fail != null) {
-          feedbackMessage("fail");
+          feedbackMessage.fail();
         }
       }
     } else {
