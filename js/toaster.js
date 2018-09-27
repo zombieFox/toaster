@@ -12,7 +12,7 @@ var toaster = (function() {
       },
       wheat: {
         level: 0,
-        current: 25000,
+        current: 12000,
         cost: {
           cycles: 20,
           multiply: 2.5,
