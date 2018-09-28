@@ -296,6 +296,10 @@ var toaster = (function() {
             // unlock strategy cycles speed
             passed: false,
             validate: [{
+              address: "system.matterConversion.level",
+              operator: "more",
+              number: 1
+            }, {
               address: "system.cycles.current",
               operator: "more",
               number: 2
@@ -818,11 +822,11 @@ var toaster = (function() {
           },
           message: {
             success: {
-              path: "processor.boost.success",
+              path: "wheat.success",
               state: false
             },
             fail: {
-              path: "processor.boost.fail",
+              path: "wheat.fail",
               state: false
             }
           },
