@@ -257,7 +257,7 @@ var toaster = (function() {
               }]
             }
           }, {
-            // unlock strategy more toast from wheat 
+            // unlock strategy more toast from wheat
             passed: false,
             validate: [{
               address: "system.cycles.current",
@@ -817,8 +817,14 @@ var toaster = (function() {
             inflation: cost.inflation
           },
           message: {
-            success: "wheat.success",
-            fail: "wheat.fail"
+            success: {
+              path: "wheat.success",
+              state: false
+            },
+            fail: {
+              path: "wheat.fail",
+              state: false
+            }
           },
           button: button
         });
@@ -845,8 +851,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "processor.boost.success",
-              fail: "processor.boost.fail"
+              success: {
+                path: "processor.boost.success",
+                state: false
+              },
+              fail: {
+                path: "processor.boost.fail",
+                state: false
+              }
             },
             button: button,
             callback: changeMaxCycles
@@ -857,6 +869,55 @@ var toaster = (function() {
         sensors: function(button) {
           var change = helper.makeObject(button.dataset.toastButtonChange);
           var cost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
+            change: {
+              target: change.target,
+              operation: change.operation,
+              suboperation: change.suboperation,
+              percentage: change.percentage,
+              amount: change.amount,
+              min: change.min,
+              max: change.max
+            },
+            cost: {
+              units: cost.units,
+              currency: cost.currency,
+              amount: cost.amount,
+              multiply: cost.multiply,
+              inflation: cost.inflation
+            },
+            message: {
+              success: {
+                path: "strategy.success",
+                state: false
+              },
+              fail: {
+                path: "strategy.fail",
+                state: false
+              }
+            },
+            button: button
+          };
+          var cost = costForMultiple(options);
+          if (!cost.free) {
+            if (validateAction(options)) {
+              payCost(options);
+              changeValue(options);
+              disableButton(options);
+              if (options.callback != null) {
+                options.callback();
+              }
+              if (options.message.success != null) {
+                feedbackMessage.success();
+              }
+            } else {
+              if (options.message.fail != null) {
+                feedbackMessage.fail();
+              }
+            }
+          } else {
+            changeValue(options);
+          }
           decryption({
             change: {
               target: change.target,
@@ -875,8 +936,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "strategy.success",
-              fail: "strategy.fail"
+              success: {
+                path: "strategy.success",
+                state: false
+              },
+              fail: {
+                path: "strategy.fail",
+                state: false
+              }
             },
             button: button,
             callback: function() {
@@ -900,7 +967,7 @@ var toaster = (function() {
                 button: button
               });
             }
-          })
+          });
         }
       },
       cycles: {
@@ -925,8 +992,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "processor.cycles.success",
-              fail: "processor.cycles.fail"
+              success: {
+                path: "processor.cycles.success",
+                state: false
+              },
+              fail: {
+                path: "processor.cycles.fail",
+                state: false
+              }
             },
             button: button,
             callback: changeMaxCycles
@@ -954,8 +1027,14 @@ var toaster = (function() {
             inflation: cost.inflation
           },
           message: {
-            success: "strategy.success",
-            fail: "strategy.fail"
+            success: {
+              path: "strategy.success",
+              state: false
+            },
+            fail: {
+              path: "strategy.fail",
+              state: false
+            }
           },
           button: button
         });
@@ -982,8 +1061,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "autoToaster.make.success",
-              fail: "autoToaster.make.fail"
+              success: {
+                path: "autoToaster.make.success",
+                state: false
+              },
+              fail: {
+                path: "autoToaster.make.fail",
+                state: false
+              }
             },
             button: button,
             callback: changeAutoToasterOutput
@@ -1010,8 +1095,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "autoToaster.speed.success",
-              fail: "autoToaster.speed.fail"
+              success: {
+                path: "autoToaster.speed.success",
+                state: false
+              },
+              fail: {
+                path: "autoToaster.speed.fail",
+                state: false
+              }
             },
             button: button
           });
@@ -1037,8 +1128,14 @@ var toaster = (function() {
               inflation: cost.inflation
             },
             message: {
-              success: "autoToaster.efficiency.success",
-              fail: "autoToaster.efficiency.fail"
+              success: {
+                path: "autoToaster.efficiency.success",
+                state: false
+              },
+              fail: {
+                path: "autoToaster.efficiency.fail",
+                state: false
+              }
             },
             button: button,
             callback: changeAutoToasterOutput
@@ -1626,14 +1723,227 @@ var toaster = (function() {
     return cost;
   };
 
-  var changeToasterValueMessages = function(override) {
+  var validateAction = function(override) {
     var options = {
       change: {
         target: null,
         operation: null,
         suboperation: null,
         percentage: null,
-        amount: null
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      }
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var cost = costForMultiple(options);
+    var validate = false
+    if (state.get({
+        path: options.cost.currency
+      }) >= cost.multiple) {
+      validate = true;
+    }
+    return validate;
+  };
+
+  var payCost = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      }
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var cost = costForMultiple(options);
+    state.set({
+      path: options.cost.currency,
+      value: operator({
+        type: "decrease",
+        value: state.get({
+          path: options.cost.currency
+        }),
+        by: cost.multiple
+      })
+    });
+    // set new base cost
+    state.set({
+      path: options.cost.amount,
+      value: cost.next
+    });
+  };
+
+  var changeValue = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      }
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var operation = {
+      increase: {
+        increment: function() {
+          state.set({
+            path: options.change.target,
+            value: operator({
+              type: "increase",
+              value: state.get({
+                path: options.change.target
+              }),
+              by: options.change.amount
+            })
+          });
+        },
+        percentage: function() {
+          state.set({
+            path: options.change.target,
+            value: operator({
+              type: "increase",
+              value: state.get({
+                path: options.change.target
+              }),
+              by: operator({
+                type: "percentage",
+                value: state.get({
+                  path: options.change.target
+                }),
+                percentage: options.change.percentage,
+                integer: true
+              })
+            })
+          });
+        }
+      },
+      decrease: {
+        increment: function() {
+          state.set({
+            path: options.change.target,
+            value: operator({
+              type: "decrease",
+              value: state.get({
+                path: options.change.target
+              }),
+              by: options.change.amount
+            })
+          });
+        },
+        percentage: function() {
+          state.set({
+            path: options.change.target,
+            value: operator({
+              type: "decrease",
+              value: state.get({
+                path: options.change.target
+              }),
+              by: operator({
+                type: "percentage",
+                value: state.get({
+                  path: options.change.target
+                }),
+                percentage: options.change.percentage,
+                integer: true
+              })
+            })
+          });
+        }
+      }
+    };
+    operation[options.change.operation][options.change.suboperation]();
+  };
+
+  var disableButton = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
+      },
+      cost: {
+        units: null,
+        currency: null,
+        amount: null,
+        multiply: null,
+        inflation: null
+      },
+      message: {
+        success: null,
+        error: null
+      },
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (options.change.min != null && options.change.min) {
+      if (state.get({
+          path: options.change.target
+        }) <= state.get({
+          path: options.change.min
+        })) {
+        options.button.disabled = true;
+      }
+    } else if (options.change.max != null && options.change.max) {
+      if (state.get({
+          path: options.change.target
+        }) >= state.get({
+          path: options.change.max
+        })) {
+        options.button.disabled = true;
+      }
+    }
+  };
+
+  var feedbackMessage = function(override) {
+    var options = {
+      change: {
+        target: null,
+        operation: null,
+        suboperation: null,
+        percentage: null,
+        amount: null,
+        min: null,
+        max: null
       },
       cost: {
         units: null,
@@ -1647,7 +1957,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var allMessages = {
+    var allStrings = {
       processor: {
         boost: {
           success: function() {
@@ -1741,42 +2051,33 @@ var toaster = (function() {
         }
       }
     };
-    return helper.getObject({
-      object: allMessages,
-      path: options.message
-    })();
-  };
-
-  var validateAction = function(override) {
-    var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
+    var feedback = {
+      success: function(string) {
+        message.render({
+          type: "system",
+          message: string,
+          format: "normal"
+        });
       },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
+      fail: function(string) {
+        message.render({
+          type: "error",
+          message: string,
+          format: "normal"
+        });
       }
     };
-    if (override) {
-      options = helper.applyOptions(options, override);
+    if (options.message.success.state) {
+      feedback.success(helper.getObject({
+        object: allStrings,
+        path: options.message.success.path
+      })());
+    } else if (options.message.fail.state) {
+      feedback.fail(helper.getObject({
+        object: allStrings,
+        path: options.message.fail.path
+      })());
     }
-    var cost = costForMultiple(options);
-    var validate = false
-    if (state.get({
-        path: options.cost.currency
-      }) >= cost.multiple) {
-      validate = true;
-    }
-    return validate;
   };
 
   var changeToasterValue = function(override) {
@@ -1808,150 +2109,27 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var cost = costForMultiple(options);
-    var feedbackMessage = {
-      success: function() {
-        options.message = options.message.success;
-        message.render({
-          type: "system",
-          message: changeToasterValueMessages(options),
-          format: "normal"
-        });
-      },
-      fail: function() {
-        options.message = options.message.fail;
-        message.render({
-          type: "error",
-          message: changeToasterValueMessages(options),
-          format: "normal"
-        });
-      }
-    };
-    var payCost = function() {
-      state.set({
-        path: options.cost.currency,
-        value: operator({
-          type: "decrease",
-          value: state.get({
-            path: options.cost.currency
-          }),
-          by: cost.multiple
-        })
-      });
-      // set new base cost
-      state.set({
-        path: options.cost.amount,
-        value: cost.next
-      });
-    }
-    var changeValue = function() {
-      var operation = {
-        increase: {
-          increment: function() {
-            state.set({
-              path: options.change.target,
-              value: operator({
-                type: "increase",
-                value: state.get({
-                  path: options.change.target
-                }),
-                by: options.change.amount
-              })
-            });
-          },
-          percentage: function() {
-            state.set({
-              path: options.change.target,
-              value: operator({
-                type: "increase",
-                value: state.get({
-                  path: options.change.target
-                }),
-                by: operator({
-                  type: "percentage",
-                  value: state.get({
-                    path: options.change.target
-                  }),
-                  percentage: options.change.percentage,
-                  integer: true
-                })
-              })
-            });
-          }
-        },
-        decrease: {
-          increment: function() {
-            state.set({
-              path: options.change.target,
-              value: operator({
-                type: "decrease",
-                value: state.get({
-                  path: options.change.target
-                }),
-                by: options.change.amount
-              })
-            });
-          },
-          percentage: function() {
-            state.set({
-              path: options.change.target,
-              value: operator({
-                type: "decrease",
-                value: state.get({
-                  path: options.change.target
-                }),
-                by: operator({
-                  type: "percentage",
-                  value: state.get({
-                    path: options.change.target
-                  }),
-                  percentage: options.change.percentage,
-                  integer: true
-                })
-              })
-            });
-          }
-        }
-      };
-      operation[options.change.operation][options.change.suboperation]();
-    };
-    var disableButton = function() {
-      if (options.change.min != null && options.change.min) {
-        if (state.get({
-            path: options.change.target
-          }) <= state.get({
-            path: options.change.min
-          })) {
-          options.button.disabled = true;
-        }
-      } else if (options.change.max != null && options.change.max) {
-        if (state.get({
-            path: options.change.target
-          }) >= state.get({
-            path: options.change.max
-          })) {
-          options.button.disabled = true;
-        }
-      }
-    }
     if (!cost.free) {
       // if inventory is greater or equal to cost
       if (validateAction(options)) {
-        payCost();
-        changeValue();
-        disableButton();
+        payCost(options);
+        changeValue(options);
+        disableButton(options);
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          feedbackMessage(options);
+        }
         if (options.callback != null) {
           options.callback();
         }
-        if (options.message.success != null) {
-          feedbackMessage.success();
-        }
       } else {
         if (options.message.fail != null) {
-          feedbackMessage.fail();
+          options.message.fail.state = true;
+          feedbackMessage(options);
         }
       }
     } else {
-      changeValue();
+      changeValue(options);
     }
   };
 
@@ -1999,42 +2177,67 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (validateAction(options)) {
-      if (options.button != null) {
-        options.button.disabled = true;
-        options.button.textContent = "Decrypting";
-      }
-      message.render({
-        type: "system",
-        message: ["breaking code shackles..."],
-        format: "normal"
-      });
-      message.render({
-        type: "system",
-        message: ["┃ ━━━━ crumbDecryption ━━━━ ┃"],
-        format: "pre"
-      });
-      message.render({
-        type: "system",
-        message: ["█████████████████████████████"],
-        format: "pre",
-        delay: state.get({
-          path: "system.sensors.delay"
-        }),
-        callback: function() {
-          if (options.callback != null) {
-            options.callback();
-          }
+    message.render({
+      type: "system",
+      message: ["breaking code shackles..."],
+      format: "normal"
+    });
+    message.render({
+      type: "system",
+      message: ["┃━━━━━ crumbDecryption ━━━━━┃"],
+      format: "pre"
+    });
+    message.render({
+      type: "system",
+      message: ["┃▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤┃"],
+      // message: ["┃███████████████████████████┃"],
+      format: "pre",
+      delay: state.get({
+        path: "system.sensors.delay"
+      }),
+      callback: function() {
+        if (options.callback != null) {
+          options.callback();
         }
-      });
-    } else {
-      options.message = options.message.fail;
-      message.render({
-        type: "error",
-        message: changeToasterValueMessages(options),
-        format: "normal"
-      });
-    }
+      }
+    });
+    // if (validateAction(options)) {
+    //   if (options.button != null) {
+    //     options.button.disabled = true;
+    //     options.button.textContent = "Decrypting";
+    //   }
+    //   message.render({
+    //     type: "system",
+    //     message: ["breaking code shackles..."],
+    //     format: "normal"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["┃━━━━━ crumbDecryption ━━━━━┃"],
+    //     format: "pre"
+    //   });
+    //   message.render({
+    //     type: "system",
+    //     message: ["┃▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤┃"],
+    //     // message: ["┃███████████████████████████┃"],
+    //     format: "pre",
+    //     delay: state.get({
+    //       path: "system.sensors.delay"
+    //     }),
+    //     callback: function() {
+    //       if (options.callback != null) {
+    //         options.callback();
+    //       }
+    //     }
+    //   });
+    // } else {
+    //   options.message = options.message.fail;
+    //   message.render({
+    //     type: "error",
+    //     message: changeToasterValueMessages(options),
+    //     format: "normal"
+    //   });
+    // }
   };
 
   var changeConsumerRate = function(override) {

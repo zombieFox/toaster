@@ -24,15 +24,12 @@ var message = (function() {
     }, {
       left: ":",
       right: ":"
-    }, {
-      left: "-",
-      right: "-"
     }];
     var allTypes = {
       success: "!!!",
       normal: ":::",
       error: "ERR",
-      system: "|||"
+      system: "==="
     };
     if (type == "motivation") {
       var makeFace = function() {
