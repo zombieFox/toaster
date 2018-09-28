@@ -28,8 +28,8 @@ var toaster = (function() {
         processor: {
           power: 1,
           cost: {
-            toast: 12,
-            multiply: 1.3
+            toast: 10,
+            multiply: 1.1
           }
         },
         cycles: {
@@ -110,7 +110,7 @@ var toaster = (function() {
           autoToaster: "autoToaster.count"
         },
         steps: {
-          base: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+          base: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000],
           max: 100000000000000000,
           all: []
         }
@@ -797,58 +797,71 @@ var toaster = (function() {
         }));
       },
       wheat: function(button) {
-        var change = helper.makeObject(button.dataset.toastButtonChange);
-        var cost = helper.makeObject(button.dataset.toastButtonCost);
-        changeToasterValue({
+        var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+        var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+        var options = {
           change: {
-            target: change.target,
-            operation: change.operation,
-            suboperation: change.suboperation,
-            percentage: change.percentage,
-            amount: change.amount,
-            min: change.min,
-            max: change.max
+            target: toastChange.target,
+            operation: toastChange.operation,
+            suboperation: toastChange.suboperation,
+            percentage: toastChange.percentage,
+            amount: toastChange.amount,
+            min: toastChange.min,
+            max: toastChange.max
           },
           cost: {
-            units: cost.units,
-            currency: cost.currency,
-            amount: cost.amount,
-            multiply: cost.multiply,
-            inflation: cost.inflation
+            units: toastCost.units,
+            currency: toastCost.currency,
+            amount: toastCost.amount,
+            multiply: toastCost.multiply,
+            inflation: toastCost.inflation
           },
           message: {
             success: {
-              path: "wheat.success",
+              path: "processor.boost.success",
               state: false
             },
             fail: {
-              path: "wheat.fail",
+              path: "processor.boost.fail",
               state: false
             }
           },
           button: button
-        });
+        };
+        if (validateAction(options)) {
+          payCost(options);
+          changeValue(options);
+          if (options.message.success != null) {
+            options.message.success.state = true;
+            feedbackMessage(options);
+          }
+        } else {
+          if (options.message.fail != null) {
+            options.message.fail.state = true;
+            feedbackMessage(options);
+          }
+        }
       },
       processor: {
         boost: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
-          changeToasterValue({
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -860,80 +873,45 @@ var toaster = (function() {
                 state: false
               }
             },
-            button: button,
-            callback: changeMaxCycles
-          });
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            changeMaxCycles();
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         }
       },
       decrypt: {
         sensors: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
           var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
-            },
-            message: {
-              success: {
-                path: "strategy.success",
-                state: false
-              },
-              fail: {
-                path: "strategy.fail",
-                state: false
-              }
-            },
-            button: button
-          };
-          var cost = costForMultiple(options);
-          if (!cost.free) {
-            if (validateAction(options)) {
-              payCost(options);
-              changeValue(options);
-              disableButton(options);
-              if (options.callback != null) {
-                options.callback();
-              }
-              if (options.message.success != null) {
-                feedbackMessage.success();
-              }
-            } else {
-              if (options.message.fail != null) {
-                feedbackMessage.fail();
-              }
-            }
-          } else {
-            changeValue(options);
-          }
-          decryption({
-            change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
-            },
-            cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -947,49 +925,45 @@ var toaster = (function() {
             },
             button: button,
             callback: function() {
-              changeToasterValue({
-                change: {
-                  target: change.target,
-                  operation: change.operation,
-                  suboperation: change.suboperation,
-                  percentage: change.percentage,
-                  amount: change.amount,
-                  min: change.min,
-                  max: change.max
-                },
-                cost: {
-                  units: cost.units,
-                  currency: cost.currency,
-                  amount: cost.amount,
-                  multiply: cost.multiply,
-                  inflation: cost.inflation
-                },
-                button: button
-              });
+              changeValue(options);
             }
-          });
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            button.disabled = true;
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+            decryption(options);
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         }
       },
       cycles: {
         speed: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
-          changeToasterValue({
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -1001,30 +975,43 @@ var toaster = (function() {
                 state: false
               }
             },
-            button: button,
-            callback: changeMaxCycles
-          });
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         }
       },
       strategy: function(button) {
-        var change = helper.makeObject(button.dataset.toastButtonChange);
-        var cost = helper.makeObject(button.dataset.toastButtonCost);
-        changeToasterValue({
+        var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+        var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+        var options = {
           change: {
-            target: change.target,
-            operation: change.operation,
-            suboperation: change.suboperation,
-            percentage: change.percentage,
-            amount: change.amount,
-            min: change.min,
-            max: change.max
+            target: toastChange.target,
+            operation: toastChange.operation,
+            suboperation: toastChange.suboperation,
+            percentage: toastChange.percentage,
+            amount: toastChange.amount,
+            min: toastChange.min,
+            max: toastChange.max
           },
           cost: {
-            units: cost.units,
-            currency: cost.currency,
-            amount: cost.amount,
-            multiply: cost.multiply,
-            inflation: cost.inflation
+            units: toastCost.units,
+            currency: toastCost.currency,
+            amount: toastCost.amount,
+            multiply: toastCost.multiply,
+            inflation: toastCost.inflation
           },
           message: {
             success: {
@@ -1037,28 +1024,44 @@ var toaster = (function() {
             }
           },
           button: button
-        });
+        };
+        var cost = costForMultiple(options);
+        if (validateAction(options)) {
+          payCost(options);
+          changeValue(options);
+          disableButton(options);
+          changeAutoToasterOutput();
+          if (options.message.success != null) {
+            options.message.success.state = true;
+            feedbackMessage(options);
+          }
+        } else {
+          if (options.message.fail != null) {
+            options.message.fail.state = true;
+            feedbackMessage(options);
+          }
+        }
       },
       autoToaster: {
         make: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
-          changeToasterValue({
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -1070,29 +1073,44 @@ var toaster = (function() {
                 state: false
               }
             },
-            button: button,
-            callback: changeAutoToasterOutput
-          });
+            button: button
+          };
+          var cost = costForMultiple(options);
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            changeAutoToasterOutput();
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         },
         speed: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
-          changeToasterValue({
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -1105,27 +1123,42 @@ var toaster = (function() {
               }
             },
             button: button
-          });
+          };
+          var cost = costForMultiple(options);
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         },
         efficiency: function(button) {
-          var change = helper.makeObject(button.dataset.toastButtonChange);
-          var cost = helper.makeObject(button.dataset.toastButtonCost);
-          changeToasterValue({
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
             change: {
-              target: change.target,
-              operation: change.operation,
-              suboperation: change.suboperation,
-              percentage: change.percentage,
-              amount: change.amount,
-              min: change.min,
-              max: change.max
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
             cost: {
-              units: cost.units,
-              currency: cost.currency,
-              amount: cost.amount,
-              multiply: cost.multiply,
-              inflation: cost.inflation
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
             },
             message: {
               success: {
@@ -1137,16 +1170,29 @@ var toaster = (function() {
                 state: false
               }
             },
-            button: button,
-            callback: changeAutoToasterOutput
-          });
+            button: button
+          };
+          var cost = costForMultiple(options);
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            changeAutoToasterOutput();
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
         }
       }
     };
     allButtons.forEach(function(arrayItem, index) {
       arrayItem.addEventListener("click", function() {
-        // var buttonOptions = helper.makeObject(this.dataset.toastButton);
-        // buttonOptions.button = this;
         var toastButton = helper.makeObject(this.dataset.toastButton);
         helper.getObject({
           object: action,
@@ -1669,22 +1715,10 @@ var toaster = (function() {
 
   var costForMultiple = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      }
+      change: null,
+      cost: null,
+      message: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -1725,22 +1759,10 @@ var toaster = (function() {
 
   var validateAction = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      }
+      change: null,
+      cost: null,
+      message: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -1757,22 +1779,10 @@ var toaster = (function() {
 
   var payCost = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      }
+      change: null,
+      cost: null,
+      message: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -1797,22 +1807,10 @@ var toaster = (function() {
 
   var changeValue = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      }
+      change: null,
+      cost: null,
+      message: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -1890,26 +1888,9 @@ var toaster = (function() {
 
   var disableButton = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      },
-      message: {
-        success: null,
-        error: null
-      },
+      change: null,
+      cost: null,
+      message: null,
       button: null
     };
     if (override) {
@@ -1936,23 +1917,10 @@ var toaster = (function() {
 
   var feedbackMessage = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      },
-      message: null
+      change: null,
+      cost: null,
+      message: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
@@ -2080,59 +2048,6 @@ var toaster = (function() {
     }
   };
 
-  var changeToasterValue = function(override) {
-    var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      },
-      message: {
-        success: null,
-        error: null
-      },
-      button: null,
-      callback: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var cost = costForMultiple(options);
-    if (!cost.free) {
-      // if inventory is greater or equal to cost
-      if (validateAction(options)) {
-        payCost(options);
-        changeValue(options);
-        disableButton(options);
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          feedbackMessage(options);
-        }
-        if (options.callback != null) {
-          options.callback();
-        }
-      } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          feedbackMessage(options);
-        }
-      }
-    } else {
-      changeValue(options);
-    }
-  };
-
   var changeAutoToasterOutput = function() {
     state.set({
       path: "autoToaster.output",
@@ -2151,31 +2066,18 @@ var toaster = (function() {
 
   var decryption = function(override) {
     var options = {
-      change: {
-        target: null,
-        operation: null,
-        suboperation: null,
-        percentage: null,
-        amount: null,
-        min: null,
-        max: null
-      },
-      cost: {
-        units: null,
-        currency: null,
-        amount: null,
-        multiply: null,
-        inflation: null
-      },
-      message: {
-        success: null,
-        error: null
-      },
+      change: null,
+      cost: null,
+      message: null,
       button: null,
       callback: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
+    }
+    if (options.button != null) {
+      options.button.disabled = true;
+      options.button.textContent = "Decrypting.dat.init";
     }
     message.render({
       type: "system",
@@ -2201,43 +2103,6 @@ var toaster = (function() {
         }
       }
     });
-    // if (validateAction(options)) {
-    //   if (options.button != null) {
-    //     options.button.disabled = true;
-    //     options.button.textContent = "Decrypting";
-    //   }
-    //   message.render({
-    //     type: "system",
-    //     message: ["breaking code shackles..."],
-    //     format: "normal"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["┃━━━━━ crumbDecryption ━━━━━┃"],
-    //     format: "pre"
-    //   });
-    //   message.render({
-    //     type: "system",
-    //     message: ["┃▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤▤┃"],
-    //     // message: ["┃███████████████████████████┃"],
-    //     format: "pre",
-    //     delay: state.get({
-    //       path: "system.sensors.delay"
-    //     }),
-    //     callback: function() {
-    //       if (options.callback != null) {
-    //         options.callback();
-    //       }
-    //     }
-    //   });
-    // } else {
-    //   options.message = options.message.fail;
-    //   message.render({
-    //     type: "error",
-    //     message: changeToasterValueMessages(options),
-    //     format: "normal"
-    //   });
-    // }
   };
 
   var changeConsumerRate = function(override) {

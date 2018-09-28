@@ -65,12 +65,12 @@ body {
 @media (min-width: 992px) {
   .controls {
     padding: 2em 1em 4em 1em;
-    width: 70vw;
+    width: 67vw;
   }
 
   .report {
     padding: 2em 2em 4em 1em;
-    width: 30vw;
+    width: 33vw;
     min-width: 25em;
   }
 }

@@ -29,7 +29,7 @@ var message = (function() {
       success: "!!!",
       normal: ":::",
       error: "ERR",
-      system: "==="
+      system: ">>>"
     };
     if (type == "motivation") {
       var makeFace = function() {
