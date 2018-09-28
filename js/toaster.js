@@ -19,8 +19,9 @@ var toaster = (function() {
           toast: 200
         },
         loaf: {
-          slice: 0,
           max: 5,
+          starting: 5,
+          slice: 0,
           multiply: 2
         }
       },
@@ -527,7 +528,8 @@ var toaster = (function() {
               number: 1
             }],
             actions: {
-              unlock: ["#stage-collect-wheat"]
+              unlock: ["#stage-collect-wheat"],
+              func: ["wheat.start"]
             }
           }, {
             // unlock wheat collect
@@ -538,7 +540,7 @@ var toaster = (function() {
               number: 2
             }],
             actions: {
-              func: ["wheat.moreToast"]
+              func: ["wheat.increase"]
             }
           }],
 
@@ -1600,30 +1602,58 @@ var toaster = (function() {
         });
       },
       wheat: {
-        moreToast: function() {
-          doubleToastFromWheat();
+        start: function() {
+          wheatLumpMax({
+            action: "start"
+          });
+        },
+        increase: function() {
+          wheatLumpMax({
+            action: "increase"
+          });
         }
       }
     };
+    console.log(options.func);
     helper.getObject({
       object: funcList,
       path: options.func
     })();
   };
 
-  var doubleToastFromWheat = function() {
-    state.set({
-      path: "wheat.loaf.max",
-      value: operator({
-        type: "multiply",
-        value: state.get({
-          path: "wheat.loaf.max"
-        }),
-        by: state.get({
-          path: "wheat.loaf.multiply"
-        })
-      })
-    })
+  var wheatLumpMax = function(override) {
+    var options = {
+      action: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var consumerAction = {
+      start: function() {
+        state.set({
+          path: "wheat.loaf.max",
+          value: state.get({
+            path: "wheat.loaf.starting"
+          })
+        });
+      },
+      increase: function() {
+        state.set({
+          path: "wheat.loaf.max",
+          value: operator({
+            type: "multiply",
+            value: state.get({
+              path: "wheat.loaf.max"
+            }),
+            by: state.get({
+              path: "wheat.loaf.multiply"
+            }),
+            integer: true
+          })
+        });
+      }
+    };
+    consumerAction[options.action]();
   };
 
   var makeMilestones = function() {
@@ -2095,8 +2125,8 @@ var toaster = (function() {
     });
     message.render({
       type: "system",
-      message: ["┃▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤┃"],
-      // message: ["┃███████████████████████████┃"],
+      // message: ["┃▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤┃"],
+      message: ["┃███████████████████████████┃"],
       format: "pre",
       delay: state.get({
         path: "system.sensors.delay"
