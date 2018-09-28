@@ -794,9 +794,34 @@ var toaster = (function() {
     location.reload();
   };
 
+  var toggleMenu = function() {
+    var toaster = helper.e("#toaster");
+    if (toaster.classList.contains("menu-open")) {
+      toaster.classList.remove("menu-open");
+      message.render({
+        type: "system",
+        message: ["system menu close"],
+        format: "normal",
+      });
+    } else {
+      toaster.classList.add("menu-open");
+      message.render({
+        type: "system",
+        message: ["system menu open"],
+        format: "normal",
+      });
+    }
+  };
+
   var bind = function() {
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
+      menu: function() {
+        toggleMenu();
+      },
+      reboot: function() {
+        reboot();
+      },
       toast: function() {
         makeToast(state.get({
           path: "system.processor.power"
@@ -1614,7 +1639,6 @@ var toaster = (function() {
         }
       }
     };
-    console.log(options.func);
     helper.getObject({
       object: funcList,
       path: options.func

@@ -8,8 +8,8 @@
   --gray-700: #495057;
   --gray-800: #343a40;
   --gray-900: #212529;
-  --black-100: #141414;
-  --black-200: #000000;
+  --black-100: #000000;
+  --black-200: #1b1b1b;
 }
 
 body {
@@ -24,19 +24,63 @@ body {
   height: 100vh;
 }
 
-.controls {
-  padding: 1em 0 3em 0;
+.section-controls {
+  background-color: var(--black-200);
+  position: relative;
   height: 70vh;
 }
 
-.report {
+.controls {
+  padding: 1em 0;
+  transition: all 200ms ease-in-out;
+}
+
+.section-report {
+  background-color: var(--black-100);
+  position: relative;
   padding: 1em 2em 3em 0;
   height: 30vh;
 }
 
-.controls, .report {
+.section-controls, .section-report {
   width: 100vw;
   overflow-y: auto;
+}
+
+.section-display {
+  background-color: var(--gray-900);
+  padding: 0.8em 1.5em;
+  position: sticky;
+  display: block;
+  top: 0;
+  z-index: 2;
+}
+
+.section-nav {
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 200ms ease-in-out;
+}
+
+.menu-open .controls {
+  opacity: 0.4;
+  filter: blur(40px);
+  transform: scale(0.95);
+}
+
+.menu-open .section-nav {
+  opacity: 1;
+  pointer-events: all;
 }
 
 @media (min-width: 768px) {
@@ -46,37 +90,32 @@ body {
     flex-wrap: nowrap;
   }
 
-  .controls, .report {
+  .section-controls, .section-report {
     height: 100vh;
     overflow-y: auto;
   }
 
-  .controls {
-    padding: 1em 0 3em 0;
+  .section-controls {
     width: 50vw;
   }
 
-  .report {
+  .section-report {
     padding: 1em 2em 3em 1em;
     width: 50vw;
   }
 }
 
 @media (min-width: 992px) {
-  .controls {
-    padding: 2em 1em 4em 1em;
+  .section-controls {
+    padding: 4em 1em 4em 1em;
+    padding: 0;
     width: 67vw;
   }
 
-  .report {
-    padding: 2em 2em 4em 1em;
+  .section-report {
     width: 33vw;
     min-width: 25em;
   }
-}
-
-.report {
-  background-color: var(--black-200);
 }
 
 .report-message {
