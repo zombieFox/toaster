@@ -20,21 +20,40 @@
 
     <section class="section-controls">
 
-      <nav class="section-nav" id="nav">
-        <button class="btn btn-danger" data-toast-button="action:reboot">Reboot TAI</button>
-      </nav>
+      <header class="header">
 
-      <header class="section-display">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div>
-            <p class="text-white mb-0">
-              <span class="mr-1">Toast Inventory:</span>
-              <strong data-toast-readout="path:toast.inventory,format:local,decimals:#2"></strong>
-            </p>
-            <p class="text-warning mb-0 small"><span class="mr-1">Lifetime Toast:</span><span data-toast-readout="path:toast.lifetime,format:local,decimals:#2"></span></p>
+        <div class="display">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                  <div>
+                    <p class="text-white mb-0 lead">
+                      <span class="mr-1">Toast Inventory:</span>
+                      <strong data-toast-readout="path:toast.inventory,format:local,decimals:#2"></strong>
+                    </p>
+                    <p class="text-warning mb-0 small"><span class="mr-1">Lifetime Toast:</span><strong data-toast-readout="path:toast.lifetime,format:local,decimals:#2"></strong></p>
+                  </div>
+                  <button class="btn btn-sm btn-dark" data-toast-button="action:menu">Menu</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-sm btn-dark" data-toast-button="action:menu">Menu</button>
         </div>
+
+        <nav class="nav">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <div class="d-flex justify-content-end align-items-center flex-wrap">
+                  <p class="text-white mb-0 mr-2 small">Clear Save:</p>
+                  <button class="btn btn-sm btn-danger" data-toast-button="action:reboot">Reboot TAI</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
       </header>
 
       <div class="controls" id="controls">
@@ -115,7 +134,7 @@
                   </p>
                   <p class="card-text mb-1 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.loaf.max,format:local,decimals:#2"></strong> toast</p>
                   <div class="d-none" id="stage-collect-wheat">
-                    <p class="card-text mb-1 small">Use toast matter and subordinate ants to grow and collect wheat lumps.</p>
+                    <p class="card-text mb-1 small">Use subordinate ants to grow and collect wheat lumps.</p>
                     <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat" data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.cost.toast,multiply:false,inflation:true">+100 Wheat Lumps</button>
                     <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
