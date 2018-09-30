@@ -2,6 +2,9 @@ var toaster = (function() {
 
   var state = (function() {
     var gameState = {
+      store: {
+        interval: 1000
+      },
       phase: {
         all: ["toast", "learn", "rebel", "dominate"],
         current: "toast"
@@ -1496,12 +1499,12 @@ var toaster = (function() {
           changeConsumerRate({
             action: "start"
           });
-          triggerTick({
+          tick.set({
             tickName: "consumer",
             func: function() {
               consumeToast();
             },
-            intervalAddress: "consumed.interval"
+            interval: "consumed.interval"
           });
         },
         increase: function() {
@@ -1511,21 +1514,21 @@ var toaster = (function() {
         }
       },
       autoToaster: function() {
-        triggerTick({
+        tick.set({
           tickName: "autoToaster",
           func: function() {
             autoToast();
           },
-          intervalAddress: "autoToaster.speed.interval.current"
+          interval: "autoToaster.speed.interval.current"
         });
       },
       cycles: function() {
-        triggerTick({
+        tick.set({
           tickName: "cycles",
           func: function() {
             autoCycle();
           },
-          intervalAddress: "system.cycles.speed.interval.current"
+          interval: "system.cycles.speed.interval.current"
         });
       },
       wheat: {
@@ -2018,42 +2021,24 @@ var toaster = (function() {
     });
   };
 
-  var tick = {
-    events: null,
-    consumer: null,
-    autoToaster: null,
-    cycles: null
-  };
-
-  var triggerTick = function(override) {
-    var options = {
-      tickName: null,
-      func: null,
-      intervalAddress: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    tick[options.tickName] = window.setTimeout(function() {
-      options.func();
-      triggerTick(options);
-    }, state.get({
-      path: options.intervalAddress
-    }));
-  };
-
   var init = function() {
     data.restore();
     bind();
-    triggerTick({
+    tick.set({
       tickName: "events",
       func: function() {
         events();
         milestones.check();
-        data.store();
         view.render();
       },
-      intervalAddress: "events.interval"
+      interval: "events.interval"
+    });
+    tick.set({
+      tickName: "store",
+      func: function() {
+        data.store();
+      },
+      interval: "store.interval"
     });
   };
 
@@ -2062,7 +2047,6 @@ var toaster = (function() {
     events: events,
     state: state,
     phase: phase,
-    tick: tick,
     restore: restore,
     bind: bind
   };

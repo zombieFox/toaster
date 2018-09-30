@@ -62,7 +62,7 @@ body {
   position: relative;
   width: 100%;
   z-index: 3;
-  height: 4em;
+  height: 5em;
 }
 
 .controls {
@@ -91,7 +91,7 @@ body {
 }
 
 .menu-open .nav {
-  top: 4em;
+  top: 5em;
 }
 
 @media (min-width: 768px) {

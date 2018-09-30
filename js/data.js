@@ -13,6 +13,7 @@ var data = (function() {
   };
 
   var store = function() {
+    // console.log("store");
     save("toaster", JSON.stringify(toaster.state.get()));
   };
 
@@ -32,8 +33,8 @@ var data = (function() {
   };
 
   var reboot = function() {
-    for (var key in toaster.tick) {
-      clearTimeout(toaster.tick[key]);
+    for (var key in tick.get) {
+      clearTimeout(tick.get[key]);
     }
     clear("toaster");
     location.reload();
