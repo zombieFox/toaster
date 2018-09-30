@@ -14,7 +14,7 @@ var game = (function() {
     },
     wheat: {
       level: 0,
-      current: 12000,
+      current: 10000,
       cost: {
         cycles: 20,
         multiply: 2.5,

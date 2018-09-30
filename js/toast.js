@@ -1,71 +1,36 @@
 var toast = (function() {
 
-  var wheat = function(amount) {
-    while (amount > 0) {
-      amount--;
+  var make = function(amount) {
+    if (helper.operator({
+        type: "divide",
+        value: amount,
+        by: game.get({
+          path: "wheat.loaf.max"
+        })
+      }) <= game.get({
+        path: "wheat.current"
+      })) {
+      wheat.consume(amount);
       game.set({
-        path: "wheat.loaf.slice",
+        path: "toast.lifetime",
         value: helper.operator({
           type: "increase",
           value: game.get({
-            path: "wheat.loaf.slice"
+            path: "toast.lifetime"
           }),
-          by: 1
+          by: amount
         })
       });
-      // if slice == max reduce total wheat
-      if (game.get({
-          path: "wheat.loaf.slice"
-        }) == game.get({
-          path: "wheat.loaf.max"
-        })) {
-        game.set({
-          path: "wheat.loaf.slice",
-          value: 0
-        });
-        game.set({
-          path: "wheat.current",
-          value: helper.operator({
-            type: "decrease",
-            value: game.get({
-              path: "wheat.current"
-            }),
-            by: 1
-          })
-        });
-      }
-    }
-  };
-
-  var toast = function(amount) {
-    game.set({
-      path: "toast.lifetime",
-      value: helper.operator({
-        type: "increase",
-        value: game.get({
-          path: "toast.lifetime"
-        }),
-        by: amount
-      })
-    });
-    game.set({
-      path: "toast.inventory",
-      value: helper.operator({
-        type: "increase",
-        value: game.get({
-          path: "toast.inventory"
-        }),
-        by: amount
-      })
-    });
-  };
-
-  var make = function(amount) {
-    if (game.get({
-        path: "wheat.current"
-      }) >= amount) {
-      wheat(amount);
-      toast(amount);
+      game.set({
+        path: "toast.inventory",
+        value: helper.operator({
+          type: "increase",
+          value: game.get({
+            path: "toast.inventory"
+          }),
+          by: amount
+        })
+      });
     } else {
       message.render({
         type: "error",
