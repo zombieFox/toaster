@@ -1,4 +1,4 @@
-var autoToast = (function() {
+var autoToaster = (function() {
 
   var output = function() {
     game.set({

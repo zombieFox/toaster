@@ -136,7 +136,7 @@ var events = (function() {
         tick.set({
           tickName: "autoToaster",
           func: function() {
-            autoToast.make();
+            autoToaster.make();
           },
           interval: "autoToaster.speed.interval.current"
         });

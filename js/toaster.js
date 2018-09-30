@@ -248,7 +248,7 @@ var toaster = (function() {
           payCost(options);
           changeValue(options);
           disableButton(options);
-          autoToast.output();
+          autoToaster.output();
           if (options.message.success != null) {
             options.message.success.state = true;
             feedbackMessage(options);
@@ -298,7 +298,7 @@ var toaster = (function() {
             payCost(options);
             changeValue(options);
             disableButton(options);
-            autoToast.output();
+            autoToaster.output();
             if (options.message.success != null) {
               options.message.success.state = true;
               feedbackMessage(options);
@@ -395,7 +395,7 @@ var toaster = (function() {
             payCost(options);
             changeValue(options);
             disableButton(options);
-            autoToast.output();
+            autoToaster.output();
             if (options.message.success != null) {
               options.message.success.state = true;
               feedbackMessage(options);
