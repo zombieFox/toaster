@@ -37,15 +37,6 @@ var wheat = (function() {
     }
   };
 
-  var init = function() {
-    game.set({
-      path: "wheat.loaf.max",
-      value: game.get({
-        path: "wheat.loaf.starting"
-      })
-    });
-  };
-
   var increase = function() {
     game.set({
       path: "wheat.loaf.max",
@@ -62,9 +53,18 @@ var wheat = (function() {
     });
   };
 
+  var init = function() {
+    game.set({
+      path: "wheat.loaf.max",
+      value: game.get({
+        path: "wheat.loaf.starting"
+      })
+    });
+  };
+
   return {
-    consume: consume,
     init: init,
+    consume: consume,
     increase: increase
   };
 

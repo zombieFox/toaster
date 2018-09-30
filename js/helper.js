@@ -312,9 +312,27 @@ var helper = (function() {
     return options.number.toFixed(precision) + suffix;
   };
 
+  var timestamp = function() {
+    var dateStamp = new Date();
+    var object = {
+      string: dateStamp.constructor(),
+      time: dateStamp.getTime(),
+      date: dateStamp.getDate(),
+      day: dateStamp.getDay(),
+      year: dateStamp.getFullYear(),
+      hours: dateStamp.getHours(),
+      milliseconds: dateStamp.getMilliseconds(),
+      minutes: dateStamp.getMinutes(),
+      month: dateStamp.getMonth(),
+      seconds: dateStamp.getSeconds()
+    }
+    return object;
+  };
+
   return {
     e: e,
     eA: eA,
+    timestamp: timestamp,
     operator: operator,
     getObject: getObject,
     setObject: setObject,

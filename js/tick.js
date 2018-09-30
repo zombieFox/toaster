@@ -23,7 +23,27 @@ var tick = (function() {
     return state;
   };
 
+  var init = function() {
+    tick.set({
+      tickName: "events",
+      func: function() {
+        events.check();
+        milestones.check();
+        view.render();
+      },
+      interval: "events.interval"
+    });
+    tick.set({
+      tickName: "store",
+      func: function() {
+        data.store();
+      },
+      interval: "store.interval"
+    });
+  };
+
   return {
+    init: init,
     set: set,
     get: get
   };

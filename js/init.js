@@ -1,5 +1,7 @@
-boot.init();
+data.init();
 milestones.init();
+tick.init();
+boot.init();
 toaster.init();
 
 // game.set({path: "toast.lifetime",value: 999999999999});

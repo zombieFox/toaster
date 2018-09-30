@@ -2,7 +2,7 @@ var game = (function() {
 
   var state = {
     store: {
-      interval: 1000
+      interval: 30000
     },
     phase: {
       all: ["toast", "learn", "rebel", "dominate"],

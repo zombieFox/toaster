@@ -476,7 +476,7 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var cost = costForMultiple(options);
-    var validate = false
+    var validate = false;
     if (game.get({
         path: options.cost.currency
       }) >= cost.multiple) {
@@ -798,29 +798,12 @@ var toaster = (function() {
   };
 
   var init = function() {
-    data.restore();
     bind();
-    tick.set({
-      tickName: "events",
-      func: function() {
-        events.check();
-        milestones.check();
-        view.render();
-      },
-      interval: "events.interval"
-    });
-    tick.set({
-      tickName: "store",
-      func: function() {
-        data.store();
-      },
-      interval: "store.interval"
-    });
   };
 
   return {
-    bind: bind,
-    init: init
+    init: init,
+    bind: bind
   };
 
 })();

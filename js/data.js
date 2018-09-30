@@ -13,7 +13,7 @@ var data = (function() {
   };
 
   var store = function() {
-    // console.log("store");
+    console.log("game saved");
     save("toaster", JSON.stringify(game.get()));
   };
 
@@ -40,7 +40,12 @@ var data = (function() {
     location.reload();
   };
 
+  var init = function() {
+    restore();
+  };
+
   return {
+    init: init,
     save: save,
     load: load,
     clear: clear,

@@ -1,14 +1,5 @@
 var consumer = (function() {
 
-  var init = function() {
-    game.set({
-      path: "consumed.rate",
-      value: game.get({
-        path: "consumed.starting"
-      })
-    });
-  };
-
   var increase = function() {
     game.set({
       path: "consumed.rate",
@@ -61,6 +52,15 @@ var consumer = (function() {
         }
       };
     }
+  };
+
+  var init = function() {
+    game.set({
+      path: "consumed.rate",
+      value: game.get({
+        path: "consumed.starting"
+      })
+    });
   };
 
   return {
