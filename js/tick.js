@@ -14,7 +14,7 @@ var tick = (function() {
     state[options.tickName] = window.setTimeout(function() {
       options.func();
       set(options);
-    }, toaster.state.get({
+    }, game.get({
       path: options.interval
     }));
   };

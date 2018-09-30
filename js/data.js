@@ -14,13 +14,13 @@ var data = (function() {
 
   var store = function() {
     // console.log("store");
-    save("toaster", JSON.stringify(toaster.state.get()));
+    save("toaster", JSON.stringify(game.get()));
   };
 
   var restore = function() {
     if (load("toaster")) {
       console.log("state restore");
-      toaster.state.set({
+      game.set({
         full: JSON.parse(load("toaster"))
       });
       message.render({

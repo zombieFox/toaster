@@ -1,14 +1,14 @@
 var milestones = (function() {
 
   var make = function() {
-    var baseSteps = toaster.state.get({
+    var baseSteps = game.get({
       path: "milestones.steps.base"
     });
-    var maxStep = toaster.state.get({
+    var maxStep = game.get({
       path: "milestones.steps.max"
     });
     var milestone = [];
-    if (toaster.state.get({
+    if (game.get({
         path: "milestones.steps.all",
       }).length == 0) {
       baseSteps.forEach(function(arrayItem) {
@@ -28,7 +28,7 @@ var milestones = (function() {
         }
       });
       milestone = helper.sortObject(milestone, "count");
-      toaster.state.set({
+      game.set({
         path: "milestones.steps.all",
         value: milestone
       })
@@ -36,7 +36,7 @@ var milestones = (function() {
   };
 
   var check = function() {
-    var allMilestones = toaster.state.get({
+    var allMilestones = game.get({
       path: "milestones"
     });
     allMilestones.steps.all.forEach(function(arrayItem, index) {
@@ -44,7 +44,7 @@ var milestones = (function() {
       var step = arrayItem;
       for (var key in step.check) {
         // console.log(allMilestones.address[key]);
-        var valueToCheck = toaster.state.get({
+        var valueToCheck = game.get({
           path: allMilestones.address[key]
         });
         if (valueToCheck >= step.count && !step.check[key]) {

@@ -4,7 +4,7 @@ var view = (function() {
     var allDataReadouts = helper.eA("[data-toast-readout]");
     allDataReadouts.forEach(function(arrayItem, index) {
       var options = helper.makeObject(arrayItem.dataset.toastReadout);
-      var data = toaster.state.get({
+      var data = game.get({
         path: options.path
       });
       var format = {
