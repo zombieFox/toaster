@@ -97,7 +97,7 @@ var toaster = (function() {
             payCost(options);
             changeValue(options);
             disableButton(options);
-            changeMaxCycles();
+            cycles.set();
             if (options.message.success != null) {
               options.message.success.state = true;
               feedbackMessage(options);
@@ -248,7 +248,7 @@ var toaster = (function() {
           payCost(options);
           changeValue(options);
           disableButton(options);
-          changeAutoToasterOutput();
+          autoToast.output();
           if (options.message.success != null) {
             options.message.success.state = true;
             feedbackMessage(options);
@@ -298,7 +298,7 @@ var toaster = (function() {
             payCost(options);
             changeValue(options);
             disableButton(options);
-            changeAutoToasterOutput();
+            autoToast.output();
             if (options.message.success != null) {
               options.message.success.state = true;
               feedbackMessage(options);
@@ -395,7 +395,7 @@ var toaster = (function() {
             payCost(options);
             changeValue(options);
             disableButton(options);
-            changeAutoToasterOutput();
+            autoToast.output();
             if (options.message.success != null) {
               options.message.success.state = true;
               feedbackMessage(options);
@@ -756,22 +756,6 @@ var toaster = (function() {
     }
   };
 
-  var changeAutoToasterOutput = function() {
-    game.set({
-      path: "autoToaster.output",
-      value: helper.operator({
-        type: "multiply",
-        value: game.get({
-          path: "autoToaster.count"
-        }),
-        by: game.get({
-          path: "autoToaster.efficiency.current"
-        }),
-        integer: true
-      })
-    });
-  };
-
   var decryption = function(override) {
     var options = {
       change: null,
@@ -810,15 +794,6 @@ var toaster = (function() {
           options.callback();
         }
       }
-    });
-  };
-
-  var changeMaxCycles = function() {
-    game.set({
-      path: "system.cycles.max",
-      value: (game.get({
-        path: "system.processor.power"
-      }) * 10)
     });
   };
 

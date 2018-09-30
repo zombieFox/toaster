@@ -1,5 +1,21 @@
 var autoToast = (function() {
 
+  var output = function() {
+    game.set({
+      path: "autoToaster.output",
+      value: helper.operator({
+        type: "multiply",
+        value: game.get({
+          path: "autoToaster.count"
+        }),
+        by: game.get({
+          path: "autoToaster.efficiency.current"
+        }),
+        integer: true
+      })
+    });
+  };
+
   var make = function() {
     var amount = game.get({
       path: "autoToaster.count"
@@ -10,7 +26,8 @@ var autoToast = (function() {
   };
 
   return {
-    make: make
+    make: make,
+    output: output
   };
 
 })();

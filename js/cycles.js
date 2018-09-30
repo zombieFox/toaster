@@ -19,8 +19,18 @@ var cycles = (function() {
     }
   };
 
+  var set = function() {
+    game.set({
+      path: "system.cycles.max",
+      value: (game.get({
+        path: "system.processor.power"
+      }) * 10)
+    });
+  };
+
   return {
-    spin: spin
+    spin: spin,
+    set: set
   };
 
 })();
