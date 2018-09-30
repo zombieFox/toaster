@@ -78,13 +78,13 @@
                   </p>
                   <p class="card-text mb-1 small">Boost processor power with reverse antimatter quantum particles for more toast with every click.</p>
                   <div class="btn-group mb-1">
-                    <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                    <button class="btn btn-sm btn-primary" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true">Boost +1</button>
-                    <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
+                    <button class="btn btn-sm btn-primary" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
                       data-toast-button-cost="units:#10,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true">+10</button>
-                    <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#20,min:false,max:false"
+                    <button class="btn btn-sm btn-primary" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#20,min:false,max:false"
                       data-toast-button-cost="units:#20,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true">+20</button>
-                    <button class="btn btn-sm btn-info" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#50,min:false,max:false"
+                    <button class="btn btn-sm btn-primary" data-toast-button="action:processor.boost" data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#50,min:false,max:false"
                       data-toast-button-cost="units:#50,currency:toast.inventory,amount:system.processor.cost.toast,multiply:system.processor.cost.multiply,inflation:true">+50</button>
                   </div>
                   <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:system.processor.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
@@ -98,7 +98,7 @@
 
                     <div class="d-none" id="stage-system-substage-cycles-controls">
                       <p class="card-text mb-1 small">Speed up cycles by adding more hamsters in wheels.</p>
-                      <button class="btn btn-sm btn-info mb-1" data-toast-button="action:cycles.speed" data-toast-button-change="target:system.cycles.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.speed.interval.min,max:false"
+                      <button class="btn btn-sm btn-primary mb-1" data-toast-button="action:cycles.speed" data-toast-button-change="target:system.cycles.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.speed.interval.min,max:false"
                         data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.cycles.speed.cost.toast,multiply:system.cycles.speed.cost.multiply,inflation:true">Speed -0.05s</button>
                       <p class="card-text mb-0 small">-0.05s cost <strong data-toast-readout="path:system.cycles.speed.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                     </div>
@@ -289,9 +289,15 @@
   <script src="js/helper.js"></script>
   <script src="js/game.js"></script>
   <script src="js/phase.js"></script>
+  <script src="js/events.js"></script>
   <script src="js/data.js"></script>
   <script src="js/message.js"></script>
   <script src="js/motivation.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/autoToast.js"></script>
+  <script src="js/cycles.js"></script>
+  <script src="js/wheat.js"></script>
+  <script src="js/consumer.js"></script>
   <script src="js/tick.js"></script>
   <script src="js/menu.js"></script>
   <script src="js/milestones.js"></script>

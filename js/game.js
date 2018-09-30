@@ -621,7 +621,7 @@ var game = (function() {
               message: ["toast is being consumed", "consumer unknown..."],
               format: "normal"
             }],
-            func: ["consumer.start"]
+            func: ["consumer.init"]
           }
         }, {
           // increase consumer

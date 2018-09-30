@@ -28,7 +28,7 @@ var data = (function() {
         message: ["reboot complete", "TAI.dat state restored"],
         format: "normal"
       });
-      toaster.restore();
+      events.restore();
     }
   };
 
