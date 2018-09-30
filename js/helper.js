@@ -8,6 +8,58 @@ var helper = (function() {
     return document.querySelectorAll(selector);
   };
 
+  var operator = function(override) {
+    var options = {
+      type: null,
+      value: null,
+      by: null,
+      percentage: null,
+      integer: null,
+      min: null,
+      max: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var action = {
+      increase: function() {
+        options.value = options.value + options.by;
+      },
+      decrease: function() {
+        options.value = options.value - options.by;
+      },
+      divide: function() {
+        options.value = options.value / options.by;
+      },
+      multiply: function() {
+        options.value = options.value * options.by;
+      },
+      percentage: function() {
+        options.value = (options.percentage / 100) * options.value;
+      },
+      min: function() {
+        options.value = options.min;
+      },
+      max: function() {
+        options.value = options.max;
+      },
+      integer: function() {
+        options.value = Math.round(options.value);
+      }
+    };
+    action[options.type]();
+    if (options.min != null && options.value < options.min) {
+      action.min();
+    }
+    if (options.max != null && options.value > options.max) {
+      action.max();
+    }
+    if (options.integer != null && options.integer) {
+      action.integer();
+    }
+    return options.value;
+  };
+
   var applyOptions = function(defaultOptions, options) {
     if (defaultOptions && options) {
       if (options) {
@@ -186,19 +238,90 @@ var helper = (function() {
       } else {
         return 0;
       };
-      // return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
     return object;
+  };
+
+  var numberSuffix = function(override) {
+    var options = {
+      number: null,
+      decimals: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (options.decimals === null) {
+      options.decimals = 2;
+    }
+    var suffix = "";
+    var precision = options.decimals;
+    if (options.number > 999999999999999999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000000000000000000;
+      suffix = " sexdecillion";
+    } else if (options.number > 999999999999999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000000000000000;
+      suffix = " quindecillion";
+    } else if (options.number > 999999999999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000000000000;
+      suffix = " quattuordecillion";
+    } else if (options.number > 999999999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000000000;
+      suffix = " tredecillion";
+    } else if (options.number > 999999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000000;
+      suffix = " duodecillion";
+    } else if (options.number > 999999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000000;
+      suffix = " undecillion";
+    } else if (options.number > 999999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000000;
+      suffix = " decillion";
+    } else if (options.number > 999999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000000;
+      suffix = " nonillion";
+    } else if (options.number > 999999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000000;
+      suffix = " octillion";
+    } else if (options.number > 999999999999999999999999) {
+      options.number = options.number / 1000000000000000000000000;
+      suffix = " septillion";
+    } else if (options.number > 999999999999999999999) {
+      options.number = options.number / 1000000000000000000000;
+      suffix = " sextillion";
+    } else if (options.number > 999999999999999999) {
+      options.number = options.number / 1000000000000000000;
+      suffix = " quintillion";
+    } else if (options.number > 999999999999999) {
+      options.number = options.number / 1000000000000000;
+      suffix = " quadrillion";
+    } else if (options.number > 999999999999) {
+      options.number = options.number / 1000000000000;
+      suffix = " trillion";
+    } else if (options.number > 999999999) {
+      options.number = options.number / 1000000000;
+      suffix = " billion";
+    } else if (options.number > 999999) {
+      options.number = options.number / 1000000;
+      suffix = " million";
+    } else if (options.number > 999) {
+      options.number = options.number / 1000;
+      suffix = " thousand";
+    } else if (options.number < 1000) {
+      precision = 0;
+    }
+    return options.number.toFixed(precision) + suffix;
   };
 
   return {
     e: e,
     eA: eA,
+    operator: operator,
     getObject: getObject,
     setObject: setObject,
     makeObject: makeObject,
     sortObject: sortObject,
-    applyOptions: applyOptions
+    applyOptions: applyOptions,
+    numberSuffix: numberSuffix
   };
 
 })();

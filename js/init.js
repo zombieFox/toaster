@@ -1,4 +1,5 @@
 boot.init();
+milestones.init();
 toaster.init();
 
 // toaster.state.set({path: "toast.lifetime",value: 999999999999});

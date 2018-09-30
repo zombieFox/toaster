@@ -8,12 +8,19 @@
   --gray-700: #495057;
   --gray-800: #343a40;
   --gray-900: #212529;
-  --black-100: #000000;
-  --black-200: #1b1b1b;
+  --black-100: 0, 0, 0;
+  --black-200: 19, 21, 22;
+  --black-300: 29, 31, 32;
+  --black-400: 37, 40, 41;
+  --black-500: 43, 46, 48;
+  --black-600: 47, 51, 52;
+  --black-700: 50, 54, 56;
+  --black-800: 52, 56, 58;
+  --black-900: 53, 57, 59;
 }
 
 body {
-  background-color: var(--black-100);
+  background-color: rgb(var(--black-100));
 }
 
 .toaster {
@@ -24,22 +31,17 @@ body {
   height: 100vh;
 }
 
-.section-controls {
-  background-color: var(--black-200);
-  position: relative;
-  height: 70vh;
-}
-
-.controls {
-  padding: 1em 0;
-  transition: all 200ms ease-in-out;
-}
-
 .section-report {
-  background-color: var(--black-100);
+  background-color: rgb(var(--black-100));
   position: relative;
   padding: 1em 2em 3em 0;
   height: 30vh;
+}
+
+.section-controls {
+  background-color: rgb(var(--black-200));
+  position: relative;
+  height: 70vh;
 }
 
 .section-controls, .section-report {
@@ -54,7 +56,7 @@ body {
 }
 
 .display {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgb(var(--black-400));
   display: flex;
   align-items: center;
   position: relative;
@@ -63,8 +65,13 @@ body {
   height: 4em;
 }
 
+.controls {
+  padding: 1em 0;
+  transition: all 200ms ease-in-out;
+}
+
 .nav {
-  background-color: rgba(15, 15, 15, 0.6);
+  background-color: rgba(var(--black-500), 0.6);
   display: flex;
   align-items: center;
   position: absolute;
@@ -79,7 +86,7 @@ body {
 .menu-open .controls {
   opacity: 0.3;
   filter: blur(10px);
-  transform: scale(0.9);
+  transform: scale(0.95);
   pointer-events: none;
 }
 

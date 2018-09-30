@@ -12,10 +12,40 @@ var data = (function() {
     localStorage.removeItem(key);
   };
 
+  var store = function() {
+    save("toaster", JSON.stringify(toaster.state.get()));
+  };
+
+  var restore = function() {
+    if (load("toaster")) {
+      console.log("state restore");
+      toaster.state.set({
+        full: JSON.parse(load("toaster"))
+      });
+      message.render({
+        type: "success",
+        message: ["reboot complete", "TAI.dat state restored"],
+        format: "normal"
+      });
+      toaster.restore();
+    }
+  };
+
+  var reboot = function() {
+    for (var key in toaster.tick) {
+      clearTimeout(toaster.tick[key]);
+    }
+    clear("toaster");
+    location.reload();
+  };
+
   return {
     save: save,
     load: load,
-    clear: clear
+    clear: clear,
+    store: store,
+    restore: restore,
+    reboot: reboot
   };
 
 })();

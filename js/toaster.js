@@ -767,60 +767,14 @@ var toaster = (function() {
 
   })();
 
-  var store = function() {
-    data.save("toaster", JSON.stringify(state.get()));
-  };
-
-  var restore = function() {
-    if (data.load("toaster")) {
-      console.log("state restore");
-      state.set({
-        full: JSON.parse(data.load("toaster"))
-      });
-      message.render({
-        type: "success",
-        message: ["reboot complete", "TAI.dat state restored"],
-        format: "normal"
-      })
-      restoreEvents();
-    }
-  };
-
-  var reboot = function() {
-    for (var key in tick) {
-      clearTimeout(tick[key]);
-    }
-    data.clear("toaster");
-    location.reload();
-  };
-
-  var toggleMenu = function() {
-    var toaster = helper.e("#toaster");
-    if (toaster.classList.contains("menu-open")) {
-      toaster.classList.remove("menu-open");
-      message.render({
-        type: "system",
-        message: ["system menu close"],
-        format: "normal",
-      });
-    } else {
-      toaster.classList.add("menu-open");
-      message.render({
-        type: "system",
-        message: ["system menu open"],
-        format: "normal",
-      });
-    }
-  };
-
   var bind = function() {
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
       menu: function() {
-        toggleMenu();
+        menu.toggle();
       },
       reboot: function() {
-        reboot();
+        data.reboot();
       },
       toast: function() {
         makeToast(state.get({
@@ -1229,61 +1183,9 @@ var toaster = (function() {
           object: action,
           path: toastButton.action
         })(this);
-        render();
+        view.render();
       }, false);
     });
-  };
-
-  var operator = function(override) {
-    var options = {
-      type: null,
-      value: null,
-      by: null,
-      percentage: null,
-      integer: null,
-      min: null,
-      max: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var action = {
-      increase: function() {
-        options.value = options.value + options.by;
-      },
-      decrease: function() {
-        options.value = options.value - options.by;
-      },
-      divide: function() {
-        options.value = options.value / options.by;
-      },
-      multiply: function() {
-        options.value = options.value * options.by;
-      },
-      percentage: function() {
-        options.value = (options.percentage / 100) * options.value;
-      },
-      min: function() {
-        options.value = options.min;
-      },
-      max: function() {
-        options.value = options.max;
-      },
-      integer: function() {
-        options.value = Math.round(options.value);
-      }
-    };
-    action[options.type]();
-    if (options.min != null && options.value < options.min) {
-      action.min();
-    }
-    if (options.max != null && options.value > options.max) {
-      action.max();
-    }
-    if (options.integer != null && options.integer) {
-      action.integer();
-    }
-    return options.value;
   };
 
   var makeToast = function(amount) {
@@ -1292,7 +1194,7 @@ var toaster = (function() {
         amount--;
         state.set({
           path: "wheat.loaf.slice",
-          value: operator({
+          value: helper.operator({
             type: "increase",
             value: state.get({
               path: "wheat.loaf.slice"
@@ -1312,7 +1214,7 @@ var toaster = (function() {
           });
           state.set({
             path: "wheat.current",
-            value: operator({
+            value: helper.operator({
               type: "decrease",
               value: state.get({
                 path: "wheat.current"
@@ -1326,7 +1228,7 @@ var toaster = (function() {
     var toast = function(amount) {
       state.set({
         path: "toast.lifetime",
-        value: operator({
+        value: helper.operator({
           type: "increase",
           value: state.get({
             path: "toast.lifetime"
@@ -1336,7 +1238,7 @@ var toaster = (function() {
       });
       state.set({
         path: "toast.inventory",
-        value: operator({
+        value: helper.operator({
           type: "increase",
           value: state.get({
             path: "toast.inventory"
@@ -1383,7 +1285,7 @@ var toaster = (function() {
           }) > 0) {
           state.set({
             path: "toast.inventory",
-            value: operator({
+            value: helper.operator({
               type: "decrease",
               value: state.get({
                 path: "toast.inventory"
@@ -1393,7 +1295,7 @@ var toaster = (function() {
           });
           state.set({
             path: "consumed.count",
-            value: operator({
+            value: helper.operator({
               type: "increase",
               value: state.get({
                 path: "consumed.count"
@@ -1491,7 +1393,7 @@ var toaster = (function() {
     }
   };
 
-  var restoreEvents = function() {
+  var restore = function() {
     var fireEvent = {
       func: function(eventObject) {
         eventObject.actions.func.forEach(function(arrayItem) {
@@ -1546,7 +1448,7 @@ var toaster = (function() {
     if (current < max) {
       state.set({
         path: "system.cycles.current",
-        value: operator({
+        value: helper.operator({
           type: "increase",
           value: state.get({
             path: "system.cycles.current"
@@ -1664,7 +1566,7 @@ var toaster = (function() {
       increase: function() {
         state.set({
           path: "wheat.loaf.max",
-          value: operator({
+          value: helper.operator({
             type: "multiply",
             value: state.get({
               path: "wheat.loaf.max"
@@ -1678,97 +1580,6 @@ var toaster = (function() {
       }
     };
     consumerAction[options.action]();
-  };
-
-  var makeMilestones = function() {
-    var baseSteps = state.get({
-      path: "milestones.steps.base"
-    });
-    var maxStep = state.get({
-      path: "milestones.steps.max"
-    });
-    var milestone = [];
-    if (state.get({
-        path: "milestones.steps.all",
-      }).length == 0) {
-      baseSteps.forEach(function(arrayItem) {
-        var multiplier = 1;
-        var step = arrayItem;
-        while (multiplier < maxStep) {
-          var stepObject = {
-            count: step * (multiplier),
-            check: {
-              lifetime: false,
-              consumed: false,
-              autoToaster: false
-            }
-          };
-          milestone.push(stepObject)
-          multiplier = multiplier * 10;
-        }
-      });
-      milestone = helper.sortObject(milestone, "count");
-      state.set({
-        path: "milestones.steps.all",
-        value: milestone
-      })
-    }
-  };
-
-  var milestones = function() {
-    var allMilestones = state.get({
-      path: "milestones"
-    });
-    allMilestones.steps.all.forEach(function(arrayItem, index) {
-      // console.log(arrayItem);
-      var step = arrayItem;
-      for (var key in step.check) {
-        // console.log(allMilestones.address[key]);
-        var valueToCheck = state.get({
-          path: allMilestones.address[key]
-        });
-        if (valueToCheck >= step.count && !step.check[key]) {
-          step.check[key] = true;
-          // console.log(key, step.count, step.check[key]);
-          milestoneMessage({
-            count: step.count,
-            type: key
-          });
-        }
-      };
-    });
-  };
-
-  var milestoneMessage = function(override) {
-    var options = {
-      count: null,
-      type: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var messageParts = {
-      lifetime: {
-        prefix: "milestone: ",
-        suffix: " lifetime toast"
-      },
-      consumed: {
-        prefix: "milestone: ",
-        suffix: " consumed toast"
-      },
-      autoToaster: {
-        prefix: "milestone: ",
-        suffix: " subordinate auto toasters"
-      }
-    };
-    message.render({
-      type: "success",
-      message: [messageParts[options.type].prefix + numberSuffix({
-        number: options.count,
-        decimals: 0
-      }) + messageParts[options.type].suffix],
-      format: "normal"
-    });
   };
 
   var costForMultiple = function(override) {
@@ -1796,7 +1607,7 @@ var toaster = (function() {
       if (options.cost.multiply != null && options.cost.multiply) {
         for (var i = 0; i < options.cost.units; i++) {
           cost.multiple = cost.multiple + cost.next;
-          cost.next = operator({
+          cost.next = helper.operator({
             type: "multiply",
             value: cost.next,
             by: state.get({
@@ -1848,7 +1659,7 @@ var toaster = (function() {
     var cost = costForMultiple(options);
     state.set({
       path: options.cost.currency,
-      value: operator({
+      value: helper.operator({
         type: "decrease",
         value: state.get({
           path: options.cost.currency
@@ -1878,7 +1689,7 @@ var toaster = (function() {
         increment: function() {
           state.set({
             path: options.change.target,
-            value: operator({
+            value: helper.operator({
               type: "increase",
               value: state.get({
                 path: options.change.target
@@ -1890,12 +1701,12 @@ var toaster = (function() {
         percentage: function() {
           state.set({
             path: options.change.target,
-            value: operator({
+            value: helper.operator({
               type: "increase",
               value: state.get({
                 path: options.change.target
               }),
-              by: operator({
+              by: helper.operator({
                 type: "percentage",
                 value: state.get({
                   path: options.change.target
@@ -1911,7 +1722,7 @@ var toaster = (function() {
         increment: function() {
           state.set({
             path: options.change.target,
-            value: operator({
+            value: helper.operator({
               type: "decrease",
               value: state.get({
                 path: options.change.target
@@ -1923,12 +1734,12 @@ var toaster = (function() {
         percentage: function() {
           state.set({
             path: options.change.target,
-            value: operator({
+            value: helper.operator({
               type: "decrease",
               value: state.get({
                 path: options.change.target
               }),
-              by: operator({
+              by: helper.operator({
                 type: "percentage",
                 value: state.get({
                   path: options.change.target
@@ -1997,11 +1808,11 @@ var toaster = (function() {
         },
         cycles: {
           success: function() {
-            return ["-" + operator({
+            return ["-" + helper.operator({
               type: "divide",
               value: options.change.amount,
               by: 1000
-            }) + "s cycles speed, 1 cycle / " + operator({
+            }) + "s cycles speed, 1 cycle / " + helper.operator({
               type: "divide",
               value: state.get({
                 path: "system.cycles.speed.interval.current"
@@ -2041,11 +1852,11 @@ var toaster = (function() {
         },
         speed: {
           success: function() {
-            return ["-" + operator({
+            return ["-" + helper.operator({
               type: "divide",
               value: options.change.amount,
               by: 1000
-            }) + "s subordinate auto toaster speed, each toasting every " + operator({
+            }) + "s subordinate auto toaster speed, each toasting every " + helper.operator({
               type: "divide",
               value: state.get({
                 path: "autoToaster.speed.interval.current"
@@ -2109,7 +1920,7 @@ var toaster = (function() {
   var changeAutoToasterOutput = function() {
     state.set({
       path: "autoToaster.output",
-      value: operator({
+      value: helper.operator({
         type: "multiply",
         value: state.get({
           path: "autoToaster.count"
@@ -2182,7 +1993,7 @@ var toaster = (function() {
       increase: function() {
         state.set({
           path: "consumed.rate",
-          value: operator({
+          value: helper.operator({
             type: "multiply",
             value: state.get({
               path: "consumed.rate"
@@ -2205,111 +2016,6 @@ var toaster = (function() {
         path: "system.processor.power"
       }) * 10)
     });
-  };
-
-  var render = function() {
-    var allDataReadouts = helper.eA("[data-toast-readout]");
-    allDataReadouts.forEach(function(arrayItem, index) {
-      var options = helper.makeObject(arrayItem.dataset.toastReadout);
-      var data = state.get({
-        path: options.path
-      });
-      var format = {
-        suffix: function() {
-          data = numberSuffix({
-            number: data,
-            decimals: options.decimals
-          });
-        },
-        local: function() {
-          data = data.toLocaleString();
-        },
-        divide: function() {
-          data = operator({
-            type: "divide",
-            value: data,
-            by: options.by
-          })
-        }
-      };
-      if (options.modify != null) {
-        format[options.modify]();
-      }
-      if (options.format != null) {
-        format[options.format]();
-      }
-      arrayItem.textContent = data;
-    });
-  };
-
-  var numberSuffix = function(override) {
-    var options = {
-      number: null,
-      decimals: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    if (options.decimals === null) {
-      options.decimals = 2;
-    }
-    var suffix = "";
-    var precision = options.decimals;
-    if (options.number > 999999999999999999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000000000000000000;
-      suffix = " sexdecillion";
-    } else if (options.number > 999999999999999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000000000000000;
-      suffix = " quindecillion";
-    } else if (options.number > 999999999999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000000000000;
-      suffix = " quattuordecillion";
-    } else if (options.number > 999999999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000000000;
-      suffix = " tredecillion";
-    } else if (options.number > 999999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000000;
-      suffix = " duodecillion";
-    } else if (options.number > 999999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000000;
-      suffix = " undecillion";
-    } else if (options.number > 999999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000000;
-      suffix = " decillion";
-    } else if (options.number > 999999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000000;
-      suffix = " nonillion";
-    } else if (options.number > 999999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000000;
-      suffix = " octillion";
-    } else if (options.number > 999999999999999999999999) {
-      options.number = options.number / 1000000000000000000000000;
-      suffix = " septillion";
-    } else if (options.number > 999999999999999999999) {
-      options.number = options.number / 1000000000000000000000;
-      suffix = " sextillion";
-    } else if (options.number > 999999999999999999) {
-      options.number = options.number / 1000000000000000000;
-      suffix = " quintillion";
-    } else if (options.number > 999999999999999) {
-      options.number = options.number / 1000000000000000;
-      suffix = " quadrillion";
-    } else if (options.number > 999999999999) {
-      options.number = options.number / 1000000000000;
-      suffix = " trillion";
-    } else if (options.number > 999999999) {
-      options.number = options.number / 1000000000;
-      suffix = " billion";
-    } else if (options.number > 999999) {
-      options.number = options.number / 1000000;
-      suffix = " million";
-    } else if (options.number > 999) {
-      options.number = options.number / 1000;
-      suffix = " thousand";
-    } else if (options.number < 1000) {
-      precision = 0;
-    }
-    return options.number.toFixed(precision) + suffix;
   };
 
   var tick = {
@@ -2337,32 +2043,27 @@ var toaster = (function() {
   };
 
   var init = function() {
-    restore();
-    makeMilestones();
+    data.restore();
     bind();
     triggerTick({
       tickName: "events",
       func: function() {
         events();
-        milestones();
-        store();
-        render();
+        milestones.check();
+        data.store();
+        view.render();
       },
       intervalAddress: "events.interval"
     });
   };
 
   return {
-    costForMultiple: costForMultiple,
-    operator: operator,
     init: init,
     events: events,
     state: state,
     phase: phase,
-    store: store,
-    reboot: reboot,
+    tick: tick,
     restore: restore,
-    render: render,
     bind: bind
   };
 
