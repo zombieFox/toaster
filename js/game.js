@@ -113,7 +113,7 @@ var game = (function() {
         autoToaster: "autoToaster.count"
       },
       steps: {
-        base: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000],
+        base: [100, 200, 300, 400, 500, 600, 700, 800, 900],
         max: 100000000000000000,
         all: []
       }
@@ -149,7 +149,8 @@ var game = (function() {
             number: 2
           }],
           actions: {
-            unlock: ["#stage-system-substage-cycles"],
+            // unlock: ["#stage-system-substage-cycles"],
+            append: [strategy.all.cyclesSpeed],
             message: [{
               type: "normal",
               message: ["system cycles discovered"],
@@ -239,7 +240,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-collect-wheat"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: collect wheat"],
+              message: ["new strategy discovered:", "collect wheat"],
               format: "normal"
             }]
           }
@@ -275,7 +276,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-more-toast-from-wheat"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: more toast from wheat"],
+              message: ["new strategy discovered:", "more toast from wheat"],
               format: "normal"
             }]
           }
@@ -311,7 +312,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-cycles-speed"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: cycles speed"],
+              message: ["new strategy discovered:", "cycles speed"],
               format: "normal"
             }]
           }
@@ -343,7 +344,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-matter-conversion"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: toast matter conversion"],
+              message: ["new strategy discovered:", "toast matter conversion"],
               format: "normal"
             }]
           }
@@ -379,7 +380,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-auto-toaster"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toasters"],
+              message: ["new strategy discovered:", "subordinate auto toasters"],
               format: "normal"
             }]
           }
@@ -419,7 +420,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-auto-toaster-speed"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toaster speed"],
+              message: ["new strategy discovered:", "subordinate auto toaster speed"],
               format: "normal"
             }]
           }
@@ -459,7 +460,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-auto-toaster-efficiency"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toaster efficiency"],
+              message: ["new strategy discovered:", "subordinate auto toaster efficiency"],
               format: "normal"
             }]
           }
@@ -495,7 +496,7 @@ var game = (function() {
             unlock: ["#stage-strategy-substage-sensors"],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: sensor"],
+              message: ["new strategy discovered:", "sensor"],
               format: "normal"
             }]
           }

@@ -53,6 +53,16 @@ var events = (function() {
           });
         }
       },
+      append: function(eventObject) {
+        if (fireEvent.checkPass(eventObject.validate)) {
+          eventObject.passed = true;
+          eventObject.actions.append.forEach(function(arrayItem) {
+            appendElement({
+              element: arrayItem
+            });
+          });
+        }
+      },
       message: function(eventObject) {
         if (fireEvent.checkPass(eventObject.validate)) {
           eventObject.passed = true;
@@ -85,16 +95,72 @@ var events = (function() {
     }
   };
 
-  var unlockStage = function(override) {
+  var restore = function() {
+    var fireEvent = {
+      func: function(eventObject) {
+        eventObject.actions.func.forEach(function(arrayItem) {
+          eventFunc({
+            func: arrayItem
+          });
+        });
+      },
+      unlock: function(eventObject) {
+        eventObject.actions.unlock.forEach(function(arrayItem) {
+          unlockStage({
+            stage: arrayItem
+          });
+        });
+      },
+      lock: function(eventObject) {
+        eventObject.actions.lock.forEach(function(arrayItem) {
+          lockStage({
+            stage: arrayItem
+          });
+        });
+      },
+      append: function(eventObject) {
+        if (fireEvent.checkPass(eventObject.validate)) {
+          eventObject.passed = true;
+          eventObject.actions.append.forEach(function(arrayItem) {
+            appendElement({
+              element: arrayItem
+            });
+          });
+        }
+      }
+    }
+    var events = game.get({
+      path: "events." + phase.get()
+    });
+    // all events
+    for (var key in events) {
+      // console.log(key, "events:", events[key]);
+      // all events in a given key
+      events[key].forEach(function(eventObject) {
+        // if event is false
+        if (eventObject.passed) {
+          // fire unlock or lock event
+          for (var key in eventObject.actions) {
+            if (key != "message") {
+              fireEvent[key](eventObject);
+            }
+          }
+        }
+      });
+    }
+  };
+
+  var appendElement = function(override) {
     var options = {
-      stage: null
+      element: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (helper.e(options.stage)) {
-      helper.e(options.stage).classList.remove("d-none");
-    }
+    console.log(options.element);
+    // if (helper.e(options.stage)) {
+    //   helper.e(options.stage).classList.remove("d-none");
+    // }
   };
 
   var lockStage = function(override) {
@@ -163,51 +229,6 @@ var events = (function() {
       object: funcList,
       path: options.func
     })();
-  };
-
-  var restore = function() {
-    var fireEvent = {
-      func: function(eventObject) {
-        eventObject.actions.func.forEach(function(arrayItem) {
-          eventFunc({
-            func: arrayItem
-          });
-        });
-      },
-      unlock: function(eventObject) {
-        eventObject.actions.unlock.forEach(function(arrayItem) {
-          unlockStage({
-            stage: arrayItem
-          });
-        });
-      },
-      lock: function(eventObject) {
-        eventObject.actions.lock.forEach(function(arrayItem) {
-          lockStage({
-            stage: arrayItem
-          });
-        });
-      }
-    }
-    var events = game.get({
-      path: "events." + phase.get()
-    });
-    // all events
-    for (var key in events) {
-      // console.log(key, "events:", events[key]);
-      // all events in a given key
-      events[key].forEach(function(eventObject) {
-        // if event is false
-        if (eventObject.passed) {
-          // fire unlock or lock event
-          for (var key in eventObject.actions) {
-            if (key != "message") {
-              fireEvent[key](eventObject);
-            }
-          }
-        }
-      });
-    }
   };
 
   return {
