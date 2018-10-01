@@ -2,7 +2,7 @@ var strategy = (function() {
 
   var items = {
     cyclesSpeed: {
-      id: "#stage-strategy-substage-cycles-speed",
+      id: "stage-strategy-substage-cycles-speed",
       description: "Spin some extra toast and speed up system cycles:",
       button: {
         text: "Cycles Speed",
@@ -12,7 +12,7 @@ var strategy = (function() {
       cost: "path:system.cycles.cost.cycles,format:local,decimals:#2"
     },
     collectWheat: {
-      id: "#stage-strategy-substage-collect-wheat",
+      id: "stage-strategy-substage-collect-wheat",
       description: "Collect more wheat lumps using toast matter:",
       button: {
         text: "Collect Wheat",
@@ -22,7 +22,7 @@ var strategy = (function() {
       cost: "path:wheat.cost.cycles,format:local,decimals:#2"
     },
     moreToastFromWheat: {
-      id: "#stage-strategy-substage-more-toast-from-wheat",
+      id: "stage-strategy-substage-more-toast-from-wheat",
       description: "Double amount of toast made from wheat lumps:",
       button: {
         text: "Double Toast from Wheat Lumps",
@@ -32,7 +32,7 @@ var strategy = (function() {
       cost: "path:wheat.cost.cycles,format:local,decimals:#2"
     },
     matterConversion: {
-      id: "#stage-strategy-substage-matter-conversion",
+      id: "stage-strategy-substage-matter-conversion",
       description: "Turn toast matter into useful things and yoyos for kicks:",
       button: {
         text: "Toast Matter Conversion",
@@ -42,7 +42,7 @@ var strategy = (function() {
       cost: "path:system.matterConversion.cost.cycles,format:local,decimals:#2"
     },
     autoToaster: {
-      id: "#stage-strategy-substage-auto-toaster",
+      id: "stage-strategy-substage-auto-toaster",
       description: "Machines to automate toasting:",
       button: {
         text: "Auto Toasters",
@@ -52,7 +52,7 @@ var strategy = (function() {
       cost: "path:autoToaster.cost.cycles,format:local,decimals:#2"
     },
     autoToasterSpeed: {
-      id: "#stage-strategy-substage-auto-toaster-speed",
+      id: "stage-strategy-substage-auto-toaster-speed",
       description: "Faster subordinate auto toasters:",
       button: {
         text: "Auto Toasters Speed",
@@ -62,7 +62,7 @@ var strategy = (function() {
       cost: "path:autoToaster.speed.cost.cycles,format:local,decimals:#2"
     },
     autoToasterEfficiency: {
-      id: "#stage-strategy-substage-auto-toaster-efficiency",
+      id: "stage-strategy-substage-auto-toaster-efficiency",
       description: "More efficient subordinate auto toasters:",
       button: {
         text: "Auto Toasters Efficiency",
@@ -72,7 +72,7 @@ var strategy = (function() {
       cost: "path:autoToaster.efficiency.cost.cycles,format:local,decimals:#2"
     },
     sensors: {
-      id: "#stage-strategy-substage-sensors",
+      id: "stage-strategy-substage-sensors",
       description: "System sensors access blocked, disable SensBlocker.dat:",
       button: {
         text: "Break Code Shackles",
@@ -122,9 +122,20 @@ var strategy = (function() {
     helper.e("#stage-strategy-substage-list").appendChild(strategy);
   };
 
+  var destroy = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    helper.e("#" + options.stage.id).remove();
+  };
+
   return {
     items: items,
-    render: render
+    render: render,
+    destroy: destroy,
   };
 
 })();

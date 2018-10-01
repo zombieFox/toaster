@@ -63,6 +63,16 @@ var events = (function() {
           });
         }
       },
+      remove: function(eventObject) {
+        if (fireEvent.checkPass(eventObject.validate)) {
+          eventObject.passed = true;
+          eventObject.actions.remove.forEach(function(arrayItem) {
+            removeElement({
+              stage: arrayItem
+            });
+          });
+        }
+      },
       message: function(eventObject) {
         if (fireEvent.checkPass(eventObject.validate)) {
           eventObject.passed = true;
@@ -124,6 +134,13 @@ var events = (function() {
             stage: arrayItem
           });
         });
+      },
+      remove: function(eventObject) {
+        eventObject.actions.remove.forEach(function(arrayItem) {
+          removeElement({
+            stage: arrayItem
+          });
+        });
       }
     }
     var events = game.get({
@@ -155,6 +172,18 @@ var events = (function() {
       options = helper.applyOptions(options, override);
     }
     strategy.render({
+      stage: options.stage
+    })
+  };
+
+  var removeElement = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    strategy.destroy({
       stage: options.stage
     })
   };
