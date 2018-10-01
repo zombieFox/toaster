@@ -1,6 +1,12 @@
 var toaster = (function() {
 
-  var bind = function() {
+  var bind = function(override) {
+    var options = {
+      button: null,
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
       menu: function() {
@@ -409,16 +415,23 @@ var toaster = (function() {
         }
       }
     };
-    allButtons.forEach(function(arrayItem, index) {
-      arrayItem.addEventListener("click", function() {
-        var toastButton = helper.makeObject(this.dataset.toastButton);
+    var bindButton = function(button) {
+      button.addEventListener("click", function() {
+        var toastButton = helper.makeObject(button.dataset.toastButton);
         helper.getObject({
           object: action,
           path: toastButton.action
-        })(this);
+        })(button);
         view.render();
       }, false);
-    });
+    };
+    if (options.button != null) {
+      bindButton(options.button);
+    } else {
+      allButtons.forEach(function(arrayItem, index) {
+        bindButton(arrayItem);
+      });
+    }
   };
 
   var costForMultiple = function(override) {

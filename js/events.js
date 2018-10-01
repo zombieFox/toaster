@@ -58,7 +58,7 @@ var events = (function() {
           eventObject.passed = true;
           eventObject.actions.append.forEach(function(arrayItem) {
             appendElement({
-              element: arrayItem
+              stage: arrayItem
             });
           });
         }
@@ -119,14 +119,11 @@ var events = (function() {
         });
       },
       append: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
-          eventObject.passed = true;
-          eventObject.actions.append.forEach(function(arrayItem) {
-            appendElement({
-              element: arrayItem
-            });
+        eventObject.actions.append.forEach(function(arrayItem) {
+          appendElement({
+            stage: arrayItem
           });
-        }
+        });
       }
     }
     var events = game.get({
@@ -152,15 +149,26 @@ var events = (function() {
 
   var appendElement = function(override) {
     var options = {
-      element: null
+      stage: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    console.log(options.element);
-    // if (helper.e(options.stage)) {
-    //   helper.e(options.stage).classList.remove("d-none");
-    // }
+    strategy.render({
+      stage: options.stage
+    })
+  };
+
+  var unlockStage = function(override) {
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (helper.e(options.stage)) {
+      helper.e(options.stage).classList.remove("d-none");
+    }
   };
 
   var lockStage = function(override) {
