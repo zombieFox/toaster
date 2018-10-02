@@ -19,6 +19,7 @@ var toaster = (function() {
         toast.make(game.get({
           path: "system.processor.power"
         }));
+        data.store();
       },
       wheat: function(button) {
         var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -65,6 +66,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
+        data.store();
       },
       processor: {
         boost: function(button) {
@@ -114,6 +116,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         }
       },
       decrypt: {
@@ -166,6 +169,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         }
       },
       cycles: {
@@ -215,6 +219,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         }
       },
       strategy: function(button) {
@@ -265,6 +270,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
+        data.store();
       },
       autoToaster: {
         make: function(button) {
@@ -315,6 +321,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         },
         speed: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -363,6 +370,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         },
         efficiency: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -412,6 +420,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.store();
         }
       }
     };
