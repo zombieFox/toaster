@@ -329,10 +329,16 @@ var helper = (function() {
     return object;
   };
 
+  var months = function(index) {
+    var all = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return all[index];
+  }
+
   return {
     e: e,
     eA: eA,
     timestamp: timestamp,
+    months: months,
     operator: operator,
     getObject: getObject,
     setObject: setObject,
