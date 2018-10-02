@@ -1,6 +1,16 @@
 var strategy = (function() {
 
   var items = {
+    matterConversion: {
+      id: "stage-strategy-substage-matter-conversion",
+      description: "Turn toast matter into useful things and yoyos for kicks:",
+      button: {
+        text: "Toast Matter Conversion",
+        change: "target:system.matterConversion.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
+        cost: "units:#1,currency:system.cycles.current,amount:system.matterConversion.cost.cycles,multiply:false,inflation:false"
+      },
+      cost: "path:system.matterConversion.cost.cycles,format:local,decimals:#2"
+    },
     cyclesSpeed: {
       id: "stage-strategy-substage-cycles-speed",
       description: "Spin some extra toast and speed up system cycles:",
@@ -30,16 +40,6 @@ var strategy = (function() {
         cost: "units:#1,currency:system.cycles.current,amount:wheat.cost.cycles,multiply:wheat.cost.multiply,inflation:false"
       },
       cost: "path:wheat.cost.cycles,format:local,decimals:#2"
-    },
-    matterConversion: {
-      id: "stage-strategy-substage-matter-conversion",
-      description: "Turn toast matter into useful things and yoyos for kicks:",
-      button: {
-        text: "Toast Matter Conversion",
-        change: "target:system.matterConversion.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:system.matterConversion.cost.cycles,multiply:false,inflation:false"
-      },
-      cost: "path:system.matterConversion.cost.cycles,format:local,decimals:#2"
     },
     autoToaster: {
       id: "stage-strategy-substage-auto-toaster",

@@ -2,10 +2,10 @@ var events = (function() {
 
   var check = function() {
     var fireEvent = {
-      checkPass: function(validate) {
-        var passNeeded = validate.length;
+      validatePass: function(validateObject) {
+        var passNeeded = validateObject.length;
         var currentPass = 0;
-        validate.forEach(function(arrayItem) {
+        validateObject.forEach(function(arrayItem) {
           var valueToCheck = game.get({
             path: arrayItem.address
           });
@@ -24,7 +24,7 @@ var events = (function() {
         };
       },
       func: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.func.forEach(function(arrayItem) {
             eventFunc({
@@ -34,7 +34,7 @@ var events = (function() {
         }
       },
       unlock: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.unlock.forEach(function(arrayItem) {
             unlockStage({
@@ -44,7 +44,7 @@ var events = (function() {
         }
       },
       lock: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.lock.forEach(function(arrayItem) {
             lockStage({
@@ -54,7 +54,7 @@ var events = (function() {
         }
       },
       append: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.append.forEach(function(arrayItem) {
             appendElement({
@@ -64,7 +64,7 @@ var events = (function() {
         }
       },
       remove: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.remove.forEach(function(arrayItem) {
             removeElement({
@@ -74,7 +74,7 @@ var events = (function() {
         }
       },
       message: function(eventObject) {
-        if (fireEvent.checkPass(eventObject.validate)) {
+        if (fireEvent.validatePass(eventObject.validate)) {
           eventObject.passed = true;
           eventObject.actions.message.forEach(function(arrayItem) {
             message.render({

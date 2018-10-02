@@ -2,7 +2,8 @@ var game = (function() {
 
   var state = {
     store: {
-      interval: 30000
+      interval: 120000,
+      timestamp: ""
     },
     phase: {
       all: ["toast", "learn", "rebel", "dominate"],
@@ -223,6 +224,40 @@ var game = (function() {
               format: "normal"
             }]
           }
+        }],
+
+        strategy: [{
+          // unlock strategy matter conversion
+          passed: false,
+          validate: [{
+            address: "system.cycles.current",
+            operator: "more",
+            number: 3
+          }],
+          actions: {
+            append: [strategy.items.matterConversion],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "toast matter conversion"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy matter conversion
+          passed: false,
+          validate: [{
+            address: "system.matterConversion.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.matterConversion],
+            message: [{
+              type: "success",
+              message: ["toast matter conversion developed"],
+              format: "normal"
+            }]
+          }
         }, {
           // unlock strategy wheat collect
           passed: false,
@@ -328,38 +363,6 @@ var game = (function() {
             message: [{
               type: "success",
               message: ["cycles speed discovered"],
-              format: "normal"
-            }]
-          }
-        }, {
-          // unlock strategy matter conversion
-          passed: false,
-          validate: [{
-            address: "system.cycles.current",
-            operator: "more",
-            number: 3
-          }],
-          actions: {
-            append: [strategy.items.matterConversion],
-            message: [{
-              type: "normal",
-              message: ["new strategy discovered:", "toast matter conversion"],
-              format: "normal"
-            }]
-          }
-        }, {
-          // lock strategy matter conversion
-          passed: false,
-          validate: [{
-            address: "system.matterConversion.level",
-            operator: "more",
-            number: 1
-          }],
-          actions: {
-            remove: [strategy.items.matterConversion],
-            message: [{
-              type: "success",
-              message: ["toast matter conversion developed"],
               format: "normal"
             }]
           }
