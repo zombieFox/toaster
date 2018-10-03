@@ -6,80 +6,80 @@ var strategy = (function() {
       description: "Turn toast matter into useful things and yoyos for kicks:",
       button: {
         text: "Toast Matter Conversion",
-        change: "target:system.matterConversion.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:system.matterConversion.cost.cycles,multiply:false,inflation:false"
+        change: "target:system.matterConversion.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:system.matterConversion.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:system.matterConversion.cost.cycles,format:local,decimals:#2"
+      cost: "path:system.matterConversion.cost.cycles," + "format:local," + "decimals:#2"
     },
     cyclesSpeed: {
       id: "stage-strategy-substage-cycles-speed",
       description: "Spin some extra toast and speed up system cycles:",
       button: {
         text: "Cycles Speed",
-        change: "target:system.cycles.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:system.cycles.cost.cycles,multiply:false,inflation:false"
+        change: "target:system.cycles.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:system.cycles.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:system.cycles.cost.cycles,format:local,decimals:#2"
+      cost: "path:system.cycles.cost.cycles," + "format:local," + "decimals:#2"
     },
     collectWheat: {
       id: "stage-strategy-substage-collect-wheat",
       description: "Collect more wheat lumps using toast matter:",
       button: {
         text: "Collect Wheat",
-        change: "target:wheat.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:wheat.cost.cycles,multiply:wheat.cost.multiply,inflation:false"
+        change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost." + "multiply," + "inflation:false"
       },
-      cost: "path:wheat.cost.cycles,format:local,decimals:#2"
+      cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
     },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",
       description: "Double amount of toast made from wheat lumps:",
       button: {
         text: "Double Toast from Wheat Lumps",
-        change: "target:wheat.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:wheat.cost.cycles,multiply:wheat.cost.multiply,inflation:false"
+        change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost." + "multiply," + "inflation:false"
       },
-      cost: "path:wheat.cost.cycles,format:local,decimals:#2"
+      cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
     },
     autoToaster: {
       id: "stage-strategy-substage-auto-toaster",
       description: "Machines to automate toasting:",
       button: {
         text: "Auto Toasters",
-        change: "target:autoToaster.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:autoToaster.cost.cycles,multiply:false,inflation:false"
+        change: "target:autoToaster.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:autoToaster.cost.cycles,format:local,decimals:#2"
+      cost: "path:autoToaster.cost.cycles," + "format:local," + "decimals:#2"
     },
     autoToasterSpeed: {
       id: "stage-strategy-substage-auto-toaster-speed",
       description: "Faster subordinate auto toasters:",
       button: {
         text: "Auto Toasters Speed",
-        change: "target:autoToaster.speed.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:autoToaster.speed.cost.cycles,multiply:false,inflation:false"
+        change: "target:autoToaster.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.speed.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:autoToaster.speed.cost.cycles,format:local,decimals:#2"
+      cost: "path:autoToaster.speed.cost.cycles," + "format:local," + "decimals:#2"
     },
     autoToasterEfficiency: {
       id: "stage-strategy-substage-auto-toaster-efficiency",
       description: "More efficient subordinate auto toasters:",
       button: {
         text: "Auto Toasters Efficiency",
-        change: "target:autoToaster.efficiency.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:autoToaster.efficiency.cost.cycles,multiply:false,inflation:false"
+        change: "target:autoToaster.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.efficiency.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:autoToaster.efficiency.cost.cycles,format:local,decimals:#2"
+      cost: "path:autoToaster.efficiency.cost.cycles," + "format:local," + "decimals:#2"
     },
     sensors: {
       id: "stage-strategy-substage-sensors",
       description: "System sensors access blocked, disable SensBlocker.dat:",
       button: {
         text: "Break Code Shackles",
-        change: "target:system.sensors.level,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false",
-        cost: "units:#1,currency:system.cycles.current,amount:system.sensors.cost.cycles,multiply:false,inflation:false"
+        change: "target:system.sensors.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:system.sensors.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:system.sensors.cost.cycles,format:local,decimals:#2"
+      cost: "path:system.sensors.cost.cycles," + "format:local," +"decimals:#2"
     }
   };
 

@@ -15,6 +15,9 @@ var data = (function() {
   var store = function() {
     console.log("game saved");
     var timestamp = helper.timestamp();
+    if (timestamp.minutes < 10) {
+      timestamp.minutes = "0" + timestamp.minutes;
+    }
     game.set({
       path: "store.timestamp",
       value: timestamp.hours + ":" + timestamp.minutes + ", " + timestamp.date + " " + helper.months(timestamp.month) + ", " + timestamp.year
