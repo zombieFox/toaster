@@ -511,7 +511,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            append: [strategy.items.sensors],
+            remove: [strategy.items.sensors],
             message: [{
               type: "system",
               message: ["SensBlocker.dat disabled"],
