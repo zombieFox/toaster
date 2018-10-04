@@ -35,7 +35,8 @@ var menu = (function() {
   return {
     open: open,
     close: close,
-    toggle: toggle
+    toggle: toggle,
+    render: render
   };
 
 })();

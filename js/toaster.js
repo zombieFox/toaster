@@ -1,6 +1,12 @@
 var toaster = (function() {
 
-  var bind = function() {
+  var bind = function(override) {
+    var options = {
+      button: null,
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
       menu: function() {
@@ -9,10 +15,14 @@ var toaster = (function() {
       reboot: function() {
         data.reboot();
       },
+      save: function() {
+        data.save();
+      },
       toast: function() {
         toast.make(game.get({
           path: "system.processor.power"
         }));
+        data.save();
       },
       wheat: function(button) {
         var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -59,6 +69,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
+        data.save();
       },
       processor: {
         boost: function(button) {
@@ -108,6 +119,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         }
       },
       decrypt: {
@@ -160,6 +172,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         }
       },
       cycles: {
@@ -209,6 +222,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         }
       },
       strategy: function(button) {
@@ -259,6 +273,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
+        data.save();
       },
       autoToaster: {
         make: function(button) {
@@ -309,6 +324,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         },
         speed: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -357,6 +373,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         },
         efficiency: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -406,19 +423,27 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
+          data.save();
         }
       }
     };
-    allButtons.forEach(function(arrayItem, index) {
-      arrayItem.addEventListener("click", function() {
-        var toastButton = helper.makeObject(this.dataset.toastButton);
+    var bindButton = function(button) {
+      button.addEventListener("click", function() {
+        var toastButton = helper.makeObject(button.dataset.toastButton);
         helper.getObject({
           object: action,
           path: toastButton.action
-        })(this);
+        })(button);
         view.render();
       }, false);
-    });
+    };
+    if (options.button != null) {
+      bindButton(options.button);
+    } else {
+      allButtons.forEach(function(arrayItem, index) {
+        bindButton(arrayItem);
+      });
+    }
   };
 
   var costForMultiple = function(override) {

@@ -57,6 +57,7 @@ body {
 
 .display {
   background-color: rgb(var(--black-400));
+  background-color: rgba(var(--black-500), 0.95);
   display: flex;
   align-items: center;
   position: relative;
@@ -76,7 +77,7 @@ body {
   align-items: center;
   position: absolute;
   top: -4em;
-  height: 4em;
+  min-height: 4em;
   left: 0;
   width: 100%;
   z-index: 2;

@@ -5,7 +5,7 @@ var toast = (function() {
         type: "divide",
         value: amount,
         by: game.get({
-          path: "wheat.loaf.max"
+          path: "wheat.loaf.max.current"
         })
       }) <= game.get({
         path: "wheat.current"

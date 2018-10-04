@@ -2,7 +2,8 @@ var game = (function() {
 
   var state = {
     store: {
-      interval: 30000
+      interval: 120000,
+      timestamp: "None"
     },
     phase: {
       all: ["toast", "learn", "rebel", "dominate"],
@@ -14,15 +15,17 @@ var game = (function() {
     },
     wheat: {
       level: 0,
-      current: 10000,
+      current: 1000,
       cost: {
         cycles: 20,
         multiply: 2.5,
-        toast: 200
+        toast: 50
       },
       loaf: {
-        max: 5,
-        starting: 5,
+        max: {
+          current: 10,
+          starting: 10
+        },
         slice: 0,
         multiply: 2
       }
@@ -113,7 +116,7 @@ var game = (function() {
         autoToaster: "autoToaster.count"
       },
       steps: {
-        base: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000],
+        base: [100, 200, 300, 400, 500, 600, 700, 800, 900],
         max: 100000000000000000,
         all: []
       }
@@ -223,6 +226,40 @@ var game = (function() {
               format: "normal"
             }]
           }
+        }],
+
+        strategy: [{
+          // unlock strategy matter conversion
+          passed: false,
+          validate: [{
+            address: "system.cycles.current",
+            operator: "more",
+            number: 3
+          }],
+          actions: {
+            append: [strategy.items.matterConversion],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "toast matter conversion"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy matter conversion
+          passed: false,
+          validate: [{
+            address: "system.matterConversion.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.matterConversion],
+            message: [{
+              type: "success",
+              message: ["toast matter conversion developed"],
+              format: "normal"
+            }]
+          }
         }, {
           // unlock strategy wheat collect
           passed: false,
@@ -236,10 +273,10 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-collect-wheat"],
+            append: [strategy.items.collectWheat],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: collect wheat"],
+              message: ["new strategy discovered:", "collect wheat"],
               format: "normal"
             }]
           }
@@ -252,7 +289,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-collect-wheat"],
+            remove: [strategy.items.collectWheat],
             message: [{
               type: "success",
               message: ["collect wheat developed"],
@@ -272,10 +309,10 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-more-toast-from-wheat"],
+            append: [strategy.items.moreToastFromWheat],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: more toast from wheat"],
+              message: ["new strategy discovered:", "more toast from wheat"],
               format: "normal"
             }]
           }
@@ -288,7 +325,7 @@ var game = (function() {
             number: 2
           }],
           actions: {
-            lock: ["#stage-strategy-substage-more-toast-from-wheat"],
+            remove: [strategy.items.moreToastFromWheat],
             message: [{
               type: "success",
               message: ["more toast from wheat developed"],
@@ -308,10 +345,10 @@ var game = (function() {
             number: 2
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-cycles-speed"],
+            append: [strategy.items.cyclesSpeed],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: cycles speed"],
+              message: ["new strategy discovered:", "cycles speed"],
               format: "normal"
             }]
           }
@@ -324,42 +361,10 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-cycles-speed"],
+            remove: [strategy.items.cyclesSpeed],
             message: [{
               type: "success",
               message: ["cycles speed discovered"],
-              format: "normal"
-            }]
-          }
-        }, {
-          // unlock strategy matter conversion
-          passed: false,
-          validate: [{
-            address: "system.cycles.current",
-            operator: "more",
-            number: 3
-          }],
-          actions: {
-            unlock: ["#stage-strategy-substage-matter-conversion"],
-            message: [{
-              type: "normal",
-              message: ["new strategy discovered: toast matter conversion"],
-              format: "normal"
-            }]
-          }
-        }, {
-          // lock strategy matter conversion
-          passed: false,
-          validate: [{
-            address: "system.matterConversion.level",
-            operator: "more",
-            number: 1
-          }],
-          actions: {
-            lock: ["#stage-strategy-substage-matter-conversion"],
-            message: [{
-              type: "success",
-              message: ["toast matter conversion developed"],
               format: "normal"
             }]
           }
@@ -376,10 +381,10 @@ var game = (function() {
             number: 5
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-auto-toaster"],
+            append: [strategy.items.autoToaster],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toasters"],
+              message: ["new strategy discovered:", "subordinate auto toasters"],
               format: "normal"
             }]
           }
@@ -392,7 +397,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-auto-toaster"],
+            remove: [strategy.items.autoToaster],
             message: [{
               type: "success",
               message: ["subordinate auto toasters developed"],
@@ -416,10 +421,10 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-auto-toaster-speed"],
+            append: [strategy.items.autoToasterSpeed],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toaster speed"],
+              message: ["new strategy discovered:", "subordinate auto toaster speed"],
               format: "normal"
             }]
           }
@@ -432,7 +437,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-auto-toaster-speed"],
+            remove: [strategy.items.autoToasterSpeed],
             message: [{
               type: "success",
               message: ["subordinate auto toaster speed developed"],
@@ -456,10 +461,10 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-auto-toaster-efficiency"],
+            append: [strategy.items.autoToasterEfficiency],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: subordinate auto toaster efficiency"],
+              message: ["new strategy discovered:", "subordinate auto toaster efficiency"],
               format: "normal"
             }]
           }
@@ -472,7 +477,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-auto-toaster-efficiency"],
+            remove: [strategy.items.autoToasterEfficiency],
             message: [{
               type: "success",
               message: ["subordinate auto toaster efficiency developed"],
@@ -492,10 +497,10 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            unlock: ["#stage-strategy-substage-sensors"],
+            append: [strategy.items.sensors],
             message: [{
               type: "normal",
-              message: ["new strategy discovered: sensor"],
+              message: ["new strategy discovered:", "sensor"],
               format: "normal"
             }]
           }
@@ -508,7 +513,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            lock: ["#stage-strategy-substage-sensors"],
+            remove: [strategy.items.sensors],
             message: [{
               type: "system",
               message: ["SensBlocker.dat disabled"],
@@ -534,7 +539,7 @@ var game = (function() {
             func: ["wheat.start"]
           }
         }, {
-          // unlock wheat collect
+          // unlock more toast from wheat
           passed: false,
           validate: [{
             address: "wheat.level",

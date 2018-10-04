@@ -168,7 +168,7 @@ var helper = (function() {
     }
   };
 
-  function makeObject(string) {
+  var makeObject = function(string) {
     var _stringOrBooleanOrNumber = function(stringToTest) {
       if (stringToTest == "true") {
         return true;
@@ -227,7 +227,7 @@ var helper = (function() {
     };
   };
 
-  function sortObject(object, key) {
+  var sortObject = function(object, key) {
     object.sort(function(a, b) {
       var textA = a[key];
       var textB = b[key];
@@ -329,10 +329,16 @@ var helper = (function() {
     return object;
   };
 
+  var months = function(index) {
+    var all = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return all[index];
+  }
+
   return {
     e: e,
     eA: eA,
     timestamp: timestamp,
+    months: months,
     operator: operator,
     getObject: getObject,
     setObject: setObject,
