@@ -21,22 +21,22 @@ var strategy = (function() {
       },
       cost: "path:system.cycles.cost.cycles," + "format:local," + "decimals:#2"
     },
-    collectWheat: {
+    wheatDrones: {
       id: "stage-strategy-substage-collect-wheat",
-      description: "Collect more wheat lumps using toast matter:",
+      description: "Collect more wheat lumps using drones made from toast matter:",
       button: {
-        text: "Collect Wheat",
-        change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false"
+        text: "Wheat Drones",
+        change: "target:wheat.drones.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.inventory.cost.cycles," + "multiply:false," + "inflation:false"
       },
-      cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
+      cost: "path:wheat.drones.inventory.cost.cycles," + "format:local," + "decimals:#2"
     },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",
       description: "Double amount of toast made from wheat lumps:",
       button: {
         text: "Double Toast from Wheat Lumps",
-        change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        change: "target:wheat.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
         cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false"
       },
       cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"

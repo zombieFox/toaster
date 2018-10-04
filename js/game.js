@@ -16,7 +16,7 @@ var game = (function() {
     wheat: {
       inventory: {
         level: 0,
-        current: 1000,
+        current: 500,
         cost: {
           cycles: 20,
           multiply: 2.5,
@@ -29,6 +29,39 @@ var game = (function() {
           },
           slice: 0,
           multiply: 2
+        }
+      },
+      drones: {
+        inventory: {
+          level: 0,
+          count: 0,
+          output: 0,
+          cost: {
+            cycles: 10,
+            toast: 15
+          }
+        },
+        speed: {
+          level: 0,
+          interval: {
+            current: 10000,
+            min: 1000
+          },
+          cost: {
+            cycles: 20,
+            toast: 6,
+            multiply: 1.1
+          }
+        },
+        efficiency: {
+          level: 0,
+          current: 1,
+          max: 10,
+          cost: {
+            cycles: 30,
+            toast: 12,
+            multiply: 1.2
+          }
         }
       }
     },
@@ -263,19 +296,19 @@ var game = (function() {
             }]
           }
         }, {
-          // unlock strategy wheat collect
+          // unlock strategy wheat drones
           passed: false,
           validate: [{
-            address: "system.cycles.current",
-            operator: "more",
-            number: 2
+            address: "wheat.inventory.current",
+            operator: "less",
+            number: 250
           }, {
             address: "system.matterConversion.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            append: [strategy.items.collectWheat],
+            append: [strategy.items.wheatDrones],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "collect wheat"],
@@ -283,18 +316,18 @@ var game = (function() {
             }]
           }
         }, {
-          // lock strategy wheat collect
+          // lock strategy wheat drones
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "wheat.drones.inventory.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            remove: [strategy.items.collectWheat],
+            remove: [strategy.items.wheatDrones],
             message: [{
               type: "success",
-              message: ["collect wheat developed"],
+              message: ["collect wheat drones developed"],
               format: "normal"
             }]
           }
