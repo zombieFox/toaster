@@ -15,11 +15,14 @@ var toaster = (function() {
       reboot: function() {
         data.reboot();
       },
+      save: function() {
+        data.save();
+      },
       toast: function() {
         toast.make(game.get({
           path: "system.processor.power"
         }));
-        data.store();
+        data.save();
       },
       wheat: function(button) {
         var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -66,7 +69,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
-        data.store();
+        data.save();
       },
       processor: {
         boost: function(button) {
@@ -116,7 +119,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         }
       },
       decrypt: {
@@ -169,7 +172,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         }
       },
       cycles: {
@@ -219,7 +222,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         }
       },
       strategy: function(button) {
@@ -270,7 +273,7 @@ var toaster = (function() {
             feedbackMessage(options);
           }
         }
-        data.store();
+        data.save();
       },
       autoToaster: {
         make: function(button) {
@@ -321,7 +324,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         },
         speed: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -370,7 +373,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         },
         efficiency: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
@@ -420,7 +423,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.store();
+          data.save();
         }
       }
     };

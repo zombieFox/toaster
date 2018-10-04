@@ -17,7 +17,7 @@ var wheat = (function() {
       if (game.get({
           path: "wheat.loaf.slice"
         }) == game.get({
-          path: "wheat.loaf.max"
+          path: "wheat.loaf.max.current"
         })) {
         game.set({
           path: "wheat.loaf.slice",
@@ -39,11 +39,11 @@ var wheat = (function() {
 
   var increase = function() {
     game.set({
-      path: "wheat.loaf.max",
+      path: "wheat.loaf.max.current",
       value: helper.operator({
         type: "multiply",
         value: game.get({
-          path: "wheat.loaf.max"
+          path: "wheat.loaf.max.current"
         }),
         by: game.get({
           path: "wheat.loaf.multiply"
@@ -55,9 +55,9 @@ var wheat = (function() {
 
   var init = function() {
     game.set({
-      path: "wheat.loaf.max",
+      path: "wheat.loaf.max.current",
       value: game.get({
-        path: "wheat.loaf.starting"
+        path: "wheat.loaf.max.starting"
       })
     });
   };

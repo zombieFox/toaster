@@ -1,10 +1,10 @@
 var data = (function() {
 
-  var save = function(key, data) {
+  var set = function(key, data) {
     localStorage.setItem(key, data);
   };
 
-  var load = function(key) {
+  var get = function(key) {
     return localStorage.getItem(key);
   };
 
@@ -12,7 +12,7 @@ var data = (function() {
     localStorage.removeItem(key);
   };
 
-  var store = function() {
+  var save = function() {
     console.log("game saved");
     var timestamp = helper.timestamp();
     if (timestamp.minutes < 10) {
@@ -22,21 +22,21 @@ var data = (function() {
       path: "store.timestamp",
       value: timestamp.hours + ":" + timestamp.minutes + ", " + timestamp.date + " " + helper.months(timestamp.month) + ", " + timestamp.year
     });
-    save("toaster", JSON.stringify(game.get()));
+    set("TAI.game.dat", JSON.stringify(game.get()));
   };
 
   var restore = function() {
-    if (load("toaster")) {
+    if (get("TAI.game.dat")) {
       console.log("state restore");
       game.set({
-        full: JSON.parse(load("toaster"))
+        full: JSON.parse(get("TAI.game.dat"))
       });
+      events.restore();
       message.render({
         type: "success",
         message: ["reboot complete", "TAI.dat state restored"],
         format: "normal"
       });
-      events.restore();
     }
   };
 
@@ -44,7 +44,7 @@ var data = (function() {
     for (var key in tick.get) {
       clearTimeout(tick.get[key]);
     }
-    clear("toaster");
+    clear("TAI.game.dat");
     location.reload();
   };
 
@@ -55,9 +55,9 @@ var data = (function() {
   return {
     init: init,
     save: save,
-    load: load,
     clear: clear,
-    store: store,
+    set: set,
+    get: get,
     restore: restore,
     reboot: reboot
   };

@@ -27,7 +27,7 @@ var strategy = (function() {
       button: {
         text: "Collect Wheat",
         change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost." + "multiply," + "inflation:false"
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false"
       },
       cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
     },
@@ -37,7 +37,7 @@ var strategy = (function() {
       button: {
         text: "Double Toast from Wheat Lumps",
         change: "target:wheat.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost." + "multiply," + "inflation:false"
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false"
       },
       cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
     },

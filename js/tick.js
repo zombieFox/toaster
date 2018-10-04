@@ -36,7 +36,7 @@ var tick = (function() {
     tick.set({
       tickName: "store",
       func: function() {
-        data.store();
+        data.save();
       },
       interval: "store.interval"
     });

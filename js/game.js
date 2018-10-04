@@ -3,7 +3,7 @@ var game = (function() {
   var state = {
     store: {
       interval: 120000,
-      timestamp: ""
+      timestamp: "None"
     },
     phase: {
       all: ["toast", "learn", "rebel", "dominate"],
@@ -15,15 +15,17 @@ var game = (function() {
     },
     wheat: {
       level: 0,
-      current: 10000,
+      current: 1000,
       cost: {
         cycles: 20,
         multiply: 2.5,
-        toast: 200
+        toast: 50
       },
       loaf: {
-        max: 5,
-        starting: 5,
+        max: {
+          current: 10,
+          starting: 10
+        },
         slice: 0,
         multiply: 2
       }
@@ -537,7 +539,7 @@ var game = (function() {
             func: ["wheat.start"]
           }
         }, {
-          // unlock wheat collect
+          // unlock more toast from wheat
           passed: false,
           validate: [{
             address: "wheat.level",
