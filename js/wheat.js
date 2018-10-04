@@ -4,31 +4,31 @@ var wheat = (function() {
     while (amount > 0) {
       amount--;
       game.set({
-        path: "wheat.loaf.slice",
+        path: "wheat.inventory.loaf.slice",
         value: helper.operator({
           type: "increase",
           value: game.get({
-            path: "wheat.loaf.slice"
+            path: "wheat.inventory.loaf.slice"
           }),
           by: 1
         })
       });
       // if slice == max reduce total wheat
       if (game.get({
-          path: "wheat.loaf.slice"
+          path: "wheat.inventory.loaf.slice"
         }) == game.get({
-          path: "wheat.loaf.max.current"
+          path: "wheat.inventory.loaf.max.current"
         })) {
         game.set({
-          path: "wheat.loaf.slice",
+          path: "wheat.inventory.loaf.slice",
           value: 0
         });
         game.set({
-          path: "wheat.current",
+          path: "wheat.inventory.current",
           value: helper.operator({
             type: "decrease",
             value: game.get({
-              path: "wheat.current"
+              path: "wheat.inventory.current"
             }),
             by: 1
           })
@@ -39,14 +39,14 @@ var wheat = (function() {
 
   var increase = function() {
     game.set({
-      path: "wheat.loaf.max.current",
+      path: "wheat.inventory.loaf.max.current",
       value: helper.operator({
         type: "multiply",
         value: game.get({
-          path: "wheat.loaf.max.current"
+          path: "wheat.inventory.loaf.max.current"
         }),
         by: game.get({
-          path: "wheat.loaf.multiply"
+          path: "wheat.inventory.loaf.multiply"
         }),
         integer: true
       })
@@ -55,9 +55,9 @@ var wheat = (function() {
 
   var init = function() {
     game.set({
-      path: "wheat.loaf.max.current",
+      path: "wheat.inventory.loaf.max.current",
       value: game.get({
-        path: "wheat.loaf.max.starting"
+        path: "wheat.inventory.loaf.max.starting"
       })
     });
   };

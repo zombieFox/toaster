@@ -14,20 +14,22 @@ var game = (function() {
       inventory: 0
     },
     wheat: {
-      level: 0,
-      current: 1000,
-      cost: {
-        cycles: 20,
-        multiply: 2.5,
-        toast: 50
-      },
-      loaf: {
-        max: {
-          current: 10,
-          starting: 10
+      inventory: {
+        level: 0,
+        current: 1000,
+        cost: {
+          cycles: 20,
+          multiply: 2.5,
+          toast: 50
         },
-        slice: 0,
-        multiply: 2
+        loaf: {
+          max: {
+            current: 10,
+            starting: 10
+          },
+          slice: 0,
+          multiply: 2
+        }
       }
     },
     system: {
@@ -284,7 +286,7 @@ var game = (function() {
           // lock strategy wheat collect
           passed: false,
           validate: [{
-            address: "wheat.level",
+            address: "wheat.inventory.level",
             operator: "more",
             number: 1
           }],
@@ -304,7 +306,7 @@ var game = (function() {
             operator: "more",
             number: 20
           }, {
-            address: "wheat.level",
+            address: "wheat.inventory.level",
             operator: "more",
             number: 1
           }],
@@ -320,7 +322,7 @@ var game = (function() {
           // lock strategy more toast from wheat
           passed: false,
           validate: [{
-            address: "wheat.level",
+            address: "wheat.inventory.level",
             operator: "more",
             number: 2
           }],
@@ -530,7 +532,7 @@ var game = (function() {
           // unlock wheat collect
           passed: false,
           validate: [{
-            address: "wheat.level",
+            address: "wheat.inventory.level",
             operator: "more",
             number: 1
           }],
@@ -542,7 +544,7 @@ var game = (function() {
           // unlock more toast from wheat
           passed: false,
           validate: [{
-            address: "wheat.level",
+            address: "wheat.inventory.level",
             operator: "more",
             number: 2
           }],

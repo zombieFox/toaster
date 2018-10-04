@@ -133,13 +133,13 @@
                 <div class="card-body">
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Wheat Lump Inventory:</span>
-                    <strong data-toast-readout="path:wheat.current,format:local,decimals:#2"></strong>
+                    <strong data-toast-readout="path:wheat.inventory.current,format:local,decimals:#2"></strong>
                   </p>
-                  <p class="card-text mb-1 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.loaf.max.current,format:local,decimals:#2"></strong> toast</p>
+                  <p class="card-text mb-1 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.inventory.loaf.max.current,format:local,decimals:#2"></strong> toast</p>
                   <div class="d-none" id="stage-collect-wheat">
-                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat" data-toast-button-change="target:wheat.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
-                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.cost.toast,multiply:false,inflation:true">+100 Wheat Lumps</button>
-                    <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat" data-toast-button-change="target:wheat.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
+                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.inventory.cost.toast,multiply:false,inflation:true">+100 Wheat Lumps</button>
+                    <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                   </div>
                 </div>
               </div>
