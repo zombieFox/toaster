@@ -338,7 +338,7 @@ var game = (function() {
           // unlock strategy wheat drones speed
           passed: false,
           validate: [{
-            address: "wheat.drones.inventory.level",
+            address: "wheat.drones.inventory.current",
             operator: "more",
             number: 1
           }, {
