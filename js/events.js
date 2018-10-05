@@ -244,6 +244,15 @@ var events = (function() {
           interval: "autoToaster.speed.interval.current"
         });
       },
+      wheatDrones: function() {
+        tick.set({
+          tickName: "wheatDrones",
+          func: function() {
+            wheat.make();
+          },
+          interval: "wheat.drones.speed.interval.current"
+        });
+      },
       cycles: function() {
         tick.set({
           tickName: "cycles",
@@ -254,7 +263,7 @@ var events = (function() {
         });
       },
       wheat: {
-        start: function() {
+        drones: function() {
           wheat.init();
         },
         increase: function() {

@@ -34,17 +34,18 @@ var game = (function() {
       drones: {
         inventory: {
           level: 0,
-          count: 0,
+          current: 0,
           output: 0,
           cost: {
             cycles: 10,
-            toast: 15
+            toast: 20,
+            multiply: 1.05
           }
         },
         speed: {
           level: 0,
           interval: {
-            current: 10000,
+            current: 1000,
             min: 1000
           },
           cost: {
@@ -301,7 +302,7 @@ var game = (function() {
           validate: [{
             address: "wheat.inventory.current",
             operator: "less",
-            number: 250
+            number: 499
           }, {
             address: "system.matterConversion.level",
             operator: "more",
@@ -562,16 +563,16 @@ var game = (function() {
         }],
 
         wheat: [{
-          // unlock wheat collect
+          // unlock wheat drones
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "wheat.drones.inventory.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            unlock: ["#stage-collect-wheat"],
-            func: ["wheat.start"]
+            unlock: ["#stage-wheat-drones"],
+            func: ["wheatDrones"]
           }
         }, {
           // unlock more toast from wheat

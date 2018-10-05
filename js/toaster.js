@@ -24,52 +24,103 @@ var toaster = (function() {
         }));
         data.save();
       },
-      wheat: function(button) {
-        var toastChange = helper.makeObject(button.dataset.toastButtonChange);
-        var toastCost = helper.makeObject(button.dataset.toastButtonCost);
-        var options = {
-          change: {
-            target: toastChange.target,
-            operation: toastChange.operation,
-            suboperation: toastChange.suboperation,
-            percentage: toastChange.percentage,
-            amount: toastChange.amount,
-            min: toastChange.min,
-            max: toastChange.max
-          },
-          cost: {
-            units: toastCost.units,
-            currency: toastCost.currency,
-            amount: toastCost.amount,
-            multiply: toastCost.multiply,
-            inflation: toastCost.inflation
-          },
-          message: {
-            success: {
-              path: "wheat.success",
-              state: false
+      wheat: {
+        make: function(button) {
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
+            change: {
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
             },
-            fail: {
-              path: "wheat.fail",
-              state: false
+            cost: {
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
+            },
+            message: {
+              success: {
+                path: "wheat.make.success",
+                state: false
+              },
+              fail: {
+                path: "wheat.make.fail",
+                state: false
+              }
+            },
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            wheat.output();
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
             }
-          },
-          button: button
-        };
-        if (validateAction(options)) {
-          payCost(options);
-          changeValue(options);
-          if (options.message.success != null) {
-            options.message.success.state = true;
-            feedbackMessage(options);
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
           }
-        } else {
-          if (options.message.fail != null) {
-            options.message.fail.state = true;
-            feedbackMessage(options);
+          data.save();
+        },
+        more: function(button) {
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var options = {
+            change: {
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
+            },
+            cost: {
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount,
+              multiply: toastCost.multiply,
+              inflation: toastCost.inflation
+            },
+            message: {
+              success: {
+                path: "wheat.success",
+                state: false
+              },
+              fail: {
+                path: "wheat.fail",
+                state: false
+              }
+            },
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
           }
+          data.save();
         }
-        data.save();
       },
       processor: {
         boost: function(button) {
@@ -744,11 +795,15 @@ var toaster = (function() {
         }
       },
       wheat: {
-        success: function() {
-          return ["+" + options.change.amount + " wheat lumps"];
-        },
-        fail: function() {
-          return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
+        make: {
+          success: function() {
+            return ["+" + options.change.amount + " wheat collection drone, " + game.get({
+              path: "autoToaster.count"
+            }).toLocaleString(2) + " online"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
+          }
         }
       }
     };

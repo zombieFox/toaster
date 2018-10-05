@@ -136,10 +136,16 @@
                     <strong data-toast-readout="path:wheat.inventory.current,format:local,decimals:#2"></strong>
                   </p>
                   <p class="card-text mb-1 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.inventory.loaf.max.current,format:local,decimals:#2"></strong> toast</p>
-                  <div class="d-none" id="stage-collect-wheat">
-                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat" data-toast-button-change="target:wheat.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
-                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.inventory.cost.toast,multiply:false,inflation:true">+100 Wheat Lumps</button>
-                    <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                  <div class="d-none" id="stage-wheat-drones">
+                    <hr>
+                    <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
+                      <span class="mr-1">Wheat Drones:</span>
+                      <strong class="float-right" data-toast-readout="path:wheat.drones.inventory.current,format:local,decimals:#2"></strong>
+                    </p>
+                    <p class="card-text mb-1 small">Collecting <strong data-toast-readout="path:wheat.drones.inventory.output,format:local,decimals:#2"></strong> wheat/<strong data-toast-readout="path:wheat.drones.speed.interval.current,format:local,decimals:#2,modify:divide,by:#1000,round:false"></strong>s</p>
+                    <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat.make" data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
+                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast,multiply:wheat.drones.inventory.cost.multiply,inflation:true">+1 Drone</button>
+                    <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.drones.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
                   </div>
                 </div>
               </div>
