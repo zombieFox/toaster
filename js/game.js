@@ -13,25 +13,6 @@ var game = (function() {
       lifetime: 0,
       inventory: 0
     },
-    wheat: {
-      inventory: {
-        level: 0,
-        current: 1000,
-        cost: {
-          cycles: 20,
-          multiply: 2.5,
-          toast: 50
-        },
-        loaf: {
-          max: {
-            current: 10,
-            starting: 10
-          },
-          slice: 0,
-          multiply: 2
-        }
-      }
-    },
     system: {
       processor: {
         power: 1,
@@ -79,14 +60,69 @@ var game = (function() {
       multiply: 4,
       interval: 10000
     },
+    wheat: {
+      inventory: {
+        level: 0,
+        current: 600,
+        cost: {
+          cycles: 20,
+          multiply: 2.5,
+          toast: 50
+        },
+        loaf: {
+          max: {
+            current: 10,
+            starting: 10
+          },
+          slice: 0,
+          multiply: 2
+        }
+      },
+      drones: {
+        inventory: {
+          level: 0,
+          current: 0,
+          output: 0,
+          cost: {
+            cycles: 20,
+            toast: 10,
+            increase: 5
+          }
+        },
+        speed: {
+          level: 0,
+          interval: {
+            current: 10000,
+            min: 1000
+          },
+          cost: {
+            cycles: 30,
+            toast: 20,
+            multiply: 1.6
+          }
+        },
+        efficiency: {
+          level: 0,
+          current: 1,
+          max: 10,
+          cost: {
+            cycles: 40,
+            toast: 30,
+            multiply: 2.2
+          }
+        }
+      }
+    },
     autoToaster: {
-      level: 0,
-      count: 0,
-      output: 0,
-      cost: {
-        cycles: 30,
-        toast: 15,
-        multiply: 1.05
+      inventory: {
+        level: 0,
+        current: 0,
+        output: 0,
+        cost: {
+          cycles: 20,
+          toast: 10,
+          increase: 5
+        }
       },
       speed: {
         level: 0,
@@ -96,7 +132,7 @@ var game = (function() {
         },
         cost: {
           cycles: 30,
-          toast: 60,
+          toast: 20,
           multiply: 1.6
         }
       },
@@ -106,7 +142,7 @@ var game = (function() {
         max: 10,
         cost: {
           cycles: 40,
-          toast: 140,
+          toast: 30,
           multiply: 2.2
         }
       }
@@ -115,7 +151,7 @@ var game = (function() {
       address: {
         lifetime: "toast.lifetime",
         consumed: "consumed.count",
-        autoToaster: "autoToaster.count"
+        autoToaster: "autoToaster.inventory.current"
       },
       steps: {
         base: [100, 200, 300, 400, 500, 600, 700, 800, 900],
@@ -133,7 +169,7 @@ var game = (function() {
           validate: [{
             address: "toast.lifetime",
             operator: "more",
-            number: 10
+            number: 20
           }],
           actions: {
             unlock: ["#stage-system"],
@@ -263,19 +299,19 @@ var game = (function() {
             }]
           }
         }, {
-          // unlock strategy wheat collect
+          // unlock strategy wheat drones
           passed: false,
           validate: [{
-            address: "system.cycles.current",
-            operator: "more",
-            number: 2
-          }, {
             address: "system.matterConversion.level",
             operator: "more",
             number: 1
+          }, {
+            address: "wheat.inventory.current",
+            operator: "less",
+            number: 500
           }],
           actions: {
-            append: [strategy.items.collectWheat],
+            append: [strategy.items.wheatDrones],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "collect wheat"],
@@ -283,18 +319,98 @@ var game = (function() {
             }]
           }
         }, {
-          // lock strategy wheat collect
+          // lock strategy wheat drones
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "wheat.drones.inventory.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            remove: [strategy.items.collectWheat],
+            remove: [strategy.items.wheatDrones],
             message: [{
               type: "success",
-              message: ["collect wheat developed"],
+              message: ["collect wheat drones developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock strategy wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "system.cycles.current",
+            operator: "more",
+            number: 20
+          }],
+          actions: {
+            append: [strategy.items.wheatDronesSpeed],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "wheat drones speed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.wheatDronesSpeed],
+            message: [{
+              type: "success",
+              message: ["wheat drones speed developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock strategy wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "system.cycles.current",
+            operator: "more",
+            number: 20
+          }],
+          actions: {
+            append: [strategy.items.wheatDronesEfficiency],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "subordinate wheat drones efficiency"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.wheatDronesEfficiency],
+            message: [{
+              type: "success",
+              message: ["subordinate wheat drones efficiency developed"],
               format: "normal"
             }]
           }
@@ -394,7 +510,7 @@ var game = (function() {
           // lock strategy auto toaster
           passed: false,
           validate: [{
-            address: "autoToaster.level",
+            address: "autoToaster.inventory.level",
             operator: "more",
             number: 1
           }],
@@ -410,11 +526,11 @@ var game = (function() {
           // unlock strategy auto toaster speed
           passed: false,
           validate: [{
-            address: "autoToaster.count",
+            address: "autoToaster.inventory.current",
             operator: "more",
             number: 1
           }, {
-            address: "autoToaster.level",
+            address: "autoToaster.inventory.level",
             operator: "more",
             number: 1
           }, {
@@ -450,11 +566,11 @@ var game = (function() {
           // unlock strategy auto toaster efficiency
           passed: false,
           validate: [{
-            address: "autoToaster.count",
+            address: "autoToaster.inventory.current",
             operator: "more",
             number: 1
           }, {
-            address: "autoToaster.level",
+            address: "autoToaster.inventory.level",
             operator: "more",
             number: 1
           }, {
@@ -529,16 +645,76 @@ var game = (function() {
         }],
 
         wheat: [{
-          // unlock wheat collect
+          // unlock wheat
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "toast.lifetime",
+            operator: "more",
+            number: 10
+          }],
+          actions: {
+            unlock: ["#stage-wheat"],
+            message: [{
+              type: "normal",
+              message: ["wheat lump inventory discovered"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock wheat drones
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            unlock: ["#stage-collect-wheat"],
-            func: ["wheat.start"]
+            unlock: ["#stage-wheat-substage-drones"],
+            func: ["wheatDrones"]
+          }
+        }, {
+          // unlock wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-wheat-substage-speed"],
+          }
+        }, {
+          // lock wheat drones speed controls
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.interval.current",
+            operator: "less",
+            number: 1000
+          }],
+          actions: {
+            lock: ["#stage-wheat-substage-speed-controls"],
+          }
+        }, {
+          // unlock wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-wheat-substage-efficiency"],
+          }
+        }, {
+          // lock wheat drones efficiency controls
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.current",
+            operator: "more",
+            number: 10
+          }],
+          actions: {
+            lock: ["#stage-wheat-substage-efficiency-controls"],
           }
         }, {
           // unlock more toast from wheat
@@ -557,7 +733,7 @@ var game = (function() {
           // unlock auto toaster
           passed: false,
           validate: [{
-            address: "autoToaster.level",
+            address: "autoToaster.inventory.level",
             operator: "more",
             number: 1
           }],

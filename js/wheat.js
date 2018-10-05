@@ -1,5 +1,37 @@
 var wheat = (function() {
 
+  var output = function() {
+    game.set({
+      path: "wheat.drones.inventory.output",
+      value: helper.operator({
+        type: "multiply",
+        value: game.get({
+          path: "wheat.drones.inventory.current"
+        }),
+        by: game.get({
+          path: "wheat.drones.efficiency.current"
+        }),
+        integer: true
+      })
+    });
+  };
+
+  var make = function() {
+    game.set({
+      path: "wheat.inventory.current",
+      value: helper.operator({
+        type: "increase",
+        value: game.get({
+          path: "wheat.inventory.current"
+        }),
+        by: game.get({
+          path: "wheat.drones.inventory.output"
+        }),
+        integer: true
+      })
+    });
+  };
+
   var consume = function(amount) {
     while (amount > 0) {
       amount--;
@@ -64,6 +96,8 @@ var wheat = (function() {
 
   return {
     init: init,
+    make: make,
+    output: output,
     consume: consume,
     increase: increase
   };
