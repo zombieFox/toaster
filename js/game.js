@@ -16,7 +16,7 @@ var game = (function() {
     wheat: {
       inventory: {
         level: 0,
-        current: 500,
+        current: 600,
         cost: {
           cycles: 20,
           multiply: 2.5,
@@ -39,7 +39,7 @@ var game = (function() {
           cost: {
             cycles: 10,
             toast: 20,
-            multiply: 1.05
+            increase: 10
           }
         },
         speed: {
@@ -302,7 +302,7 @@ var game = (function() {
           validate: [{
             address: "wheat.inventory.current",
             operator: "less",
-            number: 499
+            number: 400
           }, {
             address: "system.matterConversion.level",
             operator: "more",
