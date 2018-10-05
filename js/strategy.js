@@ -24,8 +24,8 @@ var strategy = (function() {
       cost: "path:system.cycles.cost.cycles," + "format:local," + "decimals:#2"
     },
     wheatDrones: {
-      id: "stage-strategy-substage-collect-wheat",
-      description: "Collect more wheat lumps using drones made from toast matter:",
+      id: "stage-strategy-substage-drones",
+      description: "Drones made from toast matter to collect wheat matter:",
       button: {
         text: "Wheat Drones",
         change: "target:wheat.drones.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
@@ -33,6 +33,28 @@ var strategy = (function() {
         inflation: "increase:false," + "operator:false," + "amount:false"
       },
       cost: "path:wheat.drones.inventory.cost.cycles," + "format:local," + "decimals:#2"
+    },
+    wheatDronesSpeed: {
+      id: "stage-strategy-substage-drones-speed",
+      description: "Faster wheat collection drones:",
+      button: {
+        text: "Drones Speed",
+        change: "target:wheat.drones.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.speed.cost.cycles," + "multiply:false," + "inflation:false",
+        inflation: "increase:false," + "operator:false," + "amount:false"
+      },
+      cost: "path:wheat.drones.speed.cost.cycles," + "format:local," + "decimals:#2"
+    },
+    wheatDronesEfficiency: {
+      id: "stage-strategy-substage-drones-efficiency",
+      description: "More efficient wheat collection drones:",
+      button: {
+        text: "Drones Efficiency",
+        change: "target:wheat.drones.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.efficiency.cost.cycles," + "multiply:false," + "inflation:false",
+        inflation: "increase:false," + "operator:false," + "amount:false"
+      },
+      cost: "path:wheat.drones.efficiency.cost.cycles," + "format:local," + "decimals:#2"
     },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",

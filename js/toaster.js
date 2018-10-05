@@ -78,6 +78,111 @@ var toaster = (function() {
           }
           data.save();
         },
+        speed: function(button) {
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var toastInflation = helper.makeObject(button.dataset.toastButtonInflation);
+          var options = {
+            change: {
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
+            },
+            cost: {
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount
+            },
+            inflation: {
+              increase: toastInflation.increase,
+              operator: toastInflation.operator,
+              amount: toastInflation.amount
+            },
+            message: {
+              success: {
+                path: "wheat.speed.success",
+                state: false
+              },
+              fail: {
+                path: "wheat.speed.fail",
+                state: false
+              }
+            },
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
+          data.save();
+        },
+        efficiency: function(button) {
+          var toastChange = helper.makeObject(button.dataset.toastButtonChange);
+          var toastCost = helper.makeObject(button.dataset.toastButtonCost);
+          var toastInflation = helper.makeObject(button.dataset.toastButtonInflation);
+          var options = {
+            change: {
+              target: toastChange.target,
+              operation: toastChange.operation,
+              suboperation: toastChange.suboperation,
+              percentage: toastChange.percentage,
+              amount: toastChange.amount,
+              min: toastChange.min,
+              max: toastChange.max
+            },
+            cost: {
+              units: toastCost.units,
+              currency: toastCost.currency,
+              amount: toastCost.amount
+            },
+            inflation: {
+              increase: toastInflation.increase,
+              operator: toastInflation.operator,
+              amount: toastInflation.amount
+            },
+            message: {
+              success: {
+                path: "wheat.efficiency.success",
+                state: false
+              },
+              fail: {
+                path: "wheat.efficiency.fail",
+                state: false
+              }
+            },
+            button: button
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            wheat.output();
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
+          data.save();
+        },
         more: function(button) {
           var toastChange = helper.makeObject(button.dataset.toastButtonChange);
           var toastCost = helper.makeObject(button.dataset.toastButtonCost);
@@ -795,7 +900,7 @@ var toaster = (function() {
       autoToaster: {
         make: {
           success: function() {
-            return ["+" + options.change.amount + " subordinate auto toasters, " + game.get({
+            return ["+" + options.change.amount + " subordinate auto toaster, " + game.get({
               path: "autoToaster.inventory.current"
             }).toLocaleString(2) + " online"];
           },
@@ -823,7 +928,7 @@ var toaster = (function() {
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount + " subordinate auto toasters efficiency, each producing " + game.get({
+            return ["+" + options.change.amount + " subordinate auto toaster efficiency, each producing " + game.get({
               path: "autoToaster.efficiency.current"
             }).toLocaleString(2) + " toast"];
           },
@@ -838,6 +943,34 @@ var toaster = (function() {
             return ["+" + options.change.amount + " wheat collection drone, " + game.get({
               path: "wheat.drones.inventory.current"
             }).toLocaleString(2) + " online"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        speed: {
+          success: function() {
+            return ["-" + helper.operator({
+              type: "divide",
+              value: options.change.amount,
+              by: 1000
+            }) + "s wheat collection drone speed, each collecting every " + helper.operator({
+              type: "divide",
+              value: game.get({
+                path: "wheat.drones.speed.interval.current"
+              }),
+              by: 1000
+            }).toLocaleString(2) + "s"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        efficiency: {
+          success: function() {
+            return ["+" + options.change.amount + " wheat collection drone efficiency, each producing " + game.get({
+              path: "wheat.drones.efficiency.current"
+            }).toLocaleString(2) + " toast"];
           },
           fail: function() {
             return ["toast inventory low, " + costForMultiple(options).multiple.toLocaleString(2) + " toast matter needed"];

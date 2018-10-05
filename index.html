@@ -135,7 +135,7 @@
                     <strong data-toast-readout="path:wheat.inventory.current,format:local,decimals:#2"></strong>
                   </p>
                   <p class="card-text mb-1 small">1 wheat lump will produce <strong data-toast-readout="path:wheat.inventory.loaf.max.current,format:local,decimals:#2"></strong> toast</p>
-                  <div class="d-none" id="stage-wheat-drones">
+                  <div class="d-none" id="stage-wheat-substage-drones">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Wheat Drones:</span>
@@ -153,6 +153,32 @@
                         data-toast-button-cost="units:#50,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast" data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.inventory.cost.increase">+50</button>
                     </div>
                     <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.drones.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                  </div>
+                  <div class="d-none" id="stage-wheat-substage-speed">
+                    <hr>
+                    <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
+                      <span class="mr-1">Speed:</span>
+                      <span class="float-right"><strong data-toast-readout="path:wheat.drones.speed.interval.current,format:local,decimals:#2,modify:divide,by:#1000,round:false"></strong>s</span>
+                    </p>
+                    <div id="stage-wheat-substage-speed-controls">
+                      <p class="card-text mb-1 small">Improve toast per second speed with zipp-crumb particals and rocket fuel.</p>
+                      <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat.speed" data-toast-button-change="target:wheat.drones.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#500,min:wheat.drones.speed.interval.min,max:false"
+                        data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.speed.cost.toast" data-toast-button-inflation="increase:true,operator:multiply,amount:wheat.drones.speed.cost.multiply">Speed -0.5s</button>
+                      <p class="card-text mb-0 small">-0.5s cost <strong data-toast-readout="path:wheat.drones.speed.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                    </div>
+                  </div>
+                  <div class="d-none" id="stage-wheat-substage-efficiency">
+                    <hr>
+                    <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
+                      <span class="mr-1">Efficiency:</span>
+                      <strong class="float-right" data-toast-readout="path:wheat.drones.efficiency.current,format:local,decimals:#2"></strong>
+                    </p>
+                    <div id="stage-wheat-substage-efficiency-controls">
+                      <p class="card-text mb-1 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
+                      <button class="btn btn-sm btn-dark mb-1" data-toast-button="action:wheat.efficiency" data-toast-button-change="target:wheat.drones.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:wheat.drones.efficiency.max"
+                        data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.efficiency.cost.toast" data-toast-button-inflation="increase:true,operator:multiply,amount:wheat.drones.efficiency.cost.multiply">Efficiency +1</button>
+                      <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:wheat.drones.efficiency.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                    </div>
                   </div>
                 </div>
               </div>

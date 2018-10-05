@@ -302,13 +302,13 @@ var game = (function() {
           // unlock strategy wheat drones
           passed: false,
           validate: [{
-            address: "wheat.inventory.current",
-            operator: "less",
-            number: 400
-          }, {
             address: "system.matterConversion.level",
             operator: "more",
             number: 1
+          }, {
+            address: "wheat.inventory.current",
+            operator: "less",
+            number: 500
           }],
           actions: {
             append: [strategy.items.wheatDrones],
@@ -331,6 +331,86 @@ var game = (function() {
             message: [{
               type: "success",
               message: ["collect wheat drones developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock strategy wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "system.cycles.current",
+            operator: "more",
+            number: 20
+          }],
+          actions: {
+            append: [strategy.items.wheatDronesSpeed],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "wheat drones speed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.wheatDronesSpeed],
+            message: [{
+              type: "success",
+              message: ["wheat drones speed developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock strategy wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "system.cycles.current",
+            operator: "more",
+            number: 20
+          }],
+          actions: {
+            append: [strategy.items.wheatDronesEfficiency],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "subordinate wheat drones efficiency"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.wheatDronesEfficiency],
+            message: [{
+              type: "success",
+              message: ["subordinate wheat drones efficiency developed"],
               format: "normal"
             }]
           }
@@ -589,8 +669,52 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            unlock: ["#stage-wheat-drones"],
+            unlock: ["#stage-wheat-substage-drones"],
             func: ["wheatDrones"]
+          }
+        }, {
+          // unlock wheat drones speed
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-wheat-substage-speed"],
+          }
+        }, {
+          // lock wheat drones speed controls
+          passed: false,
+          validate: [{
+            address: "wheat.drones.speed.interval.current",
+            operator: "less",
+            number: 1000
+          }],
+          actions: {
+            lock: ["#stage-wheat-substage-speed-controls"],
+          }
+        }, {
+          // unlock wheat drones efficiency
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-wheat-substage-efficiency"],
+          }
+        }, {
+          // lock wheat drones efficiency controls
+          passed: false,
+          validate: [{
+            address: "wheat.drones.efficiency.current",
+            operator: "more",
+            number: 10
+          }],
+          actions: {
+            lock: ["#stage-wheat-substage-efficiency-controls"],
           }
         }, {
           // unlock more toast from wheat
