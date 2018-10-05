@@ -2,11 +2,11 @@ var autoToaster = (function() {
 
   var output = function() {
     game.set({
-      path: "autoToaster.output",
+      path: "autoToaster.inventory.output",
       value: helper.operator({
         type: "multiply",
         value: game.get({
-          path: "autoToaster.count"
+          path: "autoToaster.inventory.current"
         }),
         by: game.get({
           path: "autoToaster.efficiency.current"
@@ -18,7 +18,7 @@ var autoToaster = (function() {
 
   var make = function() {
     var amount = game.get({
-      path: "autoToaster.count"
+      path: "autoToaster.inventory.current"
     }) * game.get({
       path: "autoToaster.efficiency.current"
     });

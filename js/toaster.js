@@ -796,7 +796,7 @@ var toaster = (function() {
         make: {
           success: function() {
             return ["+" + options.change.amount + " subordinate auto toasters, " + game.get({
-              path: "autoToaster.count"
+              path: "autoToaster.inventory.current"
             }).toLocaleString(2) + " online"];
           },
           fail: function() {

@@ -50,11 +50,11 @@ var strategy = (function() {
       description: "Machines to automate toasting:",
       button: {
         text: "Auto Toasters",
-        change: "target:autoToaster.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.cost.cycles," + "multiply:false," + "inflation:false",
+        change: "target:autoToaster.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.inventory.cost.cycles," + "multiply:false," + "inflation:false",
         inflation: "increase:false," + "operator:false," + "amount:false"
       },
-      cost: "path:autoToaster.cost.cycles," + "format:local," + "decimals:#2"
+      cost: "path:autoToaster.inventory.cost.cycles," + "format:local," + "decimals:#2"
     },
     autoToasterSpeed: {
       id: "stage-strategy-substage-auto-toaster-speed",
