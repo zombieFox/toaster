@@ -441,7 +441,6 @@ var toaster = (function() {
             state: false
           }
         };
-        console.log(options);
         if (validateAction(options)) {
           payCost(options);
           changeValue(options);
