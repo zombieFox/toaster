@@ -66,7 +66,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          // data.save();
+          data.save();
         },
         cycles: function(button) {
           var options = {
@@ -94,7 +94,6 @@ var toaster = (function() {
               state: false
             }
           };
-          console.log(options);
           if (validateAction(options)) {
             payCost(options);
             changeValue(options);
@@ -109,7 +108,7 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          // data.save();
+          data.save();
         }
       },
       wheat: {
@@ -528,26 +527,12 @@ var toaster = (function() {
               path: options.cost.currency
             })) {
             var startingAmount = 0;
-            var max = false;
-            var min = false;
-            if (options.change.min) {
-              min = game.get({
-                path: options.change.min
-              });
-            }
-            if (options.change.max) {
-              max = game.get({
-                path: options.change.max
-              });
-            }
-            console.log("min", min);
             // while cost total is less than current currency
             while ((cost.total + cost.next) <= game.get({
                 path: options.cost.currency
               })) {
               // add the cost of next to total
               cost.total = cost.total + cost.next;
-              // console.log(cost.total, startingAmount);
               // calculate cost of next unit
               cost.next = helper.operator({
                 type: options.inflation.operator,
@@ -557,8 +542,10 @@ var toaster = (function() {
                 }),
                 integer: true
               });
+              // increase the starting amount
+              startingAmount = startingAmount + options.change.amount;
               // if amount has a min
-              if ((game.get({
+              if (options.change.min && (game.get({
                   path: options.change.target
                 }) - startingAmount) <= game.get({
                   path: options.change.min
@@ -566,15 +553,13 @@ var toaster = (function() {
                 break
               }
               // if amount has a max
-              if ((game.get({
+              if (options.change.max && (game.get({
                   path: options.change.target
                 }) - startingAmount) >= game.get({
-                  path: options.change.min
+                  path: options.change.max
                 })) {
                 break
               }
-              // increase the starting amount
-              startingAmount = startingAmount + options.change.amount;
             }
             options.change.amount = startingAmount;
           } else {
@@ -609,6 +594,22 @@ var toaster = (function() {
               cost.total = cost.total + cost.next;
               // increase the starting amount
               startingAmount = startingAmount + options.change.amount;
+              // if amount has a min
+              if (options.change.min && (game.get({
+                  path: options.change.target
+                }) - startingAmount) <= game.get({
+                  path: options.change.min
+                })) {
+                break
+              }
+              // if amount has a max
+              if (options.change.max && (game.get({
+                  path: options.change.target
+                }) - startingAmount) >= game.get({
+                  path: options.change.max
+                })) {
+                break
+              }
             }
             options.change.amount = startingAmount;
           } else {
@@ -631,7 +632,6 @@ var toaster = (function() {
       // if price is always the same
       calculateCost.flat();
     }
-    console.log(cost);
     return cost;
   };
 
