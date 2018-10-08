@@ -63,15 +63,15 @@ var strategy = (function() {
     },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",
-      description: "Double amount of toast made from wheat lumps:",
+      description: "Improve wheat filtering and double amount of toast made from 1 wheat lump:",
       button: {
         text: "Double Toast from Wheat Lumps",
         change: "target:wheat.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.inventory.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false",
         inflation: "increase:false," + "operator:false," + "amount:false",
         max: "buy:false"
       },
-      cost: "path:wheat.cost.cycles," + "format:local," + "decimals:#2"
+      cost: "path:wheat.inventory.cost.cycles," + "format:local," + "decimals:#2"
     },
     autoToaster: {
       id: "stage-strategy-substage-auto-toaster",

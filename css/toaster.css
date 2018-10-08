@@ -143,6 +143,7 @@ body {
   text-align: center;
   flex-grow: 0;
   flex-shrink: 0;
+  font-weight: 900;
 }
 
 .report-message-text {
@@ -168,7 +169,7 @@ body {
 }
 
 .report-message .report-message-text-string {
-  margin-right: 0.8em;
+  margin-right: 0.5em;
 }
 
 .report-message .report-message-text-blink {

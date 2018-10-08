@@ -418,13 +418,17 @@ var game = (function() {
           // unlock strategy more toast from wheat
           passed: false,
           validate: [{
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 100
+          }, {
             address: "system.cycles.current",
             operator: "more",
             number: 20
-          }, {
-            address: "wheat.inventory.level",
-            operator: "more",
-            number: 1
           }],
           actions: {
             append: [strategy.items.moreToastFromWheat],
@@ -440,7 +444,7 @@ var game = (function() {
           validate: [{
             address: "wheat.inventory.level",
             operator: "more",
-            number: 2
+            number: 1
           }],
           actions: {
             remove: [strategy.items.moreToastFromWheat],
@@ -669,7 +673,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            unlock: ["#stage-wheat-substage-drones"],
+            unlock: ["#stage-wheat-drones"],
             func: ["wheatDrones"]
           }
         }, {
@@ -722,7 +726,7 @@ var game = (function() {
           validate: [{
             address: "wheat.inventory.level",
             operator: "more",
-            number: 2
+            number: 1
           }],
           actions: {
             func: ["wheat.increase"]
