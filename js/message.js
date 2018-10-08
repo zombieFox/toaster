@@ -52,6 +52,14 @@ var message = (function() {
     motivation: "info"
   };
 
+  var cursor = {
+    success: "*",
+    normal: "#",
+    error: "-",
+    system: "|",
+    motivation: "_"
+  };
+
   var typeWriter = function(override) {
     var options = {
       text: null,
@@ -64,7 +72,7 @@ var message = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.index < options.text.length) {
-      options.target.innerHTML = options.text.substring(0, options.index + 1) + '<span class="report-message-text-blink">#</span>';
+      options.target.innerHTML = options.text.substring(0, options.index + 1);
       scrollToBottom();
       var delay;
       if (options.delay !== null) {
@@ -94,19 +102,27 @@ var message = (function() {
       index: null,
       target: null,
       delay: null,
+      cursor: null,
       callback: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
     }
     options.textArray.forEach(function(arrayItem, index) {
-      var span = document.createElement("span");
-      span.setAttribute("class", "report-message-text-item");
-      options.target.appendChild(span);
+      var item = document.createElement("span");
+      item.setAttribute("class", "report-message-text-item");
+      var string = document.createElement("span");
+      string.setAttribute("class", "report-message-text-string");
+      var blink = document.createElement("span");
+      blink.setAttribute("class", "report-message-text-blink");
+      blink.textContent = options.cursor;
+      item.appendChild(string);
+      item.appendChild(blink);
+      options.target.appendChild(item);
       typeWriter({
         text: arrayItem,
         index: index,
-        target: span,
+        target: string,
         delay: options.delay,
         callback: options.callback
       });
@@ -128,11 +144,15 @@ var message = (function() {
     var report = helper.e("#report");
     var newMessage = document.createElement("pre");
     newMessage.setAttribute("class", "mb-2 text-" + colour[options.type] + " report-message");
-    if (options.format == "normal") {
-      newMessage.classList.add("report-message-normal");
-    } else if (options.format == "pre") {
-      newMessage.classList.add("report-message-pre");
-    };
+    var format = {
+      normal: function() {
+        newMessage.classList.add("report-message-normal");
+      },
+      pre: function() {
+        newMessage.classList.add("report-message-pre");
+      }
+    }
+    format[options.format]();
     var messageType = document.createElement("span");
     messageType.textContent = typePrefix(options.type);
     messageType.setAttribute("class", "report-message-type");
@@ -149,6 +169,7 @@ var message = (function() {
       index: 0,
       delay: options.delay,
       target: messageText,
+      cursor: cursor[options.type],
       callback: options.callback
     });
   };
