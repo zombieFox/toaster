@@ -140,6 +140,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            storeCost(options);
             changeValue(options);
             disableButton(options);
             wheat.output();
@@ -684,6 +685,31 @@ var toaster = (function() {
     game.set({
       path: options.cost.amount,
       value: options.prices.next
+    });
+  };
+
+  var storeCost = function(override) {
+    var options = {
+      change: null,
+      cost: null,
+      inflation: null,
+      max: null,
+      prices: null,
+      message: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.cost.store,
+      value: helper.operator({
+        type: "increase",
+        value: game.get({
+          path: options.cost.store
+        }),
+        by: options.prices.total
+      })
     });
   };
 

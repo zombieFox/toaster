@@ -86,7 +86,8 @@ var game = (function() {
           cost: {
             cycles: 20,
             toast: 10,
-            increase: 5
+            increase: 5,
+            spent: 0
           }
         },
         speed: {
@@ -121,7 +122,8 @@ var game = (function() {
         cost: {
           cycles: 20,
           toast: 10,
-          increase: 5
+          increase: 5,
+          spent: 0
         }
       },
       speed: {
