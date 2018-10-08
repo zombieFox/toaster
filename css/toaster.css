@@ -167,14 +167,18 @@ body {
   white-space: pre;
 }
 
+.report-message .report-message-text-string {
+  margin-right: 0.8em;
+}
+
 .report-message .report-message-text-blink {
   display: none;
+  font-weight: 900;
 }
 
 .report-message:last-child .report-message-text:last-child .report-message-text-blink {
   display: inline-block;
   opacity: 1;
-  margin-left: 0.8em;
   animation-duration: 1s;
   animation-name: blink;
   animation-iteration-count: infinite;

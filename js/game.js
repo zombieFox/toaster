@@ -308,13 +308,13 @@ var game = (function() {
           }, {
             address: "wheat.inventory.current",
             operator: "less",
-            number: 500
+            number: 550
           }],
           actions: {
             append: [strategy.items.wheatDrones],
             message: [{
               type: "normal",
-              message: ["new strategy discovered:", "collect wheat"],
+              message: ["new strategy discovered:", "wheat drones"],
               format: "normal"
             }]
           }
@@ -618,7 +618,7 @@ var game = (function() {
             append: [strategy.items.sensors],
             message: [{
               type: "normal",
-              message: ["new strategy discovered:", "sensor"],
+              message: ["new strategy discovered:", "sensors"],
               format: "normal"
             }]
           }

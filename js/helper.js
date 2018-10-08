@@ -48,6 +48,9 @@ var helper = (function() {
       }
     };
     action[options.type]();
+    if (options.value < 0) {
+      options.value = 0;
+    }
     if (options.min != null && options.value < options.min) {
       action.min();
     }

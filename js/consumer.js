@@ -1,21 +1,5 @@
 var consumer = (function() {
 
-  var increase = function() {
-    game.set({
-      path: "consumed.rate",
-      value: helper.operator({
-        type: "multiply",
-        value: game.get({
-          path: "consumed.rate"
-        }),
-        by: game.get({
-          path: "consumed.multiply"
-        }),
-        integer: true
-      })
-    });
-  };
-
   var consume = function() {
     // console.log(amount + " toast consumed");
     if (game.get({
@@ -52,6 +36,22 @@ var consumer = (function() {
         }
       };
     }
+  };
+
+  var increase = function() {
+    game.set({
+      path: "consumed.rate",
+      value: helper.operator({
+        type: "multiply",
+        value: game.get({
+          path: "consumed.rate"
+        }),
+        by: game.get({
+          path: "consumed.multiply"
+        }),
+        integer: true
+      })
+    });
   };
 
   var init = function() {
