@@ -156,6 +156,21 @@ var toaster = (function() {
           }
           data.save();
         },
+        dismantle: function(button) {
+          var options = {
+            dismantle: null,
+            cost: null,
+            button: null
+          };
+          options.dismantle = helper.makeObject(button.dataset.toastButtonDismantle);
+          options.cost = helper.makeObject(button.dataset.toastButtonCost);
+          options.button = button;
+          refundCost(options);
+          clearSpent(options);
+          dismantleTarget(options);
+          wheat.output();
+          data.save();
+        },
         speed: function(button) {
           var options = {
             change: null,
@@ -458,7 +473,7 @@ var toaster = (function() {
           }
         }
         data.save();
-      },
+      }
     };
     var bindButton = function(button) {
       button.addEventListener("click", function() {
@@ -710,6 +725,59 @@ var toaster = (function() {
         }),
         by: options.prices.total
       })
+    });
+  };
+
+  refundCost = function(override) {
+    var options = {
+      dismantle: null,
+      cost: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.cost.currency,
+      value: helper.operator({
+        type: "increase",
+        value: game.get({
+          path: options.cost.currency
+        }),
+        by: game.get({
+          path: options.cost.spent
+        })
+      })
+    });
+  };
+
+  var dismantleTarget = function(override) {
+    var options = {
+      dismantle: null,
+      cost: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.dismantle.target,
+      value: 0
+    });
+  };
+
+  var clearSpent = function(override) {
+    var options = {
+      dismantle: null,
+      cost: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.cost.spent,
+      value: 0
     });
   };
 

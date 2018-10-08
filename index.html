@@ -240,7 +240,16 @@
                       data-toast-button-max="buy:true"
                     >+Max</button>
                   </div>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.drones.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                  <div class="" id="stage-wheat-substage-dismantle-drones">
+                    <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.drones.inventory.cost.toast,format:local,decimals:#2"></strong> toast matter</p>
+                    <hr>
+                    <button class="btn btn-sm btn-danger mb-1"
+                      data-toast-button="action:wheat.dismantle"
+                      data-toast-button-dismantle="target:wheat.drones.inventory.current"
+                      data-toast-button-cost="currency:toast.inventory,spent:wheat.drones.inventory.cost.spent"
+                    >Dismantle All Drones</button>
+                  </div>
+                  <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:wheat.drones.inventory.cost.spent,format:local,decimals:#2"></strong> toast matter</p>
                   <div class="d-none" id="stage-wheat-substage-speed">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
