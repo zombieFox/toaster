@@ -555,7 +555,7 @@ var toaster = (function() {
               // if amount has a max
               if (options.change.max && (game.get({
                   path: options.change.target
-                }) - startingAmount) >= game.get({
+                }) + startingAmount) >= game.get({
                   path: options.change.max
                 })) {
                 break
@@ -605,7 +605,7 @@ var toaster = (function() {
               // if amount has a max
               if (options.change.max && (game.get({
                   path: options.change.target
-                }) - startingAmount) >= game.get({
+                }) + startingAmount) >= game.get({
                   path: options.change.max
                 })) {
                 break

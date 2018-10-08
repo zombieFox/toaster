@@ -308,7 +308,7 @@ var game = (function() {
           }, {
             address: "wheat.inventory.current",
             operator: "less",
-            number: 500
+            number: 550
           }],
           actions: {
             append: [strategy.items.wheatDrones],
