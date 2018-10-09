@@ -140,7 +140,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
-            storeCost(options);
+            storeSpent(options);
             changeValue(options);
             disableButton(options);
             wheat.output();
@@ -158,17 +158,40 @@ var toaster = (function() {
         },
         dismantle: function(button) {
           var options = {
-            dismantle: null,
+            change: null,
             cost: null,
+            message: null,
             button: null
           };
-          options.dismantle = helper.makeObject(button.dataset.toastButtonDismantle);
+          options.change = helper.makeObject(button.dataset.toastButtonChange);
           options.cost = helper.makeObject(button.dataset.toastButtonCost);
           options.button = button;
-          refundCost(options);
-          clearSpent(options);
-          dismantleTarget(options);
-          wheat.output();
+          options.message = {
+            success: {
+              path: "wheat.dismantle.success",
+              state: false
+            },
+            fail: {
+              path: "wheat.dismantle.fail",
+              state: false
+            }
+          };
+          if (validateDismantle(options)) {
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+            refundCost(options);
+            resetCost(options);
+            clearSpent(options);
+            dismantleTarget(options);
+            wheat.output();
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
           data.save();
         },
         speed: function(button) {
@@ -286,6 +309,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            storeSpent(options);
             changeValue(options);
             disableButton(options);
             autoToaster.output();
@@ -293,6 +317,44 @@ var toaster = (function() {
               options.message.success.state = true;
               feedbackMessage(options);
             }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
+          data.save();
+        },
+        dismantle: function(button) {
+          var options = {
+            change: null,
+            cost: null,
+            message: null,
+            button: null
+          };
+          options.change = helper.makeObject(button.dataset.toastButtonChange);
+          options.cost = helper.makeObject(button.dataset.toastButtonCost);
+          options.button = button;
+          options.message = {
+            success: {
+              path: "autoToaster.dismantle.success",
+              state: false
+            },
+            fail: {
+              path: "autoToaster.dismantle.fail",
+              state: false
+            }
+          };
+          if (validateDismantle(options)) {
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+            refundCost(options);
+            resetCost(options);
+            clearSpent(options);
+            dismantleTarget(options);
+            autoToaster.output();
           } else {
             if (options.message.fail != null) {
               options.message.fail.state = true;
@@ -673,6 +735,25 @@ var toaster = (function() {
     return validate;
   };
 
+  var validateDismantle = function(override) {
+    var options = {
+      change: null,
+      cost: null,
+      message: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var validate = false;
+    if (game.get({
+        path: options.change.target
+      }) > 0) {
+      validate = true;
+    }
+    return validate;
+  };
+
   var payCost = function(override) {
     var options = {
       change: null,
@@ -703,7 +784,7 @@ var toaster = (function() {
     });
   };
 
-  var storeCost = function(override) {
+  var storeSpent = function(override) {
     var options = {
       change: null,
       cost: null,
@@ -717,20 +798,20 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     game.set({
-      path: options.cost.store,
+      path: options.cost.spent,
       value: helper.operator({
         type: "increase",
         value: game.get({
-          path: options.cost.store
+          path: options.cost.spent
         }),
         by: options.prices.total
       })
     });
   };
 
-  refundCost = function(override) {
+  var refundCost = function(override) {
     var options = {
-      dismantle: null,
+      change: null,
       cost: null,
       button: null
     };
@@ -751,24 +832,9 @@ var toaster = (function() {
     });
   };
 
-  var dismantleTarget = function(override) {
-    var options = {
-      dismantle: null,
-      cost: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    game.set({
-      path: options.dismantle.target,
-      value: 0
-    });
-  };
-
   var clearSpent = function(override) {
     var options = {
-      dismantle: null,
+      change: null,
       cost: null,
       button: null
     };
@@ -778,6 +844,38 @@ var toaster = (function() {
     game.set({
       path: options.cost.spent,
       value: 0
+    });
+  };
+
+  var dismantleTarget = function(override) {
+    var options = {
+      change: null,
+      cost: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.change.target,
+      value: 0
+    });
+  };
+
+  var resetCost = function(override) {
+    var options = {
+      change: null,
+      cost: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    game.set({
+      path: options.cost.amount,
+      value: game.get({
+        path: options.cost.starting
+      })
     });
   };
 
@@ -868,11 +966,6 @@ var toaster = (function() {
   var disableButton = function(override) {
     var options = {
       change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
       button: null
     };
     if (override) {
@@ -954,12 +1047,24 @@ var toaster = (function() {
       autoToaster: {
         make: {
           success: function() {
-            return ["+" + options.change.amount + " subordinate auto toaster, " + game.get({
+            return ["+" + options.change.amount + " subordinate auto toasters, " + game.get({
               path: "autoToaster.inventory.current"
             }).toLocaleString(2) + " online"];
           },
           fail: function() {
             return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        dismantle: {
+          success: function() {
+            return ["-" + game.get({
+              path: options.change.target
+            }).toLocaleString(2) + " subordinate auto toasters, " + game.get({
+              path: options.cost.spent
+            }).toLocaleString(2) + " toast matter returned"];
+          },
+          fail: function() {
+            return ["no subordinate auto toasters to dismantled"];
           }
         },
         speed: {
@@ -994,12 +1099,24 @@ var toaster = (function() {
       wheat: {
         make: {
           success: function() {
-            return ["+" + options.change.amount + " wheat collection drone, " + game.get({
+            return ["+" + options.change.amount + " wheat collection drones, " + game.get({
               path: "wheat.drones.inventory.current"
             }).toLocaleString(2) + " online"];
           },
           fail: function() {
             return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        dismantle: {
+          success: function() {
+            return ["-" + game.get({
+              path: options.change.target
+            }).toLocaleString(2) + " wheat collection drones, " + game.get({
+              path: options.cost.spent
+            }).toLocaleString(2) + " toast matter returned"];
+          },
+          fail: function() {
+            return ["no wheat collection drones to dismantled"];
           }
         },
         speed: {

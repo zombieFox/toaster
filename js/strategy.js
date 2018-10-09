@@ -61,6 +61,18 @@ var strategy = (function() {
       },
       cost: "path:wheat.drones.efficiency.cost.cycles," + "format:local," + "decimals:#2"
     },
+    wheatDronesDismantle: {
+      id: "stage-strategy-substage-drones-dismantle",
+      description: "Dismantle all wheat drones and regain toast matter:",
+      button: {
+        text: "Dismantle Wheat Drones",
+        change: "target:drones.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:drones.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
+        inflation: "increase:false," + "operator:false," + "amount:false",
+        max: "buy:false"
+      },
+      cost: "path:drones.dismantle.cost.cycles," + "format:local," + "decimals:#2"
+    },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",
       description: "Improve wheat filtering and double amount of toast made from 1 wheat lump:",
@@ -108,6 +120,18 @@ var strategy = (function() {
         max: "buy:false"
       },
       cost: "path:autoToaster.efficiency.cost.cycles," + "format:local," + "decimals:#2"
+    },
+    autoToasterDismantle: {
+      id: "stage-strategy-substage-auto-toaster-dismantle",
+      description: "Dismantle all subordinate auto toasters and regain toast matter:",
+      button: {
+        text: "Dismantle Auto Toasters",
+        change: "target:autoToaster.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
+        inflation: "increase:false," + "operator:false," + "amount:false",
+        max: "buy:false"
+      },
+      cost: "path:autoToaster.dismantle.cost.cycles," + "format:local," + "decimals:#2"
     },
     sensors: {
       id: "stage-strategy-substage-sensors",

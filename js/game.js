@@ -64,6 +64,7 @@ var game = (function() {
       inventory: {
         level: 0,
         current: 600,
+        min: 0,
         cost: {
           cycles: 20,
           multiply: 2.5,
@@ -85,9 +86,18 @@ var game = (function() {
           output: 0,
           cost: {
             cycles: 20,
-            toast: 10,
+            toast: {
+              starting: 10,
+              current: 10,
+              spent: 0
+            },
             increase: 5,
-            spent: 0
+          }
+        },
+        dismantle: {
+          level: 0,
+          cost: {
+            cycles: 100
           }
         },
         speed: {
@@ -121,9 +131,18 @@ var game = (function() {
         output: 0,
         cost: {
           cycles: 20,
-          toast: 10,
+          toast: {
+            starting: 10,
+            current: 10,
+            spent: 0
+          },
           increase: 5,
-          spent: 0
+        }
+      },
+      dismantle: {
+        level: 0,
+        cost: {
+          cycles: 100
         }
       },
       speed: {
@@ -417,6 +436,46 @@ var game = (function() {
             }]
           }
         }, {
+          // unlock strategy wheat drones dismantle
+          passed: false,
+          validate: [{
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.drones.inventory.current",
+            operator: "less",
+            number: 0
+          }],
+          actions: {
+            append: [strategy.items.wheatDronesDismantle],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "dismantle wheat drones"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy wheat drones dismantle
+          passed: false,
+          validate: [{
+            address: "wheat.drones.dismantle.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.wheatDronesDismantle],
+            message: [{
+              type: "success",
+              message: ["dismantle wheat drones developed"],
+              format: "normal"
+            }]
+          }
+        }, {
           // unlock strategy more toast from wheat
           passed: false,
           validate: [{
@@ -605,6 +664,46 @@ var game = (function() {
             message: [{
               type: "success",
               message: ["subordinate auto toaster efficiency developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // unlock strategy auto toaster dismantle
+          passed: false,
+          validate: [{
+            address: "autoToaster.inventory.current",
+            operator: "more",
+            number: 1
+          }, {
+            address: "autoToaster.inventory.level",
+            operator: "more",
+            number: 1
+          }, {
+            address: "wheat.inventory.current",
+            operator: "less",
+            number: 0
+          }],
+          actions: {
+            append: [strategy.items.autoToasterDismantle],
+            message: [{
+              type: "normal",
+              message: ["new strategy discovered:", "dismantle subordinate auto toaster developed"],
+              format: "normal"
+            }]
+          }
+        }, {
+          // lock strategy auto toaster dismantle
+          passed: false,
+          validate: [{
+            address: "autoToaster.efficiency.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            remove: [strategy.items.autoToasterDismantle],
+            message: [{
+              type: "success",
+              message: ["dismantle subordinate auto toaster developed"],
               format: "normal"
             }]
           }
