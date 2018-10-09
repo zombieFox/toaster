@@ -439,17 +439,13 @@ var game = (function() {
           // unlock strategy wheat drones dismantle
           passed: false,
           validate: [{
-            address: "wheat.drones.inventory.current",
-            operator: "more",
-            number: 1
-          }, {
             address: "wheat.drones.inventory.level",
             operator: "more",
             number: 1
           }, {
-            address: "wheat.drones.inventory.current",
+            address: "wheat.inventory.current",
             operator: "less",
-            number: 0
+            number: 400
           }],
           actions: {
             append: [strategy.items.wheatDronesDismantle],
@@ -671,17 +667,13 @@ var game = (function() {
           // unlock strategy auto toaster dismantle
           passed: false,
           validate: [{
-            address: "autoToaster.inventory.current",
-            operator: "more",
-            number: 1
-          }, {
             address: "autoToaster.inventory.level",
             operator: "more",
             number: 1
           }, {
             address: "wheat.inventory.current",
             operator: "less",
-            number: 0
+            number: 400
           }],
           actions: {
             append: [strategy.items.autoToasterDismantle],
@@ -695,7 +687,7 @@ var game = (function() {
           // lock strategy auto toaster dismantle
           passed: false,
           validate: [{
-            address: "autoToaster.efficiency.level",
+            address: "autoToaster.dismantle.level",
             operator: "more",
             number: 1
           }],
@@ -822,6 +814,17 @@ var game = (function() {
             lock: ["#stage-wheat-substage-efficiency-controls"],
           }
         }, {
+          // lock strategy wheat drones dismantle
+          passed: false,
+          validate: [{
+            address: "wheat.drones.dismantle.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-wheat-substage-dismantle"],
+          }
+        }, {
           // unlock more toast from wheat
           passed: false,
           validate: [{
@@ -889,6 +892,17 @@ var game = (function() {
           }],
           actions: {
             lock: ["#stage-auto-toaster-substage-efficiency-controls"],
+          }
+        }, {
+          // lock strategy auto toaster dismantle
+          passed: false,
+          validate: [{
+            address: "autoToaster.dismantle.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            unlock: ["#stage-auto-toaster-substage-dismantle"],
           }
         }],
 

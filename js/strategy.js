@@ -66,12 +66,12 @@ var strategy = (function() {
       description: "Dismantle all wheat drones and regain toast matter:",
       button: {
         text: "Dismantle Wheat Drones",
-        change: "target:drones.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:drones.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
+        change: "target:wheat.drones.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
         inflation: "increase:false," + "operator:false," + "amount:false",
         max: "buy:false"
       },
-      cost: "path:drones.dismantle.cost.cycles," + "format:local," + "decimals:#2"
+      cost: "path:wheat.drones.dismantle.cost.cycles," + "format:local," + "decimals:#2"
     },
     moreToastFromWheat: {
       id: "stage-strategy-substage-more-toast-from-wheat",

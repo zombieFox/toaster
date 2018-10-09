@@ -34,7 +34,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["wheat matter low"],
+        message: ["wheat inventory low"],
         format: "normal"
       });
     }
