@@ -131,9 +131,9 @@ var game = (function() {
           toast: {
             starting: 10,
             current: 10,
+            increase: 5,
             spent: 0
           },
-          increase: 5,
         }
       },
       dismantle: {
