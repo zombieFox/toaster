@@ -44,20 +44,20 @@ var message = (function() {
     }
   };
 
+  var cursor = {
+    success: "*",
+    normal: "#",
+    error: "-",
+    system: "/",
+    motivation: "_"
+  };
+
   var colour = {
     success: "success",
     normal: "white",
     error: "danger",
     system: "warning",
     motivation: "info"
-  };
-
-  var cursor = {
-    success: "*",
-    normal: "#",
-    error: "-",
-    system: "|",
-    motivation: "_"
   };
 
   var typeWriter = function(override) {

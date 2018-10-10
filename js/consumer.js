@@ -1,40 +1,39 @@
 var consumer = (function() {
 
   var consume = function() {
-    // console.log(amount + " toast consumed");
     if (game.get({
         path: "toast.inventory"
       }) > 0) {
-      var rate = game.get({
+      var amount = game.get({
         path: "consumed.rate"
       });
-      while (rate > 0) {
-        rate = rate - 1;
-        if (game.get({
-            path: "toast.inventory"
-          }) > 0) {
-          game.set({
-            path: "toast.inventory",
-            value: helper.operator({
-              type: "decrease",
-              value: game.get({
-                path: "toast.inventory"
-              }),
-              by: 1
-            })
-          });
-          game.set({
-            path: "consumed.count",
-            value: helper.operator({
-              type: "increase",
-              value: game.get({
-                path: "consumed.count"
-              }),
-              by: 1
-            })
-          });
-        }
+      if (amount > game.get({
+          path: "toast.inventory"
+        })) {
+        amount = game.get({
+          path: "toast.inventory"
+        });
       };
+      game.set({
+        path: "toast.inventory",
+        value: helper.operator({
+          type: "decrease",
+          value: game.get({
+            path: "toast.inventory"
+          }),
+          by: amount
+        })
+      });
+      game.set({
+        path: "consumed.count",
+        value: helper.operator({
+          type: "increase",
+          value: game.get({
+            path: "consumed.count"
+          }),
+          by: amount
+        })
+      });
     }
   };
 

@@ -63,21 +63,18 @@ var game = (function() {
     wheat: {
       inventory: {
         level: 0,
-        current: 600,
+        current: 1000,
         min: 0,
         cost: {
           cycles: 20,
           multiply: 2.5,
           toast: 50
-        },
-        loaf: {
-          max: {
-            current: 10,
-            starting: 10
-          },
-          slice: 0,
-          multiply: 2
         }
+      },
+      consume: {
+        rate: 10,
+        starting: 10,
+        multiply: 2
       },
       drones: {
         inventory: {
@@ -172,6 +169,7 @@ var game = (function() {
       address: {
         lifetime: "toast.lifetime",
         consumed: "consumed.count",
+        drones: "wheat.drones.inventory.current",
         autoToaster: "autoToaster.inventory.current"
       },
       steps: {
@@ -296,7 +294,7 @@ var game = (function() {
             number: 3
           }],
           actions: {
-            append: [strategy.items.matterConversion],
+            append: [strategy.items.processor.matterConversion],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "toast matter conversion"],
@@ -312,7 +310,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.matterConversion],
+            remove: [strategy.items.processor.matterConversion],
             message: [{
               type: "success",
               message: ["toast matter conversion developed"],
@@ -329,10 +327,10 @@ var game = (function() {
           }, {
             address: "wheat.inventory.current",
             operator: "less",
-            number: 550
+            number: 700
           }],
           actions: {
-            append: [strategy.items.wheatDrones],
+            append: [strategy.items.wheat.drones.inventory],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "wheat drones"],
@@ -348,7 +346,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.wheatDrones],
+            remove: [strategy.items.wheat.drones.inventory],
             message: [{
               type: "success",
               message: ["collect wheat drones developed"],
@@ -372,7 +370,7 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            append: [strategy.items.wheatDronesSpeed],
+            append: [strategy.items.wheat.drones.speed],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "wheat drones speed"],
@@ -388,7 +386,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.wheatDronesSpeed],
+            remove: [strategy.items.wheat.drones.speed],
             message: [{
               type: "success",
               message: ["wheat drones speed developed"],
@@ -412,7 +410,7 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            append: [strategy.items.wheatDronesEfficiency],
+            append: [strategy.items.wheat.drones.efficiency],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "subordinate wheat drones efficiency"],
@@ -428,7 +426,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.wheatDronesEfficiency],
+            remove: [strategy.items.wheat.drones.efficiency],
             message: [{
               type: "success",
               message: ["subordinate wheat drones efficiency developed"],
@@ -448,7 +446,7 @@ var game = (function() {
             number: 400
           }],
           actions: {
-            append: [strategy.items.wheatDronesDismantle],
+            append: [strategy.items.wheat.drones.dismantle],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "dismantle wheat drones"],
@@ -464,7 +462,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.wheatDronesDismantle],
+            remove: [strategy.items.wheat.drones.dismantle],
             message: [{
               type: "success",
               message: ["dismantle wheat drones developed"],
@@ -481,14 +479,14 @@ var game = (function() {
           }, {
             address: "wheat.drones.inventory.current",
             operator: "more",
-            number: 100
+            number: 50
           }, {
             address: "system.cycles.current",
             operator: "more",
             number: 20
           }],
           actions: {
-            append: [strategy.items.moreToastFromWheat],
+            append: [strategy.items.wheat.more],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "more toast from wheat"],
@@ -504,7 +502,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.moreToastFromWheat],
+            remove: [strategy.items.wheat.more],
             message: [{
               type: "success",
               message: ["more toast from wheat developed"],
@@ -524,7 +522,7 @@ var game = (function() {
             number: 2
           }],
           actions: {
-            append: [strategy.items.cyclesSpeed],
+            append: [strategy.items.processor.cycles.speed],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "cycles speed"],
@@ -540,7 +538,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.cyclesSpeed],
+            remove: [strategy.items.processor.cycles.speed],
             message: [{
               type: "success",
               message: ["cycles speed discovered"],
@@ -560,7 +558,7 @@ var game = (function() {
             number: 5
           }],
           actions: {
-            append: [strategy.items.autoToaster],
+            append: [strategy.items.autoToaster.inventory],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "subordinate auto toasters"],
@@ -576,7 +574,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.autoToaster],
+            remove: [strategy.items.autoToaster.inventory],
             message: [{
               type: "success",
               message: ["subordinate auto toasters developed"],
@@ -600,7 +598,7 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            append: [strategy.items.autoToasterSpeed],
+            append: [strategy.items.autoToaster.speed],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "subordinate auto toaster speed"],
@@ -616,7 +614,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.autoToasterSpeed],
+            remove: [strategy.items.autoToaster.speed],
             message: [{
               type: "success",
               message: ["subordinate auto toaster speed developed"],
@@ -640,7 +638,7 @@ var game = (function() {
             number: 20
           }],
           actions: {
-            append: [strategy.items.autoToasterEfficiency],
+            append: [ strategy.items.autoToaster.efficiency],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "subordinate auto toaster efficiency"],
@@ -656,7 +654,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.autoToasterEfficiency],
+            remove: [ strategy.items.autoToaster.efficiency],
             message: [{
               type: "success",
               message: ["subordinate auto toaster efficiency developed"],
@@ -676,7 +674,7 @@ var game = (function() {
             number: 400
           }],
           actions: {
-            append: [strategy.items.autoToasterDismantle],
+            append: [strategy.items.autoToaster.dismantle],
             message: [{
               type: "normal",
               message: ["new strategy discovered:", "dismantle subordinate auto toaster developed"],
@@ -692,7 +690,7 @@ var game = (function() {
             number: 1
           }],
           actions: {
-            remove: [strategy.items.autoToasterDismantle],
+            remove: [strategy.items.autoToaster.dismantle],
             message: [{
               type: "success",
               message: ["dismantle subordinate auto toaster developed"],
@@ -947,7 +945,7 @@ var game = (function() {
           validate: [{
             address: "toast.lifetime",
             operator: "more",
-            number: 5000
+            number: 10000
           }],
           actions: {
             message: [{
@@ -963,7 +961,7 @@ var game = (function() {
           validate: [{
             address: "toast.lifetime",
             operator: "more",
-            number: 50000
+            number: 100000
           }],
           actions: {
             message: [{
@@ -979,7 +977,7 @@ var game = (function() {
           validate: [{
             address: "toast.lifetime",
             operator: "more",
-            number: 500000
+            number: 1000000
           }],
           actions: {
             message: [{

@@ -1061,7 +1061,7 @@ var toaster = (function() {
               path: options.change.target
             }).toLocaleString(2) + " subordinate auto toasters, " + game.get({
               path: options.cost.spent
-            }).toLocaleString(2) + " toast matter returned"];
+            }).toLocaleString(2) + " toast matter regained"];
           },
           fail: function() {
             return ["no subordinate auto toasters to dismantled"];
@@ -1113,7 +1113,7 @@ var toaster = (function() {
               path: options.change.target
             }).toLocaleString(2) + " wheat collection drones, " + game.get({
               path: options.cost.spent
-            }).toLocaleString(2) + " toast matter returned"];
+            }).toLocaleString(2) + " toast matter regained"];
           },
           fail: function() {
             return ["no wheat collection drones to dismantled"];
