@@ -10,8 +10,7 @@ var wheat = (function() {
         }),
         by: game.get({
           path: "wheat.drones.efficiency.current"
-        }),
-        integer: true
+        })
       })
     });
   };
@@ -26,70 +25,49 @@ var wheat = (function() {
         }),
         by: game.get({
           path: "wheat.drones.inventory.output"
-        }),
-        integer: true
+        })
       })
     });
   };
 
   var consume = function(amount) {
-    while (amount > 0) {
-      amount--;
+    if (amount > 0) {
+      var amount = amount / game.get({
+        path: "wheat.consume.rate"
+      });
       game.set({
-        path: "wheat.inventory.loaf.slice",
+        path: "wheat.inventory.current",
         value: helper.operator({
-          type: "increase",
+          type: "decrease",
           value: game.get({
-            path: "wheat.inventory.loaf.slice"
+            path: "wheat.inventory.current"
           }),
-          by: 1
+          by: amount
         })
       });
-      // if slice == max reduce total wheat
-      if (game.get({
-          path: "wheat.inventory.loaf.slice"
-        }) == game.get({
-          path: "wheat.inventory.loaf.max.current"
-        })) {
-        game.set({
-          path: "wheat.inventory.loaf.slice",
-          value: 0
-        });
-        game.set({
-          path: "wheat.inventory.current",
-          value: helper.operator({
-            type: "decrease",
-            value: game.get({
-              path: "wheat.inventory.current"
-            }),
-            by: 1
-          })
-        });
-      }
     }
   };
 
   var increase = function() {
     game.set({
-      path: "wheat.inventory.loaf.max.current",
+      path: "wheat.consume.rate",
       value: helper.operator({
         type: "multiply",
         value: game.get({
-          path: "wheat.inventory.loaf.max.current"
+          path: "wheat.consume.rate"
         }),
         by: game.get({
-          path: "wheat.inventory.loaf.multiply"
-        }),
-        integer: true
+          path: "wheat.consume.multiply"
+        })
       })
     });
   };
 
   var init = function() {
     game.set({
-      path: "wheat.inventory.loaf.max.current",
+      path: "wheat.consume.rate",
       value: game.get({
-        path: "wheat.inventory.loaf.max.starting"
+        path: "wheat.consume.starting"
       })
     });
   };

@@ -5,7 +5,7 @@ var toast = (function() {
         type: "divide",
         value: amount,
         by: game.get({
-          path: "wheat.inventory.loaf.max.current"
+          path: "wheat.consume.rate"
         })
       }) <= game.get({
         path: "wheat.inventory.current"
@@ -34,7 +34,7 @@ var toast = (function() {
     } else {
       message.render({
         type: "error",
-        message: ["wheat matter low"],
+        message: ["wheat inventory low"],
         format: "normal"
       });
     }

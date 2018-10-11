@@ -20,6 +20,7 @@ var milestones = (function() {
             check: {
               lifetime: false,
               consumed: false,
+              drones: false,
               autoToaster: false
             }
           };
@@ -75,6 +76,10 @@ var milestones = (function() {
       consumed: {
         prefix: "milestone: ",
         suffix: " consumed toast"
+      },
+      drones: {
+        prefix: "milestone: ",
+        suffix: " wheat collection drones"
       },
       autoToaster: {
         prefix: "milestone: ",
