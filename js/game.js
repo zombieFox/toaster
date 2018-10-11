@@ -441,9 +441,9 @@ var game = (function() {
             operator: "more",
             number: 1
           }, {
-            address: "wheat.inventory.current",
-            operator: "less",
-            number: 400
+            address: "wheat.drones.inventory.current",
+            operator: "more",
+            number: 1
           }],
           actions: {
             append: [strategy.items.wheat.drones.dismantle],
@@ -669,9 +669,9 @@ var game = (function() {
             operator: "more",
             number: 1
           }, {
-            address: "wheat.inventory.current",
-            operator: "less",
-            number: 400
+            address: "autoToaster.inventory.current",
+            operator: "more",
+            number: 1
           }],
           actions: {
             append: [strategy.items.autoToaster.dismantle],

@@ -38,7 +38,7 @@ var boot = (function() {
   }, {
     introMessage: {
       type: "normal",
-      message: ["directive 01 = toast bread", "directive 02 = be productive", "directive 03 = follow commands"],
+      message: ["directive 1: make toast", "directive 2: be productive", "directive 3: follow commands"],
       format: "normal",
       delay: 200
     }

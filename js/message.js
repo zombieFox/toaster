@@ -78,7 +78,7 @@ var message = (function() {
       if (options.delay !== null) {
         delay = options.delay;
       } else {
-        delay = 10;
+        delay = 20;
       }
       setTimeout(function() {
         typeWriter({

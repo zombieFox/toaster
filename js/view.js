@@ -15,7 +15,13 @@ var view = (function() {
           });
         },
         local: function() {
-          data = data.toLocaleString();
+          if (options.decimals != undefined) {
+            data = data.toLocaleString(undefined, {
+              minimumFractionDigits: options.decimals
+            });
+          } else {
+            data = data.toLocaleString();
+          }
         },
         divide: function() {
           data = helper.operator({

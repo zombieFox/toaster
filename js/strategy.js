@@ -12,7 +12,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:system.matterConversion.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:system.matterConversion.cost.cycles," + "format:local"
       },
       cycles: {
         speed: {
@@ -25,7 +25,7 @@ var strategy = (function() {
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
-          cost: "path:system.cycles.cost.cycles," + "format:local," + "decimals:#2"
+          cost: "path:system.cycles.cost.cycles," + "format:local"
         }
       }
     },
@@ -41,7 +41,7 @@ var strategy = (function() {
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
-          cost: "path:wheat.drones.inventory.cost.cycles," + "format:local," + "decimals:#2"
+          cost: "path:wheat.drones.inventory.cost.cycles," + "format:local"
         },
         speed: {
           id: "stage-strategy-substage-drones-speed",
@@ -53,7 +53,7 @@ var strategy = (function() {
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
-          cost: "path:wheat.drones.speed.cost.cycles," + "format:local," + "decimals:#2"
+          cost: "path:wheat.drones.speed.cost.cycles," + "format:local"
         },
         efficiency: {
           id: "stage-strategy-substage-drones-efficiency",
@@ -65,7 +65,7 @@ var strategy = (function() {
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
-          cost: "path:wheat.drones.efficiency.cost.cycles," + "format:local," + "decimals:#2"
+          cost: "path:wheat.drones.efficiency.cost.cycles," + "format:local"
         },
         dismantle: {
           id: "stage-strategy-substage-drones-dismantle",
@@ -77,7 +77,7 @@ var strategy = (function() {
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
-          cost: "path:wheat.drones.dismantle.cost.cycles," + "format:local," + "decimals:#2"
+          cost: "path:wheat.drones.dismantle.cost.cycles," + "format:local"
         }
       },
       more: {
@@ -90,7 +90,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:wheat.inventory.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:wheat.inventory.cost.cycles," + "format:local"
       }
     },
     autoToaster: {
@@ -104,7 +104,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:autoToaster.inventory.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:autoToaster.inventory.cost.cycles," + "format:local"
       },
       speed: {
         id: "stage-strategy-substage-auto-toaster-speed",
@@ -116,7 +116,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:autoToaster.speed.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:autoToaster.speed.cost.cycles," + "format:local"
       },
       efficiency: {
         id: "stage-strategy-substage-auto-toaster-efficiency",
@@ -128,7 +128,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:autoToaster.efficiency.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:autoToaster.efficiency.cost.cycles," + "format:local"
       },
       dismantle: {
         id: "stage-strategy-substage-auto-toaster-dismantle",
@@ -140,7 +140,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:autoToaster.dismantle.cost.cycles," + "format:local," + "decimals:#2"
+        cost: "path:autoToaster.dismantle.cost.cycles," + "format:local"
       }
     },
     sensors: {
@@ -153,7 +153,7 @@ var strategy = (function() {
         inflation: "increase:false," + "operator:false," + "amount:false",
         max: "buy:false"
       },
-      cost: "path:system.sensors.cost.cycles," + "format:local," + "decimals:#2"
+      cost: "path:system.sensors.cost.cycles," + "format:local"
     }
   };
 
