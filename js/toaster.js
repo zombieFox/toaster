@@ -1007,7 +1007,7 @@ var toaster = (function() {
       processor: {
         boost: {
           success: function() {
-            return ["+" + options.change.amount + " processor power, " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " processor power, " + game.get({
               path: options.change.target
             }).toLocaleString(2) + " toast with every click"];
           },
@@ -1047,7 +1047,7 @@ var toaster = (function() {
       autoToaster: {
         make: {
           success: function() {
-            return ["+" + options.change.amount + " subordinate auto toasters, " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toasters, " + game.get({
               path: "autoToaster.inventory.current"
             }).toLocaleString(2) + " online"];
           },
@@ -1087,7 +1087,7 @@ var toaster = (function() {
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount + " subordinate auto toaster efficiency, each producing " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toaster efficiency, each producing " + game.get({
               path: "autoToaster.efficiency.current"
             }).toLocaleString(2) + " toast"];
           },
@@ -1099,7 +1099,7 @@ var toaster = (function() {
       wheat: {
         make: {
           success: function() {
-            return ["+" + options.change.amount + " wheat collection drones, " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drones, " + game.get({
               path: "wheat.drones.inventory.current"
             }).toLocaleString(2) + " online"];
           },
@@ -1139,7 +1139,7 @@ var toaster = (function() {
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount + " wheat collection drone efficiency, each producing " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drone efficiency, each producing " + game.get({
               path: "wheat.drones.efficiency.current"
             }).toLocaleString(2) + " toast"];
           },
