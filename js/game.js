@@ -63,13 +63,14 @@ var game = (function() {
     wheat: {
       inventory: {
         level: 0,
-        current: 1000,
+        current: 10000000,
         min: 0,
         cost: {
-          cycles: 20,
-          multiply: 2.5,
-          toast: 50
+          cycles: 20
         }
+      },
+      lump: {
+        part: 0
       },
       consume: {
         rate: 10,
