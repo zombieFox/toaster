@@ -62,20 +62,19 @@ var game = (function() {
     },
     wheat: {
       inventory: {
-        level: 0,
         current: 10000000,
         min: 0,
         cost: {
           cycles: 20
         }
       },
-      lump: {
-        part: 0
-      },
       consume: {
-        rate: 10,
-        starting: 10,
-        multiply: 2
+        rate: 100,
+        starting: 100,
+        cost: {
+          cycles: 100,
+          multiply: 2
+        }
       },
       drones: {
         inventory: {
@@ -328,7 +327,7 @@ var game = (function() {
           }, {
             address: "wheat.inventory.current",
             operator: "less",
-            number: 700
+            number: 9999999
           }],
           actions: {
             append: [strategy.items.wheat.drones.inventory],
@@ -480,11 +479,11 @@ var game = (function() {
           }, {
             address: "wheat.drones.inventory.current",
             operator: "more",
-            number: 50
+            number: 20
           }, {
             address: "system.cycles.current",
             operator: "more",
-            number: 20
+            number: 10
           }],
           actions: {
             append: [strategy.items.wheat.more],
