@@ -244,15 +244,6 @@ var events = (function() {
           interval: "autoToaster.speed.interval.current"
         });
       },
-      wheatDrones: function() {
-        tick.set({
-          tickName: "wheatDrones",
-          func: function() {
-            wheat.make();
-          },
-          interval: "wheat.drones.speed.interval.current"
-        });
-      },
       cycles: function() {
         tick.set({
           tickName: "cycles",
@@ -263,11 +254,24 @@ var events = (function() {
         });
       },
       wheat: {
-        drones: function() {
-          wheat.init();
+        drones: {
+          init: function() {
+            tick.set({
+              tickName: "wheatDrones",
+              func: function() {
+                wheat.make();
+              },
+              interval: "wheat.drones.speed.interval.current"
+            });
+          }
         },
-        increase: function() {
-          wheat.increase();
+        consume: {
+          init: function() {
+            wheat.init();
+          },
+          decrease: function() {
+            wheat.decrease();
+          }
         }
       }
     };

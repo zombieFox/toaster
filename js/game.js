@@ -69,10 +69,11 @@ var game = (function() {
         }
       },
       consume: {
+        level: 0,
         rate: 100,
         starting: 100,
         cost: {
-          cycles: 100,
+          cycles: 120,
           multiply: 2
         }
       },
@@ -477,19 +478,19 @@ var game = (function() {
             operator: "more",
             number: 1
           }, {
+            address: "wheat.consume.level",
+            operator: "less",
+            number: 0
+          }, {
             address: "wheat.drones.inventory.current",
             operator: "more",
             number: 20
-          }, {
-            address: "system.cycles.current",
-            operator: "more",
-            number: 10
           }],
           actions: {
-            append: [strategy.items.wheat.more],
+            append: [strategy.items.wheat.more1],
             message: [{
               type: "normal",
-              message: ["new strategy discovered:", "more toast from wheat"],
+              message: ["new strategy discovered:", "15% more toast from wheat"],
               format: "normal"
             }]
           }
@@ -497,15 +498,15 @@ var game = (function() {
           // lock strategy more toast from wheat
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "wheat.consume.level",
             operator: "more",
             number: 1
           }],
           actions: {
-            remove: [strategy.items.wheat.more],
+            remove: [strategy.items.wheat.more1],
             message: [{
               type: "success",
-              message: ["more toast from wheat developed"],
+              message: ["15% more toast from wheat developed"],
               format: "normal"
             }]
           }
@@ -765,7 +766,7 @@ var game = (function() {
           }],
           actions: {
             unlock: ["#stage-wheat-drones"],
-            func: ["wheatDrones"]
+            func: ["wheat.drones.init"]
           }
         }, {
           // unlock wheat drones speed
@@ -823,15 +824,26 @@ var game = (function() {
             unlock: ["#stage-wheat-substage-dismantle"],
           }
         }, {
-          // unlock more toast from wheat
+          // unlock starting wheat consume
           passed: false,
           validate: [{
-            address: "wheat.inventory.level",
+            address: "toast.lifetime",
             operator: "more",
             number: 1
           }],
           actions: {
-            func: ["wheat.increase"]
+            func: ["wheat.consume.init"]
+          }
+        }, {
+          // unlock more toast from wheat
+          passed: false,
+          validate: [{
+            address: "wheat.consume.level",
+            operator: "more",
+            number: 1
+          }],
+          actions: {
+            func: ["wheat.consume.decrease"]
           }
         }],
 
