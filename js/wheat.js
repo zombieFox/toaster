@@ -79,7 +79,8 @@ var wheat = (function() {
         }),
         by: game.get({
           path: "wheat.consume.cost.multiply"
-        })
+        }),
+        integer: true
       })
     });
   };

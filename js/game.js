@@ -70,12 +70,12 @@ var game = (function() {
       },
       consume: {
         level: 0,
-        rate: 50,
-        starting: 50,
+        rate: 100,
+        starting: 100,
         decrease: 20,
         cost: {
           cycles: 60,
-          multiply: 2
+          multiply: 1.8
         }
       },
       drones: {

@@ -209,7 +209,6 @@ var strategy = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    console.log(options.stage.id);
     helper.e("#" + options.stage.id).remove();
   };
 
