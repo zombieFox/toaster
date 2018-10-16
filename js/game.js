@@ -17,8 +17,10 @@ var game = (function() {
       processor: {
         power: 1,
         cost: {
-          toast: 10,
-          multiply: 1.1
+          toast: 6,
+          starting: 5,
+          multiply: 1.1,
+          spent: 5
         }
       },
       cycles: {
@@ -62,7 +64,7 @@ var game = (function() {
     },
     wheat: {
       inventory: {
-        current: 10000000,
+        current: 1000000,
         min: 0,
         cost: {
           cycles: 20
@@ -70,8 +72,8 @@ var game = (function() {
       },
       consume: {
         level: 0,
-        rate: 100,
-        starting: 100,
+        rate: 60,
+        starting: 60,
         decrease: 20,
         cost: {
           cycles: 60,
@@ -84,7 +86,7 @@ var game = (function() {
           current: 0,
           output: 0,
           cost: {
-            cycles: 20,
+            cycles: 10,
             toast: {
               starting: 10,
               current: 10,
@@ -96,7 +98,7 @@ var game = (function() {
         dismantle: {
           level: 0,
           cost: {
-            cycles: 100
+            cycles: 50
           }
         },
         speed: {
@@ -106,7 +108,7 @@ var game = (function() {
             min: 1000
           },
           cost: {
-            cycles: 30,
+            cycles: 10,
             toast: 20,
             multiply: 1.6
           }
@@ -116,7 +118,7 @@ var game = (function() {
           current: 1,
           max: 10,
           cost: {
-            cycles: 40,
+            cycles: 20,
             toast: 30,
             multiply: 2.2
           }

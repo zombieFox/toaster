@@ -148,7 +148,7 @@ var events = (function() {
         }, {
           address: "wheat.inventory.current",
           operator: "less",
-          number: 9999999
+          number: 900000
         }],
         actions: {
           append: [strategy.items.wheat.drones.inventory],
@@ -185,10 +185,6 @@ var events = (function() {
           address: "wheat.drones.inventory.level",
           operator: "more",
           number: 1
-        }, {
-          address: "system.cycles.current",
-          operator: "more",
-          number: 20
         }],
         actions: {
           append: [strategy.items.wheat.drones.speed],
@@ -225,10 +221,6 @@ var events = (function() {
           address: "wheat.drones.inventory.level",
           operator: "more",
           number: 1
-        }, {
-          address: "system.cycles.current",
-          operator: "more",
-          number: 20
         }],
         actions: {
           append: [strategy.items.wheat.drones.efficiency],
@@ -654,9 +646,9 @@ var events = (function() {
           operator: "more",
           number: 1
         }, {
-          address: "system.cycles.current",
+          address: "wheat.drones.inventory.level",
           operator: "more",
-          number: 5
+          number: 1
         }],
         actions: {
           append: [strategy.items.autoToaster.inventory],

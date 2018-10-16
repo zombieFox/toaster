@@ -53,6 +53,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            storeSpent(options);
             changeValue(options);
             disableButton(options);
             cycles.set();
@@ -60,6 +61,43 @@ var toaster = (function() {
               options.message.success.state = true;
               feedbackMessage(options);
             }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
+          }
+          data.save();
+        },
+        dismantle: function(button) {
+          var options = {
+            change: null,
+            cost: null,
+            message: null,
+            button: null
+          };
+          options.change = helper.makeObject(button.dataset.toastButtonChange);
+          options.cost = helper.makeObject(button.dataset.toastButtonCost);
+          options.button = button;
+          options.message = {
+            success: {
+              path: "processor.dismantle.success",
+              state: false
+            },
+            fail: {
+              path: "processor.dismantle.fail",
+              state: false
+            }
+          };
+          if (validateDismantle(options)) {
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+            refundCost(options);
+            resetCost(options);
+            clearSpent(options);
+            dismantleTarget(options);
           } else {
             if (options.message.fail != null) {
               options.message.fail.state = true;
@@ -1013,6 +1051,18 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        dismantle: {
+          success: function() {
+            return ["-" + game.get({
+              path: options.change.target
+            }).toLocaleString(2) + " processor power, " + game.get({
+              path: options.cost.spent
+            }).toLocaleString(2) + " toast matter regained"];
+          },
+          fail: function() {
+            return ["no processor power to dismantled"];
           }
         },
         cycles: {
