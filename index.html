@@ -83,26 +83,36 @@
                     <button class="btn btn-sm btn-primary"
                       data-toast-button="action:processor.boost"
                       data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
-                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast"
+                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent"
                       data-toast-button-inflation="increase:true,operator:multiply,amount:system.processor.cost.multiply"
                       data-toast-button-max="buy:false"
                     >Boost +1</button>
                     <button class="btn btn-sm btn-primary"
                       data-toast-button="action:processor.boost"
                       data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
-                      data-toast-button-cost="units:#10,currency:toast.inventory,amount:system.processor.cost.toast"
+                      data-toast-button-cost="units:#10,currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent"
                       data-toast-button-inflation="increase:true,operator:multiply,amount:system.processor.cost.multiply"
                       data-toast-button-max="buy:false"
                     >+10</button>
                     <button class="btn btn-sm btn-primary"
                       data-toast-button="action:processor.boost"
                       data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
-                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast"
+                      data-toast-button-cost="units:#1,currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent"
                       data-toast-button-inflation="increase:true,operator:multiply,amount:system.processor.cost.multiply"
                       data-toast-button-max="buy:true"
                     >+Max</button>
                   </div>
                   <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:system.processor.cost.toast,format:local"></strong> toast matter</p>
+                  <div class="d-none" id="stage-system-substage-dismantle">
+                    <hr>
+                    <p class="card-text mb-1">Dismantle all processor power</p>
+                    <button class="btn btn-sm btn-danger mb-1"
+                      data-toast-button="action:processor.dismantle"
+                      data-toast-button-change="target:system.processor.power"
+                      data-toast-button-cost="currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent,starting:system.processor.cost.starting"
+                    >Dismantle</button>
+                    <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:system.processor.cost.spent,format:local"></strong> toast matter</p>
+                  </div>
                   <div class="d-none" id="stage-system-substage-cycles">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
