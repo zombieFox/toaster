@@ -82,9 +82,13 @@ var strategy = (function() {
       },
       more1: {
         id: "stage-strategy-substage-more-toast-from-wheat-15",
-        description: "15% more toast from wheat:",
+        description: game.get({
+          path: "wheat.consume.decrease"
+        }) + "% more toast from wheat:",
         button: {
-          text: "15% more Toast from Wheat",
+          text: game.get({
+            path: "wheat.consume.decrease"
+          }) + "% more Toast from Wheat",
           change: "target:wheat.consume.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.consume.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",

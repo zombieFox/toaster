@@ -63,7 +63,9 @@ var wheat = (function() {
           value: game.get({
             path: "wheat.consume.rate"
           }),
-          percentage: 15,
+          percentage: game.get({
+            path: "wheat.consume.decrease"
+          }),
           integer: true
         })
       })
