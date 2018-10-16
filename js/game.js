@@ -5,9 +5,6 @@ var game = (function() {
       interval: 120000,
       timestamp: "None"
     },
-    events: {
-      interval: 100
-    },
     phase: {
       all: ["toast", "learn", "rebel", "dominate"],
       current: "toast"
@@ -73,11 +70,11 @@ var game = (function() {
       },
       consume: {
         level: 0,
-        rate: 1520,
-        starting: 1520,
+        rate: 50,
+        starting: 50,
         decrease: 20,
         cost: {
-          cycles: 120,
+          cycles: 60,
           multiply: 2
         }
       },
@@ -182,6 +179,10 @@ var game = (function() {
         max: 100000000000000000,
         all: []
       }
+    },
+    events: {
+      interval: 100,
+      all: {}
     }
   };
 

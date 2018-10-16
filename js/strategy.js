@@ -80,8 +80,8 @@ var strategy = (function() {
           cost: "path:wheat.drones.dismantle.cost.cycles," + "format:local"
         }
       },
-      more1: {
-        id: "stage-strategy-substage-more-toast-from-wheat-15",
+      more: {
+        id: "stage-strategy-substage-more-toast-from-wheat",
         description: game.get({
           path: "wheat.consume.decrease"
         }) + "% more toast from wheat:",
@@ -94,7 +94,7 @@ var strategy = (function() {
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:wheat.inventory.cost.cycles," + "format:local"
+        cost: "path:wheat.consume.cost.cycles," + "format:local"
       }
     },
     autoToaster: {
@@ -209,6 +209,7 @@ var strategy = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    console.log(options.stage.id);
     helper.e("#" + options.stage.id).remove();
   };
 
