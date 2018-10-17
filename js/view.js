@@ -9,7 +9,7 @@ var view = (function() {
       });
       var format = {
         suffix: function() {
-          data = numberSuffix({
+          data = helper.numberSuffix({
             number: data,
             decimals: options.decimals
           });
