@@ -82,9 +82,7 @@ var strategy = (function() {
       },
       more: {
         id: "stage-strategy-substage-more-toast-from-wheat",
-        description: game.get({
-          path: "wheat.consume.divide"
-        }) + "% more toast from wheat:",
+        description: "Cheap out and use fewer wheat lumps to make toast",
         button: {
           text: game.get({
             path: "wheat.consume.divide"
