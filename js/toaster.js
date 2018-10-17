@@ -1071,7 +1071,7 @@ var toaster = (function() {
               type: "divide",
               value: options.change.amount,
               by: 1000
-            }) + "s cycles speed, 1 cycle / " + helper.operator({
+            }) + "s cycles speed, 1 cycle/" + helper.operator({
               type: "divide",
               value: game.get({
                 path: "system.cycles.speed.interval.current"

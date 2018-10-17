@@ -45,7 +45,7 @@ var game = (function() {
         level: 0,
         delay: 300,
         cost: {
-          cycles: 500
+          cycles: 1000
         }
       },
       matterConversion: {
@@ -64,7 +64,7 @@ var game = (function() {
     },
     wheat: {
       inventory: {
-        current: 1000000,
+        current: 10000000,
         min: 0,
         cost: {
           cycles: 20
@@ -72,12 +72,12 @@ var game = (function() {
       },
       consume: {
         level: 0,
-        rate: 60,
-        starting: 60,
-        decrease: 20,
+        rate: 70,
+        starting: 70,
+        divide: 30,
         cost: {
-          cycles: 60,
-          multiply: 1.8
+          cycles: 20,
+          multiply: 1.2
         }
       },
       drones: {
@@ -88,17 +88,17 @@ var game = (function() {
           cost: {
             cycles: 10,
             toast: {
-              starting: 10,
-              current: 10,
+              starting: 1,
+              current: 1,
               spent: 0
             },
-            increase: 5,
+            increase: 1,
           }
         },
         dismantle: {
           level: 0,
           cost: {
-            cycles: 50
+            cycles: 20
           }
         },
         speed: {
@@ -109,18 +109,18 @@ var game = (function() {
           },
           cost: {
             cycles: 10,
-            toast: 20,
-            multiply: 1.6
+            toast: 5,
+            multiply: 1.1
           }
         },
         efficiency: {
           level: 0,
           current: 1,
-          max: 10,
+          max: 50,
           cost: {
-            cycles: 20,
-            toast: 30,
-            multiply: 2.2
+            cycles: 10,
+            toast: 5,
+            multiply: 1.1
           }
         }
       }
