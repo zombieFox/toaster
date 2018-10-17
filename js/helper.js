@@ -253,11 +253,10 @@ var helper = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.decimals === null) {
+    if (options.decimals == null) {
       options.decimals = 2;
     }
     var suffix = "";
-    var precision = options.decimals;
     if (options.number > 999999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000000;
       suffix = " sexdecillion";
@@ -310,9 +309,9 @@ var helper = (function() {
       options.number = options.number / 1000;
       suffix = " thousand";
     } else if (options.number < 1000) {
-      precision = 0;
+      options.decimals = 0;
     }
-    return options.number.toFixed(precision) + suffix;
+    return options.number.toFixed(options.decimals) + suffix;
   };
 
   var timestamp = function() {
