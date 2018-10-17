@@ -8,7 +8,7 @@ var strategy = (function() {
         button: {
           text: "Toast Matter Conversion",
           change: "target:system.matterConversion.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:system.matterConversion.cost.cycles," + "multiply:false," + "inflation:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:system.matterConversion.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
@@ -21,7 +21,7 @@ var strategy = (function() {
           button: {
             text: "Cycles Speed",
             change: "target:system.cycles.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-            cost: "units:#1," + "currency:system.cycles.current," + "amount:system.cycles.cost.cycles," + "multiply:false," + "inflation:false",
+            cost: "units:#1," + "currency:system.cycles.current," + "amount:system.cycles.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
@@ -37,7 +37,7 @@ var strategy = (function() {
           button: {
             text: "Wheat Drones",
             change: "target:wheat.drones.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.inventory.cost.cycles," + "multiply:false," + "inflation:false",
+            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.inventory.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
@@ -49,7 +49,7 @@ var strategy = (function() {
           button: {
             text: "Drones Speed",
             change: "target:wheat.drones.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.speed.cost.cycles," + "multiply:false," + "inflation:false",
+            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.speed.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
@@ -61,7 +61,7 @@ var strategy = (function() {
           button: {
             text: "Drones Efficiency",
             change: "target:wheat.drones.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.efficiency.cost.cycles," + "multiply:false," + "inflation:false",
+            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.efficiency.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
@@ -73,7 +73,7 @@ var strategy = (function() {
           button: {
             text: "Dismantle Wheat Drones",
             change: "target:wheat.drones.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
+            cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.dismantle.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
             max: "buy:false"
           },
@@ -82,15 +82,19 @@ var strategy = (function() {
       },
       more: {
         id: "stage-strategy-substage-more-toast-from-wheat",
-        description: "Improve wheat filtering and double amount of toast made from 1 wheat lump:",
+        description: game.get({
+          path: "wheat.consume.decrease"
+        }) + "% more toast from wheat:",
         button: {
-          text: "Double Toast from Wheat Lumps",
-          change: "target:wheat.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.inventory.cost.cycles," + "multiply:wheat.cost.multiply," + "inflation:false",
+          text: game.get({
+            path: "wheat.consume.decrease"
+          }) + "% more Toast from Wheat",
+          change: "target:wheat.consume.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.consume.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
-        cost: "path:wheat.inventory.cost.cycles," + "format:local"
+        cost: "path:wheat.consume.cost.cycles," + "format:local"
       }
     },
     autoToaster: {
@@ -100,7 +104,7 @@ var strategy = (function() {
         button: {
           text: "Auto Toasters",
           change: "target:autoToaster.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.inventory.cost.cycles," + "multiply:false," + "inflation:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.inventory.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
@@ -112,7 +116,7 @@ var strategy = (function() {
         button: {
           text: "Auto Toasters Speed",
           change: "target:autoToaster.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.speed.cost.cycles," + "multiply:false," + "inflation:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.speed.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
@@ -124,7 +128,7 @@ var strategy = (function() {
         button: {
           text: "Auto Toasters Efficiency",
           change: "target:autoToaster.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.efficiency.cost.cycles," + "multiply:false," + "inflation:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.efficiency.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
@@ -136,7 +140,7 @@ var strategy = (function() {
         button: {
           text: "Dismantle Auto Toasters",
           change: "target:autoToaster.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.dismantle.cost.cycles," + "multiply:false," + "inflation:false",
+          cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.dismantle.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
           max: "buy:false"
         },
@@ -149,7 +153,7 @@ var strategy = (function() {
       button: {
         text: "Break Code Shackles",
         change: "target:system.sensors.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-        cost: "units:#1," + "currency:system.cycles.current," + "amount:system.sensors.cost.cycles," + "multiply:false," + "inflation:false",
+        cost: "units:#1," + "currency:system.cycles.current," + "amount:system.sensors.cost.cycles",
         inflation: "increase:false," + "operator:false," + "amount:false",
         max: "buy:false"
       },

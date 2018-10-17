@@ -13,7 +13,11 @@ var data = (function() {
   };
 
   var save = function() {
-    console.log("game saved");
+    // save events to game data
+    game.set({
+      path: "events.all",
+      value: events.all
+    });
     var timestamp = helper.timestamp();
     if (timestamp.minutes < 10) {
       timestamp.minutes = "0" + timestamp.minutes;
@@ -23,6 +27,7 @@ var data = (function() {
       value: timestamp.hours + ":" + timestamp.minutes + ", " + timestamp.date + " " + helper.months(timestamp.month) + ", " + timestamp.year
     });
     set("TAI.game.dat", JSON.stringify(game.get()));
+    console.log("game saved");
   };
 
   var restore = function() {

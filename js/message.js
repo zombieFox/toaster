@@ -1,47 +1,51 @@
 var message = (function() {
 
   var typePrefix = function(type) {
-    var eyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
-    var mouths = ["_", ".", "▁", "◡", "◠", "w"];
-    var sides = [{
-      left: "[",
-      right: "]"
-    }, {
-      left: "(",
-      right: ")"
-    }, {
-      left: "{",
-      right: "}"
-    }, {
-      left: "<",
-      right: ">"
-    }, {
-      left: "|",
-      right: "|"
-    }, {
-      left: "=",
-      right: "="
-    }, {
-      left: ":",
-      right: ":"
-    }];
-    var allTypes = {
-      success: "!!!",
-      normal: ":::",
-      error: "ERR",
-      system: "///"
-    };
-    if (type == "motivation") {
-      var makeFace = function() {
+    var all = {
+      success: function() {
+        return "!!!";
+      },
+      normal: function() {
+        return ":::";
+      },
+      error: function() {
+        return "ERR";
+      },
+      system: function() {
+        return "///";
+      },
+      motivation: function() {
+        var eyes = ["~", "-", "^", "*", "=", "x", "¬", "¯", "×", "÷", "•", "†", "—", "Y", "O", "o", "V", "v", "M", "m", "U", "u", "8", "0", "ö", "õ", "₪", "θ", "Ξ", "+", "■", "◆", "◇", "◈", "◉", "◍", "◎", "●", "◐", "◑", "◒", "◓", "◔", "◕", "◴", "◵", "◶", "◷", "☉"];
+        var mouths = ["_", ".", "▁", "◡", "◠", "w"];
+        var sides = [{
+          left: "[",
+          right: "]"
+        }, {
+          left: "(",
+          right: ")"
+        }, {
+          left: "{",
+          right: "}"
+        }, {
+          left: "<",
+          right: ">"
+        }, {
+          left: "|",
+          right: "|"
+        }, {
+          left: "=",
+          right: "="
+        }, {
+          left: ":",
+          right: ":"
+        }];
         var randomBracket = sides[Math.round(Math.random() * (sides.length - 1))];
         var randomEyes = eyes[Math.round(Math.random() * (eyes.length - 1))];
         var randomMouth = mouths[Math.round(Math.random() * (mouths.length - 1))];
         return randomBracket.left + randomEyes + randomMouth + randomEyes + randomBracket.right;
-      };
-      return makeFace();
-    } else {
-      return allTypes[type];
-    }
+      }
+    };
+    return all[type]();
   };
 
   var cursor = {
@@ -78,7 +82,7 @@ var message = (function() {
       if (options.delay !== null) {
         delay = options.delay;
       } else {
-        delay = 20;
+        delay = 10;
       }
       setTimeout(function() {
         typeWriter({
@@ -151,7 +155,7 @@ var message = (function() {
       pre: function() {
         newMessage.classList.add("report-message-pre");
       }
-    }
+    };
     format[options.format]();
     var messageType = document.createElement("span");
     messageType.textContent = typePrefix(options.type);
