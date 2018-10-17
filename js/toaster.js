@@ -2,7 +2,7 @@ var toaster = (function() {
 
   var bind = function(override) {
     var options = {
-      button: null,
+      button: null
     };
     if (override) {
       options = helper.applyOptions(options, override);
