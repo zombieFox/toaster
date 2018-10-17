@@ -148,7 +148,7 @@ var events = (function() {
         }, {
           address: "wheat.inventory.current",
           operator: "less",
-          number: 900000
+          number: 9800000
         }],
         actions: {
           append: [strategy.items.wheat.drones.inventory],
@@ -296,7 +296,7 @@ var events = (function() {
         }, {
           address: "wheat.drones.inventory.current",
           operator: "more",
-          number: 20
+          number: 50
         }],
         actions: {
           append: [strategy.items.wheat.more],
@@ -333,126 +333,6 @@ var events = (function() {
           address: "wheat.consume.level",
           operator: "more",
           number: 1
-        }, {
-          address: "wheat.drones.inventory.current",
-          operator: "more",
-          number: 40
-        }],
-        actions: {
-          append: [strategy.items.wheat.more],
-          message: [{
-            type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // lock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 2
-        }],
-        actions: {
-          remove: [strategy.items.wheat.more],
-          message: [{
-            type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // unlock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.drones.inventory.level",
-          operator: "more",
-          number: 1
-        }, {
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 2
-        }, {
-          address: "wheat.drones.inventory.current",
-          operator: "more",
-          number: 60
-        }],
-        actions: {
-          append: [strategy.items.wheat.more],
-          message: [{
-            type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // lock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 3
-        }],
-        actions: {
-          remove: [strategy.items.wheat.more],
-          message: [{
-            type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // unlock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.drones.inventory.level",
-          operator: "more",
-          number: 1
-        }, {
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 3
-        }, {
-          address: "wheat.drones.inventory.current",
-          operator: "more",
-          number: 80
-        }],
-        actions: {
-          append: [strategy.items.wheat.more],
-          message: [{
-            type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // lock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 4
-        }],
-        actions: {
-          remove: [strategy.items.wheat.more],
-          message: [{
-            type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
-            format: "normal"
-          }]
-        }
-      }, {
-        // unlock strategy more toast from wheat
-        passed: false,
-        validate: [{
-          address: "wheat.drones.inventory.level",
-          operator: "more",
-          number: 1
-        }, {
-          address: "wheat.consume.level",
-          operator: "more",
-          number: 4
         }, {
           address: "wheat.drones.inventory.current",
           operator: "more",
@@ -472,6 +352,126 @@ var events = (function() {
         validate: [{
           address: "wheat.consume.level",
           operator: "more",
+          number: 2
+        }],
+        actions: {
+          remove: [strategy.items.wheat.more],
+          message: [{
+            type: "success",
+            message: ["15% less wheat needed to make 1 toast developed"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // unlock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.drones.inventory.level",
+          operator: "more",
+          number: 1
+        }, {
+          address: "wheat.consume.level",
+          operator: "more",
+          number: 2
+        }, {
+          address: "wheat.drones.inventory.current",
+          operator: "more",
+          number: 150
+        }],
+        actions: {
+          append: [strategy.items.wheat.more],
+          message: [{
+            type: "normal",
+            message: ["new strategy discovered:", "15% more toast from wheat"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // lock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.consume.level",
+          operator: "more",
+          number: 3
+        }],
+        actions: {
+          remove: [strategy.items.wheat.more],
+          message: [{
+            type: "success",
+            message: ["15% less wheat needed to make 1 toast developed"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // unlock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.drones.inventory.level",
+          operator: "more",
+          number: 1
+        }, {
+          address: "wheat.consume.level",
+          operator: "more",
+          number: 3
+        }, {
+          address: "wheat.drones.inventory.current",
+          operator: "more",
+          number: 200
+        }],
+        actions: {
+          append: [strategy.items.wheat.more],
+          message: [{
+            type: "normal",
+            message: ["new strategy discovered:", "15% more toast from wheat"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // lock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.consume.level",
+          operator: "more",
+          number: 4
+        }],
+        actions: {
+          remove: [strategy.items.wheat.more],
+          message: [{
+            type: "success",
+            message: ["15% less wheat needed to make 1 toast developed"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // unlock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.drones.inventory.level",
+          operator: "more",
+          number: 1
+        }, {
+          address: "wheat.consume.level",
+          operator: "more",
+          number: 4
+        }, {
+          address: "wheat.drones.inventory.current",
+          operator: "more",
+          number: 250
+        }],
+        actions: {
+          append: [strategy.items.wheat.more],
+          message: [{
+            type: "normal",
+            message: ["new strategy discovered:", "15% more toast from wheat"],
+            format: "normal"
+          }]
+        }
+      }, {
+        // lock strategy more toast from wheat
+        passed: false,
+        validate: [{
+          address: "wheat.consume.level",
+          operator: "more",
           number: 5
         }],
         actions: {
@@ -496,7 +496,7 @@ var events = (function() {
         }, {
           address: "wheat.drones.inventory.current",
           operator: "more",
-          number: 120
+          number: 300
         }],
         actions: {
           append: [strategy.items.wheat.more],
@@ -536,7 +536,7 @@ var events = (function() {
         }, {
           address: "wheat.drones.inventory.current",
           operator: "more",
-          number: 140
+          number: 350
         }],
         actions: {
           append: [strategy.items.wheat.more],
@@ -576,7 +576,7 @@ var events = (function() {
         }, {
           address: "wheat.drones.inventory.current",
           operator: "more",
-          number: 160
+          number: 400
         }],
         actions: {
           append: [strategy.items.wheat.more],
@@ -649,6 +649,18 @@ var events = (function() {
           address: "wheat.drones.inventory.level",
           operator: "more",
           number: 1
+        }, {
+          address: "wheat.drones.speed.level",
+          operator: "more",
+          number: 1
+        }, {
+          address: "wheat.drones.efficiency.level",
+          operator: "more",
+          number: 1
+        }, {
+          address: "wheat.drones.dismantle.level",
+          operator: "more",
+          number: 1
         }],
         actions: {
           append: [strategy.items.autoToaster.inventory],
@@ -685,10 +697,6 @@ var events = (function() {
           address: "autoToaster.inventory.level",
           operator: "more",
           number: 1
-        }, {
-          address: "system.cycles.current",
-          operator: "more",
-          number: 20
         }],
         actions: {
           append: [strategy.items.autoToaster.speed],
@@ -725,10 +733,6 @@ var events = (function() {
           address: "autoToaster.inventory.level",
           operator: "more",
           number: 1
-        }, {
-          address: "system.cycles.current",
-          operator: "more",
-          number: 20
         }],
         actions: {
           append: [strategy.items.autoToaster.efficiency],
@@ -899,7 +903,7 @@ var events = (function() {
         validate: [{
           address: "wheat.drones.efficiency.current",
           operator: "more",
-          number: 10
+          number: 50
         }],
         actions: {
           lock: ["#stage-wheat-substage-efficiency-controls"],
@@ -1259,7 +1263,9 @@ var events = (function() {
         }
       }
     }
-    var events = all[phase.get()];
+    var events = game.get({
+      path: "events.all." + phase.get()
+    });
     for (var key in events) {
       // console.log(key, "events:", events[key]);
       // all events in a given key
@@ -1316,7 +1322,9 @@ var events = (function() {
     all = game.get({
       path: "events.all"
     });
-    var events = all[phase.get()];
+    var events = game.get({
+      path: "events.all." + phase.get()
+    });
     for (var key in events) {
       // console.log(key, "events:", events[key]);
       // all events in a given key
@@ -1451,7 +1459,23 @@ var events = (function() {
     })();
   };
 
+  var init = function() {
+    // if no events found in game data
+    if (Object.keys(game.get({
+        path: "events.all"
+      })).length == 0 && game.get({
+        path: "events.all"
+      }).constructor == Object) {
+      // add events to game data
+      game.set({
+        path: "events.all",
+        value: events.all
+      });
+    }
+  };
+
   return {
+    init: init,
     all: all,
     check: check,
     restore: restore

@@ -1,5 +1,6 @@
 data.init();
 milestones.init();
+events.init();
 tick.init();
 boot.init();
 toaster.init();
