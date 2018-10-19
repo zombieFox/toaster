@@ -64,7 +64,7 @@ var game = (function() {
     },
     wheat: {
       inventory: {
-        current: 10000000,
+        current: 3000000,
         min: 0,
         cost: {
           cycles: 20
@@ -116,11 +116,11 @@ var game = (function() {
         efficiency: {
           level: 0,
           current: 1,
-          max: 50,
+          max: 200,
           cost: {
             cycles: 10,
             toast: 5,
-            multiply: 1.1
+            increase: 10
           }
         }
       }
@@ -161,11 +161,11 @@ var game = (function() {
       efficiency: {
         level: 0,
         current: 1,
-        max: 10,
+        max: 200,
         cost: {
           cycles: 40,
           toast: 30,
-          multiply: 2.2
+          increase: 30
         }
       }
     },

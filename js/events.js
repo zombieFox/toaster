@@ -12,7 +12,7 @@ var events = (function() {
           number: 20
         }],
         actions: {
-          unlock: ["#stage-system"],
+          unlock: ["#stage-system-substage-processor"],
           message: [{
             type: "normal",
             message: ["system discovered", "self improvement possible"],
@@ -148,7 +148,7 @@ var events = (function() {
         }, {
           address: "wheat.inventory.current",
           operator: "less",
-          number: 9800000
+          number: 2880000
         }],
         actions: {
           append: [strategy.items.wheat.drones.inventory],
@@ -903,13 +903,15 @@ var events = (function() {
         validate: [{
           address: "wheat.drones.efficiency.current",
           operator: "more",
-          number: 50
+          number: game.get({
+            path: "wheat.drones.efficiency.max"
+          })
         }],
         actions: {
           lock: ["#stage-wheat-substage-efficiency-controls"],
         }
       }, {
-        // lock strategy wheat drones dismantle
+        // unlock wheat drones dismantle
         passed: false,
         validate: [{
           address: "wheat.drones.dismantle.level",
@@ -1071,13 +1073,15 @@ var events = (function() {
         validate: [{
           address: "autoToaster.efficiency.current",
           operator: "more",
-          number: 10
+          number: game.get({
+            path: "autoToaster.efficiency.max"
+          })
         }],
         actions: {
           lock: ["#stage-auto-toaster-substage-efficiency-controls"],
         }
       }, {
-        // lock strategy auto toaster dismantle
+        // unlock auto toaster dismantle
         passed: false,
         validate: [{
           address: "autoToaster.dismantle.level",
