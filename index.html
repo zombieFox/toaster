@@ -41,22 +41,26 @@
           </div>
         </div>
 
-        <nav class="nav">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-                <div class="d-flex justify-content-end align-items-center flex-wrap">
-                  <p class="text-white mb-0 mr-2 small text-info">Last save <strong data-toast-readout="path:store.timestamp"></strong>:</p>
-                  <button class="btn btn-sm btn-primary mr-2" data-toast-button="action:save">Save</button>
-                  <p class="text-white mb-0 mr-2 small">Clear Save:</p>
-                  <button class="btn btn-sm btn-danger" data-toast-button="action:reboot">Reboot TAI</button>
-                </div>
-              </div>
+      </header>
+
+      <nav class="nav">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <ul class="list-unstyled mb-0">
+                <li class="text-white d-flex justify-content-end align-items-center flex-wrap pb-3 mb-3 border-bottom border-dark">
+                  <p class="text-white mb-0 mr-2 text-info">Last save <strong data-toast-readout="path:store.timestamp"></strong>:</p>
+                  <button class="btn btn-primary" data-toast-button="action:save">Save Game Data</button>
+                </li>
+                <li class="text-white d-flex justify-content-end align-items-center flex-wrap">
+                  <p class="text-white mb-0 mr-2">Clear Save:</p>
+                  <button class="btn btn-danger" data-toast-button="action:reboot">Reboot TAI</button>
+                </li>
+              </ul>
             </div>
           </div>
-        </nav>
-
-      </header>
+        </div>
+      </nav>
 
       <div class="controls" id="controls">
         <div class="container-fluid">
@@ -93,6 +97,13 @@
                         data-toast-button-inflation="increase:true,operator:multiply,amount:system.processor.cost.multiply"
                         data-toast-button-max="buy:false"
                       >+10</button>
+                      <button class="btn btn-sm btn-primary"
+                        data-toast-button="action:processor.boost"
+                        data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
+                        data-toast-button-cost="units:#100,currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent"
+                        data-toast-button-inflation="increase:true,operator:multiply,amount:system.processor.cost.multiply"
+                        data-toast-button-max="buy:false"
+                      >+100</button>
                       <button class="btn btn-sm btn-primary"
                         data-toast-button="action:processor.boost"
                         data-toast-button-change="target:system.processor.power,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"

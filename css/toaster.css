@@ -52,7 +52,7 @@ body {
 .header {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 .display {
@@ -74,14 +74,19 @@ body {
 .nav {
   background-color: rgba(var(--black-500), 0.6);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 7em;
+  padding-bottom: 2em;
   position: absolute;
-  top: -4em;
-  min-height: 4em;
+  top: -100%;
   left: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 1;
   transition: all 200ms ease-in-out;
+}
+
+.menu-open .nav {
+  top: 0;
 }
 
 .menu-open .controls {
@@ -89,10 +94,6 @@ body {
   filter: blur(10px);
   transform: scale(0.95);
   pointer-events: none;
-}
-
-.menu-open .nav {
-  top: 5em;
 }
 
 @media (min-width: 768px) {

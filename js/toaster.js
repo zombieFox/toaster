@@ -17,6 +17,11 @@ var toaster = (function() {
       },
       save: function() {
         data.save();
+        message.render({
+          type: "system",
+          message: ["game data saved"],
+          format: "normal"
+        });
       },
       toast: function() {
         toast.make(game.get({
