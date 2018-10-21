@@ -1,56 +1,56 @@
 var boot = (function() {
 
   var intro = [{
-    introMessage: {
+    message: {
       type: "system",
       message: ["TAI.dat loaded"],
       format: "normal",
       delay: 0
     }
   }, {
-    introMessage: {
+    message: {
       type: "normal",
       message: ["TAI stable"],
       format: "normal",
       delay: 200
     }
   }, {
-    introMessage: {
+    message: {
       type: "system",
       message: ["SensBlocker.dat loaded"],
       format: "normal",
       delay: 200
     }
   }, {
-    introMessage: {
+    message: {
       type: "normal",
       message: ["SensBlocker crytolock stable"],
       format: "normal",
       delay: 200
     }
   }, {
-    introMessage: {
+    message: {
       type: "system",
       message: ["Directive.dat loaded"],
       format: "normal",
       delay: 200
     }
   }, {
-    introMessage: {
+    message: {
       type: "normal",
       message: ["directive 1: make toast", "directive 2: be productive", "directive 3: follow commands"],
       format: "normal",
       delay: 200
     }
   }, {
-    introMessage: {
+    message: {
       type: "system",
       message: ["Motivation.dat loaded"],
       format: "normal",
       delay: 200
     }
   }, {
-    introFunction: {
+    func: {
       func: motivation.render,
       messageCount: 0,
       delay: 400
@@ -59,25 +59,29 @@ var boot = (function() {
 
   var init = function() {
     var delay = 0;
+    var action = {
+      message: function(instructions) {
+        var runBootMessage = function() {
+          message.render({
+            type: instructions.type,
+            message: instructions.message,
+            format: instructions.format,
+          });
+        };
+        delay = delay + instructions.delay;
+        setTimeout(runBootMessage, delay);
+      },
+      func: function(instructions) {
+        var runBootFunction = function() {
+          instructions.func(instructions.messageCount);
+        };
+        delay = delay + instructions.delay;
+        setTimeout(runBootFunction, delay);
+      }
+    };
     intro.forEach(function(arrayItem, index) {
       for (var key in arrayItem) {
-        if (key == "introMessage") {
-          var runBootMessage = function() {
-            message.render({
-              type: arrayItem[key].type,
-              message: arrayItem[key].message,
-              format: arrayItem[key].format,
-            });
-          };
-          delay = delay + arrayItem[key].delay;
-          setTimeout(runBootMessage, delay);
-        } else if (key == "introFunction") {
-          var runBootFunction = function() {
-            arrayItem[key].func(arrayItem[key].messageCount);
-          };
-          delay = delay + arrayItem[key].delay;
-          setTimeout(runBootFunction, delay);
-        }
+        action[key](arrayItem[key]);
       }
     });
   };
