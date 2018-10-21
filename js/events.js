@@ -148,7 +148,7 @@ var events = (function() {
         }, {
           address: "wheat.inventory.current",
           operator: "less",
-          number: 2880000
+          number: 2900000
         }],
         actions: {
           append: [strategy.items.wheat.drones.inventory],

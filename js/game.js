@@ -74,7 +74,7 @@ var game = (function() {
         level: 0,
         rate: 70,
         starting: 70,
-        divide: 30,
+        divide: 40,
         cost: {
           cycles: 20,
           multiply: 1.2
@@ -109,8 +109,8 @@ var game = (function() {
           },
           cost: {
             cycles: 10,
-            toast: 5,
-            multiply: 1.1
+            toast: 20,
+            multiply: 1.3
           }
         },
         efficiency: {
@@ -119,8 +119,8 @@ var game = (function() {
           max: 200,
           cost: {
             cycles: 10,
-            toast: 5,
-            increase: 10
+            toast: 50,
+            increase: 50
           }
         }
       }
@@ -154,8 +154,8 @@ var game = (function() {
         },
         cost: {
           cycles: 30,
-          toast: 20,
-          multiply: 1.6
+          toast: 50,
+          multiply: 1.8
         }
       },
       efficiency: {
@@ -164,8 +164,8 @@ var game = (function() {
         max: 200,
         cost: {
           cycles: 40,
-          toast: 30,
-          increase: 30
+          toast: 100,
+          increase: 100
         }
       }
     },

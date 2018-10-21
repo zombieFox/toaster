@@ -610,7 +610,7 @@ var toaster = (function() {
     var cost = {
       starting: null, // starting cost for first unit
       next: null, // cost for the next unit
-      total: null // total cost for multiply unites
+      total: null // total cost for multiply units
     };
     var calculateCost = {
       startingValues: function() {
