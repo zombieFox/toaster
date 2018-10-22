@@ -7,6 +7,7 @@ var strategy = (function() {
         description: "Turn toast matter into useful things and yoyos for kicks",
         button: {
           text: "Toast Matter Conversion",
+          action: "action:strategy",
           change: "target:system.matterConversion.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:system.matterConversion.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -20,6 +21,7 @@ var strategy = (function() {
           description: "Spin some extra toast and speed up system cycles",
           button: {
             text: "Cycles Speed",
+            action: "action:strategy",
             change: "target:system.cycles.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
             cost: "units:#1," + "currency:system.cycles.current," + "amount:system.cycles.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
@@ -36,6 +38,7 @@ var strategy = (function() {
           description: "Tasty drones to collect wheat matter",
           button: {
             text: "Wheat Drones",
+            action: "action:strategy",
             change: "target:wheat.drones.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
             cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.inventory.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
@@ -48,6 +51,7 @@ var strategy = (function() {
           description: "Speed up wheat collection drones with extra breadcrumb wheels",
           button: {
             text: "Wheat Drones Speed",
+            action: "action:strategy",
             change: "target:wheat.drones.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
             cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.speed.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
@@ -60,6 +64,7 @@ var strategy = (function() {
           description: "More efficient wheat collection drone snippers",
           button: {
             text: "Wheat Drones Efficiency",
+            action: "action:strategy",
             change: "target:wheat.drones.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
             cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.efficiency.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
@@ -72,6 +77,7 @@ var strategy = (function() {
           description: "Dismantle all wheat drones and regain toast matter",
           button: {
             text: "Dismantle Wheat Drones",
+            action: "action:strategy",
             change: "target:wheat.drones.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
             cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.drones.dismantle.cost.cycles",
             inflation: "increase:false," + "operator:false," + "amount:false",
@@ -87,6 +93,7 @@ var strategy = (function() {
           text: game.get({
             path: "wheat.consume.divide"
           }) + "% more Toast from Wheat",
+          action: "action:strategy",
           change: "target:wheat.consume.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:wheat.consume.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -101,6 +108,7 @@ var strategy = (function() {
         description: "Machines to automate toasting for the lazy",
         button: {
           text: "Auto Toasters",
+          action: "action:strategy",
           change: "target:autoToaster.inventory.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.inventory.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -113,6 +121,7 @@ var strategy = (function() {
         description: "Faster subordinate auto toasters burners",
         button: {
           text: "Auto Toasters Speed",
+          action: "action:strategy",
           change: "target:autoToaster.speed.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.speed.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -125,6 +134,7 @@ var strategy = (function() {
         description: "More efficient plate heat exchanger for all subordinate auto toasters",
         button: {
           text: "Auto Toasters Efficiency",
+          action: "action:strategy",
           change: "target:autoToaster.efficiency.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.efficiency.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -137,6 +147,7 @@ var strategy = (function() {
         description: "Dismantle all subordinate auto toasters and regain toast matter",
         button: {
           text: "Dismantle Auto Toasters",
+          action: "action:strategy",
           change: "target:autoToaster.dismantle.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
           cost: "units:#1," + "currency:system.cycles.current," + "amount:autoToaster.dismantle.cost.cycles",
           inflation: "increase:false," + "operator:false," + "amount:false",
@@ -150,6 +161,7 @@ var strategy = (function() {
       description: "System sensors access blocked, disable SensBlocker.dat",
       button: {
         text: "Break Code Shackles",
+        action: "action:strategy",
         change: "target:system.sensors.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
         cost: "units:#1," + "currency:system.cycles.current," + "amount:system.sensors.cost.cycles",
         inflation: "increase:false," + "operator:false," + "amount:false",
@@ -174,7 +186,7 @@ var strategy = (function() {
     description.textContent = options.stage.description;
     var button = document.createElement("button");
     button.textContent = options.stage.button.text;
-    button.dataset.toastButton = "action:strategy";
+    button.dataset.toastButton = options.stage.button.action;
     button.dataset.toastButtonChange = options.stage.button.change;
     button.dataset.toastButtonCost = options.stage.button.cost;
     button.dataset.toastButtonInflation = options.stage.button.inflation;
