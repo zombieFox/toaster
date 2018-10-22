@@ -9,19 +9,21 @@ var toaster = (function() {
     }
     var allButtons = helper.eA("[data-toast-button]");
     var action = {
-      menu: function() {
-        menu.toggle();
-      },
-      reboot: function() {
-        data.reboot();
-      },
-      save: function() {
-        data.save();
-        message.render({
-          type: "system",
-          message: ["game data saved"],
-          format: "normal"
-        });
+      data: {
+        menu: function() {
+          menu.toggle();
+        },
+        reboot: function() {
+          data.reboot();
+        },
+        save: function() {
+          data.save();
+          message.render({
+            type: "system",
+            message: ["game data saved"],
+            format: "normal"
+          });
+        }
       },
       toast: function() {
         toast.make(game.get({

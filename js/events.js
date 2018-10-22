@@ -302,7 +302,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -318,7 +320,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -342,7 +346,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -358,7 +364,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -382,7 +390,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -398,7 +408,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -422,7 +434,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -438,7 +452,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -462,7 +478,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -478,7 +496,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -502,7 +522,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -518,7 +540,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -542,7 +566,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -558,7 +584,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }
@@ -582,7 +610,9 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", "15% more toast from wheat"],
+            message: ["new strategy discovered:", game.get({
+              path: "wheat.consume.divide"
+            }) + "% more toast from wheat"],
             format: "normal"
           }]
         }
@@ -598,7 +628,9 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: ["15% less wheat needed to make 1 toast developed"],
+            message: [game.get({
+              path: "wheat.consume.divide"
+            }) + "% less wheat needed to make 1 toast developed"],
             format: "normal"
           }]
         }

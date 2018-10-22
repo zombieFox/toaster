@@ -36,15 +36,18 @@ body {
   position: relative;
   padding: 1em 2em 3em 0;
   height: 30vh;
+  z-index: 2;
 }
 
 .section-controls {
   background-color: rgb(var(--black-200));
   position: relative;
   height: 70vh;
+  z-index: 1;
 }
 
-.section-controls, .section-report {
+.section-controls,
+.section-report {
   width: 100vw;
   overflow-y: auto;
 }
@@ -56,8 +59,7 @@ body {
 }
 
 .display {
-  background-color: rgb(var(--black-400));
-  background-color: rgba(var(--black-500), 0.95);
+  background-color: rgba(var(--black-300), 0.95);
   display: flex;
   align-items: center;
   position: relative;
@@ -66,27 +68,13 @@ body {
   height: 5em;
 }
 
+.display-text{
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
 .controls {
   padding: 1em 0;
-  transition: all 200ms ease-in-out;
-}
-
-.nav {
-  background-color: rgba(var(--black-500), 0.6);
-  display: flex;
-  align-items: flex-start;
-  padding-top: 7em;
-  padding-bottom: 2em;
-  position: absolute;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-  transition: all 200ms ease-in-out;
-}
-
-.menu-open .nav {
-  top: 0;
+  transition: all 200ms ease-in-out 0.15s;
 }
 
 .menu-open .controls {
@@ -94,6 +82,26 @@ body {
   filter: blur(10px);
   transform: scale(0.95);
   pointer-events: none;
+  transition: all 200ms ease-in-out 0s;
+}
+
+.nav {
+  background-color: rgba(var(--black-500), 0.6);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 6em;
+  padding-bottom: 1em;
+  position: fixed;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  transition: all 200ms ease-in-out 0s;
+}
+
+.menu-open .nav {
+  top: 0;
+  transition: all 200ms ease-in-out 0.15s;
 }
 
 @media (min-width: 768px) {
@@ -103,7 +111,8 @@ body {
     flex-wrap: nowrap;
   }
 
-  .section-controls, .section-report {
+  .section-controls,
+  .section-report {
     height: 100vh;
     overflow-y: auto;
   }
@@ -116,6 +125,10 @@ body {
     padding: 1em 2em 3em 1em;
     width: 50vw;
   }
+
+  .nav {
+    padding-left: 50vw;
+  }
 }
 
 @media (min-width: 992px) {
@@ -127,7 +140,10 @@ body {
 
   .section-report {
     width: 33vw;
-    min-width: 25em;
+  }
+
+  .nav {
+    padding-left: 33vw;
   }
 }
 

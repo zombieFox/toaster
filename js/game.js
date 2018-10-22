@@ -110,7 +110,7 @@ var game = (function() {
           cost: {
             cycles: 10,
             toast: 20,
-            multiply: 1.3
+            multiply: 1.2
           }
         },
         efficiency: {
@@ -155,7 +155,7 @@ var game = (function() {
         cost: {
           cycles: 30,
           toast: 50,
-          multiply: 1.8
+          multiply: 1.6
         }
       },
       efficiency: {
