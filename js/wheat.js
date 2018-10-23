@@ -51,36 +51,39 @@ var wheat = (function() {
   };
 
   var decrease = function() {
-    game.set({
-      path: "wheat.consume.rate",
-      value: helper.operator({
-        type: "decrease",
-        value: game.get({
-          path: "wheat.consume.rate"
-        }),
-        by: helper.operator({
-          type: "percentage",
+    // decrease wheat consume
+    if (game.get({
+        path: "wheat.consume.rate"
+      }) > 8) {
+      game.set({
+        path: "wheat.consume.rate",
+        value: helper.operator({
+          type: "decrease",
           value: game.get({
             path: "wheat.consume.rate"
           }),
-          percentage: game.get({
-            path: "wheat.consume.divide"
+          by: game.get({
+            path: "wheat.consume.decrease"
           }),
-          integer: true
         })
-      })
-    });
+      });
+    } else {
+      game.set({
+        path: "wheat.consume.rate",
+        value: 1
+      });
+    }
+    // increase strategy cost
     game.set({
       path: "wheat.consume.cost.cycles",
       value: helper.operator({
-        type: "multiply",
+        type: "increase",
         value: game.get({
           path: "wheat.consume.cost.cycles"
         }),
         by: game.get({
-          path: "wheat.consume.cost.multiply"
-        }),
-        integer: true
+          path: "wheat.consume.cost.increase"
+        })
       })
     });
   };

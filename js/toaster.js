@@ -538,48 +538,95 @@ var toaster = (function() {
           data.save();
         }
       },
-      strategy: function(button) {
-        var options = {
-          change: null,
-          cost: null,
-          inflation: null,
-          max: null,
-          prices: null,
-          message: null,
-          button: null
-        };
-        options.change = helper.makeObject(button.dataset.toastButtonChange);
-        options.cost = helper.makeObject(button.dataset.toastButtonCost);
-        options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
-        options.max = helper.makeObject(button.dataset.toastButtonMax);
-        options.button = button;
-        options.prices = costForMultiple(options);
-        options.message = {
-          success: {
-            path: "strategy.success",
-            state: false
-          },
-          fail: {
-            path: "strategy.fail",
-            state: false
+      strategy: {
+        unlock: function(button) {
+          var options = {
+            change: null,
+            cost: null,
+            inflation: null,
+            max: null,
+            prices: null,
+            message: null,
+            button: null
+          };
+          options.change = helper.makeObject(button.dataset.toastButtonChange);
+          options.cost = helper.makeObject(button.dataset.toastButtonCost);
+          options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
+          options.max = helper.makeObject(button.dataset.toastButtonMax);
+          options.button = button;
+          options.prices = costForMultiple(options);
+          options.message = {
+            success: {
+              path: "strategy.success",
+              state: false
+            },
+            fail: {
+              path: "strategy.fail",
+              state: false
+            }
+          };
+          if (validateAction(options)) {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
           }
-        };
-        if (validateAction(options)) {
-          payCost(options);
-          changeValue(options);
-          disableButton(options);
-          autoToaster.output();
-          if (options.message.success != null) {
-            options.message.success.state = true;
-            feedbackMessage(options);
+          data.save();
+        },
+        decrypt: function(button) {
+          var options = {
+            change: null,
+            cost: null,
+            inflation: null,
+            max: null,
+            prices: null,
+            message: null,
+            button: null,
+            callback: null
+          };
+          options.change = helper.makeObject(button.dataset.toastButtonChange);
+          options.cost = helper.makeObject(button.dataset.toastButtonCost);
+          options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
+          options.max = helper.makeObject(button.dataset.toastButtonMax);
+          options.button = button;
+          options.prices = costForMultiple(options);
+          options.message = {
+            success: {
+              path: "strategy.success",
+              state: false
+            },
+            fail: {
+              path: "strategy.fail",
+              state: false
+            }
+          };
+          options.callback = function() {
+            payCost(options);
+            changeValue(options);
+            disableButton(options);
+          };
+          if (validateAction(options)) {
+            if (options.message.success != null) {
+              options.message.success.state = true;
+              feedbackMessage(options);
+            }
+            decryption(options);
+          } else {
+            if (options.message.fail != null) {
+              options.message.fail.state = true;
+              feedbackMessage(options);
+            }
           }
-        } else {
-          if (options.message.fail != null) {
-            options.message.fail.state = true;
-            feedbackMessage(options);
-          }
+          data.save();
         }
-        data.save();
       }
     };
     var bindButton = function(button) {
@@ -1101,58 +1148,6 @@ var toaster = (function() {
           return ["processor cycles low, " + options.prices.total.toLocaleString(2) + " cycles needed"];
         }
       },
-      autoToaster: {
-        make: {
-          success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toasters, " + game.get({
-              path: "autoToaster.inventory.current"
-            }).toLocaleString(2) + " online"];
-          },
-          fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
-          }
-        },
-        dismantle: {
-          success: function() {
-            return ["-" + game.get({
-              path: options.change.target
-            }).toLocaleString(2) + " subordinate auto toasters, " + game.get({
-              path: options.cost.spent
-            }).toLocaleString(2) + " toast matter regained"];
-          },
-          fail: function() {
-            return ["no subordinate auto toasters to dismantled"];
-          }
-        },
-        speed: {
-          success: function() {
-            return ["-" + helper.operator({
-              type: "divide",
-              value: options.change.amount,
-              by: 1000
-            }) + "s subordinate auto toaster speed, each toasting every " + helper.operator({
-              type: "divide",
-              value: game.get({
-                path: "autoToaster.speed.interval.current"
-              }),
-              by: 1000
-            }).toLocaleString(2) + "s"];
-          },
-          fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
-          }
-        },
-        efficiency: {
-          success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toaster efficiency, each producing " + game.get({
-              path: "autoToaster.efficiency.current"
-            }).toLocaleString(2) + " toast"];
-          },
-          fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
-          }
-        }
-      },
       wheat: {
         make: {
           success: function() {
@@ -1198,6 +1193,58 @@ var toaster = (function() {
           success: function() {
             return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drone efficiency, each producing " + game.get({
               path: "wheat.drones.efficiency.current"
+            }).toLocaleString(2) + " toast"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        }
+      },
+      autoToaster: {
+        make: {
+          success: function() {
+            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toasters, " + game.get({
+              path: "autoToaster.inventory.current"
+            }).toLocaleString(2) + " online"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        dismantle: {
+          success: function() {
+            return ["-" + game.get({
+              path: options.change.target
+            }).toLocaleString(2) + " subordinate auto toasters, " + game.get({
+              path: options.cost.spent
+            }).toLocaleString(2) + " toast matter regained"];
+          },
+          fail: function() {
+            return ["no subordinate auto toasters to dismantled"];
+          }
+        },
+        speed: {
+          success: function() {
+            return ["-" + helper.operator({
+              type: "divide",
+              value: options.change.amount,
+              by: 1000
+            }) + "s subordinate auto toaster speed, each toasting every " + helper.operator({
+              type: "divide",
+              value: game.get({
+                path: "autoToaster.speed.interval.current"
+              }),
+              by: 1000
+            }).toLocaleString(2) + "s"];
+          },
+          fail: function() {
+            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+          }
+        },
+        efficiency: {
+          success: function() {
+            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toaster efficiency, each producing " + game.get({
+              path: "autoToaster.efficiency.current"
             }).toLocaleString(2) + " toast"];
           },
           fail: function() {
@@ -1260,13 +1307,14 @@ var toaster = (function() {
     });
     message.render({
       type: "system",
-      message: ["┃━━━━━ crumbDecryption ━━━━━┃"],
+      message: ["┃━━━━━  crumb.decrypt  ━━━━━┃"],
       format: "pre"
     });
     message.render({
       type: "system",
       // message: ["┃▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤┃"],
-      message: ["┃███████████████████████████┃"],
+      // message: ["┃███████████████████████████┃"],
+      message: ["┃///////////////////////////┃"],
       format: "pre",
       delay: game.get({
         path: "system.sensors.delay"

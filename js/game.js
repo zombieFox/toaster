@@ -28,7 +28,7 @@ var game = (function() {
         current: 0,
         max: 10,
         cost: {
-          cycles: 10
+          cycles: 16
         },
         speed: {
           interval: {
@@ -45,13 +45,13 @@ var game = (function() {
         level: 0,
         delay: 300,
         cost: {
-          cycles: 1000
+          cycles: 1024
         }
       },
       matterConversion: {
         level: 0,
         cost: {
-          cycles: 20
+          cycles: 24
         }
       }
     },
@@ -67,17 +67,17 @@ var game = (function() {
         current: 3000000,
         min: 0,
         cost: {
-          cycles: 20
+          cycles: 24
         }
       },
       consume: {
         level: 0,
-        rate: 70,
-        starting: 70,
-        divide: 40,
+        rate: 64,
+        starting: 64,
+        decrease: 8,
         cost: {
-          cycles: 20,
-          multiply: 1.2
+          cycles: 8,
+          increase: 8
         }
       },
       drones: {
@@ -86,19 +86,13 @@ var game = (function() {
           current: 0,
           output: 0,
           cost: {
-            cycles: 10,
+            cycles: 8,
             toast: {
               starting: 1,
               current: 1,
               spent: 0
             },
             increase: 1,
-          }
-        },
-        dismantle: {
-          level: 0,
-          cost: {
-            cycles: 20
           }
         },
         speed: {
@@ -108,7 +102,7 @@ var game = (function() {
             min: 1000
           },
           cost: {
-            cycles: 10,
+            cycles: 16,
             toast: 20,
             multiply: 1.2
           }
@@ -118,9 +112,15 @@ var game = (function() {
           current: 1,
           max: 200,
           cost: {
-            cycles: 10,
+            cycles: 24,
             toast: 50,
             increase: 50
+          }
+        },
+        dismantle: {
+          level: 0,
+          cost: {
+            cycles: 32
           }
         }
       }
@@ -131,19 +131,13 @@ var game = (function() {
         current: 0,
         output: 0,
         cost: {
-          cycles: 20,
+          cycles: 8,
           toast: {
             starting: 10,
             current: 10,
             increase: 5,
             spent: 0
           },
-        }
-      },
-      dismantle: {
-        level: 0,
-        cost: {
-          cycles: 100
         }
       },
       speed: {
@@ -153,7 +147,7 @@ var game = (function() {
           min: 1000
         },
         cost: {
-          cycles: 30,
+          cycles: 16,
           toast: 50,
           multiply: 1.6
         }
@@ -163,9 +157,15 @@ var game = (function() {
         current: 1,
         max: 200,
         cost: {
-          cycles: 40,
+          cycles: 24,
           toast: 100,
           increase: 100
+        }
+      },
+      dismantle: {
+        level: 0,
+        cost: {
+          cycles: 32
         }
       }
     },
