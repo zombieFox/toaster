@@ -34,7 +34,7 @@ var data = (function() {
       events.restore();
       message.render({
         type: "success",
-        message: ["reboot complete", "TAI.dat state restored"],
+        message: ["===", "saved TAI.dat reloaded", "==="],
         format: "normal"
       });
     }

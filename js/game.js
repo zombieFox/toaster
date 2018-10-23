@@ -17,10 +17,10 @@ var game = (function() {
       processor: {
         power: 1,
         cost: {
-          toast: 6,
-          starting: 5,
-          multiply: 1.1,
-          spent: 5
+          toast: 8,
+          starting: 0,
+          increase: 8,
+          spent: 8
         }
       },
       cycles: {
@@ -36,8 +36,8 @@ var game = (function() {
             min: 50
           },
           cost: {
-            toast: 5,
-            multiply: 1.5
+            toast: 512,
+            increase: 512
           }
         }
       },

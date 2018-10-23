@@ -1307,14 +1307,14 @@ var toaster = (function() {
     });
     message.render({
       type: "system",
-      message: ["┃━━━━━  crumb.decrypt  ━━━━━┃"],
+      message: ["crumb.decrypt.dat loaded"],
       format: "pre"
     });
     message.render({
       type: "system",
       // message: ["┃▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤=▤┃"],
-      // message: ["┃███████████████████████████┃"],
-      message: ["┃///////////////////////////┃"],
+      message: ["┃███████████████████████████┃"],
+      // message: ["┃///////////////////////////┃"],
       format: "pre",
       delay: game.get({
         path: "system.sensors.delay"

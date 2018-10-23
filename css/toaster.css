@@ -241,6 +241,7 @@ body {
 .strategy-item:nth-child(27) {animation-delay: 2.4s;}
 .strategy-item:nth-child(29) {animation-delay: 2.5s;}
 .strategy-item:nth-child(30) {animation-delay: 2.6s;}
+
 @keyframes strategy-swing {
   0% {
     transform: perspective(1000px) rotateX(-90deg);

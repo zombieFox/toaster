@@ -75,11 +75,11 @@ var message = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    if (options.index < options.text.length) {
+    if (options.index <= options.text.length) {
       options.target.innerHTML = options.text.substring(0, options.index + 1);
       scrollToBottom();
       var delay;
-      if (options.delay !== null) {
+      if (options.delay != null) {
         delay = options.delay;
       } else {
         delay = 10;
@@ -94,7 +94,7 @@ var message = (function() {
         });
       }, delay);
     } else {
-      if (options.callback !== null) {
+      if (options.callback != null) {
         options.callback();
       }
     }
@@ -125,7 +125,7 @@ var message = (function() {
       options.target.appendChild(item);
       typeWriter({
         text: arrayItem,
-        index: index,
+        index: 1,
         target: string,
         delay: options.delay,
         callback: options.callback
