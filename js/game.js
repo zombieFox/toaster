@@ -56,10 +56,10 @@ var game = (function() {
       }
     },
     consumed: {
-      starting: 2,
-      rate: 2,
+      starting: 8,
+      rate: 8,
       count: 0,
-      multiply: 4,
+      multiply: 2,
       interval: 10000
     },
     wheat: {

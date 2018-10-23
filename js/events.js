@@ -80,7 +80,7 @@ var events = (function() {
           number: 1
         }],
         actions: {
-          unlock: ["#stage-system-substage-sensors"]
+          unlock: ["#stage-system-substage-sensors", "#stage-sensors"]
         }
       }],
 
@@ -302,9 +302,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -320,9 +318,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -346,9 +342,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -364,9 +358,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -390,9 +382,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -408,9 +398,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -434,9 +422,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -452,9 +438,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -478,9 +462,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -496,9 +478,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -522,9 +502,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -540,9 +518,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -566,9 +542,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -584,9 +558,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
@@ -610,9 +582,7 @@ var events = (function() {
           append: [strategy.items.wheat.more],
           message: [{
             type: "normal",
-            message: ["new strategy discovered:", game.get({
-              path: "wheat.consume.divide"
-            }) + "% more toast from wheat"],
+            message: ["new strategy discovered: fewer wheat lumps needed to make toast"],
             format: "normal"
           }]
         }
@@ -628,9 +598,7 @@ var events = (function() {
           remove: [strategy.items.wheat.more],
           message: [{
             type: "success",
-            message: [game.get({
-              path: "wheat.consume.divide"
-            }) + "% less wheat needed to make 1 toast developed"],
+            message: ["reduce wheat lumps cost developed"],
             format: "normal"
           }]
         }
