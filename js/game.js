@@ -17,8 +17,8 @@ var game = (function() {
       processor: {
         power: 1,
         cost: {
-          toast: 8,
           starting: 0,
+          toast: 8,
           increase: 8,
           spent: 8
         }
@@ -90,9 +90,9 @@ var game = (function() {
             toast: {
               starting: 1,
               current: 1,
+              increase: 1,
               spent: 0
-            },
-            increase: 1,
+            }
           }
         },
         speed: {
@@ -103,8 +103,10 @@ var game = (function() {
           },
           cost: {
             cycles: 16,
-            toast: 20,
-            multiply: 1.2
+            toast: {
+              current: 32,
+              increase: 32
+            }
           }
         },
         efficiency: {
@@ -113,8 +115,10 @@ var game = (function() {
           max: 200,
           cost: {
             cycles: 24,
-            toast: 50,
-            increase: 50
+            toast: {
+              current: 64,
+              increase: 64
+            }
           }
         },
         dismantle: {
@@ -133,9 +137,9 @@ var game = (function() {
         cost: {
           cycles: 8,
           toast: {
-            starting: 10,
-            current: 10,
-            increase: 5,
+            starting: 8,
+            current: 8,
+            increase: 8,
             spent: 0
           },
         }
@@ -148,8 +152,10 @@ var game = (function() {
         },
         cost: {
           cycles: 16,
-          toast: 50,
-          multiply: 1.6
+          toast: {
+            current: 8,
+            multiply: 2
+          }
         }
       },
       efficiency: {
@@ -158,8 +164,10 @@ var game = (function() {
         max: 200,
         cost: {
           cycles: 24,
-          toast: 100,
-          increase: 100
+          toast: {
+            current: 16,
+            multiply: 2
+          }
         }
       },
       dismantle: {
