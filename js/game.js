@@ -104,8 +104,8 @@ var game = (function() {
           cost: {
             cycles: 16,
             toast: {
-              current: 32,
-              increase: 32
+              current: 8,
+              increase: 8
             }
           }
         },
@@ -116,8 +116,8 @@ var game = (function() {
           cost: {
             cycles: 24,
             toast: {
-              current: 64,
-              increase: 64
+              current: 16,
+              increase: 16
             }
           }
         },
@@ -153,8 +153,8 @@ var game = (function() {
         cost: {
           cycles: 16,
           toast: {
-            current: 8,
-            multiply: 2
+            current: 16,
+            increase: 16
           }
         }
       },
@@ -165,8 +165,8 @@ var game = (function() {
         cost: {
           cycles: 24,
           toast: {
-            current: 16,
-            multiply: 2
+            current: 32,
+            increase: 32
           }
         }
       },

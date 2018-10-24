@@ -1191,9 +1191,9 @@ var toaster = (function() {
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drone efficiency, each producing " + game.get({
+            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drone efficiency, each collecting " + game.get({
               path: "wheat.drones.efficiency.current"
-            }).toLocaleString(2) + " toast"];
+            }).toLocaleString(2) + " wheat lumps"];
           },
           fail: function() {
             return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
