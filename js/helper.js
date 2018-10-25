@@ -259,59 +259,82 @@ var helper = (function() {
     var suffix = "";
     if (options.number > 999999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000000;
-      suffix = " sexdecillion";
+      // suffix = " sexdecillion";
+      suffix = " Sxd";
     } else if (options.number > 999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000;
-      suffix = " quindecillion";
+      // suffix = " quindecillion";
+      suffix = " Qid";
     } else if (options.number > 999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000;
-      suffix = " quattuordecillion";
+      // suffix = " quattuordecillion";
+      suffix = " Qad";
     } else if (options.number > 999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000;
-      suffix = " tredecillion";
+      // suffix = " tredecillion";
+      suffix = " Td";
     } else if (options.number > 999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000;
-      suffix = " duodecillion";
+      // suffix = " duodecillion";
+      suffix = " Dd";
     } else if (options.number > 999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000;
-      suffix = " undecillion";
+      // suffix = " undecillion";
+      suffix = " Ud";
     } else if (options.number > 999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000;
-      suffix = " decillion";
+      // suffix = " decillion";
+      suffix = " Dc";
     } else if (options.number > 999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000;
-      suffix = " nonillion";
+      // suffix = " nonillion";
+      suffix = " No";
     } else if (options.number > 999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000;
-      suffix = " octillion";
+      // suffix = " octillion";
+      suffix = " Oc";
     } else if (options.number > 999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000;
-      suffix = " septillion";
+      // suffix = " septillion";
+      suffix = " Sp";
     } else if (options.number > 999999999999999999999) {
       options.number = options.number / 1000000000000000000000;
-      suffix = " sextillion";
+      // suffix = " sextillion";
+      suffix = " Sx";
     } else if (options.number > 999999999999999999) {
       options.number = options.number / 1000000000000000000;
-      suffix = " quintillion";
+      // suffix = " quintillion";
+      suffix = " Qi";
     } else if (options.number > 999999999999999) {
       options.number = options.number / 1000000000000000;
-      suffix = " quadrillion";
+      // suffix = " quadrillion";
+      suffix = " Qa";
     } else if (options.number > 999999999999) {
       options.number = options.number / 1000000000000;
-      suffix = " trillion";
+      // suffix = " trillion";
+      suffix = " Tr";
     } else if (options.number > 999999999) {
       options.number = options.number / 1000000000;
-      suffix = " billion";
+      // suffix = " billion";
+      suffix = " Bi";
     } else if (options.number > 999999) {
       options.number = options.number / 1000000;
-      suffix = " million";
+      // suffix = " million";
+      suffix = " Mi";
     } else if (options.number > 999) {
       options.number = options.number / 1000;
-      suffix = " thousand";
+      // suffix = " thousand";
+      suffix = " K";
     } else if (options.number < 1000) {
       options.decimals = 0;
     }
-    return options.number.toFixed(options.decimals) + suffix;
+    var number = options.number.toFixed(options.decimals);
+    if (number.indexOf(".") > -1) {
+      if (number.split(".")[1] == "00") {
+        number = number.split(".")[0];
+      }
+    }
+    return number + suffix;
   };
 
   var timestamp = function() {
