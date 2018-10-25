@@ -34,13 +34,13 @@ var consumer = (function() {
           by: amount
         })
       });
-      message.render({
-        type: "error",
-        message: [game.get({
-          path: "consumed.rate"
-        }) + " toast was just consumed, nom!"],
-        format: "normal"
-      });
+      // message.render({
+      //   type: "error",
+      //   message: [game.get({
+      //     path: "consumed.rate"
+      //   }) + " toast was just consumed, nom!"],
+      //   format: "normal"
+      // });
     }
   };
 
