@@ -67,19 +67,17 @@
           <div class="row">
             <div class="col-md-12 col-lg-6">
 
-              <div class="card mb-3 bg-dark text-white" id="stage-system">
+              <div class="card mb-3" id="stage-system">
                 <div class="card-header">
-                  <p class="card-text mb-0">
-                    <strong>System</strong>
-                  </p>
+                  <p class="card-text mb-0"><strong>System</strong></p>
                 </div>
                 <div class="card-body">
-                  <button class="btn btn-lg btn-block btn-primary" data-toast-button="action:toast">Toast +<span data-toast-readout="path:system.processor.power,format:local"></span></button>
+                  <button class="btn btn-lg btn-block btn-primary" data-toast-button="action:toast">Toast +<span data-toast-readout="path:system.processor.power,format:suffix"></span></button>
                   <div class="d-none" id="stage-system-substage-processor">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Processor Power:</span>
-                      <strong data-toast-readout="path:system.processor.power,format:local"></strong>
+                      <strong data-toast-readout="path:system.processor.power,format:suffix"></strong>
                     </p>
                     <p class="card-text mb-1 small">Boost processor power with reverse antimatter quantum particles for more toast with every click.</p>
                     <div class="btn-group mb-1">
@@ -128,7 +126,7 @@
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Cycles:</span>
-                      <span><strong data-toast-readout="path:system.cycles.current,format:local"></strong> / <span data-toast-readout="path:system.cycles.max,format:local"></span></span>
+                      <span><strong data-toast-readout="path:system.cycles.current,format:suffix"></strong> / <span data-toast-readout="path:system.cycles.max,format:suffix"></span></span>
                     </p>
                     <p class="card-text mb-1 small">1 cycle / <strong data-toast-readout="path:system.cycles.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s, Max Cycles = Processor Power x10.</p>
                     <div class="d-none" id="stage-system-substage-cycles-controls">
@@ -227,7 +225,7 @@
                 <ul class="list-group list-group-flush bg-dark rounded-bottom" id="stage-strategy-substage-list"></ul>
               </div>
 
-              <div class="card mb-3 d-none" id="stage-wheat-drones">
+              <div class="card mb-3 d-none bg-dark text-white" id="stage-wheat-drones">
                 <div class="card-header">
                   <p class="card-text mb-0"><strong>Wheat Collection Drones</strong></p>
                 </div>
@@ -238,35 +236,35 @@
                   </p>
                   <p class="card-text mb-1 small">Collecting <strong data-toast-readout="path:wheat.drones.inventory.output,format:suffix"></strong> wheat lumps/<strong data-toast-readout="path:wheat.drones.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</p>
                   <div class="btn-group mb-1">
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
                       data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >Drone +1</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
                       data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
                       data-toast-button-cost="units:#10,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+10</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
                       data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
                       data-toast-button-cost="units:#100,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+100</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
                       data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1000,min:false,max:false"
                       data-toast-button-cost="units:#1000,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+1,000</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
                       data-toast-button-change="target:wheat.drones.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent"
@@ -294,21 +292,21 @@
                     <div id="stage-wheat-substage-speed-controls">
                       <p class="card-text mb-1 small">Improve collection per second speed with additional spoon propellers.</p>
                       <div class="btn-group mb-1">
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:wheat.speed"
                           data-toast-button-change="target:wheat.drones.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#500,min:drones.speed.interval.min,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.speed.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.speed.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >Speed -0.5s</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:wheat.speed"
                           data-toast-button-change="target:wheat.drones.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#1000,min:drones.speed.interval.min,max:false"
                           data-toast-button-cost="units:#2,currency:toast.inventory,amount:wheat.drones.speed.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.speed.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >-1s</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:wheat.speed"
                           data-toast-button-change="target:wheat.drones.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#500,min:wheat.drones.speed.interval.min,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.speed.cost.toast.current"
@@ -323,21 +321,21 @@
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Efficiency:</span>
-                      <strong class="float-right" data-toast-readout="path:wheat.drones.efficiency.current,format:local"></strong>
+                      <strong class="float-right" data-toast-readout="path:wheat.drones.efficiency.current,format:suffix"></strong>
                     </p>
                     <div id="stage-wheat-substage-efficiency-controls">
                       <p class="card-text mb-1 small">Improve drone efficiency with pipe cleaner claws and snippers.</p>
                       <div class="btn-group mb-1">
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:wheat.efficiency"
-                          data-toast-button-change="target:wheat.drones.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:wheat.drones.efficiency.max"
+                          data-toast-button-change="target:wheat.drones.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.efficiency.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.efficiency.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >Efficiency +1</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:wheat.efficiency"
-                          data-toast-button-change="target:wheat.drones.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:wheat.drones.efficiency.max"
+                          data-toast-button-change="target:wheat.drones.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:wheat.drones.efficiency.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:wheat.drones.efficiency.cost.toast.increase"
                           data-toast-button-max="buy:true"
@@ -349,7 +347,7 @@
                 </div>
               </div>
 
-              <div class="card mb-3 d-none" id="stage-auto-toaster">
+              <div class="card mb-3 d-none bg-dark text-white" id="stage-auto-toaster">
                 <div class="card-header">
                   <p class="card-text mb-0"><strong>Subordinate Auto Toasters</strong></p>
                 </div>
@@ -360,35 +358,35 @@
                   </p>
                   <p class="card-text mb-1 small">Producing <strong data-toast-readout="path:autoToaster.inventory.output,format:suffix"></strong> toast/<strong data-toast-readout="path:autoToaster.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</p>
                   <div class="btn-group mb-1">
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
                       data-toast-button-change="target:autoToaster.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >Auto Toaster +1</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
                       data-toast-button-change="target:autoToaster.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#10,min:false,max:false"
                       data-toast-button-cost="units:#10,currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+10</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
                       data-toast-button-change="target:autoToaster.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#100,min:false,max:false"
                       data-toast-button-cost="units:#100,currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+100</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
                       data-toast-button-change="target:autoToaster.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1000,min:false,max:false"
                       data-toast-button-cost="units:#1000,currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent"
                       data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.inventory.cost.toast.increase"
                       data-toast-button-max="buy:false"
                     >+1,000</button>
-                    <button class="btn btn-sm btn-dark"
+                    <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
                       data-toast-button-change="target:autoToaster.inventory.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                       data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent"
@@ -416,21 +414,21 @@
                     <div id="stage-auto-toaster-substage-speed-controls">
                       <p class="card-text mb-1 small">Improve toast per second speed with zipp-crumb particals and rocket fuel.</p>
                       <div class="btn-group mb-1">
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:autoToaster.speed"
                           data-toast-button-change="target:autoToaster.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#500,min:autoToaster.speed.interval.min,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.speed.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.speed.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >Speed -0.5s</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:autoToaster.speed"
                           data-toast-button-change="target:autoToaster.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#1000,min:autoToaster.speed.interval.min,max:false"
                           data-toast-button-cost="units:#2,currency:toast.inventory,amount:autoToaster.speed.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.speed.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >-1s</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:autoToaster.speed"
                           data-toast-button-change="target:autoToaster.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#500,min:autoToaster.speed.interval.min,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.speed.cost.toast.current"
@@ -445,21 +443,21 @@
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Efficiency:</span>
-                      <strong class="float-right" data-toast-readout="path:autoToaster.efficiency.current,format:local"></strong>
+                      <strong class="float-right" data-toast-readout="path:autoToaster.efficiency.current,format:suffix"></strong>
                     </p>
                     <div id="stage-auto-toaster-substage-efficiency-controls">
                       <p class="card-text mb-1 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
                       <div class="btn-group mb-1">
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:autoToaster.efficiency"
-                          data-toast-button-change="target:autoToaster.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:autoToaster.efficiency.max"
+                          data-toast-button-change="target:autoToaster.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.efficiency.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.efficiency.cost.toast.increase"
                           data-toast-button-max="buy:false"
                         >Efficiency +1</button>
-                        <button class="btn btn-sm btn-dark"
+                        <button class="btn btn-sm btn-secondary"
                           data-toast-button="action:autoToaster.efficiency"
-                          data-toast-button-change="target:autoToaster.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:autoToaster.efficiency.max"
+                          data-toast-button-change="target:autoToaster.efficiency.current,operation:increase,suboperation:increment,percentage:false,amount:#1,min:false,max:false"
                           data-toast-button-cost="units:#1,currency:toast.inventory,amount:autoToaster.efficiency.cost.toast.current"
                           data-toast-button-inflation="increase:true,operator:increase,amount:autoToaster.efficiency.cost.toast.increase"
                           data-toast-button-max="buy:true"
