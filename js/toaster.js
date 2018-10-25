@@ -732,6 +732,7 @@ var toaster = (function() {
               }
             }
             options.change.amount = startingAmount;
+            // console.log(cost);
           } else {
             // if current currency is lower than cost of next
             cost.total = cost.next;
@@ -1099,21 +1100,31 @@ var toaster = (function() {
       processor: {
         boost: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " processor power, " + game.get({
-              path: options.change.target
-            }).toLocaleString(2) + " toast with every click"];
+            return ["+" + helper.numberSuffix({
+              number: options.change.amount
+            }) + " processor power, " + helper.numberSuffix({
+              number: game.get({
+                path: options.change.target
+              })
+            }) + " toast with every click"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         },
         dismantle: {
           success: function() {
-            return ["-" + game.get({
-              path: options.change.target
-            }).toLocaleString(2) + " processor power, " + game.get({
-              path: options.cost.spent
-            }).toLocaleString(2) + " toast matter regained"];
+            return ["-" + helper.numberSuffix({
+              number: game.get({
+                path: options.change.target
+              })
+            }) + " processor power, " + helper.numberSuffix({
+              number: game.get({
+                path: options.cost.spent
+              })
+            }) + " toast matter regained"];
           },
           fail: function() {
             return ["no processor power to dismantled"];
@@ -1134,7 +1145,9 @@ var toaster = (function() {
             }) + "s"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         }
       },
@@ -1145,27 +1158,39 @@ var toaster = (function() {
           }).toLocaleString(2) + " cycles used to spin up new strategy"];
         },
         fail: function() {
-          return ["processor cycles low, " + options.prices.total.toLocaleString(2) + " cycles needed"];
+          return ["processor cycles low, " + helper.numberSuffix({
+            number: options.prices.total
+          }) + " cycles needed"];
         }
       },
       wheat: {
         make: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drones, " + game.get({
-              path: "wheat.drones.inventory.current"
-            }).toLocaleString(2) + " online"];
+            return ["+" + helper.numberSuffix({
+              number: options.change.amount
+            }) + " wheat collection drones, " + helper.numberSuffix({
+              number: game.get({
+                path: "wheat.drones.inventory.current"
+              })
+            }) + " online"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         },
         dismantle: {
           success: function() {
-            return ["-" + game.get({
-              path: options.change.target
-            }).toLocaleString(2) + " wheat collection drones, " + game.get({
-              path: options.cost.spent
-            }).toLocaleString(2) + " toast matter regained"];
+            return ["-" + helper.numberSuffix({
+              number: game.get({
+                path: options.change.target
+              })
+            }) + " wheat collection drones, " + helper.numberSuffix({
+              number: game.get({
+                path: options.cost.spent
+              })
+            }) + " toast matter regained"];
           },
           fail: function() {
             return ["no wheat collection drones to dismantled"];
@@ -1183,41 +1208,59 @@ var toaster = (function() {
                 path: "wheat.drones.speed.interval.current"
               }),
               by: 1000
-            }).toLocaleString(2) + "s"];
+            }) + "s"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " wheat collection drone efficiency, each collecting " + game.get({
-              path: "wheat.drones.efficiency.current"
-            }).toLocaleString(2) + " wheat lumps"];
+            return ["+" + helper.numberSuffix({
+              number: options.change.amount
+            }) + " wheat collection drone efficiency, each collecting " + helper.numberSuffix({
+              number: game.get({
+                path: "wheat.drones.efficiency.current"
+              })
+            }) + " wheat lumps"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         }
       },
       autoToaster: {
         make: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toasters, " + game.get({
-              path: "autoToaster.inventory.current"
-            }).toLocaleString(2) + " online"];
+            return ["+" + helper.numberSuffix({
+              number: options.change.amount
+            }) + " subordinate auto toasters, " + helper.numberSuffix({
+              number: game.get({
+                path: "autoToaster.inventory.current"
+              })
+            }) + " online"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         },
         dismantle: {
           success: function() {
-            return ["-" + game.get({
-              path: options.change.target
-            }).toLocaleString(2) + " subordinate auto toasters, " + game.get({
-              path: options.cost.spent
-            }).toLocaleString(2) + " toast matter regained"];
+            return ["-" + helper.numberSuffix({
+              number: game.get({
+                path: options.change.target
+              })
+            }) + " subordinate auto toasters, " + helper.numberSuffix({
+              number: game.get({
+                path: options.cost.spent
+              })
+            }) + " toast matter regained"];
           },
           fail: function() {
             return ["no subordinate auto toasters to dismantled"];
@@ -1229,26 +1272,34 @@ var toaster = (function() {
               type: "divide",
               value: options.change.amount,
               by: 1000
-            }) + "s subordinate auto toaster speed, each toasting every " + helper.operator({
+            }) + "s subordinate auto toaster speed, each collecting every " + helper.operator({
               type: "divide",
               value: game.get({
                 path: "autoToaster.speed.interval.current"
               }),
               by: 1000
-            }).toLocaleString(2) + "s"];
+            }) + "s"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         },
         efficiency: {
           success: function() {
-            return ["+" + options.change.amount.toLocaleString(2) + " subordinate auto toaster efficiency, each producing " + game.get({
-              path: "autoToaster.efficiency.current"
-            }).toLocaleString(2) + " toast"];
+            return ["+" + helper.numberSuffix({
+              number: options.change.amount
+            }) + " subordinate auto toaster efficiency, each producing " + helper.numberSuffix({
+              number: game.get({
+                path: "autoToaster.efficiency.current"
+              })
+            }) + " toast"];
           },
           fail: function() {
-            return ["toast inventory low, " + options.prices.total.toLocaleString(2) + " toast matter needed"];
+            return ["toast inventory low, " + helper.numberSuffix({
+              number: options.prices.total
+            }) + " toast matter needed"];
           }
         }
       }
