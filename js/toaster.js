@@ -58,6 +58,7 @@ var toaster = (function() {
               state: false
             }
           };
+          console.log(options.prices);
           if (validateAction(options)) {
             payCost(options);
             storeSpent(options);
@@ -663,7 +664,6 @@ var toaster = (function() {
     }
     var cost = {
       starting: null, // starting cost for first unit
-      next: null, // cost for the next unit
       total: null // total cost for multiply units
     };
     var calculateCost = {
@@ -672,24 +672,23 @@ var toaster = (function() {
         cost.starting = game.get({
           path: options.cost.amount
         });
-        // next cost starts as above
-        cost.next = cost.starting;
+        // next cost
+        cost.next = 0;
         // total cost
         cost.total = 0;
       },
       inflation: function() {
         var definedAmount = function() {
-          for (var i = 1; i <= options.cost.units; i++) {
-            cost.total = cost.total + cost.next;
-            cost.next = helper.operator({
-              type: options.inflation.operator,
-              value: cost.next,
-              by: game.get({
-                path: options.inflation.amount
-              }),
-              integer: true
-            });
-          };
+          var target = game.get({
+            path: options.change.target
+          });
+          var amount = options.cost.units;
+          var inflation = game.get({
+            path: options.inflation.amount
+          });
+          // magic formula to calculate the cost of a known number of units
+          cost.total = (target + amount - 1) * (target + amount) / 2 * inflation - (target - 1) * target / 2 * inflation;
+          cost.next = cost.total + inflation;
         }
         var maxBuy = function functionName() {
           // if the cost of 1 unit is less than current currency
