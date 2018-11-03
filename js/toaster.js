@@ -688,7 +688,7 @@ var toaster = (function() {
           });
           // magic formula to calculate the cost of a known number of units
           cost.total = (target + amount - 1) * (target + amount) / 2 * inflation - (target - 1) * target / 2 * inflation;
-          cost.next = cost.total + inflation;
+          cost.next = cost.starting + (amount * inflation);
         }
         var maxBuy = function functionName() {
           // if the cost of 1 unit is less than current currency
