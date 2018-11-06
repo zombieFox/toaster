@@ -17,7 +17,7 @@ var game = (function() {
       processor: {
         power: 1,
         cost: {
-          starting: 0,
+          starting: 8,
           toast: 8,
           increase: 8,
           spent: 8
