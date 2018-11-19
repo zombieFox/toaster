@@ -9,42 +9,59 @@ game.set({path:"toast.inventory",value:360});
 game.set({path:"toast.lifetime",value:360});
 game.set({path:"system.cycles.current",value:360});
 
-// level 1, cost for next 0
-// level 2, cost for next 8
-// level 3, cost for next 16
-// level 4, cost for next 24
-// level 5, cost for next 32
-// level 6, cost for next 40
-// level 7, cost for next 48
-// level 8, cost for next 56
-// level 9, cost for next 64
-// level 10, cost for next 72
 
-// var i = game.get({path:"toast.inventory"}); // the amount of currency owned
-// var k = game.get({path:"system.processor.power"}); // the number of generators currently owned
-// var b = game.get({path:"system.processor.cost.toast"}); // the base price
 
+
+
+
+// n = variable index
+// a = variable value
 // a_n = the nth term
 // d = the common difference
 // n = the index of the nth term
 // c = constant
 
-var n = 10; // the index of the nth term
 var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
 var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
+var n = 15; // the index of the nth term
 var a_n = (d * (n - 1)) + c; // the nth term
+var a_1 =  (a_n - (d * (n - 1))); // the nth term
+var n_x =  11;
+var n_y =  15;
+var a_x =  (d * (11 - 1)) + c;
+var a_y =  (d * (15 - 1)) + c;
 
 // a_n = dn + c
-// get the value of a given index in arithmetic sequences
 var arr = [];
-for (var i = 1; i < n; i++) {
+for (var i = 1; i <= n; i++) {
   arr.push((d * (i - 1)) + c);
 }
+console.log("Arithmetic Sequences:");
 console.log(arr);
+console.log("index (n)", n, "=", (d * (n - 1)) + c);
 
 // c = a_n - (d * n)
-// get the constant in an arithmetic sequences
-console.log("constant = ", a_n - (d * n));
+console.log("constant (n1) =", a_1);
+
+// Sn = (n * (a_1 + a_n)) / 2
+console.log("sum of level", n, "=", (n * (a_1 + a_n)) / 2);
+
+// S(n_x) -> (n_y) = ( ( (n_y + 1) - n_x) * (a_x + a_y) ) / 2
+console.log("sum from", n_x, "to", n_y, "=", (((n_y + 1) - n_x) * (a_x + a_y)) / 2);
+
+
+
+
+
+
+
+
+
+
+
+// var i = game.get({path:"toast.inventory"}); // the amount of currency owned
+// var k = game.get({path:"system.processor.power"}); // the number of generators currently owned
+// var b = game.get({path:"system.processor.cost.toast"}); // the base price
 
 // b * ((Math.pow(d, k)) - (Math.pow(d, n) - 1) / (d - 1))
 
