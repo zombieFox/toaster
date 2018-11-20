@@ -23,34 +23,26 @@ game.set({path:"system.cycles.current",value:360});
 
 var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
 var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
-var n = 15; // the index of the nth term
+var n = 10; // the index of the nth term
 var a_n = (d * (n - 1)) + c; // the nth term
-var a_1 =  (a_n - (d * (n - 1))); // the nth term
-var n_x =  11;
-var n_y =  15;
-var a_x =  (d * (11 - 1)) + c;
-var a_y =  (d * (15 - 1)) + c;
+var a_1 = (a_n - (d * (n - 1))); // constant / first term / c
+var n_x = 1;
+var n_y = 10;
+var a_x = (d * (n_x - 1)) + c;
+var a_y = (d * (n_y - 1)) + c;
+var sn = (n * (a_1 + a_n)) / 2;
 
 // a_n = dn + c
 var arr = [];
 for (var i = 1; i <= n; i++) {
   arr.push((d * (i - 1)) + c);
 }
-console.log("Arithmetic Sequences:");
-console.log(arr);
-console.log("index (n)", n, "=", (d * (n - 1)) + c);
-
-// c = a_n - (d * n)
-console.log("constant (n1) =", a_1);
-
-// Sn = (n * (a_1 + a_n)) / 2
-console.log("sum of level", n, "=", (n * (a_1 + a_n)) / 2);
+console.log("Arithmetic Sequences:", arr);
+console.log("a_1:", a_1, "a_" + n + ":", a_n);
+console.log("sum of index", n, "=", sn);
 
 // S(n_x) -> (n_y) = ( ( (n_y + 1) - n_x) * (a_x + a_y) ) / 2
-console.log("sum from", n_x, "to", n_y, "=", (((n_y + 1) - n_x) * (a_x + a_y)) / 2);
-
-
-
+console.log("sum from index", n_x, "to", n_y, "=", (((n_y + 1) - n_x) * (a_x + a_y)) / 2);
 
 
 
