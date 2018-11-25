@@ -21,29 +21,48 @@ game.set({path:"system.cycles.current",value:360});
 // n = the index of the nth term
 // c = constant
 
-var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
-var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
-var n = 10; // the index of the nth term
-var a_n = (d * (n - 1)) + c; // the nth term
-var a_1 = (a_n - (d * (n - 1))); // constant / first term / c
-var n_x = 1;
-var n_y = 10;
-var a_x = (d * (n_x - 1)) + c;
-var a_y = (d * (n_y - 1)) + c;
-var sn = (n * (a_1 + a_n)) / 2;
-
-// a_n = dn + c
-var arr = [];
-for (var i = 1; i <= n; i++) {
-  arr.push((d * (i - 1)) + c);
+var as = function() {
+  var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
+  var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
+  var n = 10; // the index of the nth term
+  var a_n = (d * (n - 1)) + c; // the nth term
+  var a_1 = (a_n - (d * (n - 1))); // constant / first term / c
+  var n_x = 3;
+  var n_y = 5;
+  var a_x = (d * (n_x - 1)) + c;
+  var a_y = (d * (n_y - 1)) + c;
+  var s_n = (n * (a_1 + a_n)) / 2;
+  var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
+  var arr = [];
+  for (var i = 1; i <= n; i++) {
+    arr.push((d * (i - 1)) + c);
+  }
+  console.log("Arithmetic Sequences:", arr);
+  console.log("a_1:", a_1);
+  console.log("a_" + n + ":", a_n);
+  console.log("sum all:", s_n);
+  console.log("sum from n_x (" + n_x + ") to n_y (" + n_y + "):", s_xy);
 }
-console.log("Arithmetic Sequences:", arr);
-console.log("a_1:", a_1, "a_" + n + ":", a_n);
-console.log("sum of index", n, "=", sn);
 
-// S(n_x) -> (n_y) = ( ( (n_y + 1) - n_x) * (a_x + a_y) ) / 2
-console.log("sum from index", n_x, "to", n_y, "=", (((n_y + 1) - n_x) * (a_x + a_y)) / 2);
+var gs = function() {
+  var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
+  var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
+  var r = game.get({path:"system.processor.cost.increase"}); // the common ratio
+  var n = 3; // the index of the nth term
+  var a = 1.5; // the scale factor
+  var a_n = a * Math.pow(r, n); // the nth term
+  console.log(n);
+  console.log(a_n);
+  //
+  var arr = [];
+  for (var i = 1; i <= n; i++) {
+    arr.push(a * Math.pow(r, i));
+  }
+  console.log("Geometric Sequences:", arr);
+}
 
+as();
+gs();
 
 
 
