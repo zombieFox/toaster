@@ -25,17 +25,17 @@ var as = function() {
   var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
   var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
   var n = 10; // the index of the nth term
-  var a_n = (d * (n - 1)) + c; // the nth term
-  var a_1 = (a_n - (d * (n - 1))); // constant / first term / c
-  var n_x = 3;
-  var n_y = 5;
+  var a_n = c + (d * (n - 1)); // the nth term
+  var a_1 = a_n - (d * (n - 1)); // constant / first term / c
+  var s_n = (n * (a_1 + a_n)) / 2;
+  var n_x = 2;
+  var n_y = 8;
   var a_x = (d * (n_x - 1)) + c;
   var a_y = (d * (n_y - 1)) + c;
-  var s_n = (n * (a_1 + a_n)) / 2;
   var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
   var arr = [];
   for (var i = 1; i <= n; i++) {
-    arr.push((d * (i - 1)) + c);
+    arr.push(c + (d * (i - 1)));
   }
   console.log("Arithmetic Sequences:", arr);
   console.log("a_1:", a_1);
@@ -46,22 +46,28 @@ var as = function() {
 
 var gs = function() {
   var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
-  var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
-  var r = game.get({path:"system.processor.cost.increase"}); // the common ratio
-  var n = 3; // the index of the nth term
-  var a = 1.5; // the scale factor
-  var a_n = a * Math.pow(r, n); // the nth term
-  console.log(n);
-  console.log(a_n);
-  //
+  var d = game.get({path:"system.processor.cost.multiply"}); // difference / price growth rate
+  var n = 5; // the index of the nth term
+  var a_n = c * (Math.pow(d, (n - 1))); // the nth term
+  var a_1 = a_n / Math.pow(d, (n - 1)); // constant / first term / c
+  var s_n = (a_1 * (1 - Math.pow(d, n))) / (1 - d);
+  // var n_x = 2;
+  // var n_y = 8;
+  // var a_x = (d * (n_x - 1)) + c;
+  // var a_y = (d * (n_y - 1)) + c;
+  // var s_xy =  ( ( a_1 * Math.pow(d, n_x) ) * ( 1 - Math.pow(r, (n_y + 1 - n_x) )) / (1 - r);
   var arr = [];
   for (var i = 1; i <= n; i++) {
-    arr.push(a * Math.pow(r, i));
+    arr.push(c * (Math.pow(a_1, (i - 1))));
   }
   console.log("Geometric Sequences:", arr);
+  console.log("a_1:", a_1);
+  console.log("a_" + n + ":", a_n);
+  console.log("sum all:", s_n);
 }
 
 as();
+console.log("---");
 gs();
 
 
