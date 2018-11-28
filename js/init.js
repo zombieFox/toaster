@@ -57,7 +57,7 @@ var gs = function() {
   var s_xy = ((a_1 * Math.pow(d, n_x)) * (1 - Math.pow(d, (n_y + 1 - n_x))) / (1 - d)) / 2;
   var arr = [];
   for (var i = 1; i <= n; i++) {
-    arr.push(Math.floor(c * (Math.pow(d, (i - 1)))));
+    arr.push(c * (Math.pow(d, (i - 1))));
   }
   console.log("Geometric Sequences:", arr);
   console.log("a_1:", a_1);
