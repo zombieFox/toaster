@@ -27,7 +27,7 @@ var as = function() {
   var n = 10; // the index of the nth term
   var a_n = c + (d * (n - 1)); // the nth term
   var a_1 = a_n - (d * (n - 1)); // constant / first term / c
-  var s_n = (n * (a_1 + a_n)) / 2;
+  var s_n = (n * (a_1 + a_n)) / 2; // sum all up to n
   var n_x = 2;
   var n_y = 8;
   var a_x = (d * (n_x - 1)) + c;
@@ -47,23 +47,23 @@ var as = function() {
 var gs = function() {
   var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
   var d = game.get({path:"system.processor.cost.multiply"}); // difference / price growth rate
-  var n = 5; // the index of the nth term
+  // d = 1.05;
+  var n = 10; // the index of the nth term
   var a_n = c * (Math.pow(d, (n - 1))); // the nth term
   var a_1 = a_n / Math.pow(d, (n - 1)); // constant / first term / c
-  var s_n = (a_1 * (1 - Math.pow(d, n))) / (1 - d);
-  // var n_x = 2;
-  // var n_y = 8;
-  // var a_x = (d * (n_x - 1)) + c;
-  // var a_y = (d * (n_y - 1)) + c;
-  // var s_xy =  ( ( a_1 * Math.pow(d, n_x) ) * ( 1 - Math.pow(r, (n_y + 1 - n_x) )) / (1 - r);
+  var s_n = (a_1 * (1 - Math.pow(d, n))) / (1 - d); // sum all up to n
+  var n_x = 2;
+  var n_y = 8;
+  var s_xy = ((a_1 * Math.pow(d, n_x)) * (1 - Math.pow(d, (n_y + 1 - n_x))) / (1 - d)) / 2;
   var arr = [];
   for (var i = 1; i <= n; i++) {
-    arr.push(c * (Math.pow(a_1, (i - 1))));
+    arr.push(Math.floor(c * (Math.pow(d, (i - 1)))));
   }
   console.log("Geometric Sequences:", arr);
   console.log("a_1:", a_1);
   console.log("a_" + n + ":", a_n);
   console.log("sum all:", s_n);
+  console.log("sum from n_x (" + n_x + ") to n_y (" + n_y + "):", s_xy);
 }
 
 as();
