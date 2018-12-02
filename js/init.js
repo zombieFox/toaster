@@ -22,18 +22,18 @@ tick.init();
 // c = constant
 var as = function() {
   var l = 3 // current level
-  var m = 400; // money
+  var m = 80; // money
   var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
   var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
   var n = 10; // the index of the nth term
   var a_n = c + (d * (n - 1)); // the nth term
   var a_1 = a_n - (d * (n - 1)); // constant / first term / c
   var s_n = (n * (a_1 + a_n)) / 2; // sum all up to n
-  var n_x = 1;
-  var n_y = 10;
-  var a_x = c + (d * (n_x - 1));
-  var a_y = c + (d * (n_y - 1));
-  var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
+  var n_x = 1; // starting point to calculate from
+  var n_y = 10; // end point to calculate to
+  var a_x = c + (d * (n_x - 1)); // value of ax
+  var a_y = c + (d * (n_y - 1)); // value of ay
+  var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2; // sum from ax to ay
   var arr_n = [];
   var arr_s = [];
   for (var i = 1; i <= n; i++) {
@@ -42,20 +42,21 @@ var as = function() {
   for (var i = 1; i <= n; i++) {
     arr_s.push(((((arr_s.length + 1) + 1) - n_x) * ((c + (d * (n_x - 1))) + (c + (d * ((arr_s.length + 1) - 1))))) / 2);
   }
-  console.log("Arithmetic Sequences:", arr_n);
-  console.log("Arithmetic Sums:", arr_s);
+  console.log("Arithmetic Sequences:    ", arr_n);
+  console.log("Arithmetic Sum per level:", arr_s);
   console.log("money", m);
   console.log("a_1:", a_1);
   console.log("a_" + n + ":", a_n);
   console.log("sum all:", s_n);
   console.log("sum from n_x (" + n_x + ") to n_y (" + n_y + "):", s_xy);
+  console.log("level:", l);
 
   function buyMax(m, l, a_1, d) {
-    let cost_bought = a_1 * l + (l * (l + 1)) / 2 * d;
-    let cost_max = cost_bought + m;
+    var cost_bought = a_1 * l + (l * (l + 1)) / 2 * d;
+    var cost_max = cost_bought + m;
     // solving the formula for cost_bought for n instead
-    let amount_max = Math.floor(-(-Math.sqrt(8 * cost_max * d + 4 * a_1 * a_1 + 4 * a_1 * d + d * d) + 2 * a_1 + d) / (2 * d));
-    let amount_buyable = amount_max - l;
+    var amount_max = Math.floor(-(-Math.sqrt(8 * cost_max * d + 4 * a_1 * a_1 + 4 * a_1 * d + d * d) + 2 * a_1 + d) / (2 * d));
+    var amount_buyable = amount_max - l;
     console.log("- cost_bought", cost_bought);
     console.log("- cost_max", cost_max);
     console.log("- amount_max", amount_max);
@@ -74,8 +75,8 @@ var gs = function() {
   var a_n = c * (Math.pow(d, (n - 1))); // the nth term
   var a_1 = a_n / Math.pow(d, (n - 1)); // constant / first term / c
   var s_n = (a_1 * (1 - Math.pow(d, n))) / (1 - d); // sum all up to n
-  var n_x = 2;
-  var n_y = 8;
+  var n_x = 1; // starting point to calculate from
+  var n_y = 10; // end point to calculate to
   var s_xy = ((a_1 * Math.pow(d, n_x)) * (1 - Math.pow(d, (n_y + 1 - n_x))) / (1 - d)) / 2;
   var arr = [];
   for (var i = 1; i <= n; i++) {
