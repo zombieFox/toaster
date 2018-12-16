@@ -22,7 +22,7 @@ var data = (function() {
       value: timestamp.hours + ":" + timestamp.minutes + ", " + timestamp.date + " " + helper.months(timestamp.month) + ", " + timestamp.year
     });
     set("TAI.game.dat", JSON.stringify(game.get()));
-    console.log("game saved");
+    // console.log("game saved");
   };
 
   var restore = function() {

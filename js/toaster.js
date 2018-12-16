@@ -58,7 +58,6 @@ var toaster = (function() {
               state: false
             }
           };
-          console.log(options.prices);
           if (validateAction(options)) {
             payCost(options);
             storeSpent(options);
@@ -662,147 +661,183 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
+    // the starting cost / constant / c
+    var c = game.get({
+      path: options.cost.starting
+    });
+    // inflation amount per nth term / difference / d
+    var d = game.get({
+      path: options.inflation.amount
+    });
+    // the index of the nth term / n
+    // eg:
+    // array [2, 4, 6, 8]
+    // index [1, 2, 3, 4]
+    //              ^
+    //              the desiered index
+    // the index of the nth term
+    var n = game.get({
+      path: options.change.target
+    }) + options.change.amount;
+    // starting point to calculate from
+    var n_x = game.get({
+      path: options.change.target
+    }) + 1;
+    // end point to calculate to
+    var n_y = n;
+    // value of n_x
+    var a_x = c + (d * (n_x - 1));
+    // value of n_y
+    var a_y = c + (d * (n_y - 1));
+    // sum from ax to ay
+    var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
+    // total for the next level
+    var n_y_plus_1 = c + (d * (n_y));
     var cost = {
-      starting: null, // starting cost for first unit
-      total: null // total cost for multiply units
+      startingIndex: n, // n
+      indexX: n_x, // n_x
+      indexY: n_y, // n_y
+      total: s_xy, // sum from ax to ay
+      next: n_y_plus_1 // cost for level after y
     };
-    var calculateCost = {
-      startingValues: function() {
-        // starting cost
-        cost.starting = game.get({
-          path: options.cost.amount
-        });
-        // next cost
-        cost.next = 0;
-        // total cost
-        cost.total = 0;
-      },
-      inflation: function() {
-        var definedAmount = function() {
-          var target = game.get({
-            path: options.change.target
-          });
-          var amount = options.cost.units;
-          var inflation = game.get({
-            path: options.inflation.amount
-          });
-          // magic formula to calculate the cost of a known number of units
-          cost.total = (target + amount - 1) * (target + amount) / 2 * inflation - (target - 1) * target / 2 * inflation;
-          cost.next = cost.starting + (amount * inflation);
-        }
-        var maxBuy = function functionName() {
-          // if the cost of 1 unit is less than current currency
-          if ((cost.total + cost.next) <= game.get({
-              path: options.cost.currency
-            })) {
-            var startingAmount = 0;
-            // while cost total is less than current currency
-            while ((cost.total + cost.next) <= game.get({
-                path: options.cost.currency
-              })) {
-              // add the cost of next to total
-              cost.total = cost.total + cost.next;
-              // calculate cost of next unit
-              cost.next = helper.operator({
-                type: options.inflation.operator,
-                value: cost.next,
-                by: game.get({
-                  path: options.inflation.amount
-                }),
-                integer: true
-              });
-              // increase the starting amount
-              startingAmount = startingAmount + options.change.amount;
-              // if amount has a min
-              if (options.change.min && (game.get({
-                  path: options.change.target
-                }) - startingAmount) <= game.get({
-                  path: options.change.min
-                })) {
-                break
-              }
-              // if amount has a max
-              if (options.change.max && (game.get({
-                  path: options.change.target
-                }) + startingAmount) >= game.get({
-                  path: options.change.max
-                })) {
-                break
-              }
-            }
-            options.change.amount = startingAmount;
-            // console.log(cost);
-          } else {
-            // if current currency is lower than cost of next
-            cost.total = cost.next;
-          }
-        }
-        if (options.max.buy) {
-          maxBuy();
-        } else {
-          definedAmount();
-        }
-      },
-      flat: function() {
-        // cost.total = cost.next;
-        var definedAmount = function() {
-          for (var i = 1; i <= options.cost.units; i++) {
-            cost.total = cost.total + cost.next;
-          };
-        }
-        var maxBuy = function functionName() {
-          // if the cost of 1 unit is less than current currency
-          if ((cost.total + cost.next) <= game.get({
-              path: options.cost.currency
-            })) {
-            var startingAmount = 0;
-            // while cost total is less than current currency
-            while ((cost.total + cost.next) <= game.get({
-                path: options.cost.currency
-              })) {
-              // add the cost of next to total
-              cost.total = cost.total + cost.next;
-              // increase the starting amount
-              startingAmount = startingAmount + options.change.amount;
-              // if amount has a min
-              if (options.change.min && (game.get({
-                  path: options.change.target
-                }) - startingAmount) <= game.get({
-                  path: options.change.min
-                })) {
-                break
-              }
-              // if amount has a max
-              if (options.change.max && (game.get({
-                  path: options.change.target
-                }) + startingAmount) >= game.get({
-                  path: options.change.max
-                })) {
-                break
-              }
-            }
-            options.change.amount = startingAmount;
-          } else {
-            // if current currency is lower than cost of next
-            cost.total = cost.next;
-          }
-        }
-        if (options.max.buy) {
-          maxBuy();
-        } else {
-          definedAmount();
-        }
-      }
-    }
-    calculateCost.startingValues();
-    if (options.inflation.increase) {
-      // if price increases with every unit
-      calculateCost.inflation();
-    } else {
-      // if price is always the same
-      calculateCost.flat();
-    }
     return cost;
+    // var calculateCost = {
+    //   startingValues: function() {
+    //     // starting cost
+    //     cost.starting = game.get({
+    //       path: options.cost.amount
+    //     });
+    //     // next cost
+    //     cost.next = 0;
+    //     // total cost
+    //     cost.total = 0;
+    //   },
+    //   inflation: function() {
+    //     var definedAmount = function() {
+    //       var target = game.get({
+    //         path: options.change.target
+    //       });
+    //       var amount = options.cost.units;
+    //       var inflation = game.get({
+    //         path: options.inflation.amount
+    //       });
+    //       // magic formula to calculate the cost of a known number of units
+    //       cost.total = (target + amount - 1) * (target + amount) / 2 * inflation - (target - 1) * target / 2 * inflation;
+    //       cost.next = cost.starting + (amount * inflation);
+    //     }
+    //     var maxBuy = function functionName() {
+    //       // if the cost of 1 unit is less than current currency
+    //       if ((cost.total + cost.next) <= game.get({
+    //           path: options.cost.currency
+    //         })) {
+    //         var startingAmount = 0;
+    //         // while cost total is less than current currency
+    //         while ((cost.total + cost.next) <= game.get({
+    //             path: options.cost.currency
+    //           })) {
+    //           // add the cost of next to total
+    //           cost.total = cost.total + cost.next;
+    //           // calculate cost of next unit
+    //           cost.next = helper.operator({
+    //             type: options.inflation.operator,
+    //             value: cost.next,
+    //             by: game.get({
+    //               path: options.inflation.amount
+    //             }),
+    //             integer: true
+    //           });
+    //           // increase the starting amount
+    //           startingAmount = startingAmount + options.change.amount;
+    //           // if amount has a min
+    //           if (options.change.min && (game.get({
+    //               path: options.change.target
+    //             }) - startingAmount) <= game.get({
+    //               path: options.change.min
+    //             })) {
+    //             break
+    //           }
+    //           // if amount has a max
+    //           if (options.change.max && (game.get({
+    //               path: options.change.target
+    //             }) + startingAmount) >= game.get({
+    //               path: options.change.max
+    //             })) {
+    //             break
+    //           }
+    //         }
+    //         options.change.amount = startingAmount;
+    //         // console.log(cost);
+    //       } else {
+    //         // if current currency is lower than cost of next
+    //         cost.total = cost.next;
+    //       }
+    //     }
+    //     if (options.max.buy) {
+    //       maxBuy();
+    //     } else {
+    //       definedAmount();
+    //     }
+    //   },
+    //   flat: function() {
+    //     // cost.total = cost.next;
+    //     var definedAmount = function() {
+    //       for (var i = 1; i <= options.cost.units; i++) {
+    //         cost.total = cost.total + cost.next;
+    //       };
+    //     }
+    //     var maxBuy = function functionName() {
+    //       // if the cost of 1 unit is less than current currency
+    //       if ((cost.total + cost.next) <= game.get({
+    //           path: options.cost.currency
+    //         })) {
+    //         var startingAmount = 0;
+    //         // while cost total is less than current currency
+    //         while ((cost.total + cost.next) <= game.get({
+    //             path: options.cost.currency
+    //           })) {
+    //           // add the cost of next to total
+    //           cost.total = cost.total + cost.next;
+    //           // increase the starting amount
+    //           startingAmount = startingAmount + options.change.amount;
+    //           // if amount has a min
+    //           if (options.change.min && (game.get({
+    //               path: options.change.target
+    //             }) - startingAmount) <= game.get({
+    //               path: options.change.min
+    //             })) {
+    //             break
+    //           }
+    //           // if amount has a max
+    //           if (options.change.max && (game.get({
+    //               path: options.change.target
+    //             }) + startingAmount) >= game.get({
+    //               path: options.change.max
+    //             })) {
+    //             break
+    //           }
+    //         }
+    //         options.change.amount = startingAmount;
+    //       } else {
+    //         // if current currency is lower than cost of next
+    //         cost.total = cost.next;
+    //       }
+    //     }
+    //     if (options.max.buy) {
+    //       maxBuy();
+    //     } else {
+    //       definedAmount();
+    //     }
+    //   }
+    // }
+    // calculateCost.startingValues();
+    // if (options.inflation.increase) {
+    //   // if price increases with every unit
+    //   calculateCost.inflation();
+    // } else {
+    //   // if price is always the same
+    //   calculateCost.flat();
+    // }
+    // return cost;
   };
 
   var validateAction = function(override) {

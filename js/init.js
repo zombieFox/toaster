@@ -1,18 +1,13 @@
 toaster.init();
 data.init();
-// milestones.init();
+milestones.init();
 events.init();
 tick.init();
-// boot.init();
+boot.init();
 
-// game.set({path:"toast.inventory",value:360});
-// game.set({path:"toast.lifetime",value:360});
-// game.set({path:"system.cycles.current",value:360});
-
-
-
-
-
+// game.set({path:"toast.inventory",value:3000});
+// game.set({path:"toast.lifetime",value:3000});
+// game.set({path:"system.cycles.current",value:3000});
 
 // n = variable index
 // a = variable value
@@ -31,19 +26,24 @@ var as = function() {
   var s_n = (n * (a_1 + a_n)) / 2; // sum all up to n
   var n_x = 1; // starting point to calculate from
   var n_y = 10; // end point to calculate to
-  var a_x = c + (d * (n_x - 1)); // value of ax
-  var a_y = c + (d * (n_y - 1)); // value of ay
+  var a_x = c + (d * (n_x - 1)); // value of nx
+  var a_y = c + (d * (n_y - 1)); // value of ny
   var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2; // sum from ax to ay
   var arr_n = [];
   var arr_s = [];
+  var level = [];
   for (var i = 1; i <= n; i++) {
     arr_n.push(c + (d * (i - 1)));
   }
   for (var i = 1; i <= n; i++) {
     arr_s.push(((((arr_s.length + 1) + 1) - n_x) * ((c + (d * (n_x - 1))) + (c + (d * ((arr_s.length + 1) - 1))))) / 2);
   }
+  for (var i = 1; i <= n; i++) {
+    level.push(i);
+  }
   console.log("Arithmetic Sequences:    ", arr_n);
   console.log("Arithmetic Sum per level:", arr_s);
+  console.log("Arithmetic Sum per level:", level);
   console.log("money", m);
   console.log("a_1:", a_1);
   console.log("a_" + n + ":", a_n);
@@ -92,12 +92,6 @@ var gs = function() {
 as();
 console.log("---");
 gs();
-
-
-
-
-
-
 
 // var i = game.get({path:"toast.inventory"}); // the amount of currency owned
 // var k = game.get({path:"system.processor.power"}); // the number of generators currently owned
