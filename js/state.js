@@ -18,17 +18,11 @@ var state = (function() {
         power: 1,
         cost: {
           starting: 0,
-          next: 8,
-          multiply: 1.1,
+          toast: 8,
+          increase: 8,
+          multiply: 1.05,
           spent: 0
         }
-        // cost: {
-        //   starting: 0,
-        //   toast: 8,
-        //   increase: 8,
-        //   multiply: 1.05,
-        //   spent: 0
-        // }
       },
       cycles: {
         level: 0,

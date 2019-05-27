@@ -12,27 +12,88 @@ var control = (function() {
     func: function() {
       var options = new BoostOptions();
       options.change.amount = 1;
-      options.cost.amount = 1;
+      options.cost.units = 1;
       options.button = this.element;
       options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
+      if (toaster.validateAction(options)) {
+        toaster.payCost(options);
+        toaster.setNewCost(options);
+        toaster.storeSpent(options);
+        toaster.changeValue(options);
+        toaster.disableButton(options);
+        cycles.set();
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          toaster.feedbackMessage(options);
+        }
+      } else {
+        if (options.message.fail != null) {
+          options.message.fail.state = true;
+          toaster.feedbackMessage(options);
+        }
+      }
     }
   }, {
     element: helper.e(".control-processor-boost-2"),
     func: function() {
       var options = new BoostOptions();
       options.change.amount = 2;
-      options.cost.amount = 2;
+      options.cost.units = 2;
       options.button = this.element;
       options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
+      if (toaster.validateAction(options)) {
+        toaster.payCost(options);
+        toaster.setNewCost(options);
+        toaster.storeSpent(options);
+        toaster.changeValue(options);
+        toaster.disableButton(options);
+        cycles.set();
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          toaster.feedbackMessage(options);
+        }
+      } else {
+        if (options.message.fail != null) {
+          options.message.fail.state = true;
+          toaster.feedbackMessage(options);
+        }
+      }
     }
   }, {
     element: helper.e(".control-processor-boost-3"),
     func: function() {
       var options = new BoostOptions();
       options.change.amount = 3;
-      options.cost.amount = 3;
+      options.cost.units = 3;
+      options.button = this.element;
+      options.prices = toaster.costForMultiple(options);
+      console.log(options.prices);
+      if (toaster.validateAction(options)) {
+        toaster.payCost(options);
+        toaster.setNewCost(options);
+        toaster.storeSpent(options);
+        toaster.changeValue(options);
+        toaster.disableButton(options);
+        cycles.set();
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          toaster.feedbackMessage(options);
+        }
+      } else {
+        if (options.message.fail != null) {
+          options.message.fail.state = true;
+          toaster.feedbackMessage(options);
+        }
+      }
+    }
+  }, {
+    element: helper.e(".control-processor-boost-max"),
+    func: function() {
+      var options = new BoostOptions();
+      options.change.amount = 30;
+      options.cost.units = 30;
       options.button = this.element;
       options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
@@ -50,7 +111,7 @@ var control = (function() {
     });
   };
 
-  var BoostOptions = function(amount, units, button) {
+  var BoostOptions = function() {
     this.change = {
       target: "system.processor.power",
       operation: "increase",

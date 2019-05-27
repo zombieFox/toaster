@@ -657,20 +657,7 @@ var toaster = (function() {
     }
   };
 
-  var costForMultiple = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    console.log(options.inflation.increase);
+  var costForMultiple = function(options) {
     if (options.inflation.increase) {
       // the starting cost / constant / c
       var c = state.get({
@@ -682,7 +669,7 @@ var toaster = (function() {
       });
       // the index of the nth term / n
       // eg:
-      // array [2, 4, 6, 8]
+      // array [3, 6, 9, 12]
       // index [1, 2, 3, 4]
       //              ^
       //              the desiered index
@@ -690,9 +677,6 @@ var toaster = (function() {
       var n = state.get({
         path: options.change.target
       }) + options.change.amount;
-      console.log("c",c);
-      console.log("d",d);
-      console.log("n",n);
       // starting point to calculate from
       var n_x = state.get({
         path: options.change.target
@@ -708,7 +692,6 @@ var toaster = (function() {
       // total for the next level
       var n_y_plus_1 = c + (d * (n_y));
       var cost = {
-        startingIndex: n, // n
         indexX: n_x, // n_x
         indexY: n_y, // n_y
         total: s_xy, // sum from ax to ay
@@ -722,199 +705,29 @@ var toaster = (function() {
       };
     };
     return cost;
-    // var calculateCost = {
-    //   startingValues: function() {
-    //     // starting cost
-    //     cost.starting = state.get({
-    //       path: options.cost.amount
-    //     });
-    //     // next cost
-    //     cost.next = 0;
-    //     // total cost
-    //     cost.total = 0;
-    //   },
-    //   inflation: function() {
-    //     var definedAmount = function() {
-    //       var target = state.get({
-    //         path: options.change.target
-    //       });
-    //       var amount = options.cost.units;
-    //       var inflation = state.get({
-    //         path: options.inflation.amount
-    //       });
-    //       // magic formula to calculate the cost of a known number of units
-    //       cost.total = (target + amount - 1) * (target + amount) / 2 * inflation - (target - 1) * target / 2 * inflation;
-    //       cost.next = cost.starting + (amount * inflation);
-    //     }
-    //     var maxBuy = function functionName() {
-    //       // if the cost of 1 unit is less than current currency
-    //       if ((cost.total + cost.next) <= state.get({
-    //           path: options.cost.currency
-    //         })) {
-    //         var startingAmount = 0;
-    //         // while cost total is less than current currency
-    //         while ((cost.total + cost.next) <= state.get({
-    //             path: options.cost.currency
-    //           })) {
-    //           // add the cost of next to total
-    //           cost.total = cost.total + cost.next;
-    //           // calculate cost of next unit
-    //           cost.next = helper.operator({
-    //             type: options.inflation.operator,
-    //             value: cost.next,
-    //             by: state.get({
-    //               path: options.inflation.amount
-    //             }),
-    //             integer: true
-    //           });
-    //           // increase the starting amount
-    //           startingAmount = startingAmount + options.change.amount;
-    //           // if amount has a min
-    //           if (options.change.min && (state.get({
-    //               path: options.change.target
-    //             }) - startingAmount) <= state.get({
-    //               path: options.change.min
-    //             })) {
-    //             break
-    //           }
-    //           // if amount has a max
-    //           if (options.change.max && (state.get({
-    //               path: options.change.target
-    //             }) + startingAmount) >= state.get({
-    //               path: options.change.max
-    //             })) {
-    //             break
-    //           }
-    //         }
-    //         options.change.amount = startingAmount;
-    //         // console.log(cost);
-    //       } else {
-    //         // if current currency is lower than cost of next
-    //         cost.total = cost.next;
-    //       }
-    //     }
-    //     if (options.max.buy) {
-    //       maxBuy();
-    //     } else {
-    //       definedAmount();
-    //     }
-    //   },
-    //   flat: function() {
-    //     // cost.total = cost.next;
-    //     var definedAmount = function() {
-    //       for (var i = 1; i <= options.cost.units; i++) {
-    //         cost.total = cost.total + cost.next;
-    //       };
-    //     }
-    //     var maxBuy = function functionName() {
-    //       // if the cost of 1 unit is less than current currency
-    //       if ((cost.total + cost.next) <= state.get({
-    //           path: options.cost.currency
-    //         })) {
-    //         var startingAmount = 0;
-    //         // while cost total is less than current currency
-    //         while ((cost.total + cost.next) <= state.get({
-    //             path: options.cost.currency
-    //           })) {
-    //           // add the cost of next to total
-    //           cost.total = cost.total + cost.next;
-    //           // increase the starting amount
-    //           startingAmount = startingAmount + options.change.amount;
-    //           // if amount has a min
-    //           if (options.change.min && (state.get({
-    //               path: options.change.target
-    //             }) - startingAmount) <= state.get({
-    //               path: options.change.min
-    //             })) {
-    //             break
-    //           }
-    //           // if amount has a max
-    //           if (options.change.max && (state.get({
-    //               path: options.change.target
-    //             }) + startingAmount) >= state.get({
-    //               path: options.change.max
-    //             })) {
-    //             break
-    //           }
-    //         }
-    //         options.change.amount = startingAmount;
-    //       } else {
-    //         // if current currency is lower than cost of next
-    //         cost.total = cost.next;
-    //       }
-    //     }
-    //     if (options.max.buy) {
-    //       maxBuy();
-    //     } else {
-    //       definedAmount();
-    //     }
-    //   }
-    // }
-    // calculateCost.startingValues();
-    // if (options.inflation.increase) {
-    //   // if price increases with every unit
-    //   calculateCost.inflation();
-    // } else {
-    //   // if price is always the same
-    //   calculateCost.flat();
-    // }
-    // return cost;
   };
 
-  var validateAction = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var validate = false;
-    if (options.prices.total <= state.get({
+  var validateAction = function(options) {
+    if (state.get({
         path: options.cost.currency
-      })) {
-      validate = true;
+      }) >= options.prices.total) {
+      return true;
+    } else {
+      return false;
     }
-    return validate;
   };
 
-  var validateDismantle = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var validate = false;
+  var validateDismantle = function(options) {
     if (state.get({
         path: options.change.target
       }) > 0) {
-      validate = true;
+      return true;
+    } else {
+      return false;
     }
-    return validate;
   };
 
-  var payCost = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var payCost = function(options) {
     state.set({
       path: options.cost.currency,
       value: helper.operator({
@@ -927,38 +740,15 @@ var toaster = (function() {
     });
   };
 
-  var setNewCost = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var setNewCost = function(options) {
+    console.log(options);
     state.set({
       path: options.cost.amount,
       value: options.prices.next
     });
   };
 
-  var storeSpent = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var storeSpent = function(options) {
     state.set({
       path: options.cost.spent,
       value: helper.operator({
@@ -971,15 +761,7 @@ var toaster = (function() {
     });
   };
 
-  var refundCost = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var refundCost = function(options) {
     state.set({
       path: options.cost.currency,
       value: helper.operator({
@@ -994,45 +776,21 @@ var toaster = (function() {
     });
   };
 
-  var clearSpent = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var clearSpent = function(options) {
     state.set({
       path: options.cost.spent,
       value: 0
     });
   };
 
-  var dismantleTarget = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var dismantleTarget = function(options) {
     state.set({
       path: options.change.target,
       value: 0
     });
   };
 
-  var resetCost = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var resetCost = function(options) {
     state.set({
       path: options.cost.amount,
       value: state.get({
@@ -1041,19 +799,7 @@ var toaster = (function() {
     });
   };
 
-  var changeValue = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var changeValue = function(options) {
     var operation = {
       increase: {
         increment: function() {
@@ -1125,14 +871,7 @@ var toaster = (function() {
     operation[options.change.operation][options.change.suboperation]();
   };
 
-  var disableButton = function(override) {
-    var options = {
-      change: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var disableButton = function(options) {
     if (options.change.min != null && options.change.min) {
       if (state.get({
           path: options.change.target
@@ -1152,19 +891,7 @@ var toaster = (function() {
     }
   };
 
-  var feedbackMessage = function(override) {
-    var options = {
-      change: null,
-      cost: null,
-      inflation: null,
-      max: null,
-      prices: null,
-      message: null,
-      button: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
+  var feedbackMessage = function(options) {
     var allStrings = {
       processor: {
         boost: {
@@ -1448,13 +1175,20 @@ var toaster = (function() {
   };
 
   var init = function() {
-    bind();
+    // bind();
   };
 
   return {
     init: init,
     bind: bind,
-    costForMultiple: costForMultiple
+    costForMultiple: costForMultiple,
+    validateAction: validateAction,
+    payCost: payCost,
+    setNewCost: setNewCost,
+    storeSpent: storeSpent,
+    changeValue: changeValue,
+    disableButton: disableButton,
+    feedbackMessage: feedbackMessage
   };
 
 })();
