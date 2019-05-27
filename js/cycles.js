@@ -1,16 +1,16 @@
 var cycles = (function() {
 
   var spin = function() {
-    if (game.get({
+    if (state.get({
         path: "system.cycles.current"
-      }) < game.get({
+      }) < state.get({
         path: "system.cycles.max"
       })) {
-      game.set({
+      state.set({
         path: "system.cycles.current",
         value: helper.operator({
           type: "increase",
-          value: game.get({
+          value: state.get({
             path: "system.cycles.current"
           }),
           by: 1
@@ -20,9 +20,9 @@ var cycles = (function() {
   };
 
   var set = function() {
-    game.set({
+    state.set({
       path: "system.cycles.max",
-      value: (game.get({
+      value: (state.get({
         path: "system.processor.power"
       }) * 10)
     });

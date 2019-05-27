@@ -1,5 +1,7 @@
 var data = (function() {
 
+  var saveName = "TAI.game.dat";
+
   var set = function(key, data) {
     localStorage.setItem(key, data);
   };
@@ -8,7 +10,7 @@ var data = (function() {
     return localStorage.getItem(key);
   };
 
-  var clear = function(key) {
+  var remove = function(key) {
     localStorage.removeItem(key);
   };
 
@@ -17,19 +19,26 @@ var data = (function() {
     if (timestamp.minutes < 10) {
       timestamp.minutes = "0" + timestamp.minutes;
     }
-    game.set({
+    state.set({
       path: "store.timestamp",
       value: timestamp.hours + ":" + timestamp.minutes + ", " + timestamp.date + " " + helper.months(timestamp.month) + ", " + timestamp.year
     });
-    set("TAI.game.dat", JSON.stringify(game.get()));
-    // console.log("game saved");
+    set(saveName, JSON.stringify(state.get()));
+    console.log("game data saved");
+  };
+
+  var wipe = function() {
+    remove(saveName);
+  };
+
+  var load = function() {
+    return JSON.parse(get(saveName));
   };
 
   var restore = function() {
-    if (get("TAI.game.dat")) {
-      console.log("state restored");
-      game.set({
-        full: JSON.parse(get("TAI.game.dat"))
+    if (get(saveName)) {
+      state.set({
+        full: JSON.parse(get(saveName))
       });
       events.restore();
       message.render({
@@ -37,6 +46,7 @@ var data = (function() {
         message: ["===", "saved TAI.dat reloaded", "==="],
         format: "normal"
       });
+      console.log("state restored");
     }
   };
 
@@ -44,7 +54,7 @@ var data = (function() {
     for (var key in tick.get) {
       clearTimeout(tick.get[key]);
     }
-    clear("TAI.game.dat");
+    remove(saveName);
     location.reload();
   };
 
@@ -55,9 +65,10 @@ var data = (function() {
   return {
     init: init,
     save: save,
-    clear: clear,
+    remove: remove,
     set: set,
     get: get,
+    wipe: wipe,
     restore: restore,
     reboot: reboot
   };

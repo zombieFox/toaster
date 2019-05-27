@@ -1,7 +1,7 @@
 var phase = (function() {
 
   var get = function() {
-    return game.get({
+    return state.get({
       path: "phase.current"
     });
   };
@@ -13,11 +13,11 @@ var phase = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    var allPhases = game.get({
+    var allPhases = state.get({
       path: "phase.all"
     });
     if (allPhases.includes(options.phase)) {
-      game.set({
+      state.set({
         path: "phase.current",
         value: options.phase
       });

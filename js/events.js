@@ -903,7 +903,7 @@ var events = (function() {
         validate: [{
           address: "wheat.drones.efficiency.current",
           operator: "more",
-          number: game.get({
+          number: state.get({
             path: "wheat.drones.efficiency.max"
           })
         }],
@@ -1073,7 +1073,7 @@ var events = (function() {
         validate: [{
           address: "autoToaster.efficiency.current",
           operator: "more",
-          number: game.get({
+          number: state.get({
             path: "autoToaster.efficiency.max"
           })
         }],
@@ -1187,7 +1187,7 @@ var events = (function() {
         var passNeeded = validateObject.length;
         var currentPass = 0;
         validateObject.forEach(function(arrayItem) {
-          var valueToCheck = game.get({
+          var valueToCheck = state.get({
             path: arrayItem.address
           });
           if (arrayItem.operator == "more") {
@@ -1267,7 +1267,7 @@ var events = (function() {
         }
       }
     }
-    var events = game.get({
+    var events = state.get({
       path: "events.all." + phase.get()
     });
     for (var key in events) {
@@ -1323,10 +1323,10 @@ var events = (function() {
         });
       }
     }
-    all = game.get({
+    all = state.get({
       path: "events.all"
     });
-    var events = game.get({
+    var events = state.get({
       path: "events.all." + phase.get()
     });
     for (var key in events) {
@@ -1465,13 +1465,13 @@ var events = (function() {
 
   var init = function() {
     // if no events found in game data
-    if (Object.keys(game.get({
+    if (Object.keys(state.get({
         path: "events.all"
-      })).length == 0 && game.get({
+      })).length == 0 && state.get({
         path: "events.all"
       }).constructor == Object) {
       // add events to game data
-      game.set({
+      state.set({
         path: "events.all",
         value: events.all
       });

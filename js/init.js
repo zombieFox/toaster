@@ -1,25 +1,26 @@
-toaster.init();
+control.init();
+// toaster.init();
 data.init();
 milestones.init();
 events.init();
 tick.init();
 boot.init();
 
-// game.set({path:"toast.inventory",value:3000});
-// game.set({path:"toast.lifetime",value:3000});
-// game.set({path:"system.cycles.current",value:3000});
+// state.set({path:"toast.inventory",value:3000});
+// state.set({path:"toast.lifetime",value:3000});
+// state.set({path:"system.cycles.current",value:3000});
 
-// n = variable index
-// a = variable value
-// a_n = the nth term
-// d = the common difference
+// n = index of term
+// a = term
+// a_n = nth term
+// d = the difference between two terms
 // n = the index of the nth term
-// c = constant
+// c = constant - if the difference between each term is equal
 var as = function() {
   var l = 3 // current level
   var m = 80; // money
-  var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
-  var d = game.get({path:"system.processor.cost.increase"}); // difference / price growth rate
+  var c = state.get({path:"system.processor.cost.starting"}); // constant / base price
+  var d = state.get({path:"system.processor.cost.increase"}); // difference / price growth rate
   var n = 10; // the index of the nth term
   var a_n = c + (d * (n - 1)); // the nth term
   var a_1 = a_n - (d * (n - 1)); // constant / first term / c
@@ -68,8 +69,8 @@ var as = function() {
 }
 
 var gs = function() {
-  var c = game.get({path:"system.processor.cost.starting"}); // constant / base price
-  var d = game.get({path:"system.processor.cost.multiply"}); // difference / price growth rate
+  var c = state.get({path:"system.processor.cost.starting"}); // constant / base price
+  var d = state.get({path:"system.processor.cost.multiply"}); // difference / price growth rate
   // d = 1.05;
   var n = 10; // the index of the nth term
   var a_n = c * (Math.pow(d, (n - 1))); // the nth term
@@ -92,16 +93,17 @@ var gs = function() {
 as();
 console.log("---");
 gs();
+console.log("------------------------------------------------------------------");
 
-// var i = game.get({path:"toast.inventory"}); // the amount of currency owned
-// var k = game.get({path:"system.processor.power"}); // the number of generators currently owned
-// var b = game.get({path:"system.processor.cost.toast"}); // the base price
+// var i = state.get({path:"toast.inventory"}); // the amount of currency owned
+// var k = state.get({path:"system.processor.power"}); // the number of generators currently owned
+// var b = state.get({path:"system.processor.cost.toast"}); // the base price
 
 // b * ((Math.pow(d, k)) - (Math.pow(d, n) - 1) / (d - 1))
 
-// var currentAmount = game.get({path:"system.processor.power"});
+// var currentAmount = state.get({path:"system.processor.power"});
 // var unitsToAdd = 5;
-// var increase = game.get({path:"system.processor.cost.increase"});
+// var increase = state.get({path:"system.processor.cost.increase"});
 // // S = Starting number
 // // M = How many are you going to buy
 // // I = How much it increments per buy

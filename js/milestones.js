@@ -1,14 +1,14 @@
 var milestones = (function() {
 
   var make = function() {
-    var baseSteps = game.get({
+    var baseSteps = state.get({
       path: "milestones.steps.base"
     });
-    var maxStep = game.get({
+    var maxStep = state.get({
       path: "milestones.steps.max"
     });
     var milestone = [];
-    if (game.get({
+    if (state.get({
         path: "milestones.steps.all",
       }).length == 0) {
       baseSteps.forEach(function(arrayItem) {
@@ -29,7 +29,7 @@ var milestones = (function() {
         }
       });
       milestone = helper.sortObject(milestone, "count");
-      game.set({
+      state.set({
         path: "milestones.steps.all",
         value: milestone
       })
@@ -37,7 +37,7 @@ var milestones = (function() {
   };
 
   var check = function() {
-    var allMilestones = game.get({
+    var allMilestones = state.get({
       path: "milestones"
     });
     allMilestones.steps.all.forEach(function(arrayItem, index) {
@@ -45,7 +45,7 @@ var milestones = (function() {
       var step = arrayItem;
       for (var key in step.check) {
         // console.log(allMilestones.address[key]);
-        var valueToCheck = game.get({
+        var valueToCheck = state.get({
           path: allMilestones.address[key]
         });
         if (valueToCheck >= step.count && !step.check[key]) {

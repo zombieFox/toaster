@@ -1,6 +1,6 @@
 var tick = (function() {
 
-  var state = {};
+  var current = {};
 
   var set = function(override) {
     var options = {
@@ -11,16 +11,16 @@ var tick = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    state[options.tickName] = window.setTimeout(function() {
+    current[options.tickName] = window.setTimeout(function() {
       options.func();
       set(options);
-    }, game.get({
+    }, state.get({
       path: options.interval
     }));
   };
 
   var get = function() {
-    return state;
+    return current;
   };
 
   var init = function() {

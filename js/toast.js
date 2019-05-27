@@ -4,28 +4,28 @@ var toast = (function() {
     if (helper.operator({
         type: "divide",
         value: amount,
-        by: game.get({
+        by: state.get({
           path: "wheat.consume.rate"
         })
-      }) <= game.get({
+      }) <= state.get({
         path: "wheat.inventory.current"
       })) {
       wheat.consume(amount);
-      game.set({
+      state.set({
         path: "toast.lifetime",
         value: helper.operator({
           type: "increase",
-          value: game.get({
+          value: state.get({
             path: "toast.lifetime"
           }),
           by: amount
         })
       });
-      game.set({
+      state.set({
         path: "toast.inventory",
         value: helper.operator({
           type: "increase",
-          value: game.get({
+          value: state.get({
             path: "toast.inventory"
           }),
           by: amount

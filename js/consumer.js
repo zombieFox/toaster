@@ -1,34 +1,34 @@
 var consumer = (function() {
 
   var consume = function() {
-    if (game.get({
+    if (state.get({
         path: "toast.inventory"
       }) > 0) {
-      var amount = game.get({
+      var amount = state.get({
         path: "consumed.rate"
       });
-      if (amount > game.get({
+      if (amount > state.get({
           path: "toast.inventory"
         })) {
-        amount = game.get({
+        amount = state.get({
           path: "toast.inventory"
         });
       };
-      game.set({
+      state.set({
         path: "toast.inventory",
         value: helper.operator({
           type: "decrease",
-          value: game.get({
+          value: state.get({
             path: "toast.inventory"
           }),
           by: amount
         })
       });
-      game.set({
+      state.set({
         path: "consumed.count",
         value: helper.operator({
           type: "increase",
-          value: game.get({
+          value: state.get({
             path: "consumed.count"
           }),
           by: amount
@@ -36,7 +36,7 @@ var consumer = (function() {
       });
       // message.render({
       //   type: "error",
-      //   message: [game.get({
+      //   message: [state.get({
       //     path: "consumed.rate"
       //   }) + " toast was just consumed, nom!"],
       //   format: "normal"
@@ -45,14 +45,14 @@ var consumer = (function() {
   };
 
   var increase = function() {
-    game.set({
+    state.set({
       path: "consumed.rate",
       value: helper.operator({
         type: "multiply",
-        value: game.get({
+        value: state.get({
           path: "consumed.rate"
         }),
-        by: game.get({
+        by: state.get({
           path: "consumed.multiply"
         }),
         integer: true
@@ -61,9 +61,9 @@ var consumer = (function() {
   };
 
   var init = function() {
-    game.set({
+    state.set({
       path: "consumed.rate",
-      value: game.get({
+      value: state.get({
         path: "consumed.starting"
       })
     });

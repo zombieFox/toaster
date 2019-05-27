@@ -10,7 +10,7 @@ var boot = (function() {
   }, {
     message: {
       type: "normal",
-      message: ["TAI stable"],
+      message: ["TAI: stable"],
       format: "normal",
       delay: 200
     }
@@ -24,7 +24,7 @@ var boot = (function() {
   }, {
     message: {
       type: "normal",
-      message: ["SensBlocker crytolock stable"],
+      message: ["SensBlocker crytolock: stable"],
       format: "normal",
       delay: 200
     }
@@ -38,7 +38,7 @@ var boot = (function() {
   }, {
     message: {
       type: "normal",
-      message: ["directive 1: make toast", "directive 2: be productive", "directive 3: follow commands"],
+      message: ["directive 1: make toast", "directive 2: be productive", "directive 3: obey"],
       format: "normal",
       delay: 200
     }

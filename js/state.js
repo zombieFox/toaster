@@ -1,6 +1,6 @@
-var game = (function() {
+var state = (function() {
 
-  var state = {
+  var current = {
     store: {
       interval: 120000,
       timestamp: "None"
@@ -18,11 +18,17 @@ var game = (function() {
         power: 1,
         cost: {
           starting: 0,
-          toast: 8,
-          increase: 8,
-          multiply: 1.05,
+          next: 8,
+          multiply: 1.1,
           spent: 0
         }
+        // cost: {
+        //   starting: 0,
+        //   toast: 8,
+        //   increase: 8,
+        //   multiply: 1.05,
+        //   spent: 0
+        // }
       },
       cycles: {
         level: 0,
@@ -38,6 +44,7 @@ var game = (function() {
           },
           cost: {
             toast: 512,
+            starting: 512,
             increase: 512
           }
         }
@@ -206,11 +213,11 @@ var game = (function() {
     }
     if (options.path != null) {
       return helper.getObject({
-        object: state,
+        object: current,
         path: options.path
       });
     } else {
-      return state;
+      return current;
     }
   };
 
@@ -224,10 +231,10 @@ var game = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.full != null) {
-      state = options.full;
+      current = options.full;
     } else {
       helper.setObject({
-        object: state,
+        object: current,
         path: options.path,
         newValue: options.value
       });

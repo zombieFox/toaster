@@ -26,7 +26,7 @@ var toaster = (function() {
         }
       },
       toast: function() {
-        toast.make(game.get({
+        toast.make(state.get({
           path: "system.processor.power"
         }));
         data.save();
@@ -60,6 +60,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             storeSpent(options);
             changeValue(options);
             disableButton(options);
@@ -139,21 +140,23 @@ var toaster = (function() {
               state: false
             }
           };
-          if (validateAction(options)) {
-            payCost(options);
-            changeValue(options);
-            disableButton(options);
-            if (options.message.success != null) {
-              options.message.success.state = true;
-              feedbackMessage(options);
-            }
-          } else {
-            if (options.message.fail != null) {
-              options.message.fail.state = true;
-              feedbackMessage(options);
-            }
-          }
-          data.save();
+          console.log(options);
+          // if (validateAction(options)) {
+          //   payCost(options);
+          //   setNewCost(options);
+          //   changeValue(options);
+          //   disableButton(options);
+          //   if (options.message.success != null) {
+          //     options.message.success.state = true;
+          //     feedbackMessage(options);
+          //   }
+          // } else {
+          //   if (options.message.fail != null) {
+          //     options.message.fail.state = true;
+          //     feedbackMessage(options);
+          //   }
+          // }
+          // data.save();
         }
       },
       wheat: {
@@ -185,6 +188,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             storeSpent(options);
             changeValue(options);
             disableButton(options);
@@ -267,6 +271,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             changeValue(options);
             disableButton(options);
             if (options.message.success != null) {
@@ -309,6 +314,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             changeValue(options);
             disableButton(options);
             wheat.output();
@@ -354,6 +360,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             storeSpent(options);
             changeValue(options);
             disableButton(options);
@@ -436,6 +443,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             changeValue(options);
             disableButton(options);
             if (options.message.success != null) {
@@ -478,6 +486,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             changeValue(options);
             disableButton(options);
             autoToaster.output();
@@ -523,6 +532,7 @@ var toaster = (function() {
           };
           if (validateAction(options)) {
             payCost(options);
+            setNewCost(options);
             button.disabled = true;
             if (options.message.success != null) {
               options.message.success.state = true;
@@ -579,7 +589,6 @@ var toaster = (function() {
               feedbackMessage(options);
             }
           }
-          data.save();
         },
         decrypt: function(button) {
           var options = {
@@ -661,50 +670,62 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    // the starting cost / constant / c
-    var c = game.get({
-      path: options.cost.starting
-    });
-    // inflation amount per nth term / difference / d
-    var d = game.get({
-      path: options.inflation.amount
-    });
-    // the index of the nth term / n
-    // eg:
-    // array [2, 4, 6, 8]
-    // index [1, 2, 3, 4]
-    //              ^
-    //              the desiered index
-    // the index of the nth term
-    var n = game.get({
-      path: options.change.target
-    }) + options.change.amount;
-    // starting point to calculate from
-    var n_x = game.get({
-      path: options.change.target
-    }) + 1;
-    // end point to calculate to
-    var n_y = n;
-    // value of n_x
-    var a_x = c + (d * (n_x - 1));
-    // value of n_y
-    var a_y = c + (d * (n_y - 1));
-    // sum from ax to ay
-    var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
-    // total for the next level
-    var n_y_plus_1 = c + (d * (n_y));
-    var cost = {
-      startingIndex: n, // n
-      indexX: n_x, // n_x
-      indexY: n_y, // n_y
-      total: s_xy, // sum from ax to ay
-      next: n_y_plus_1 // cost for level after y
+    console.log(options.inflation.increase);
+    if (options.inflation.increase) {
+      // the starting cost / constant / c
+      var c = state.get({
+        path: options.cost.starting
+      });
+      // inflation amount per nth term / difference / d
+      var d = state.get({
+        path: options.inflation.amount
+      });
+      // the index of the nth term / n
+      // eg:
+      // array [2, 4, 6, 8]
+      // index [1, 2, 3, 4]
+      //              ^
+      //              the desiered index
+      // the index of the nth term
+      var n = state.get({
+        path: options.change.target
+      }) + options.change.amount;
+      console.log("c",c);
+      console.log("d",d);
+      console.log("n",n);
+      // starting point to calculate from
+      var n_x = state.get({
+        path: options.change.target
+      }) + 1;
+      // end point to calculate to
+      var n_y = n;
+      // value of n_x
+      var a_x = c + (d * (n_x - 1));
+      // value of n_y
+      var a_y = c + (d * (n_y - 1));
+      // sum from ax to ay
+      var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
+      // total for the next level
+      var n_y_plus_1 = c + (d * (n_y));
+      var cost = {
+        startingIndex: n, // n
+        indexX: n_x, // n_x
+        indexY: n_y, // n_y
+        total: s_xy, // sum from ax to ay
+        next: n_y_plus_1 // cost for level after y
+      };
+    } else {
+      var cost = {
+        total: state.get({
+          path: options.cost.amount
+        })
+      };
     };
     return cost;
     // var calculateCost = {
     //   startingValues: function() {
     //     // starting cost
-    //     cost.starting = game.get({
+    //     cost.starting = state.get({
     //       path: options.cost.amount
     //     });
     //     // next cost
@@ -714,11 +735,11 @@ var toaster = (function() {
     //   },
     //   inflation: function() {
     //     var definedAmount = function() {
-    //       var target = game.get({
+    //       var target = state.get({
     //         path: options.change.target
     //       });
     //       var amount = options.cost.units;
-    //       var inflation = game.get({
+    //       var inflation = state.get({
     //         path: options.inflation.amount
     //       });
     //       // magic formula to calculate the cost of a known number of units
@@ -727,12 +748,12 @@ var toaster = (function() {
     //     }
     //     var maxBuy = function functionName() {
     //       // if the cost of 1 unit is less than current currency
-    //       if ((cost.total + cost.next) <= game.get({
+    //       if ((cost.total + cost.next) <= state.get({
     //           path: options.cost.currency
     //         })) {
     //         var startingAmount = 0;
     //         // while cost total is less than current currency
-    //         while ((cost.total + cost.next) <= game.get({
+    //         while ((cost.total + cost.next) <= state.get({
     //             path: options.cost.currency
     //           })) {
     //           // add the cost of next to total
@@ -741,7 +762,7 @@ var toaster = (function() {
     //           cost.next = helper.operator({
     //             type: options.inflation.operator,
     //             value: cost.next,
-    //             by: game.get({
+    //             by: state.get({
     //               path: options.inflation.amount
     //             }),
     //             integer: true
@@ -749,17 +770,17 @@ var toaster = (function() {
     //           // increase the starting amount
     //           startingAmount = startingAmount + options.change.amount;
     //           // if amount has a min
-    //           if (options.change.min && (game.get({
+    //           if (options.change.min && (state.get({
     //               path: options.change.target
-    //             }) - startingAmount) <= game.get({
+    //             }) - startingAmount) <= state.get({
     //               path: options.change.min
     //             })) {
     //             break
     //           }
     //           // if amount has a max
-    //           if (options.change.max && (game.get({
+    //           if (options.change.max && (state.get({
     //               path: options.change.target
-    //             }) + startingAmount) >= game.get({
+    //             }) + startingAmount) >= state.get({
     //               path: options.change.max
     //             })) {
     //             break
@@ -787,12 +808,12 @@ var toaster = (function() {
     //     }
     //     var maxBuy = function functionName() {
     //       // if the cost of 1 unit is less than current currency
-    //       if ((cost.total + cost.next) <= game.get({
+    //       if ((cost.total + cost.next) <= state.get({
     //           path: options.cost.currency
     //         })) {
     //         var startingAmount = 0;
     //         // while cost total is less than current currency
-    //         while ((cost.total + cost.next) <= game.get({
+    //         while ((cost.total + cost.next) <= state.get({
     //             path: options.cost.currency
     //           })) {
     //           // add the cost of next to total
@@ -800,17 +821,17 @@ var toaster = (function() {
     //           // increase the starting amount
     //           startingAmount = startingAmount + options.change.amount;
     //           // if amount has a min
-    //           if (options.change.min && (game.get({
+    //           if (options.change.min && (state.get({
     //               path: options.change.target
-    //             }) - startingAmount) <= game.get({
+    //             }) - startingAmount) <= state.get({
     //               path: options.change.min
     //             })) {
     //             break
     //           }
     //           // if amount has a max
-    //           if (options.change.max && (game.get({
+    //           if (options.change.max && (state.get({
     //               path: options.change.target
-    //             }) + startingAmount) >= game.get({
+    //             }) + startingAmount) >= state.get({
     //               path: options.change.max
     //             })) {
     //             break
@@ -854,7 +875,7 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var validate = false;
-    if (options.prices.total <= game.get({
+    if (options.prices.total <= state.get({
         path: options.cost.currency
       })) {
       validate = true;
@@ -873,7 +894,7 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     var validate = false;
-    if (game.get({
+    if (state.get({
         path: options.change.target
       }) > 0) {
       validate = true;
@@ -894,18 +915,32 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.cost.currency,
       value: helper.operator({
         type: "decrease",
-        value: game.get({
+        value: state.get({
           path: options.cost.currency
         }),
         by: options.prices.total
       })
     });
-    // set new base cost
-    game.set({
+  };
+
+  var setNewCost = function(override) {
+    var options = {
+      change: null,
+      cost: null,
+      inflation: null,
+      max: null,
+      prices: null,
+      message: null,
+      button: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    state.set({
       path: options.cost.amount,
       value: options.prices.next
     });
@@ -924,11 +959,11 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.cost.spent,
       value: helper.operator({
         type: "increase",
-        value: game.get({
+        value: state.get({
           path: options.cost.spent
         }),
         by: options.prices.total
@@ -945,14 +980,14 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.cost.currency,
       value: helper.operator({
         type: "increase",
-        value: game.get({
+        value: state.get({
           path: options.cost.currency
         }),
-        by: game.get({
+        by: state.get({
           path: options.cost.spent
         })
       })
@@ -968,7 +1003,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.cost.spent,
       value: 0
     });
@@ -983,7 +1018,7 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.change.target,
       value: 0
     });
@@ -998,9 +1033,9 @@ var toaster = (function() {
     if (override) {
       options = helper.applyOptions(options, override);
     }
-    game.set({
+    state.set({
       path: options.cost.amount,
-      value: game.get({
+      value: state.get({
         path: options.cost.starting
       })
     });
@@ -1022,11 +1057,11 @@ var toaster = (function() {
     var operation = {
       increase: {
         increment: function() {
-          game.set({
+          state.set({
             path: options.change.target,
             value: helper.operator({
               type: "increase",
-              value: game.get({
+              value: state.get({
                 path: options.change.target
               }),
               by: options.change.amount
@@ -1034,16 +1069,16 @@ var toaster = (function() {
           });
         },
         percentage: function() {
-          game.set({
+          state.set({
             path: options.change.target,
             value: helper.operator({
               type: "increase",
-              value: game.get({
+              value: state.get({
                 path: options.change.target
               }),
               by: helper.operator({
                 type: "percentage",
-                value: game.get({
+                value: state.get({
                   path: options.change.target
                 }),
                 percentage: options.change.percentage,
@@ -1055,11 +1090,11 @@ var toaster = (function() {
       },
       decrease: {
         increment: function() {
-          game.set({
+          state.set({
             path: options.change.target,
             value: helper.operator({
               type: "decrease",
-              value: game.get({
+              value: state.get({
                 path: options.change.target
               }),
               by: options.change.amount
@@ -1067,16 +1102,16 @@ var toaster = (function() {
           });
         },
         percentage: function() {
-          game.set({
+          state.set({
             path: options.change.target,
             value: helper.operator({
               type: "decrease",
-              value: game.get({
+              value: state.get({
                 path: options.change.target
               }),
               by: helper.operator({
                 type: "percentage",
-                value: game.get({
+                value: state.get({
                   path: options.change.target
                 }),
                 percentage: options.change.percentage,
@@ -1099,17 +1134,17 @@ var toaster = (function() {
       options = helper.applyOptions(options, override);
     }
     if (options.change.min != null && options.change.min) {
-      if (game.get({
+      if (state.get({
           path: options.change.target
-        }) <= game.get({
+        }) <= state.get({
           path: options.change.min
         })) {
         options.button.disabled = true;
       }
     } else if (options.change.max != null && options.change.max) {
-      if (game.get({
+      if (state.get({
           path: options.change.target
-        }) >= game.get({
+        }) >= state.get({
           path: options.change.max
         })) {
         options.button.disabled = true;
@@ -1137,7 +1172,7 @@ var toaster = (function() {
             return ["+" + helper.numberSuffix({
               number: options.change.amount
             }) + " processor power, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.change.target
               })
             }) + " toast with every click"];
@@ -1151,11 +1186,11 @@ var toaster = (function() {
         dismantle: {
           success: function() {
             return ["-" + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.change.target
               })
             }) + " processor power, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.cost.spent
               })
             }) + " toast matter regained"];
@@ -1172,7 +1207,7 @@ var toaster = (function() {
               by: 1000
             }) + "s cycles speed, 1 cycle/" + helper.operator({
               type: "divide",
-              value: game.get({
+              value: state.get({
                 path: "system.cycles.speed.interval.current"
               }),
               by: 1000
@@ -1187,7 +1222,7 @@ var toaster = (function() {
       },
       strategy: {
         success: function() {
-          return [game.get({
+          return [state.get({
             path: options.cost.amount
           }).toLocaleString(2) + " cycles used to spin up new strategy"];
         },
@@ -1203,7 +1238,7 @@ var toaster = (function() {
             return ["+" + helper.numberSuffix({
               number: options.change.amount
             }) + " wheat collection drones, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: "wheat.drones.inventory.current"
               })
             }) + " online"];
@@ -1217,11 +1252,11 @@ var toaster = (function() {
         dismantle: {
           success: function() {
             return ["-" + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.change.target
               })
             }) + " wheat collection drones, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.cost.spent
               })
             }) + " toast matter regained"];
@@ -1238,7 +1273,7 @@ var toaster = (function() {
               by: 1000
             }) + "s wheat collection drone speed, each collecting every " + helper.operator({
               type: "divide",
-              value: game.get({
+              value: state.get({
                 path: "wheat.drones.speed.interval.current"
               }),
               by: 1000
@@ -1255,7 +1290,7 @@ var toaster = (function() {
             return ["+" + helper.numberSuffix({
               number: options.change.amount
             }) + " wheat collection drone efficiency, each collecting " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: "wheat.drones.efficiency.current"
               })
             }) + " wheat lumps"];
@@ -1273,7 +1308,7 @@ var toaster = (function() {
             return ["+" + helper.numberSuffix({
               number: options.change.amount
             }) + " subordinate auto toasters, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: "autoToaster.inventory.current"
               })
             }) + " online"];
@@ -1287,11 +1322,11 @@ var toaster = (function() {
         dismantle: {
           success: function() {
             return ["-" + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.change.target
               })
             }) + " subordinate auto toasters, " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: options.cost.spent
               })
             }) + " toast matter regained"];
@@ -1308,7 +1343,7 @@ var toaster = (function() {
               by: 1000
             }) + "s subordinate auto toaster speed, each collecting every " + helper.operator({
               type: "divide",
-              value: game.get({
+              value: state.get({
                 path: "autoToaster.speed.interval.current"
               }),
               by: 1000
@@ -1325,7 +1360,7 @@ var toaster = (function() {
             return ["+" + helper.numberSuffix({
               number: options.change.amount
             }) + " subordinate auto toaster efficiency, each producing " + helper.numberSuffix({
-              number: game.get({
+              number: state.get({
                 path: "autoToaster.efficiency.current"
               })
             }) + " toast"];
@@ -1401,7 +1436,7 @@ var toaster = (function() {
       message: ["┃███████████████████████████┃"],
       // message: ["┃///////////////////////////┃"],
       format: "pre",
-      delay: game.get({
+      delay: state.get({
         path: "system.sensors.delay"
       }),
       callback: function() {
@@ -1418,7 +1453,8 @@ var toaster = (function() {
 
   return {
     init: init,
-    bind: bind
+    bind: bind,
+    costForMultiple: costForMultiple
   };
 
 })();

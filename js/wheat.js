@@ -1,14 +1,14 @@
 var wheat = (function() {
 
   var output = function() {
-    game.set({
+    state.set({
       path: "wheat.drones.inventory.output",
       value: helper.operator({
         type: "multiply",
-        value: game.get({
+        value: state.get({
           path: "wheat.drones.inventory.current"
         }),
-        by: game.get({
+        by: state.get({
           path: "wheat.drones.efficiency.current"
         })
       })
@@ -16,14 +16,14 @@ var wheat = (function() {
   };
 
   var make = function() {
-    game.set({
+    state.set({
       path: "wheat.inventory.current",
       value: helper.operator({
         type: "increase",
-        value: game.get({
+        value: state.get({
           path: "wheat.inventory.current"
         }),
-        by: game.get({
+        by: state.get({
           path: "wheat.drones.inventory.output"
         })
       })
@@ -33,16 +33,16 @@ var wheat = (function() {
   var consume = function(amount) {
     var amount = helper.operator({
       type: "multiply",
-      value: game.get({
+      value: state.get({
         path: "wheat.consume.rate"
       }),
       by: amount
     });
-    game.set({
+    state.set({
       path: "wheat.inventory.current",
       value: helper.operator({
         type: "decrease",
-        value: game.get({
+        value: state.get({
           path: "wheat.inventory.current"
         }),
         by: amount
@@ -52,36 +52,36 @@ var wheat = (function() {
 
   var decrease = function() {
     // decrease wheat consume
-    if (game.get({
+    if (state.get({
         path: "wheat.consume.rate"
       }) > 8) {
-      game.set({
+      state.set({
         path: "wheat.consume.rate",
         value: helper.operator({
           type: "decrease",
-          value: game.get({
+          value: state.get({
             path: "wheat.consume.rate"
           }),
-          by: game.get({
+          by: state.get({
             path: "wheat.consume.decrease"
           }),
         })
       });
     } else {
-      game.set({
+      state.set({
         path: "wheat.consume.rate",
         value: 1
       });
     }
     // increase strategy cost
-    game.set({
+    state.set({
       path: "wheat.consume.cost.cycles",
       value: helper.operator({
         type: "increase",
-        value: game.get({
+        value: state.get({
           path: "wheat.consume.cost.cycles"
         }),
-        by: game.get({
+        by: state.get({
           path: "wheat.consume.cost.increase"
         })
       })
@@ -89,9 +89,9 @@ var wheat = (function() {
   };
 
   var init = function() {
-    game.set({
+    state.set({
       path: "wheat.consume.rate",
-      value: game.get({
+      value: state.get({
         path: "wheat.consume.starting"
       })
     });

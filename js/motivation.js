@@ -161,7 +161,7 @@ var motivation = (function() {
       format: "normal"
     });
     var motivationTime = Math.round(Math.random() * 200000);
-    console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
+    // console.log("motivation in: " + Math.round(motivationTime / 1000) + "s");
     clearInterval(nextMotivation);
     nextMotivation = setInterval(render, motivationTime);
   };

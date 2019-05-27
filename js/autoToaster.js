@@ -1,14 +1,14 @@
 var autoToaster = (function() {
 
   var output = function() {
-    game.set({
+    state.set({
       path: "autoToaster.inventory.output",
       value: helper.operator({
         type: "multiply",
-        value: game.get({
+        value: state.get({
           path: "autoToaster.inventory.current"
         }),
-        by: game.get({
+        by: state.get({
           path: "autoToaster.efficiency.current"
         }),
         integer: true
@@ -17,9 +17,9 @@ var autoToaster = (function() {
   };
 
   var make = function() {
-    var amount = game.get({
+    var amount = state.get({
       path: "autoToaster.inventory.current"
-    }) * game.get({
+    }) * state.get({
       path: "autoToaster.efficiency.current"
     });
     toast.make(amount);
