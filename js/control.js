@@ -1,5 +1,7 @@
 var control = (function() {
 
+  var _currentOptions = null;
+
   var _allControl = [{
     element: helper.e(".control-toast"),
     func: function() {
@@ -10,109 +12,85 @@ var control = (function() {
   }, {
     element: helper.e(".control-processor-boost-1"),
     func: function() {
-      var options = new ProcessorBoostOptions();
-      options.change.amount = 1;
-      options.cost.units = 1;
-      options.button = this.element;
-      options.prices = toaster.costForMultiple(options);
-      console.log(options.prices);
-      if (toaster.validateAction(options)) {
-        toaster.payCost(options);
-        toaster.setNewCost(options);
-        toaster.storeSpent(options);
-        toaster.changeValue(options);
-        toaster.disableButton(options);
+      var _currentOptions = new ProcessorBoostOptions();
+      _currentOptions.change.amount = 1;
+      _currentOptions.cost.units = 1;
+      _currentOptions.button = this.element;
+      _currentOptions = toaster.costForMultiple(_currentOptions);
+      if (toaster.validateAction(_currentOptions)) {
+        toaster.payCost(_currentOptions);
+        toaster.setNewCost(_currentOptions);
+        toaster.storeSpent(_currentOptions);
+        toaster.changeValue(_currentOptions);
+        toaster.disableButton(_currentOptions);
         cycles.set();
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.success != null) {
+          _currentOptions.message.success.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.fail != null) {
+          _currentOptions.message.fail.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       }
+      console.log(_currentOptions);
+      _currentOptions = null;
     }
   }, {
     element: helper.e(".control-processor-boost-10"),
     func: function() {
-      var options = new ProcessorBoostOptions();
-      options.change.amount = 10;
-      options.cost.units = 10;
-      options.button = this.element;
-      options.prices = toaster.costForMultiple(options);
-      console.log(options.prices);
-      if (toaster.validateAction(options)) {
-        toaster.payCost(options);
-        toaster.setNewCost(options);
-        toaster.storeSpent(options);
-        toaster.changeValue(options);
-        toaster.disableButton(options);
+      var _currentOptions = new ProcessorBoostOptions();
+      _currentOptions.change.amount = 5;
+      _currentOptions.cost.units = 5;
+      _currentOptions.button = this.element;
+      _currentOptions = toaster.costForMultiple(_currentOptions);
+      if (toaster.validateAction(_currentOptions)) {
+        toaster.payCost(_currentOptions);
+        toaster.setNewCost(_currentOptions);
+        toaster.storeSpent(_currentOptions);
+        toaster.changeValue(_currentOptions);
+        toaster.disableButton(_currentOptions);
         cycles.set();
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.success != null) {
+          _currentOptions.message.success.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.fail != null) {
+          _currentOptions.message.fail.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       }
-    }
-  }, {
-    element: helper.e(".control-processor-boost-100"),
-    func: function() {
-      var options = new ProcessorBoostOptions();
-      options.change.amount = 100;
-      options.cost.units = 100;
-      options.button = this.element;
-      options.prices = toaster.costForMultiple(options);
-      console.log(options.prices);
-      if (toaster.validateAction(options)) {
-        toaster.payCost(options);
-        toaster.setNewCost(options);
-        toaster.storeSpent(options);
-        toaster.changeValue(options);
-        toaster.disableButton(options);
-        cycles.set();
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          toaster.feedbackMessage(options);
-        }
-      } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          toaster.feedbackMessage(options);
-        }
-      }
+      console.log(_currentOptions);
+      _currentOptions = null;
     }
   }, {
     element: helper.e(".control-processor-boost-max"),
     func: function() {
-      var options = new ProcessorBoostOptions();
-      options.max.buy = true;
-      options.button = this.element;
-      options.prices = toaster.costForMultiple(options);
-      console.log(options.prices);
-      if (toaster.validateAction(options)) {
-        toaster.payCost(options);
-        toaster.setNewCost(options);
-        toaster.storeSpent(options);
-        toaster.changeValue(options);
-        toaster.disableButton(options);
+      var _currentOptions = new ProcessorBoostOptions();
+      _currentOptions.max.buy = true;
+      _currentOptions.button = this.element;
+      _currentOptions.prices = toaster.costForMultiple(_currentOptions);
+      if (toaster.validateAction(_currentOptions)) {
+        toaster.payCost(_currentOptions);
+        toaster.setNewCost(_currentOptions);
+        toaster.storeSpent(_currentOptions);
+        toaster.changeValue(_currentOptions);
+        toaster.disableButton(_currentOptions);
         cycles.set();
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.success != null) {
+          _currentOptions.message.success.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.fail != null) {
+          _currentOptions.message.fail.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       }
+      console.log(_currentOptions);
+      _currentOptions = null;
     }
   }, {
     element: helper.e(".control-processor-boost-dismantle"),
@@ -161,20 +139,23 @@ var control = (function() {
     };
     this.cost = {
       starting: "system.processor.cost.starting",
-      units: null,
       currency: "toast.inventory",
       amount: "system.processor.cost.toast",
-      spent: "system.processor.cost.spent"
+      spent: "system.processor.cost.spent",
+      units: null,
+      price: {
+        total: null,
+        next: null
+      }
     };
     this.inflation = {
-      increase: true,
       operator: "increase",
-      amount: "system.processor.cost.increase"
+      amount: "system.processor.cost.increase",
+      increase: true
     };
     this.max = {
       buy: false
     };
-    this.prices = null;
     this.message = {
       success: {
         path: "processor.boost.success",
@@ -200,12 +181,15 @@ var control = (function() {
     };
     this.cost = {
       starting: "system.processor.cost.starting",
-      units: null,
       currency: "toast.inventory",
       amount: "system.processor.cost.toast",
-      spent: "system.processor.cost.spent"
+      spent: "system.processor.cost.spent",
+      units: null,
+      price: {
+        total: null,
+        next: null
+      }
     };
-    this.prices = null;
     this.message = {
       success: {
         path: "processor.dismantle.success",

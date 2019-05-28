@@ -676,81 +676,82 @@ var toaster = (function() {
     }
   };
 
+  var getNthXYSum = function(override) {
+    var options = {
+      constant: null,
+      difference: null,
+      nthX: null,
+      nthY: null
+    }
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    if (options.constant != null && options.difference != null && options.nthX != null && options.nthY != null) {
+      // value of n_x
+      var a_x = getNthValue({
+        nth: options.nthX,
+        constant: options.constant,
+        difference: options.difference
+      });
+      // value of n_y
+      var a_y = getNthValue({
+        nth: options.nthY,
+        constant: options.constant,
+        difference: options.difference
+      });
+      return (((options.nthY + 1) - options.nthX) * (a_x + a_y)) / 2;
+    } else {
+      return false;
+    }
+  };
+
   var costForMultiple = function(options) {
     if (options.inflation.increase) {
-      if (options.max.buy) {
-        // the starting cost / constant / c
-        var c = state.get({
-          path: options.cost.starting
-        });
-        // inflation amount per nth term / difference / d
-        var d = state.get({
-          path: options.inflation.amount
-        });
-        // the index of the nth term / n
-        // eg:
-        // array [3, 6, 9, 12]
-        // index [1, 2, 3, 4]
-        //              ^
-        //              the desiered index
-        // the index of the nth term
-        var n = state.get({
-          path: options.change.target
-        }) + options.change.amount;
-      } else {
-        // the starting cost / constant / c
-        var c = state.get({
-          path: options.cost.starting
-        });
-        // inflation amount per nth term / difference / d
-        var d = state.get({
-          path: options.inflation.amount
-        });
-        // the index of the nth term / n
-        // eg:
-        // array [3, 6, 9, 12]
-        // index [1, 2, 3, 4]
-        //              ^
-        //              the desiered index
-        // the index of the nth term
-        var n = state.get({
-          path: options.change.target
-        }) + options.change.amount;
-        // starting point to calculate from
-        var n_x = state.get({
-          path: options.change.target
-        }) + 1;
-        // end point to calculate to
-        var n_y = n;
-        // value of n_x
-        var a_x = c + (d * (n_x - 1));
-        // value of n_y
-        var a_y = c + (d * (n_y - 1));
-        // sum from ax to ay
-        var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
-        // total for the next level
-        var n_y_plus_1 = c + (d * (n_y));
-        var cost = {
-          indexX: n_x, // n_x
-          indexY: n_y, // n_y
-          total: s_xy, // sum from ax to ay
-          next: n_y_plus_1 // cost for level after y
-        };
-      }
+      // if (options.max.buy) {} else {
+      // the starting cost / constant / c
+      var c = state.get({
+        path: options.cost.starting
+      });
+      // inflation amount per nth term / difference / d
+      var d = state.get({
+        path: options.inflation.amount
+      });
+      // starting nth
+      var n_x = state.get({
+        path: options.change.target
+      }) + 1;
+      // the desiered nth
+      var n_y = state.get({
+        path: options.change.target
+      }) + options.change.amount;
+      // sum from ax to ay
+      var s_xy = getNthXYSum({
+        constant: c,
+        difference: d,
+        nthX: n_x,
+        nthY: n_y
+      });
+      // total for the next level
+      var n_z = getNthValue({
+        nth: n_y + 1,
+        constant: c,
+        difference: d
+      });
+      options.cost.price.total = s_xy; // sum for ax to ay
+      options.cost.price.next = n_z; // cost for level after y
+      // }
     } else {
-      var cost = {
-        total: state.get({
-          path: options.cost.amount
-        })
-      };
+      options.cost.price.total = state.get({
+        path: options.cost.amount
+      });
     };
-    return cost;
+    return options;
   };
 
   var validateAction = function(options) {
     if (state.get({
         path: options.cost.currency
-      }) >= options.prices.total) {
+      }) >= options.cost.price.total) {
       return true;
     } else {
       return false;
@@ -775,7 +776,7 @@ var toaster = (function() {
         value: state.get({
           path: options.cost.currency
         }),
-        by: options.prices.total
+        by: options.cost.price.total
       })
     });
   };
@@ -784,7 +785,7 @@ var toaster = (function() {
     console.log(options);
     state.set({
       path: options.cost.amount,
-      value: options.prices.next
+      value: options.cost.price.next
     });
   };
 
@@ -796,7 +797,7 @@ var toaster = (function() {
         value: state.get({
           path: options.cost.spent
         }),
-        by: options.prices.total
+        by: options.cost.price.total
       })
     });
   };
@@ -946,7 +947,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         },
@@ -982,7 +983,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         }
@@ -995,7 +996,7 @@ var toaster = (function() {
         },
         fail: function() {
           return ["processor cycles low, " + helper.numberSuffix({
-            number: options.prices.total
+            number: options.cost.price.total
           }) + " cycles needed"];
         }
       },
@@ -1012,7 +1013,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         },
@@ -1048,7 +1049,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         },
@@ -1064,7 +1065,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         }
@@ -1082,7 +1083,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         },
@@ -1118,7 +1119,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         },
@@ -1134,7 +1135,7 @@ var toaster = (function() {
           },
           fail: function() {
             return ["toast inventory low, " + helper.numberSuffix({
-              number: options.prices.total
+              number: options.cost.price.total
             }) + " toast matter needed"];
           }
         }
