@@ -659,44 +659,65 @@ var toaster = (function() {
 
   var costForMultiple = function(options) {
     if (options.inflation.increase) {
-      // the starting cost / constant / c
-      var c = state.get({
-        path: options.cost.starting
-      });
-      // inflation amount per nth term / difference / d
-      var d = state.get({
-        path: options.inflation.amount
-      });
-      // the index of the nth term / n
-      // eg:
-      // array [3, 6, 9, 12]
-      // index [1, 2, 3, 4]
-      //              ^
-      //              the desiered index
-      // the index of the nth term
-      var n = state.get({
-        path: options.change.target
-      }) + options.change.amount;
-      // starting point to calculate from
-      var n_x = state.get({
-        path: options.change.target
-      }) + 1;
-      // end point to calculate to
-      var n_y = n;
-      // value of n_x
-      var a_x = c + (d * (n_x - 1));
-      // value of n_y
-      var a_y = c + (d * (n_y - 1));
-      // sum from ax to ay
-      var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
-      // total for the next level
-      var n_y_plus_1 = c + (d * (n_y));
-      var cost = {
-        indexX: n_x, // n_x
-        indexY: n_y, // n_y
-        total: s_xy, // sum from ax to ay
-        next: n_y_plus_1 // cost for level after y
-      };
+      if (options.max.buy) {
+        // the starting cost / constant / c
+        var c = state.get({
+          path: options.cost.starting
+        });
+        // inflation amount per nth term / difference / d
+        var d = state.get({
+          path: options.inflation.amount
+        });
+        // the index of the nth term / n
+        // eg:
+        // array [3, 6, 9, 12]
+        // index [1, 2, 3, 4]
+        //              ^
+        //              the desiered index
+        // the index of the nth term
+        var n = state.get({
+          path: options.change.target
+        }) + options.change.amount;
+      } else {
+        // the starting cost / constant / c
+        var c = state.get({
+          path: options.cost.starting
+        });
+        // inflation amount per nth term / difference / d
+        var d = state.get({
+          path: options.inflation.amount
+        });
+        // the index of the nth term / n
+        // eg:
+        // array [3, 6, 9, 12]
+        // index [1, 2, 3, 4]
+        //              ^
+        //              the desiered index
+        // the index of the nth term
+        var n = state.get({
+          path: options.change.target
+        }) + options.change.amount;
+        // starting point to calculate from
+        var n_x = state.get({
+          path: options.change.target
+        }) + 1;
+        // end point to calculate to
+        var n_y = n;
+        // value of n_x
+        var a_x = c + (d * (n_x - 1));
+        // value of n_y
+        var a_y = c + (d * (n_y - 1));
+        // sum from ax to ay
+        var s_xy = (((n_y + 1) - n_x) * (a_x + a_y)) / 2;
+        // total for the next level
+        var n_y_plus_1 = c + (d * (n_y));
+        var cost = {
+          indexX: n_x, // n_x
+          indexY: n_y, // n_y
+          total: s_xy, // sum from ax to ay
+          next: n_y_plus_1 // cost for level after y
+        };
+      }
     } else {
       var cost = {
         total: state.get({
@@ -1183,10 +1204,15 @@ var toaster = (function() {
     bind: bind,
     costForMultiple: costForMultiple,
     validateAction: validateAction,
+    validateDismantle: validateDismantle,
     payCost: payCost,
+    refundCost: refundCost,
     setNewCost: setNewCost,
+    resetCost: resetCost,
     storeSpent: storeSpent,
+    clearSpent: clearSpent,
     changeValue: changeValue,
+    dismantleTarget: dismantleTarget,
     disableButton: disableButton,
     feedbackMessage: feedbackMessage
   };

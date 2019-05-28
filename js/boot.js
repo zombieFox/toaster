@@ -19,7 +19,7 @@ var boot = (function() {
       type: "system",
       message: ["SensBlocker.dat loaded"],
       format: "normal",
-      delay: 200
+      delay: 1000
     }
   }, {
     message: {
@@ -33,7 +33,7 @@ var boot = (function() {
       type: "system",
       message: ["Directive.dat loaded"],
       format: "normal",
-      delay: 200
+      delay: 1000
     }
   }, {
     message: {
@@ -47,13 +47,13 @@ var boot = (function() {
       type: "system",
       message: ["Motivation.dat loaded"],
       format: "normal",
-      delay: 200
+      delay: 1000
     }
   }, {
     func: {
       func: motivation.render,
       messageCount: 0,
-      delay: 400
+      delay: 200
     }
   }];
 

@@ -10,7 +10,7 @@ var control = (function() {
   }, {
     element: helper.e(".control-processor-boost-1"),
     func: function() {
-      var options = new BoostOptions();
+      var options = new ProcessorBoostOptions();
       options.change.amount = 1;
       options.cost.units = 1;
       options.button = this.element;
@@ -35,11 +35,11 @@ var control = (function() {
       }
     }
   }, {
-    element: helper.e(".control-processor-boost-2"),
+    element: helper.e(".control-processor-boost-10"),
     func: function() {
-      var options = new BoostOptions();
-      options.change.amount = 2;
-      options.cost.units = 2;
+      var options = new ProcessorBoostOptions();
+      options.change.amount = 10;
+      options.cost.units = 10;
       options.button = this.element;
       options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
@@ -62,11 +62,11 @@ var control = (function() {
       }
     }
   }, {
-    element: helper.e(".control-processor-boost-3"),
+    element: helper.e(".control-processor-boost-100"),
     func: function() {
-      var options = new BoostOptions();
-      options.change.amount = 3;
-      options.cost.units = 3;
+      var options = new ProcessorBoostOptions();
+      options.change.amount = 100;
+      options.cost.units = 100;
       options.button = this.element;
       options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
@@ -89,14 +89,26 @@ var control = (function() {
       }
     }
   }, {
-    element: helper.e(".control-processor-boost-max"),
+    element: helper.e(".control-processor-boost-dismantle"),
     func: function() {
-      var options = new BoostOptions();
-      options.change.amount = 30;
-      options.cost.units = 30;
+      var options = new ProcessorDismantleOptions();
       options.button = this.element;
-      options.prices = toaster.costForMultiple(options);
       console.log(options.prices);
+      if (toaster.validateDismantle(options)) {
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          toaster.feedbackMessage(options);
+        }
+        toaster.refundCost(options);
+        toaster.resetCost(options);
+        toaster.clearSpent(options);
+        toaster.dismantleTarget(options);
+      } else {
+        if (options.message.fail != null) {
+          options.message.fail.state = true;
+          toaster.feedbackMessage(options);
+        }
+      }
     }
   }];
 
@@ -111,7 +123,7 @@ var control = (function() {
     });
   };
 
-  var BoostOptions = function() {
+  var ProcessorBoostOptions = function() {
     this.change = {
       target: "system.processor.power",
       operation: "increase",
@@ -144,6 +156,37 @@ var control = (function() {
       },
       fail: {
         path: "processor.boost.fail",
+        state: false
+      }
+    };
+    this.button = null
+  };
+
+  var ProcessorDismantleOptions = function() {
+    this.change = {
+      target: "system.processor.power",
+      operation: "increase",
+      suboperation: "increment",
+      percentage: false,
+      amount: null,
+      min: false,
+      max: false
+    };
+    this.cost = {
+      starting: "system.processor.cost.starting",
+      units: null,
+      currency: "toast.inventory",
+      amount: "system.processor.cost.toast",
+      spent: "system.processor.cost.spent"
+    };
+    this.prices = null;
+    this.message = {
+      success: {
+        path: "processor.dismantle.success",
+        state: false
+      },
+      fail: {
+        path: "processor.dismantle.fail",
         state: false
       }
     };

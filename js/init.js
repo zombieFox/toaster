@@ -6,9 +6,9 @@ events.init();
 tick.init();
 boot.init();
 
-state.set({path:"toast.inventory",value:3000});
-state.set({path:"toast.lifetime",value:3000});
-state.set({path:"system.cycles.current",value:3000});
+// state.set({path:"toast.inventory",value:40400});
+// state.set({path:"toast.lifetime",value:40400});
+// state.set({path:"system.cycles.current",value:40400});
 
 // n = index of term
 // a = term
