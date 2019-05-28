@@ -657,12 +657,20 @@ var toaster = (function() {
     }
   };
 
-  var getNthValue = function(nth, constant, difference) {
+  var getNthValue = function(override) {
+    var options = {
+      nth: null,
+      constant: null,
+      difference: null
+    }
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
     // nth = the index of the desiered value
     // constant = base price/starting/n_1 value
     // difference = constant difference/price growth rate
-    if (nth != undefined && constant != undefined && difference != undefined) {
-      return constant + (difference * (nth - 1));
+    if (options.nth != null && options.constant != null && options.difference != null) {
+      return options.constant + (options.difference * (options.nth - 1));
     } else {
       return false;
     }
