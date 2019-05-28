@@ -649,10 +649,10 @@ var toaster = (function() {
       }, false);
     };
     if (options.button != null) {
-      bindButton(options.button);
+      // bindButton(options.button);
     } else {
       allButtons.forEach(function(arrayItem, index) {
-        bindButton(arrayItem);
+        // bindButton(arrayItem);
       });
     }
   };

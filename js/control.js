@@ -89,6 +89,32 @@ var control = (function() {
       }
     }
   }, {
+    element: helper.e(".control-processor-boost-max"),
+    func: function() {
+      var options = new ProcessorBoostOptions();
+      options.max.buy = true;
+      options.button = this.element;
+      options.prices = toaster.costForMultiple(options);
+      console.log(options.prices);
+      if (toaster.validateAction(options)) {
+        toaster.payCost(options);
+        toaster.setNewCost(options);
+        toaster.storeSpent(options);
+        toaster.changeValue(options);
+        toaster.disableButton(options);
+        cycles.set();
+        if (options.message.success != null) {
+          options.message.success.state = true;
+          toaster.feedbackMessage(options);
+        }
+      } else {
+        if (options.message.fail != null) {
+          options.message.fail.state = true;
+          toaster.feedbackMessage(options);
+        }
+      }
+    }
+  }, {
     element: helper.e(".control-processor-boost-dismantle"),
     func: function() {
       var options = new ProcessorDismantleOptions();
