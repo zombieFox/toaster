@@ -4,7 +4,7 @@ data.init();
 milestones.init();
 events.init();
 tick.init();
-boot.init();
+// boot.init();
 
 // state.set({path:"toast.inventory",value:40400});
 // state.set({path:"toast.lifetime",value:40400});
@@ -17,15 +17,15 @@ boot.init();
 // n = the index of the nth term
 // c = constant - if the difference between each term is equal
 var as = function() {
-  var l = 2 // current level
-  var m = 200; // money currently available
+  var l = 3 // current level
+  var m = 1000; // money currently available
   var c = state.get({
     path: "system.processor.cost.starting"
   }); // constant / base price
   var d = state.get({
     path: "system.processor.cost.increase"
   }); // difference / price growth rate
-  var n = 10; // the index of the nth term
+  var n = 50; // the index of the nth term
   var a_n = c + (d * (n - 1)); // the nth term
   var a_1 = a_n - (d * (n - 1)); // constant / first term / c
   var s_n = (n * (a_1 + a_n)) / 2; // sum all up to n
@@ -60,12 +60,12 @@ var as = function() {
 
   // this function return the nth (index) of next level and the max level that can be reached with current currency
   function maxBuyable(m, l, a_1, d) {
-    var next_nth_value = a_1 * l + (l * (l + 1)) / 2 * d; // the value of the next term above current term/nth
-    var buying_power = next_nth_value + m; // max that can be bought
-    // solving the formula for next_nth_value for n instead
+    var sum_to_next_nth_value = a_1 * l + (l * (l + 1)) / 2 * d; // the value of the next term above current term/nth
+    var buying_power = sum_to_next_nth_value + m; // max that can be bought
+    // solving the formula for sum_to_next_nth_value for n instead
     var nth_max = Math.floor(-(-Math.sqrt(8 * buying_power * d + 4 * a_1 * a_1 + 4 * a_1 * d + d * d) + 2 * a_1 + d) / (2 * d));
     var nth_to_buy = nth_max - l;
-    console.log("- next_nth_value", next_nth_value);
+    console.log("- sum_to_next_nth_value", sum_to_next_nth_value);
     console.log("- buying_power", buying_power);
     console.log("- nth_max", nth_max);
     console.log("- nth_to_buy", nth_to_buy);

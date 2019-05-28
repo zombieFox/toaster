@@ -657,6 +657,17 @@ var toaster = (function() {
     }
   };
 
+  var getNthValue = function(nth, constant, difference) {
+    // nth = the index of the desiered value
+    // constant = base price/starting/n_1 value
+    // difference = constant difference/price growth rate
+    if (nth != undefined && constant != undefined && difference != undefined) {
+      return constant + (difference * (nth - 1));
+    } else {
+      return false;
+    }
+  };
+
   var costForMultiple = function(options) {
     if (options.inflation.increase) {
       if (options.max.buy) {
@@ -1202,6 +1213,7 @@ var toaster = (function() {
   return {
     init: init,
     bind: bind,
+    getNthValue: getNthValue,
     costForMultiple: costForMultiple,
     validateAction: validateAction,
     validateDismantle: validateDismantle,
