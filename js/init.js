@@ -1,14 +1,14 @@
 control.init();
 toaster.init();
 data.init();
-// milestones.init();
+milestones.init();
 events.init();
 tick.init();
-// boot.init();
+boot.init();
 
-state.set({path:"toast.inventory",value:2000});
-state.set({path:"toast.lifetime",value:2000});
-state.set({path:"system.cycles.current",value:2000});
+// state.set({path:"toast.inventory",value:2000});
+// state.set({path:"toast.lifetime",value:2000});
+// state.set({path:"system.cycles.current",value:2000});
 
 // n = index of term
 // a = term
@@ -16,6 +16,7 @@ state.set({path:"system.cycles.current",value:2000});
 // d = the difference between two terms
 // n = the index of the nth term
 // c = constant - if the difference between each term is equal
+
 var as = function() {
   var l = 1 // current level
   var m = 2000; // money currently available
@@ -42,7 +43,7 @@ var as = function() {
     dummyAS.push({
       nth: i,
       ace: c + (d * (i - 1)),
-      sum:  (((i + 1) - n_x) * (a_x + c + (d * (i - 1)))) / 2
+      sum: (((i + 1) - n_x) * (a_x + c + (d * (i - 1)))) / 2
     });
   }
   for (var i = 1; i <= n; i++) {
@@ -54,9 +55,9 @@ var as = function() {
   for (var i = 1; i <= n; i++) {
     level.push(i);
   }
-  // console.log("Arithmetic Sequences:    ", arr_n);
-  // console.log("Arithmetic Sum per level:", arr_s);
-  // console.log("Arithmetic Sum per level:", level);
+  console.log("Arithmetic Sequences:    ", arr_n);
+  console.log("Arithmetic Sum per level:", arr_s);
+  console.log("Arithmetic Sum per level:", level);
   console.log(dummyAS);
   // max buy:
   console.log("money", m);
@@ -78,19 +79,8 @@ var as = function() {
     console.log("cost_max", cost_max);
     console.log("amount_max", amount_max);
     console.log("amount_buyable", amount_buyable);
-    // level + 1 = n_x
-    // amount_buyable = n_y
   }
   var maxButtonClick = maxBuyable(m, l, a_1, d);
-  // var buyMax_n_x = maxButtonClick.nextNth; // starting nth to calculate from
-  // var buyMax_n_y = maxButtonClick.maxNth; // end nth to calculate to
-  // var buyMax_a_x = c + (d * (buyMax_n_x - 1)); // value of nx
-  // var buyMax_a_y = c + (d * (buyMax_n_y - 1)); // value of ny
-
-  // console.log(maxButtonClick);
-  // console.log("cost to buy max:", (((buyMax_n_y + 1) - buyMax_n_x) * (buyMax_a_x + buyMax_a_y)) / 2);
-  // console.log("max level reached:", maxButtonClick.maxNth);
-
 }
 
 var gs = function() {
@@ -122,37 +112,3 @@ var gs = function() {
 as();
 // console.log("---");
 // gs();
-
-
-
-
-// console.log("------------------------------------------------------------------");
-// var l = 1
-// var m = 400;
-// var c = state.get({
-//   path: "system.processor.cost.starting"
-// });
-// var d = state.get({
-//   path: "system.processor.cost.increase"
-// });
-// Math.floor(Math.log(((c * (r - 1)) /(b * Math.pow(r, k))) +1) /Math.log(r))
-// console.log(
-//   Math.floor(Math.log((m * (d - 1) / c * (Math.pow(d, l))) + 1) / Math.log(d))
-// );
-// var i = state.get({path:"toast.inventory"}); // the amount of currency owned
-// var k = state.get({path:"system.processor.power"}); // the number of generators currently owned
-// var b = state.get({path:"system.processor.cost.toast"}); // the base price
-
-// b * ((Math.pow(d, k)) - (Math.pow(d, n) - 1) / (d - 1))
-
-// var currentAmount = state.get({path:"system.processor.power"});
-// var unitsToAdd = 5;
-// var increase = state.get({path:"system.processor.cost.increase"});
-// // S = Starting number
-// // M = How many are you going to buy
-// // I = How much it increments per buy
-// // (S+M-1) x (S+M)/2 x I - (S-1) x S/2 x I = Total cost
-// function x() {
-//   return (currentAmount + unitsToAdd - 1) * (currentAmount + unitsToAdd) / 2 * increase - (currentAmount - 1) * currentAmount / 2 * increase;
-// }
-// console.log(x());

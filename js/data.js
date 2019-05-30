@@ -3,7 +3,7 @@ var data = (function() {
   var saveName = "TAI.game.dat";
 
   var set = function(key, data) {
-    // localStorage.setItem(key, data);
+    localStorage.setItem(key, data);
   };
 
   var get = function(key) {

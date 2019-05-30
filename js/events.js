@@ -1404,14 +1404,14 @@ var events = (function() {
     var funcList = {
       consumer: {
         init: function() {
-          // consumer.init();
-          // tick.set({
-          //   tickName: "consumer",
-          //   func: function() {
-          //     consumer.consume();
-          //   },
-          //   interval: "consumed.interval"
-          // });
+          consumer.init();
+          tick.set({
+            tickName: "consumer",
+            func: function() {
+              consumer.consume();
+            },
+            interval: "consumed.interval"
+          });
         },
         increase: function() {
           consumer.increase();

@@ -713,14 +713,15 @@ var toaster = (function() {
       }
       var costBought = options.a1 * options.level + (options.level * (options.level + 1)) / 2 * options.difference;
       var costMax = costBought + options.money;
+      // var amountMax = Math.ceil(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
       var amountMax = Math.floor(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
       var amountBuyable = amountMax - options.level;
-      console.log("costBought", costBought);
-      console.log("costMax", costMax);
-      console.log("amountMax", amountMax);
-      console.log("options.level", options.level);
-      console.log("amountBuyable", amountBuyable);
-      return amountBuyable; // the amount to increase the level by
+      if (amountBuyable === 0) {
+        amountBuyable = 1;
+      };
+      // the amount to increase the level by
+      // the new n_y
+      return amountBuyable;
     }
   };
 

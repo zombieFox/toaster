@@ -34,7 +34,6 @@ var control = (function() {
           toaster.feedbackMessage(_currentOptions);
         }
       }
-      console.log(_currentOptions);
       _currentOptions = null;
     }
   }, {
@@ -62,7 +61,6 @@ var control = (function() {
           toaster.feedbackMessage(_currentOptions);
         }
       }
-      console.log(_currentOptions);
       _currentOptions = null;
     }
   }, {
@@ -90,7 +88,6 @@ var control = (function() {
           toaster.feedbackMessage(_currentOptions);
         }
       }
-      console.log(_currentOptions);
       _currentOptions = null;
     }
   }, {
@@ -132,7 +129,6 @@ var control = (function() {
           toaster.feedbackMessage(_currentOptions);
         }
       }
-      console.log(_currentOptions);
       _currentOptions = null;
     }
   }, {
@@ -195,9 +191,6 @@ var control = (function() {
       operator: "increase",
       amount: "system.processor.cost.increase",
       increase: true
-    };
-    this.max = {
-      buy: false
     };
     this.message = {
       success: {
