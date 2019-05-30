@@ -41,8 +41,36 @@ var control = (function() {
     element: helper.e(".control-processor-boost-10"),
     func: function() {
       var _currentOptions = new ProcessorBoostOptions();
-      _currentOptions.change.amount = 5;
-      _currentOptions.cost.units = 5;
+      _currentOptions.change.amount = 10;
+      _currentOptions.cost.units = 10;
+      _currentOptions.button = this.element;
+      _currentOptions = toaster.costForMultiple(_currentOptions);
+      if (toaster.validateAction(_currentOptions)) {
+        toaster.payCost(_currentOptions);
+        toaster.setNewCost(_currentOptions);
+        toaster.storeSpent(_currentOptions);
+        toaster.changeValue(_currentOptions);
+        toaster.disableButton(_currentOptions);
+        cycles.set();
+        if (_currentOptions.message.success != null) {
+          _currentOptions.message.success.state = true;
+          toaster.feedbackMessage(_currentOptions);
+        }
+      } else {
+        if (_currentOptions.message.fail != null) {
+          _currentOptions.message.fail.state = true;
+          toaster.feedbackMessage(_currentOptions);
+        }
+      }
+      console.log(_currentOptions);
+      _currentOptions = null;
+    }
+  }, {
+    element: helper.e(".control-processor-boost-100"),
+    func: function() {
+      var _currentOptions = new ProcessorBoostOptions();
+      _currentOptions.change.amount = 100;
+      _currentOptions.cost.units = 100;
       _currentOptions.button = this.element;
       _currentOptions = toaster.costForMultiple(_currentOptions);
       if (toaster.validateAction(_currentOptions)) {
@@ -69,7 +97,22 @@ var control = (function() {
     element: helper.e(".control-processor-boost-max"),
     func: function() {
       var _currentOptions = new ProcessorBoostOptions();
-      _currentOptions.max.buy = true;
+      var n_y = toaster.nth.max({
+        money: state.get({
+          path: _currentOptions.cost.currency
+        }),
+        level: state.get({
+          path: _currentOptions.change.target
+        }),
+        a1: state.get({
+          path: _currentOptions.cost.starting
+        }),
+        difference: state.get({
+          path: _currentOptions.inflation.amount
+        })
+      });
+      _currentOptions.change.amount = n_y;
+      _currentOptions.cost.units = n_y;
       _currentOptions.button = this.element;
       _currentOptions.prices = toaster.costForMultiple(_currentOptions);
       if (toaster.validateAction(_currentOptions)) {

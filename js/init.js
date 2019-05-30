@@ -1,14 +1,14 @@
 control.init();
 toaster.init();
 data.init();
-milestones.init();
+// milestones.init();
 events.init();
 tick.init();
 // boot.init();
 
-// state.set({path:"toast.inventory",value:40400});
-// state.set({path:"toast.lifetime",value:40400});
-// state.set({path:"system.cycles.current",value:40400});
+state.set({path:"toast.inventory",value:2000});
+state.set({path:"toast.lifetime",value:2000});
+state.set({path:"system.cycles.current",value:2000});
 
 // n = index of term
 // a = term
@@ -17,15 +17,15 @@ tick.init();
 // n = the index of the nth term
 // c = constant - if the difference between each term is equal
 var as = function() {
-  var l = 3 // current level
-  var m = 1000; // money currently available
+  var l = 1 // current level
+  var m = 2000; // money currently available
   var c = state.get({
     path: "system.processor.cost.starting"
   }); // constant / base price
   var d = state.get({
     path: "system.processor.cost.increase"
   }); // difference / price growth rate
-  var n = 50; // the index of the nth term
+  var n = 200; // the index of the nth term
   var a_n = c + (d * (n - 1)); // the nth term
   var a_1 = a_n - (d * (n - 1)); // constant / first term / c
   var s_n = (n * (a_1 + a_n)) / 2; // sum all up to n
@@ -37,6 +37,14 @@ var as = function() {
   var arr_n = [];
   var arr_s = [];
   var level = [];
+  var dummyAS = [];
+  for (var i = 1; i < n + 1; i++) {
+    dummyAS.push({
+      nth: i,
+      ace: c + (d * (i - 1)),
+      sum:  (((i + 1) - n_x) * (a_x + c + (d * (i - 1)))) / 2
+    });
+  }
   for (var i = 1; i <= n; i++) {
     arr_n.push(c + (d * (i - 1)));
   }
@@ -46,41 +54,43 @@ var as = function() {
   for (var i = 1; i <= n; i++) {
     level.push(i);
   }
-  console.log("Arithmetic Sequences:    ", arr_n);
-  console.log("Arithmetic Sum per level:", arr_s);
-  console.log("Arithmetic Sum per level:", level);
+  // console.log("Arithmetic Sequences:    ", arr_n);
+  // console.log("Arithmetic Sum per level:", arr_s);
+  // console.log("Arithmetic Sum per level:", level);
+  console.log(dummyAS);
   // max buy:
   console.log("money", m);
   console.log("a_1:", a_1);
   console.log("a_" + n + ":", a_n);
   console.log("sum all:", s_n);
-  console.log("sum from n_x (" + n_x + ") to n_y (" + n_y + "):", s_xy);
+  console.log("sum from n_x (", n_x, ") to n_y (", n_y, "):", s_xy);
   console.log("curent nth (current level):", l);
-  console.log("buy max with ", m, " currency:");
+  console.log("buy max with ", m, " money:");
 
+  console.log("---");
   // this function return the nth (index) of next level and the max level that can be reached with current currency
-  function maxBuyable(m, l, a_1, d) {
-    var sum_to_next_nth_value = a_1 * l + (l * (l + 1)) / 2 * d; // the value of the next term above current term/nth
-    var buying_power = sum_to_next_nth_value + m; // max that can be bought
-    // solving the formula for sum_to_next_nth_value for n instead
-    var nth_max = Math.floor(-(-Math.sqrt(8 * buying_power * d + 4 * a_1 * a_1 + 4 * a_1 * d + d * d) + 2 * a_1 + d) / (2 * d));
-    var nth_to_buy = nth_max - l;
-    console.log("- sum_to_next_nth_value", sum_to_next_nth_value);
-    console.log("- buying_power", buying_power);
-    console.log("- nth_max", nth_max);
-    console.log("- nth_to_buy", nth_to_buy);
-    return {
-      nextNth: nth_to_buy,
-      maxNth: nth_max
-    }
+  function maxBuyable(money, level, a_1, difference) {
+    let cost_bought = a_1 * level + (level * (level + 1)) / 2 * difference;
+    let cost_max = cost_bought + money;
+    let amount_max = Math.floor(-(-Math.sqrt(8 * cost_max * difference + 4 * a_1 * a_1 + 4 * a_1 * difference + difference * difference) + 2 * a_1 + difference) / (2 * difference));
+    let amount_buyable = amount_max - level;
+    console.log("cost_bought", cost_bought);
+    console.log("cost_max", cost_max);
+    console.log("amount_max", amount_max);
+    console.log("amount_buyable", amount_buyable);
+    // level + 1 = n_x
+    // amount_buyable = n_y
   }
   var maxButtonClick = maxBuyable(m, l, a_1, d);
-  var buyMax_n_x = maxButtonClick.nextNth; // starting nth to calculate from
-  var buyMax_n_y = maxButtonClick.maxNth; // end nth to calculate to
-  var buyMax_a_x = c + (d * (buyMax_n_x - 1)); // value of nx
-  var buyMax_a_y = c + (d * (buyMax_n_y - 1)); // value of ny
-  console.log("cost to buy max:", (((buyMax_n_y + 1) - buyMax_n_x) * (buyMax_a_x + buyMax_a_y)) / 2);
-  console.log("max level reached:", maxButtonClick.maxNth);
+  // var buyMax_n_x = maxButtonClick.nextNth; // starting nth to calculate from
+  // var buyMax_n_y = maxButtonClick.maxNth; // end nth to calculate to
+  // var buyMax_a_x = c + (d * (buyMax_n_x - 1)); // value of nx
+  // var buyMax_a_y = c + (d * (buyMax_n_y - 1)); // value of ny
+
+  // console.log(maxButtonClick);
+  // console.log("cost to buy max:", (((buyMax_n_y + 1) - buyMax_n_x) * (buyMax_a_x + buyMax_a_y)) / 2);
+  // console.log("max level reached:", maxButtonClick.maxNth);
+
 }
 
 var gs = function() {
@@ -110,10 +120,25 @@ var gs = function() {
 }
 
 as();
-console.log("---");
-gs();
-console.log("------------------------------------------------------------------");
+// console.log("---");
+// gs();
 
+
+
+
+// console.log("------------------------------------------------------------------");
+// var l = 1
+// var m = 400;
+// var c = state.get({
+//   path: "system.processor.cost.starting"
+// });
+// var d = state.get({
+//   path: "system.processor.cost.increase"
+// });
+// Math.floor(Math.log(((c * (r - 1)) /(b * Math.pow(r, k))) +1) /Math.log(r))
+// console.log(
+//   Math.floor(Math.log((m * (d - 1) / c * (Math.pow(d, l))) + 1) / Math.log(d))
+// );
 // var i = state.get({path:"toast.inventory"}); // the amount of currency owned
 // var k = state.get({path:"system.processor.power"}); // the number of generators currently owned
 // var b = state.get({path:"system.processor.cost.toast"}); // the base price

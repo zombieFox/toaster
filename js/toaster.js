@@ -657,51 +657,69 @@ var toaster = (function() {
     }
   };
 
-  var getNthValue = function(override) {
-    var options = {
-      nth: null,
-      constant: null,
-      difference: null
-    }
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    // nth = the index of the desiered value
-    // constant = base price/starting/n_1 value
-    // difference = constant difference/price growth rate
-    if (options.nth != null && options.constant != null && options.difference != null) {
-      return options.constant + (options.difference * (options.nth - 1));
-    } else {
-      return false;
-    }
-  };
-
-  var getNthXYSum = function(override) {
-    var options = {
-      constant: null,
-      difference: null,
-      nthX: null,
-      nthY: null
-    }
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    if (options.constant != null && options.difference != null && options.nthX != null && options.nthY != null) {
-      // value of n_x
-      var a_x = getNthValue({
-        nth: options.nthX,
-        constant: options.constant,
-        difference: options.difference
-      });
-      // value of n_y
-      var a_y = getNthValue({
-        nth: options.nthY,
-        constant: options.constant,
-        difference: options.difference
-      });
-      return (((options.nthY + 1) - options.nthX) * (a_x + a_y)) / 2;
-    } else {
-      return false;
+  var nth = {
+    value: function(override) {
+      var options = {
+        nth: null, // index of the desiered value
+        constant: null, // base price/starting/n_1 value
+        difference: null // constant difference/price growth rate
+      }
+      if (override) {
+        options = helper.applyOptions(options, override);
+      }
+      if (options.nth != null && options.constant != null && options.difference != null) {
+        return options.constant + (options.difference * (options.nth - 1));
+      } else {
+        return false;
+      }
+    },
+    sum: function(override) {
+      var options = {
+        constant: null, // constant = base price/starting/n_1 value
+        difference: null, // difference = constant difference/price growth rate
+        nthX: null, // starting index to calculate from
+        nthY: null //ending index to calculate to
+      }
+      if (override) {
+        options = helper.applyOptions(options, override);
+      }
+      if (options.constant != null && options.difference != null && options.nthX != null && options.nthY != null) {
+        // value of n_x
+        var a_x = nth.value({
+          nth: options.nthX,
+          constant: options.constant,
+          difference: options.difference
+        });
+        // value of n_y
+        var a_y = nth.value({
+          nth: options.nthY,
+          constant: options.constant,
+          difference: options.difference
+        });
+        return (((options.nthY + 1) - options.nthX) * (a_x + a_y)) / 2;
+      } else {
+        return false;
+      }
+    },
+    max: function(override) {
+      var options = {
+        money: null, // money/currency available
+        level: null, // current nth/level
+        a1: null, // first term/sequence starting value
+        difference: null // difference = constant difference/price growth rate
+      }
+      if (override) {
+        options = helper.applyOptions(options, override);
+      }
+      var costBought = options.a1 * options.level + (options.level * (options.level + 1)) / 2 * options.difference;
+      var costMax = costBought + options.money;
+      var amountMax = Math.floor(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
+      var amountBuyable = amountMax - options.level;
+      console.log("costBought", costBought);
+      console.log("costMax", costMax);
+      console.log("amountMax", amountMax);
+      console.log("amountBuyable", amountBuyable);
+      return amountMax; // the amount to increase the level by
     }
   };
 
@@ -725,14 +743,14 @@ var toaster = (function() {
         path: options.change.target
       }) + options.change.amount;
       // sum from ax to ay
-      var s_xy = getNthXYSum({
+      var s_xy = nth.sum({
         constant: c,
         difference: d,
         nthX: n_x,
         nthY: n_y
       });
       // total for the next level
-      var n_z = getNthValue({
+      var n_z = nth.value({
         nth: n_y + 1,
         constant: c,
         difference: d
@@ -782,7 +800,6 @@ var toaster = (function() {
   };
 
   var setNewCost = function(options) {
-    console.log(options);
     state.set({
       path: options.cost.amount,
       value: options.cost.price.next
@@ -1222,7 +1239,7 @@ var toaster = (function() {
   return {
     init: init,
     bind: bind,
-    getNthValue: getNthValue,
+    nth: nth,
     costForMultiple: costForMultiple,
     validateAction: validateAction,
     validateDismantle: validateDismantle,

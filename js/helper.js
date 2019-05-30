@@ -259,72 +259,72 @@ var helper = (function() {
     var suffix = "";
     if (options.number > 999999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000000;
-      // suffix = " sexdecillion";
-      suffix = " Sxd";
+      suffix = " sexdecillion";
+      // suffix = " Sxd";
     } else if (options.number > 999999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000000;
-      // suffix = " quindecillion";
-      suffix = " Qid";
+      suffix = " quindecillion";
+      // suffix = " Qid";
     } else if (options.number > 999999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000000;
-      // suffix = " quattuordecillion";
-      suffix = " Qad";
+      suffix = " quattuordecillion";
+      // suffix = " Qad";
     } else if (options.number > 999999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000000;
-      // suffix = " tredecillion";
-      suffix = " Td";
+      suffix = " tredecillion";
+      // suffix = " Td";
     } else if (options.number > 999999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000000;
-      // suffix = " duodecillion";
-      suffix = " Dd";
+      suffix = " duodecillion";
+      // suffix = " Dd";
     } else if (options.number > 999999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000000;
-      // suffix = " undecillion";
-      suffix = " Ud";
+      suffix = " undecillion";
+      // suffix = " Ud";
     } else if (options.number > 999999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000000;
-      // suffix = " decillion";
-      suffix = " Dc";
+      suffix = " decillion";
+      // suffix = " Dc";
     } else if (options.number > 999999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000000;
-      // suffix = " nonillion";
-      suffix = " No";
+      suffix = " nonillion";
+      // suffix = " No";
     } else if (options.number > 999999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000000;
-      // suffix = " octillion";
-      suffix = " Oc";
+      suffix = " octillion";
+      // suffix = " Oc";
     } else if (options.number > 999999999999999999999999) {
       options.number = options.number / 1000000000000000000000000;
-      // suffix = " septillion";
-      suffix = " Sp";
+      suffix = " septillion";
+      // suffix = " Sp";
     } else if (options.number > 999999999999999999999) {
       options.number = options.number / 1000000000000000000000;
-      // suffix = " sextillion";
-      suffix = " Sx";
+      suffix = " sextillion";
+      // suffix = " Sx";
     } else if (options.number > 999999999999999999) {
       options.number = options.number / 1000000000000000000;
-      // suffix = " quintillion";
-      suffix = " Qi";
+      suffix = " quintillion";
+      // suffix = " Qi";
     } else if (options.number > 999999999999999) {
       options.number = options.number / 1000000000000000;
-      // suffix = " quadrillion";
-      suffix = " Qa";
+      suffix = " quadrillion";
+      // suffix = " Qa";
     } else if (options.number > 999999999999) {
       options.number = options.number / 1000000000000;
-      // suffix = " trillion";
-      suffix = " Tr";
+      suffix = " trillion";
+      // suffix = " Tr";
     } else if (options.number > 999999999) {
       options.number = options.number / 1000000000;
-      // suffix = " billion";
-      suffix = " Bi";
+      suffix = " billion";
+      // suffix = " Bi";
     } else if (options.number > 999999) {
       options.number = options.number / 1000000;
-      // suffix = " million";
-      suffix = " Mi";
+      suffix = " million";
+      // suffix = " Mi";
     } else if (options.number > 999) {
       options.number = options.number / 1000;
-      // suffix = " thousand";
-      suffix = " K";
+      suffix = " thousand";
+      // suffix = " K";
     } else if (options.number < 1000) {
       options.decimals = 0;
     }
