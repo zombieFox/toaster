@@ -12,84 +12,23 @@ var control = (function() {
   }, {
     element: helper.e(".control-processor-boost-1"),
     func: function() {
-      var _currentOptions = new ProcessorBoostOptions();
-      _currentOptions.change.amount = 1;
-      _currentOptions.cost.units = 1;
-      _currentOptions.button = this.element;
-      _currentOptions = toaster.costForMultiple(_currentOptions);
-      if (toaster.validateAction(_currentOptions)) {
-        toaster.payCost(_currentOptions);
-        toaster.setNewCost(_currentOptions);
-        toaster.storeSpent(_currentOptions);
-        toaster.changeValue(_currentOptions);
-        toaster.disableButton(_currentOptions);
-        cycles.set();
-        if (_currentOptions.message.success != null) {
-          _currentOptions.message.success.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
-      } else {
-        if (_currentOptions.message.fail != null) {
-          _currentOptions.message.fail.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
-      }
-      _currentOptions = null;
+      _controlProcessorBoost(1, 1, this.element);
     }
   }, {
     element: helper.e(".control-processor-boost-10"),
     func: function() {
-      var _currentOptions = new ProcessorBoostOptions();
-      _currentOptions.change.amount = 10;
-      _currentOptions.cost.units = 10;
-      _currentOptions.button = this.element;
-      _currentOptions = toaster.costForMultiple(_currentOptions);
-      if (toaster.validateAction(_currentOptions)) {
-        toaster.payCost(_currentOptions);
-        toaster.setNewCost(_currentOptions);
-        toaster.storeSpent(_currentOptions);
-        toaster.changeValue(_currentOptions);
-        toaster.disableButton(_currentOptions);
-        cycles.set();
-        if (_currentOptions.message.success != null) {
-          _currentOptions.message.success.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
-      } else {
-        if (_currentOptions.message.fail != null) {
-          _currentOptions.message.fail.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
-      }
-      _currentOptions = null;
+      _controlProcessorBoost(10, 10, this.element);
     }
   }, {
     element: helper.e(".control-processor-boost-100"),
-    func: function() {
-      var _currentOptions = new ProcessorBoostOptions();
-      _currentOptions.change.amount = 100;
-      _currentOptions.cost.units = 100;
-      _currentOptions.button = this.element;
-      _currentOptions = toaster.costForMultiple(_currentOptions);
-      if (toaster.validateAction(_currentOptions)) {
-        toaster.payCost(_currentOptions);
-        toaster.setNewCost(_currentOptions);
-        toaster.storeSpent(_currentOptions);
-        toaster.changeValue(_currentOptions);
-        toaster.disableButton(_currentOptions);
-        cycles.set();
-        if (_currentOptions.message.success != null) {
-          _currentOptions.message.success.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
-      } else {
-        if (_currentOptions.message.fail != null) {
-          _currentOptions.message.fail.state = true;
-          toaster.feedbackMessage(_currentOptions);
-        }
+      func: function() {
+        _controlProcessorBoost(100, 100, this.element);
       }
-      _currentOptions = null;
-    }
+  }, {
+    element: helper.e(".control-processor-boost-1000"),
+      func: function() {
+        _controlProcessorBoost(1000, 1000, this.element);
+      }
   }, {
     element: helper.e(".control-processor-boost-max"),
     func: function() {
@@ -111,7 +50,7 @@ var control = (function() {
       _currentOptions.change.amount = n_y;
       _currentOptions.cost.units = n_y;
       _currentOptions.button = this.element;
-      _currentOptions.prices = toaster.costForMultiple(_currentOptions);
+      _currentOptions = toaster.calculateCost(_currentOptions);
       if (toaster.validateAction(_currentOptions)) {
         toaster.payCost(_currentOptions);
         toaster.setNewCost(_currentOptions);
@@ -134,36 +73,64 @@ var control = (function() {
   }, {
     element: helper.e(".control-processor-boost-dismantle"),
     func: function() {
-      var options = new ProcessorDismantleOptions();
-      options.button = this.element;
-      console.log(options.prices);
-      if (toaster.validateDismantle(options)) {
-        if (options.message.success != null) {
-          options.message.success.state = true;
-          toaster.feedbackMessage(options);
+      var _currentOptions = new ProcessorDismantleOptions();
+      _currentOptions.button = this.element;
+      if (toaster.validateDismantle(_currentOptions)) {
+        if (_currentOptions.message.success != null) {
+          _currentOptions.message.success.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
-        toaster.refundCost(options);
-        toaster.resetCost(options);
-        toaster.clearSpent(options);
-        toaster.dismantleTarget(options);
+        toaster.refundCost(_currentOptions);
+        toaster.resetCost(_currentOptions);
+        toaster.clearSpent(_currentOptions);
+        toaster.dismantleTarget(_currentOptions);
       } else {
-        if (options.message.fail != null) {
-          options.message.fail.state = true;
-          toaster.feedbackMessage(options);
+        if (_currentOptions.message.fail != null) {
+          _currentOptions.message.fail.state = true;
+          toaster.feedbackMessage(_currentOptions);
         }
       }
+      _currentOptions = null;
     }
   }];
 
   var bind = function() {
     _allControl.forEach(function(item, index) {
-      item.element.addEventListener("click", function(event) {
-        if (item.func) {
-          item.func();
-          data.save();
-        };
-      }, false);
+      if (item.element) {
+        item.element.addEventListener("click", function(event) {
+          if (item.func) {
+            item.func();
+            data.save();
+          };
+        }, false);
+      };
     });
+  };
+
+  var _controlProcessorBoost = function(amount, units, button) {
+    var _currentOptions = new ProcessorBoostOptions();
+    _currentOptions.change.amount = amount;
+    _currentOptions.cost.units = units;
+    _currentOptions.button = button;
+    _currentOptions = toaster.calculateCost(_currentOptions);
+    if (toaster.validateAction(_currentOptions)) {
+      toaster.payCost(_currentOptions);
+      toaster.setNewCost(_currentOptions);
+      toaster.storeSpent(_currentOptions);
+      toaster.changeValue(_currentOptions);
+      toaster.disableButton(_currentOptions);
+      cycles.set();
+      if (_currentOptions.message.success != null) {
+        _currentOptions.message.success.state = true;
+        toaster.feedbackMessage(_currentOptions);
+      }
+    } else {
+      if (_currentOptions.message.fail != null) {
+        _currentOptions.message.fail.state = true;
+        toaster.feedbackMessage(_currentOptions);
+      }
+    }
+    _currentOptions = null;
   };
 
   var ProcessorBoostOptions = function() {
@@ -245,7 +212,8 @@ var control = (function() {
 
   // exposed methods
   return {
-    init: init
+    init: init,
+    _currentOptions: _currentOptions
   };
 
 })();

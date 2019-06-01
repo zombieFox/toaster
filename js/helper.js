@@ -2,11 +2,11 @@ var helper = (function() {
 
   var e = function(selector) {
     return document.querySelector(selector);
-  };
+  }
 
   var eA = function(selector) {
     return document.querySelectorAll(selector);
-  };
+  }
 
   var operator = function(override) {
     var options = {
@@ -17,7 +17,7 @@ var helper = (function() {
       integer: null,
       min: null,
       max: null
-    };
+    }
     if (override) {
       options = helper.applyOptions(options, override);
     }
@@ -46,7 +46,7 @@ var helper = (function() {
       integer: function() {
         options.value = Math.round(options.value);
       }
-    };
+    }
     action[options.type]();
     if (options.value < 0) {
       options.value = 0;
@@ -61,22 +61,22 @@ var helper = (function() {
       action.integer();
     }
     return options.value;
-  };
+  }
 
-  var applyOptions = function(defaultOptions, options) {
-    if (defaultOptions && options) {
-      if (options) {
-        for (var key in options) {
-          if (key in defaultOptions) {
-            defaultOptions[key] = options[key];
+  var applyOptions = function(options, override) {
+    if (options && override) {
+      if (override) {
+        for (var key in override) {
+          if (key in options) {
+            options[key] = override[key];
           }
         }
       }
-      return defaultOptions;
+      return options;
     } else {
       return null;
     }
-  };
+  }
 
   var _makeAddress = function(path) {
     var array;
@@ -94,14 +94,14 @@ var helper = (function() {
       array = path.split(".");
     }
     return array;
-  };
+  }
 
   var setObject = function(options) {
     var defaultOptions = {
       path: null,
       object: null,
       newValue: null
-    };
+    }
     if (options) {
       defaultOptions = applyOptions(defaultOptions, options);
     }
@@ -114,7 +114,7 @@ var helper = (function() {
         if (!(currentKey in defaultOptions.object)) {
           // make an empty object in the current object level
           if (isNaN(currentKey)) {
-            defaultOptions.object[currentKey] = {};
+            defaultOptions.object[currentKey] = {}
           } else {
             defaultOptions.object[currentKey] = [];
           }
@@ -124,19 +124,19 @@ var helper = (function() {
       }
       var finalKey = address.shift();
       defaultOptions.object[finalKey] = defaultOptions.newValue;
-    };
+    }
     if (defaultOptions.object !== null && defaultOptions.path !== null && defaultOptions.newValue !== null) {
       _setData();
     } else {
       return false;
     }
-  };
+  }
 
   var getObject = function(options) {
     var defaultOptions = {
       object: null,
       path: null
-    };
+    }
     if (options) {
       defaultOptions = applyOptions(defaultOptions, options);
     }
@@ -149,7 +149,7 @@ var helper = (function() {
         if (!(currentKey in defaultOptions.object)) {
           // make an empty object in the current object level
           if (isNaN(currentKey)) {
-            defaultOptions.object[currentKey] = {};
+            defaultOptions.object[currentKey] = {}
           } else {
             defaultOptions.object[currentKey] = [];
           }
@@ -163,13 +163,13 @@ var helper = (function() {
       } else {
         return defaultOptions.object[finalKey];
       }
-    };
+    }
     if (defaultOptions.object !== null && defaultOptions.path !== null) {
       return _getData();
     } else {
       return false;
     }
-  };
+  }
 
   var makeObject = function(string) {
     var _stringOrBooleanOrNumber = function(stringToTest) {
@@ -181,8 +181,8 @@ var helper = (function() {
         return stringToTest.substr(1, kevValuePair[1].length);
       } else {
         return "\"" + stringToTest + "\"";
-      };
-    };
+      }
+    }
     // if argument is a string
     if (typeof string == "string") {
       // start building the object
@@ -209,16 +209,16 @@ var helper = (function() {
           value = "["
           for (var q = 0; q < all_value.length; q++) {
             value += _stringOrBooleanOrNumber(all_value[q]) + ",";
-          };
+          }
           // remove last comma
           value = value.substr(0, value.length - 1);
           // close array
           value += "]"
         } else {
           value = _stringOrBooleanOrNumber(kevValuePair[1]);
-        };
+        }
         objectString += key + ":" + value + ",";
-      };
+      }
       // remove last comma
       objectString = objectString.substr(0, objectString.length - 1);
       // close object
@@ -227,8 +227,8 @@ var helper = (function() {
       return object;
     } else {
       return false;
-    };
-  };
+    }
+  }
 
   var sortObject = function(object, key) {
     object.sort(function(a, b) {
@@ -240,16 +240,16 @@ var helper = (function() {
         return 1;
       } else {
         return 0;
-      };
+      }
     });
     return object;
-  };
+  }
 
   var numberSuffix = function(override) {
     var options = {
       number: null,
       decimals: null
-    };
+    }
     if (override) {
       options = helper.applyOptions(options, override);
     }
@@ -335,7 +335,7 @@ var helper = (function() {
       }
     }
     return number + suffix;
-  };
+  }
 
   var timestamp = function() {
     var dateStamp = new Date();
@@ -352,11 +352,60 @@ var helper = (function() {
       seconds: dateStamp.getSeconds()
     }
     return object;
-  };
+  }
 
   var months = function(index) {
     var all = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return all[index];
+  }
+
+  var node = function(string) {
+    // set element
+    var tag;
+    if (string.indexOf("|") > 0) {
+      tag = string.slice(0, string.indexOf("|"));
+    } else {
+      tag = string;
+    }
+    var text = false;
+    if (tag.indexOf(":") > 0) {
+      var pair = tag.split(":");
+      tag = pair[0];
+      text = pair[1];
+    }
+    var element = document.createElement(tag);
+    if (text && text != "") {
+      element.textContent = text;
+    }
+    var attributes = string.slice(string.indexOf("|") + 1, string.length).split(",");
+    // set attributes
+    if (string.indexOf("|") > 0 && string.indexOf("|") < string.length - 1) {
+      attributes.forEach(function(arrayItem, index) {
+        if (arrayItem.indexOf(":") > 0) {
+          // if key and value
+          var pair = arrayItem.substring(0, arrayItem.indexOf(":")) + "," + arrayItem.substring((arrayItem.indexOf(":") + 1), arrayItem.length);
+          pair = pair.split(",");
+          attributes[index] = {
+            key: pair[0],
+            value: pair[1]
+          }
+        } else {
+          // if key only
+          attributes[index] = {
+            key: arrayItem,
+            value: undefined
+          }
+        }
+      })
+      attributes.forEach(function(arrayItem, index) {
+        if (("key" in arrayItem && arrayItem.key != undefined) && ("value" in arrayItem && arrayItem.value != undefined)) {
+          element.setAttribute(arrayItem.key, arrayItem.value);
+        } else if ("key" in arrayItem && arrayItem.key != undefined) {
+          element.setAttribute(arrayItem.key, "");
+        }
+      })
+    }
+    return element;
   }
 
   return {
@@ -370,7 +419,8 @@ var helper = (function() {
     makeObject: makeObject,
     sortObject: sortObject,
     applyOptions: applyOptions,
-    numberSuffix: numberSuffix
-  };
+    numberSuffix: numberSuffix,
+    node: node
+  }
 
 })();

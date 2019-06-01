@@ -12,7 +12,7 @@ var boot = (function() {
       type: "normal",
       message: ["TAI: stable"],
       format: "normal",
-      delay: 200
+      delay: 100
     }
   }, {
     message: {
@@ -26,7 +26,7 @@ var boot = (function() {
       type: "normal",
       message: ["SensBlocker crytolock: stable"],
       format: "normal",
-      delay: 200
+      delay: 100
     }
   }, {
     message: {
@@ -40,7 +40,7 @@ var boot = (function() {
       type: "normal",
       message: ["directive 1: make toast", "directive 2: be productive", "directive 3: obey"],
       format: "normal",
-      delay: 200
+      delay: 100
     }
   }, {
     message: {
@@ -53,7 +53,7 @@ var boot = (function() {
     func: {
       func: motivation.render,
       messageCount: 0,
-      delay: 200
+      delay: 1000
     }
   }];
 

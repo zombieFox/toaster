@@ -34,13 +34,13 @@ var consumer = (function() {
           by: amount
         })
       });
-      // message.render({
-      //   type: "error",
-      //   message: [state.get({
-      //     path: "consumed.rate"
-      //   }) + " toast was just consumed, nom!"],
-      //   format: "normal"
-      // });
+      message.render({
+        type: "error",
+        message: ["toast levels droped, " + state.get({
+          path: "consumed.rate"
+        }) + " toast were consumed"],
+        format: "normal"
+      });
     }
   };
 

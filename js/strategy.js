@@ -1,19 +1,32 @@
 var strategy = (function() {
 
+  var _activateStrategy = function(path) {
+    state.set({
+      path: path,
+      value: helper.operator({
+        type: "increase",
+        value: state.get({
+          path: path,
+        }),
+        by: 1
+      })
+    });
+  };
+
   var items = {
     processor: {
       matterConversion: {
-        id: "stage-strategy-substage-matter-conversion",
         description: "Turn toast matter into useful things and yoyos for kicks",
         button: {
           text: "Toast Matter Conversion",
-          action: "action:strategy.unlock",
-          change: "target:system.matterConversion.level," + "operation:increase," + "suboperation:increment," + "percentage:false," + "amount:#1," + "min:false," + "max:false",
-          cost: "units:#1," + "currency:system.cycles.current," + "amount:system.matterConversion.cost.cycles",
-          inflation: "increase:false," + "operator:false," + "amount:false",
-          max: "buy:false"
+          func: function() {
+            _activateStrategy("system.matterConversion.level")
+          }
         },
-        cost: "path:system.matterConversion.cost.cycles," + "format:local"
+        cost: {
+          currency: "system.cycles.current",
+          amount: "system.matterConversion.cost.cycles"
+        }
       },
       cycles: {
         speed: {
@@ -169,56 +182,56 @@ var strategy = (function() {
     }
   };
 
-  var render = function(override) {
-    var options = {
-      stage: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var strategy = document.createElement("li");
-    strategy.setAttribute("id", options.stage.id);
-    strategy.setAttribute("class", "list-group-item bg-warning strategy-item");
-    var description = document.createElement("p");
-    description.setAttribute("class", "small mb-1");
-    description.textContent = options.stage.description;
-    var button = document.createElement("button");
-    button.textContent = options.stage.button.text;
-    button.dataset.toastButton = options.stage.button.action;
-    button.dataset.toastButtonChange = options.stage.button.change;
-    button.dataset.toastButtonCost = options.stage.button.cost;
-    button.dataset.toastButtonInflation = options.stage.button.inflation;
-    button.dataset.toastButtonMax = options.stage.button.max;
-    button.setAttribute("class", "btn btn-block btn-dark mb-1");
-    var cost = document.createElement("p");
-    cost.setAttribute("class", "small mb-0");
-    var costPrefixText = document.createElement("span");
-    costPrefixText.textContent = "Cost ";
-    var costSuffixText = document.createElement("span");
-    costSuffixText.textContent = " cycles";
-    var strong = document.createElement("strong");
-    strong.dataset.toastReadout = options.stage.cost;
-    cost.appendChild(costPrefixText);
-    cost.appendChild(strong);
-    cost.appendChild(costSuffixText);
-    strategy.appendChild(button);
-    strategy.appendChild(description);
-    strategy.appendChild(cost);
-    toaster.bind({
-      button: button
-    });
-    helper.e("#stage-strategy-substage-list").appendChild(strategy);
+  var bind = function(strategyItem, button, func) {
+    button.addEventListener("click", function(event) {
+      func();
+      destroy(strategyItem);
+    }, false);
   };
 
-  var destroy = function(override) {
-    var options = {
-      stage: null
-    };
-    if (override) {
-      options = helper.applyOptions(options, override);
-    }
-    var strategy = helper.e("#" + options.stage.id);
-    if (strategy) {
+  var render = function(override) {
+    // var options = {
+    //   stage: null
+    // };
+    // if (override) {
+    //   options = helper.applyOptions(options, override);
+    // }
+    // var strategy = document.createElement("li");
+    // strategy.setAttribute("id", options.stage.id);
+    // strategy.setAttribute("class", "list-group-item bg-warning strategy-item");
+    // var description = document.createElement("p");
+    // description.setAttribute("class", "small mb-1");
+    // description.textContent = options.stage.description;
+    // var button = document.createElement("button");
+    // button.textContent = options.stage.button.text;
+    // button.dataset.toastButton = options.stage.button.action;
+    // button.dataset.toastButtonChange = options.stage.button.change;
+    // button.dataset.toastButtonCost = options.stage.button.cost;
+    // button.dataset.toastButtonInflation = options.stage.button.inflation;
+    // button.dataset.toastButtonMax = options.stage.button.max;
+    // button.setAttribute("class", "btn btn-block btn-dark mb-1");
+    // var cost = document.createElement("p");
+    // cost.setAttribute("class", "small mb-0");
+    // var costPrefixText = document.createElement("span");
+    // costPrefixText.textContent = "Cost ";
+    // var costSuffixText = document.createElement("span");
+    // costSuffixText.textContent = " cycles";
+    // var strong = document.createElement("strong");
+    // strong.dataset.toastReadout = options.stage.cost;
+    // cost.appendChild(costPrefixText);
+    // cost.appendChild(strong);
+    // cost.appendChild(costSuffixText);
+    // strategy.appendChild(button);
+    // strategy.appendChild(description);
+    // strategy.appendChild(cost);
+    // toaster.bind({
+    //   button: button
+    // });
+    // helper.e("#stage-strategy-substage-list").appendChild(strategy);
+  };
+
+  var destroy = function(strategyItem) {
+    if (strategyItem) {
       strategy.remove();
     }
   };

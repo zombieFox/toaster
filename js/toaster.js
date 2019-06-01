@@ -47,7 +47,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "processor.boost.success",
@@ -129,7 +129,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "processor.cycles.success",
@@ -175,7 +175,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "wheat.make.success",
@@ -258,7 +258,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "wheat.speed.success",
@@ -301,7 +301,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "wheat.efficiency.success",
@@ -347,7 +347,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "autoToaster.make.success",
@@ -430,7 +430,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "autoToaster.speed.success",
@@ -473,7 +473,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "autoToaster.efficiency.success",
@@ -519,7 +519,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "processor.boost.success",
@@ -564,7 +564,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "strategy.success",
@@ -606,7 +606,7 @@ var toaster = (function() {
           options.inflation = helper.makeObject(button.dataset.toastButtonInflation);
           options.max = helper.makeObject(button.dataset.toastButtonMax);
           options.button = button;
-          options.prices = costForMultiple(options);
+          options.prices = calculateCost(options);
           options.message = {
             success: {
               path: "strategy.success",
@@ -678,7 +678,7 @@ var toaster = (function() {
         constant: null, // constant = base price/starting/n_1 value
         difference: null, // difference = constant difference/price growth rate
         nthX: null, // starting index to calculate from
-        nthY: null //ending index to calculate to
+        nthY: null // ending index to calculate to
       }
       if (override) {
         options = helper.applyOptions(options, override);
@@ -713,58 +713,67 @@ var toaster = (function() {
       }
       var costBought = options.a1 * options.level + (options.level * (options.level + 1)) / 2 * options.difference;
       var costMax = costBought + options.money;
-      // var amountMax = Math.ceil(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
-      var amountMax = Math.floor(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
+      // var amountMax = Math.floor(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
+      var amountMaxRaw = -(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference);
+      var amountMax = Math.ceil(amountMaxRaw);
+      console.log("raw", amountMaxRaw);
+      console.log("round", amountMax);
       var amountBuyable = amountMax - options.level;
-      if (amountBuyable === 0) {
+      if (amountBuyable <= 0) {
         amountBuyable = 1;
-      };
+      }
+      console.log("minus", options.level);
+      console.log("final number", amountBuyable);
       // the amount to increase the level by
       // the new n_y
       return amountBuyable;
     }
   };
 
-  var costForMultiple = function(options) {
-    if (options.inflation.increase) {
-      // if (options.max.buy) {} else {
-      // the starting cost / constant / c
-      var c = state.get({
-        path: options.cost.starting
-      });
-      // inflation amount per nth term / difference / d
-      var d = state.get({
-        path: options.inflation.amount
-      });
-      // starting nth
-      var n_x = state.get({
-        path: options.change.target
-      }) + 1;
-      // the desiered nth
-      var n_y = state.get({
-        path: options.change.target
-      }) + options.change.amount;
-      // sum from ax to ay
-      var s_xy = nth.sum({
-        constant: c,
-        difference: d,
-        nthX: n_x,
-        nthY: n_y
-      });
-      // total for the next level
-      var n_z = nth.value({
-        nth: n_y + 1,
-        constant: c,
-        difference: d
-      });
-      options.cost.price.total = s_xy; // sum for ax to ay
-      options.cost.price.next = n_z; // cost for level after y
-      // }
+  var calculateCost = function(options) {
+    var _costForMax = function() {
+
+    }
+    var _costForFixes = function() {
+      if (options.inflation.increase) {
+        // the starting cost / constant / c
+        var c = state.get({
+          path: options.cost.starting
+        });
+        // inflation amount per nth term / difference / d
+        var d = state.get({
+          path: options.inflation.amount
+        });
+        // starting nth / level + 1
+        var n_x = state.get({
+          path: options.change.target
+        }) + 1;
+        // the desiered nth
+        var n_y = state.get({
+          path: options.change.target
+        }) + options.change.amount;
+        options.cost.price.total = nth.sum({
+          constant: c,
+          difference: d,
+          nthX: n_x,
+          nthY: n_y
+        });
+        options.cost.price.next = nth.value({
+          nth: n_y + 1,
+          constant: c,
+          difference: d
+        });
+      } else {
+        options.cost.price.total = state.get({
+          path: options.cost.amount
+        });
+      };
+    }
+    if (calculateCost.max) {
+      _costForMax();
     } else {
-      options.cost.price.total = state.get({
-        path: options.cost.amount
-      });
-    };
+      _costForFixes();
+    }
     return options;
   };
 
@@ -1242,7 +1251,7 @@ var toaster = (function() {
     init: init,
     bind: bind,
     nth: nth,
-    costForMultiple: costForMultiple,
+    calculateCost: calculateCost,
     validateAction: validateAction,
     validateDismantle: validateDismantle,
     payCost: payCost,

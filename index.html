@@ -84,19 +84,15 @@
                       <button class="btn btn-sm btn-primary control-processor-boost-1">+1</button>
                       <button class="btn btn-sm btn-primary control-processor-boost-10">+10</button>
                       <button class="btn btn-sm btn-primary control-processor-boost-100">+100</button>
+                      <button class="btn btn-sm btn-primary control-processor-boost-1000">+1000</button>
                       <button class="btn btn-sm btn-primary control-processor-boost-max">+ Max</button>
                     </div>
-                    <button class="btn btn-sm btn-danger mb-1 control-processor-boost-dismantle">Dismantle</button>
                     <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:system.processor.cost.toast,format:suffix"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-system-substage-dismantle">
                     <hr>
                     <p class="card-text mb-1">Dismantle all processor power</p>
-                    <button class="btn btn-sm btn-danger mb-1"
-                      data-toast-button="action:processor.dismantle"
-                      data-toast-button-change="target:system.processor.power"
-                      data-toast-button-cost="currency:toast.inventory,amount:system.processor.cost.toast,spent:system.processor.cost.spent,starting:system.processor.cost.starting"
-                    >Dismantle</button>
+                    <button class="btn btn-sm btn-danger mb-1 control-processor-boost-dismantle">Dismantle</button>
                     <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:system.processor.cost.spent,format:suffix"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-system-substage-cycles">
