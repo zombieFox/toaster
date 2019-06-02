@@ -2,7 +2,7 @@ var state = (function() {
 
   var current = {
     store: {
-      interval: 120000,
+      interval: 400000,
       timestamp: "None"
     },
     phase: {

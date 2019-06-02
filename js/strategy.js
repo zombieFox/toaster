@@ -1,6 +1,11 @@
 var strategy = (function() {
 
-  var _activateStrategy = function(path) {
+  var strat = {
+    activate: function(path) {},
+    deactivate: function(path) {}
+  }
+
+  var _strategyLevelUp = function(path) {
     state.set({
       path: path,
       value: helper.operator({
@@ -20,7 +25,7 @@ var strategy = (function() {
         button: {
           text: "Toast Matter Conversion",
           func: function() {
-            _activateStrategy("system.matterConversion.level")
+            _strategyLevelUp("system.matterConversion.level");
           }
         },
         cost: {
@@ -190,44 +195,29 @@ var strategy = (function() {
   };
 
   var render = function(override) {
-    // var options = {
-    //   stage: null
-    // };
-    // if (override) {
-    //   options = helper.applyOptions(options, override);
-    // }
-    // var strategy = document.createElement("li");
-    // strategy.setAttribute("id", options.stage.id);
-    // strategy.setAttribute("class", "list-group-item bg-warning strategy-item");
-    // var description = document.createElement("p");
-    // description.setAttribute("class", "small mb-1");
-    // description.textContent = options.stage.description;
-    // var button = document.createElement("button");
-    // button.textContent = options.stage.button.text;
-    // button.dataset.toastButton = options.stage.button.action;
-    // button.dataset.toastButtonChange = options.stage.button.change;
-    // button.dataset.toastButtonCost = options.stage.button.cost;
-    // button.dataset.toastButtonInflation = options.stage.button.inflation;
-    // button.dataset.toastButtonMax = options.stage.button.max;
-    // button.setAttribute("class", "btn btn-block btn-dark mb-1");
-    // var cost = document.createElement("p");
-    // cost.setAttribute("class", "small mb-0");
-    // var costPrefixText = document.createElement("span");
-    // costPrefixText.textContent = "Cost ";
-    // var costSuffixText = document.createElement("span");
-    // costSuffixText.textContent = " cycles";
-    // var strong = document.createElement("strong");
-    // strong.dataset.toastReadout = options.stage.cost;
-    // cost.appendChild(costPrefixText);
-    // cost.appendChild(strong);
-    // cost.appendChild(costSuffixText);
-    // strategy.appendChild(button);
-    // strategy.appendChild(description);
-    // strategy.appendChild(cost);
-    // toaster.bind({
-    //   button: button
-    // });
-    // helper.e("#stage-strategy-substage-list").appendChild(strategy);
+    var options = {
+      stage: null
+    };
+    if (override) {
+      options = helper.applyOptions(options, override);
+    }
+    var strategy = helper.node("li|class:list-group-item bg-warning strategy-item");
+    var description = helper.node("p:" + options.stage.description + "|class:small mb-1");
+    var button = helper.node("button:" + options.stage.button.text + "|class:btn btn-block btn-dark mb-1");
+    var cost = helper.node("p|class:small mb-0");
+    var costPrefixText = helper.node("span:Cost ");
+    var costSuffixText = helper.node("span: cycles");
+    var strong = helper.node("strong:" + state.get({path:options.stage.cost.amount}));
+    cost.appendChild(costPrefixText);
+    cost.appendChild(strong);
+    cost.appendChild(costSuffixText);
+    strategy.appendChild(button);
+    strategy.appendChild(description);
+    strategy.appendChild(cost);
+    bind({
+      button: options.stage.button.func
+    });
+    helper.e("#stage-strategy-substage-list").appendChild(strategy);
   };
 
   var destroy = function(strategyItem) {

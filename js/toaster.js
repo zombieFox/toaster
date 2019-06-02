@@ -715,65 +715,46 @@ var toaster = (function() {
       var costMax = costBought + options.money;
       // var amountMax = Math.floor(-(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference));
       var amountMaxRaw = -(-Math.sqrt(8 * costMax * options.difference + 4 * options.a1 * options.a1 + 4 * options.a1 * options.difference + options.difference * options.difference) + 2 * options.a1 + options.difference) / (2 * options.difference);
-      var amountMax = Math.ceil(amountMaxRaw);
-      console.log("raw", amountMaxRaw);
-      console.log("round", amountMax);
+      var amountMax = Math.floor(amountMaxRaw);
       var amountBuyable = amountMax - options.level;
       if (amountBuyable <= 0) {
         amountBuyable = 1;
       }
-      console.log("minus", options.level);
-      console.log("final number", amountBuyable);
-      // the amount to increase the level by
-      // the new n_y
+      // the amount to increase the level by / the new n_y
       return amountBuyable;
     }
   };
 
   var calculateCost = function(options) {
-    var _costForMax = function() {
-
-    }
-    var _costForFixes = function() {
-      if (options.inflation.increase) {
-        // the starting cost / constant / c
-        var c = state.get({
-          path: options.cost.starting
-        });
-        // inflation amount per nth term / difference / d
-        var d = state.get({
-          path: options.inflation.amount
-        });
-        // starting nth / level + 1
-        var n_x = state.get({
-          path: options.change.target
-        }) + 1;
-        // the desiered nth
-        var n_y = state.get({
-          path: options.change.target
-        }) + options.change.amount;
-        options.cost.price.total = nth.sum({
-          constant: c,
-          difference: d,
-          nthX: n_x,
-          nthY: n_y
-        });
-        options.cost.price.next = nth.value({
-          nth: n_y + 1,
-          constant: c,
-          difference: d
-        });
-      } else {
-        options.cost.price.total = state.get({
-          path: options.cost.amount
-        });
-      };
-    }
-    if (calculateCost.max) {
-      _costForMax();
-    } else {
-      _costForFixes();
-    }
+    // the starting cost / constant / c
+    var c = state.get({
+      path: options.cost.starting
+    });
+    // inflation amount per nth term / difference / d
+    var d = state.get({
+      path: options.inflation.amount
+    });
+    // starting nth / level + 1
+    var n_x = state.get({
+      path: options.change.target
+    }) + 1;
+    // the desiered nth
+    var n_y = state.get({
+      path: options.change.target
+    }) + options.change.amount;
+    // total value
+    options.cost.price.total = nth.sum({
+      constant: c,
+      difference: d,
+      nthX: n_x,
+      nthY: n_y
+    });
+    // next value
+    options.cost.price.next = nth.value({
+      nth: n_y + 1,
+      constant: c,
+      difference: d
+    });
     return options;
   };
 

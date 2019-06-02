@@ -51,7 +51,7 @@ var message = (function() {
   var cursor = {
     success: "*",
     normal: "#",
-    error: "~",
+    error: "!",
     system: "/",
     motivation: "_"
   };
