@@ -115,7 +115,7 @@ var events = (function() {
           number: 3
         }],
         actions: {
-          append: [strategy.items.processor.matterConversion],
+          append: [strategy.items.system.matterConversion],
           message: [{
             type: "normal",
             message: ["new strategy discovered:", "toast matter conversion"],
@@ -131,7 +131,7 @@ var events = (function() {
           number: 1
         }],
         actions: {
-          remove: [strategy.items.processor.matterConversion],
+          remove: [strategy.items.system.matterConversion],
           message: [{
             type: "success",
             message: ["toast matter conversion developed"],
@@ -615,7 +615,7 @@ var events = (function() {
           number: 2
         }],
         actions: {
-          append: [strategy.items.processor.cycles.speed],
+          append: [strategy.items.system.cycles.speed],
           message: [{
             type: "normal",
             message: ["new strategy discovered:", "cycles speed"],
@@ -631,7 +631,7 @@ var events = (function() {
           number: 1
         }],
         actions: {
-          remove: [strategy.items.processor.cycles.speed],
+          remove: [strategy.items.system.cycles.speed],
           message: [{
             type: "success",
             message: ["cycles speed discovered"],
@@ -795,7 +795,7 @@ var events = (function() {
           }]
         }
       }, {
-        // unlock strategy hardware
+        // unlock strategy sensors
         passed: false,
         validate: [{
           address: "system.processor.power",
@@ -807,7 +807,7 @@ var events = (function() {
           number: 1
         }],
         actions: {
-          append: [strategy.items.sensors],
+          append: [strategy.items.system.sensors],
           message: [{
             type: "normal",
             message: ["new strategy discovered:", "sensors"],
@@ -815,7 +815,7 @@ var events = (function() {
           }]
         }
       }, {
-        // lock strategy hardware
+        // lock strategy sensors
         passed: false,
         validate: [{
           address: "system.sensors.level",
@@ -823,7 +823,7 @@ var events = (function() {
           number: 1
         }],
         actions: {
-          remove: [strategy.items.sensors],
+          remove: [strategy.items.system.sensors],
           message: [{
             type: "system",
             message: ["SensBlocker.dat disabled"],

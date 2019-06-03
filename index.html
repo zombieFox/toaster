@@ -30,9 +30,9 @@
                   <div>
                     <p class="text-white mb-0 lead display-text">
                       <span class="mr-1">Toast Inventory:</span>
-                      <strong data-toast-readout="path:toast.inventory,format:suffix"></strong>
+                      <strong class="readout-toast-inventory"></strong>
                     </p>
-                    <p class="text-info mb-0 display-text"><span class="mr-1">Lifetime Toast:</span><strong data-toast-readout="path:toast.lifetime,format:suffix"></strong></p>
+                    <p class="text-info mb-0 display-text"><span class="mr-1">Lifetime Toast:</span><strong class="readout-toast-lifetime"></strong></p>
                   </div>
                   <button class="btn btn-sm btn-dark" data-toast-button="action:data.menu">Menu</button>
                 </div>
@@ -49,7 +49,7 @@
             <div class="col">
               <ul class="list-unstyled mb-0">
                 <li class="text-white d-flex justify-content-end align-items-center flex-wrap pb-2 mb-2 border-bottom border-dark">
-                  <p class="text-white mb-0 mr-2 text-info">Last save <strong data-toast-readout="path:store.timestamp"></strong>:</p>
+                  <p class="text-white mb-0 mr-2 text-info">Last save <strong class="readout-store-timestamp"></strong>:</p>
                   <button class="btn btn-primary" data-toast-button="action:data.save">Save Game Data</button>
                 </li>
                 <li class="text-white d-flex justify-content-end align-items-center flex-wrap">
@@ -72,39 +72,40 @@
                   <p class="card-text mb-0"><strong>System</strong></p>
                 </div>
                 <div class="card-body">
-                  <button class="btn btn-lg btn-block btn-primary control-toast">Toast +<span data-toast-readout="path:system.processor.power,format:suffix"></span></button>
+                  <button class="btn btn-lg btn-block btn-primary control-toast">Toast +<span class="readout-system-processor-power"></span></button>
                   <div class="d-none" id="stage-system-substage-processor">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Processor Power:</span>
-                      <strong data-toast-readout="path:system.processor.power,format:suffix"></strong>
+                      <strong class="readout-system-processor-power"></strong>
                     </p>
                     <p class="card-text mb-1 small">Boost processor power with reverse antimatter quantum particles for more toast with every click.</p>
                     <div class="btn-group mb-1">
-                      <button class="btn btn-sm btn-secondary control-processor-boost-1">+1</button>
-                      <button class="btn btn-sm btn-secondary control-processor-boost-10">+10</button>
-                      <button class="btn btn-sm btn-secondary control-processor-boost-100">+100</button>
-                      <button class="btn btn-sm btn-secondary control-processor-boost-1000">+1000</button>
-                      <!-- <button class="btn btn-sm btn-secondary control-processor-boost-max">+ Max</button> -->
+                      <button class="btn btn-sm btn-secondary control-system-processor-power-1">+1</button>
+                      <button class="btn btn-sm btn-secondary control-system-processor-power-10">+10</button>
+                      <button class="btn btn-sm btn-secondary control-system-processor-power-100">+100</button>
+                      <button class="btn btn-sm btn-secondary control-system-processor-power-1000">+1000</button>
+                      <!-- <button class="btn btn-sm btn-secondary control-system-processor-power-max">+ Max</button> -->
                     </div>
-                    <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:system.processor.cost.toast,format:suffix"></strong> toast matter</p>
+                    <p class="card-text mb-0 small">+1 cost <strong class="readout-system-processor-cost-toast"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-system-substage-dismantle">
                     <hr>
                     <p class="card-text mb-1">Dismantle all processor power</p>
-                    <button class="btn btn-sm btn-danger mb-1 control-processor-boost-dismantle">Dismantle</button>
-                    <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:system.processor.cost.spent,format:suffix"></strong> toast matter</p>
+                    <button class="btn btn-sm btn-danger mb-1 control-system-processor-power-dismantle">Dismantle</button>
+                    <p class="card-text mb-0 small">Regain <strong class="readout-system-processor-cost-spent"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-system-substage-cycles">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Cycles:</span>
-                      <span><strong data-toast-readout="path:system.cycles.current,format:local"></strong> / <span data-toast-readout="path:system.cycles.max,format:local"></span></span>
+                      <span><strong class="readout-system-cycles-current"></strong> / <span class="readout-system-cycles-max"></span></span>
                     </p>
-                    <p class="card-text mb-1 small">1 cycle / <strong data-toast-readout="path:system.cycles.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s, Max Cycles = Processor Power x10.</p>
+                    <p class="card-text mb-1 small">1 cycle / <strong class="readout-system-cycles-speed-interval-current"></strong>s, Max Cycles = Processor Power x10.</p>
                     <div class="d-none" id="stage-system-substage-cycles-controls">
                       <p class="card-text mb-1 small">Speed up cycles by adding more hamsters in wheels.</p>
                       <div class="btn-group mb-1">
+                        <button class="btn btn-sm btn-secondary control-system-processor-power-1">Speed -0.05s</button>
                         <button class="btn btn-sm btn-primary"
                           data-toast-button="action:processor.cycles"
                           data-toast-button-change="target:system.cycles.speed.interval.current,operation:decrease,suboperation:increment,percentage:false,amount:#50,min:system.cycles.speed.interval.min,max:false"
@@ -127,14 +128,14 @@
                           data-toast-button-max="buy:true"
                         >-Max</button>
                       </div>
-                      <p class="card-text mb-0 small">-0.05s cost <strong data-toast-readout="path:system.cycles.speed.cost.toast,format:suffix"></strong> toast matter</p>
+                      <p class="card-text mb-0 small">-0.05s cost <strong class="readout-system-cycles-speed-cost-toast"></strong> toast matter</p>
                     </div>
                   </div>
                   <div class="d-none" id="stage-system-substage-matter-conversion">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Matter Conversion Level:</span>
-                      <strong data-toast-readout="path:system.matterConversion.level,format:local"></strong>
+                      <strong class="readout-system-matterConversion-level"></strong>
                     </p>
                     <p class="card-text mb-0 small">Turn toast matter into useful things and yoyos for kicks.</p>
                   </div>
@@ -142,7 +143,7 @@
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Sensors Level:</span>
-                      <strong data-toast-readout="path:system.sensors.level,format:local"></strong>
+                      <strong class="readout-system-sensors-level"></strong>
                     </p>
                     <p class="card-text mb-0 small">Electromagnetic & Sonic Sensors with extra spicy sauce.</p>
                   </div>
@@ -166,9 +167,9 @@
                 <div class="card-body">
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Lumps:</span>
-                    <strong data-toast-readout="path:wheat.inventory.current,format:suffix"></strong>
+                    <strong class="readout-wheat-inventory-current"></strong>
                   </p>
-                  <p class="card-text mb-1 small"><strong data-toast-readout="path:wheat.consume.rate,format:local"></strong> wheat lumps will produce 1 toast</p>
+                  <p class="card-text mb-1 small"><strong class="readout-wheat-consume-rate"></strong> wheat lumps will produce 1 toast</p>
                 </div>
               </div>
 
@@ -179,9 +180,9 @@
                 <div class="card-body">
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Consumed:</span>
-                    <strong data-toast-readout="path:consumed.count,format:local"></strong>
+                    <strong class="readout-consumed-count"></strong>
                   </p>
-                  <p class="card-text mb-0 small">Toast consumed at rate of <strong data-toast-readout="path:consumed.rate,format:local"></strong> toast / <strong data-toast-readout="path:consumed.interval,format:local,modify:divide,by:#1000,round:true"></strong>s.</p>
+                  <p class="card-text mb-0 small">Toast consumed at rate of <strong class="readout-consumed-rate"></strong> toast / <strong class="readout-consumed-interval"></strong>s.</p>
                 </div>
               </div>
 
@@ -205,9 +206,9 @@
                 <div class="card-body">
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Drones:</span>
-                    <strong class="float-right" data-toast-readout="path:wheat.drones.inventory.current,format:suffix"></strong>
+                    <strong class="float-right" class="readout-wheat-drones-inventory-current"></strong>
                   </p>
-                  <p class="card-text mb-1 small">Collecting <strong data-toast-readout="path:wheat.drones.inventory.output,format:suffix"></strong> wheat lumps/<strong data-toast-readout="path:wheat.drones.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</p>
+                  <p class="card-text mb-1 small">Collecting <strong class="readout-wheat-drones-inventory-output"></strong> wheat lumps/<strong class="readout-wheat-drones-speed-interval-current"></strong>s</p>
                   <div class="btn-group mb-1">
                     <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:wheat.make"
@@ -245,7 +246,7 @@
                       data-toast-button-max="buy:true"
                     >+Max</button>
                   </div>
-                  <p class="card-text mb-0 small">Cost <strong data-toast-readout="path:wheat.drones.inventory.cost.toast.current,format:suffix"></strong> toast matter</p>
+                  <p class="card-text mb-0 small">Cost <strong class="readout-wheat-drones-inventory-cost-toast-current"></strong> toast matter</p>
                   <div class="d-none" id="stage-wheat-substage-dismantle">
                     <hr>
                     <p class="card-text mb-1">Dismantle all drones</p>
@@ -254,13 +255,13 @@
                       data-toast-button-change="target:wheat.drones.inventory.current"
                       data-toast-button-cost="currency:toast.inventory,amount:wheat.drones.inventory.cost.toast.current,spent:wheat.drones.inventory.cost.toast.spent,starting:wheat.drones.inventory.cost.toast.starting"
                     >Dismantle</button>
-                    <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:wheat.drones.inventory.cost.toast.spent,format:suffix"></strong> toast matter</p>
+                    <p class="card-text mb-0 small">Regain <strong class="readout-wheat-drones-inventory-cost-toast-spent"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-wheat-substage-speed">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Speed:</span>
-                      <span class="float-right"><strong data-toast-readout="path:wheat.drones.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</span>
+                      <span class="float-right"><strong class="readout-wheat-drones-speed-interval-current"></strong>s</span>
                     </p>
                     <div id="stage-wheat-substage-speed-controls">
                       <p class="card-text mb-1 small">Improve collection per second speed with additional spoon propellers.</p>
@@ -287,14 +288,14 @@
                           data-toast-button-max="buy:true"
                         >-Max</button>
                       </div>
-                      <p class="card-text mb-0 small">-0.5s cost <strong data-toast-readout="path:wheat.drones.speed.cost.toast.current,format:suffix"></strong> toast matter</p>
+                      <p class="card-text mb-0 small">-0.5s cost <strong class="readout-wheat-drones-speed-cost-toast-current"></strong> toast matter</p>
                     </div>
                   </div>
                   <div class="d-none" id="stage-wheat-substage-efficiency">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Efficiency:</span>
-                      <strong class="float-right" data-toast-readout="path:wheat.drones.efficiency.current,format:suffix"></strong>
+                      <strong class="float-right" class="readout-wheat-drones-efficiency-current"></strong>
                     </p>
                     <div id="stage-wheat-substage-efficiency-controls">
                       <p class="card-text mb-1 small">Improve drone efficiency with pipe cleaner claws and snippers.</p>
@@ -314,7 +315,7 @@
                           data-toast-button-max="buy:true"
                         >+Max</button>
                       </div>
-                      <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:wheat.drones.efficiency.cost.toast.current,format:suffix"></strong> toast matter</p>
+                      <p class="card-text mb-0 small">+1 cost <strong class="readout-wheat-drones-efficiency-cost-toast-current"></strong> toast matter</p>
                     </div>
                   </div>
                 </div>
@@ -327,9 +328,9 @@
                 <div class="card-body">
                   <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                     <span class="mr-1">Auto Toasters:</span>
-                    <strong class="float-right" data-toast-readout="path:autoToaster.inventory.current,format:suffix"></strong>
+                    <strong class="float-right" class="readout-autoToaster-inventory-current"></strong>
                   </p>
-                  <p class="card-text mb-1 small">Producing <strong data-toast-readout="path:autoToaster.inventory.output,format:suffix"></strong> toast/<strong data-toast-readout="path:autoToaster.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</p>
+                  <p class="card-text mb-1 small">Producing <strong class="readout-autoToaster-inventory-output"></strong> toast/<strong class="readout-autoToaster-speed-interval-current"></strong>s</p>
                   <div class="btn-group mb-1">
                     <button class="btn btn-sm btn-secondary"
                       data-toast-button="action:autoToaster.make"
@@ -367,7 +368,7 @@
                       data-toast-button-max="buy:true"
                     >+Max</button>
                   </div>
-                  <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:autoToaster.inventory.cost.toast.current,format:suffix"></strong> toast matter</p>
+                  <p class="card-text mb-0 small">+1 cost <strong class="readout-autoToaster-inventory-cost-toast-current"></strong> toast matter</p>
                   <div class="d-none" id="stage-auto-toaster-substage-dismantle">
                     <hr>
                     <p class="card-text mb-1">Dismantle all auto toasters</p>
@@ -376,13 +377,13 @@
                       data-toast-button-change="target:autoToaster.inventory.current"
                       data-toast-button-cost="currency:toast.inventory,amount:autoToaster.inventory.cost.toast.current,spent:autoToaster.inventory.cost.toast.spent,starting:autoToaster.inventory.cost.toast.starting"
                     >Dismantle</button>
-                    <p class="card-text mb-0 small">Regain <strong data-toast-readout="path:autoToaster.inventory.cost.toast.spent,format:suffix"></strong> toast matter</p>
+                    <p class="card-text mb-0 small">Regain <strong class="readout-autoToaster-inventory-cost-toast-spent"></strong> toast matter</p>
                   </div>
                   <div class="d-none" id="stage-auto-toaster-substage-speed">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Speed:</span>
-                      <span class="float-right"><strong data-toast-readout="path:autoToaster.speed.interval.current,format:local,modify:divide,by:#1000,round:false"></strong>s</span>
+                      <span class="float-right"><strong class="readout-autoToaster-speed-interval-current"></strong>s</span>
                     </p>
                     <div id="stage-auto-toaster-substage-speed-controls">
                       <p class="card-text mb-1 small">Improve toast per second speed with zipp-crumb particals and rocket fuel.</p>
@@ -409,14 +410,14 @@
                           data-toast-button-max="buy:true"
                         >-Max</button>
                       </div>
-                      <p class="card-text mb-0 small">-0.5s cost <strong data-toast-readout="path:autoToaster.speed.cost.toast.current,format:suffix"></strong> toast matter</p>
+                      <p class="card-text mb-0 small">-0.5s cost <strong class="readout-autoToaster-speed-cost-toast-current"></strong> toast matter</p>
                     </div>
                   </div>
                   <div class="d-none" id="stage-auto-toaster-substage-efficiency">
                     <hr>
                     <p class="card-text mb-0 d-flex justify-content-between flex-wrap">
                       <span class="mr-1">Efficiency:</span>
-                      <strong class="float-right" data-toast-readout="path:autoToaster.efficiency.current,format:suffix"></strong>
+                      <strong class="float-right" class="readout-autoToaster-efficiency-current"></strong>
                     </p>
                     <div id="stage-auto-toaster-substage-efficiency-controls">
                       <p class="card-text mb-1 small">Improve auto toaster efficiency with extra bread slots and fine tuning plasma burners.</p>
@@ -436,7 +437,7 @@
                           data-toast-button-max="buy:true"
                         >+Max</button>
                       </div>
-                      <p class="card-text mb-0 small">+1 cost <strong data-toast-readout="path:autoToaster.efficiency.cost.toast.current,format:suffix"></strong> toast matter</p>
+                      <p class="card-text mb-0 small">+1 cost <strong class="readout-autoToaster-efficiency-cost-toast-current"></strong> toast matter</p>
                     </div>
                   </div>
                 </div>

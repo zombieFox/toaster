@@ -10,29 +10,29 @@ var control = (function() {
       }));
     }
   }, {
-    element: helper.e(".control-processor-boost-1"),
+    element: helper.e(".control-system-processor-power-1"),
     func: function() {
       _controlProcessorBoost(1, 1, this.element);
     }
   }, {
-    element: helper.e(".control-processor-boost-10"),
+    element: helper.e(".control-system-processor-power-10"),
     func: function() {
       _controlProcessorBoost(10, 10, this.element);
     }
   }, {
-    element: helper.e(".control-processor-boost-100"),
+    element: helper.e(".control-system-processor-power-100"),
       func: function() {
         _controlProcessorBoost(100, 100, this.element);
       }
   }, {
-    element: helper.e(".control-processor-boost-1000"),
+    element: helper.e(".control-system-processor-power-1000"),
       func: function() {
         _controlProcessorBoost(1000, 1000, this.element);
       }
   }, {
-    element: helper.e(".control-processor-boost-max"),
+    element: helper.e(".control-system-processor-power-max"),
     func: function() {
-      var _currentOptions = new ProcessorBoostOptions();
+      var _currentOptions = new SystemProcessorPowerOptions();
       var n_y = toaster.nth.max({
         money: state.get({
           path: _currentOptions.cost.currency
@@ -71,9 +71,9 @@ var control = (function() {
       _currentOptions = null;
     }
   }, {
-    element: helper.e(".control-processor-boost-dismantle"),
+    element: helper.e(".control-system-processor-power-dismantle"),
     func: function() {
-      var _currentOptions = new ProcessorDismantleOptions();
+      var _currentOptions = new systemProcessorPowerDismantleOptions();
       _currentOptions.button = this.element;
       if (toaster.validateDismantle(_currentOptions)) {
         if (_currentOptions.message.success != null) {
@@ -108,7 +108,7 @@ var control = (function() {
   };
 
   var _controlProcessorBoost = function(amount, units, button) {
-    var _currentOptions = new ProcessorBoostOptions();
+    var _currentOptions = new SystemProcessorPowerOptions();
     _currentOptions.change.amount = amount;
     _currentOptions.cost.units = units;
     _currentOptions.button = button;
@@ -133,7 +133,7 @@ var control = (function() {
     _currentOptions = null;
   };
 
-  var ProcessorBoostOptions = function() {
+  var SystemProcessorPowerOptions = function() {
     this.change = {
       target: "system.processor.power",
       operation: "increase",
@@ -172,7 +172,7 @@ var control = (function() {
     this.button = null
   };
 
-  var ProcessorDismantleOptions = function() {
+  var systemProcessorPowerDismantleOptions = function() {
     this.change = {
       target: "system.processor.power",
       operation: "increase",
@@ -212,8 +212,7 @@ var control = (function() {
 
   // exposed methods
   return {
-    init: init,
-    _currentOptions: _currentOptions
+    init: init
   };
 
 })();
